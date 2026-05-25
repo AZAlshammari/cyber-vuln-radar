@@ -9,11 +9,15 @@ import { Input } from "../components/ui/Input";
 import { Toggle } from "../components/ui/Toggle";
 import { defaultFilters } from "../lib/storage";
 import type { DashboardCardPreference, Watchlists } from "../lib/types";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export function Settings(props: PageProps) {
   const { t } = useI18n();
   const { language, setLanguage, theme, setTheme, filters, setFilters, watchlists, setWatchlists, dashboardCards, setDashboardCards } = props;
+  const [dashboardDraft, setDashboardDraft] = useState(dashboardCards);
+  const [dashboardSaved, setDashboardSaved] = useState(false);
+  const dashboardDirty = useMemo(() => JSON.stringify(dashboardDraft) !== JSON.stringify(dashboardCards), [dashboardDraft, dashboardCards]);
+
   return (
     <div className="p-4 lg:p-6">
       <PageHeader title={t("settings")} description={t("settingsDescription")} />
@@ -38,13 +42,54 @@ export function Settings(props: PageProps) {
           </div>
         </Card>
         <Card>
-          <CardTitle>{t("dashboardCustomization")}</CardTitle>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <CardTitle>{t("dashboardCustomization")}</CardTitle>
+            <div className="flex items-center gap-2">
+              {dashboardSaved && !dashboardDirty ? <span className="text-sm text-emerald-600 dark:text-emerald-300">{t("changesSaved")}</span> : null}
+              <Button
+                disabled={!dashboardDirty}
+                onClick={() => {
+                  setDashboardCards(dashboardDraft);
+                  setDashboardSaved(true);
+                }}
+              >
+                {t("saveChanges")}
+              </Button>
+            </div>
+          </div>
           <div className="mt-3 space-y-2">
-            {[...dashboardCards].sort((a, b) => a.order - b.order).map((card, index, sorted) => (
+            {[...dashboardDraft].sort((a, b) => a.order - b.order).map((card, index, sorted) => (
               <div key={card.id} className="flex items-center gap-2 rounded-md border border-slate-200 p-2 dark:border-surface-700">
-                <Toggle checked={card.visible} onChange={(visible) => setDashboardCards(updateCard(dashboardCards, card.id, { visible }))} label={t(cardLabel(card.id))} />
-                <Button variant="ghost" aria-label={t("moveUp")} disabled={index === 0} onClick={() => setDashboardCards(reorder(sorted, index, -1))}><ArrowUp className="h-4 w-4" /></Button>
-                <Button variant="ghost" aria-label={t("moveDown")} disabled={index === sorted.length - 1} onClick={() => setDashboardCards(reorder(sorted, index, 1))}><ArrowDown className="h-4 w-4" /></Button>
+                <Toggle
+                  checked={card.visible}
+                  onChange={(visible) => {
+                    setDashboardSaved(false);
+                    setDashboardDraft(updateCard(dashboardDraft, card.id, { visible }));
+                  }}
+                  label={t(cardLabel(card.id))}
+                />
+                <Button
+                  variant="ghost"
+                  aria-label={t("moveUp")}
+                  disabled={index === 0}
+                  onClick={() => {
+                    setDashboardSaved(false);
+                    setDashboardDraft(reorder(sorted, index, -1));
+                  }}
+                >
+                  <ArrowUp className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  aria-label={t("moveDown")}
+                  disabled={index === sorted.length - 1}
+                  onClick={() => {
+                    setDashboardSaved(false);
+                    setDashboardDraft(reorder(sorted, index, 1));
+                  }}
+                >
+                  <ArrowDown className="h-4 w-4" />
+                </Button>
               </div>
             ))}
           </div>

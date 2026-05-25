@@ -1,9 +1,11 @@
+import { useMemo, useState } from "react";
 import type { FilterState } from "../../lib/types";
 import { useI18n } from "../../i18n";
 import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
 import { Button } from "../ui/Button";
 import { Toggle } from "../ui/Toggle";
+import { cx } from "../ui/utils";
 
 export function FilterBar({
   filters,
@@ -23,11 +25,46 @@ export function FilterBar({
   onReset: () => void;
 }) {
   const { t } = useI18n();
+  const [open, setOpen] = useState(false);
   const update = <K extends keyof FilterState>(key: K, value: FilterState[K]) => setFilters({ ...filters, [key]: value });
+  const activeCount = useMemo(
+    () =>
+      [
+        filters.severity,
+        filters.category,
+        filters.source,
+        filters.vendor,
+        filters.product,
+        filters.cwe,
+        filters.tags,
+        filters.kevOnly,
+        filters.exploitAvailable,
+        filters.patchAvailable,
+        filters.workaroundAvailable,
+        filters.recentlyPublished,
+        filters.recentlyModified,
+        filters.breakingOnly,
+        filters.watchlistOnly,
+        filters.minCvss > 0,
+        filters.minEpss > 0,
+      ].filter(Boolean).length,
+    [filters],
+  );
   return (
-    <section className="sticky top-16 z-20 mb-5 rounded-lg border border-slate-200 bg-white/95 p-3 backdrop-blur dark:border-surface-800 dark:bg-surface-900/95">
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
-        <label className="xl:col-span-2">
+    <section className="mb-5 rounded-lg border border-slate-200 bg-white/95 p-3 backdrop-blur lg:sticky lg:top-16 lg:z-20 dark:border-surface-800 dark:bg-surface-900/95">
+      <div className="flex items-end gap-2 lg:hidden">
+        <label className="min-w-0 flex-1">
+          <span className="mb-1 block text-xs font-medium text-slate-500">{t("search")}</span>
+          <Input value={filters.search} onChange={(e) => update("search", e.target.value)} placeholder={t("search")} />
+        </label>
+        <Button className="shrink-0" onClick={() => setOpen((value) => !value)} aria-expanded={open}>
+          {open ? t("hideFilters") : t("showFilters")}
+          {activeCount ? <span className="rounded bg-white/20 px-1.5 font-mono">{activeCount}</span> : null}
+        </Button>
+      </div>
+      <div className={cx("mt-3 lg:mt-0 lg:block", open ? "block" : "hidden")}>
+      <div className="grid max-h-[62vh] gap-3 overflow-y-auto pe-1 md:grid-cols-2 lg:max-h-none lg:grid-cols-3 lg:overflow-visible xl:grid-cols-6">
+        <label className="hidden xl:col-span-2 lg:block">
           <span className="mb-1 block text-xs font-medium text-slate-500">{t("search")}</span>
           <Input value={filters.search} onChange={(e) => update("search", e.target.value)} placeholder={t("search")} />
         </label>
@@ -98,7 +135,7 @@ export function FilterBar({
           </Select>
         </label>
       </div>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-3 grid max-h-[38vh] gap-2 overflow-y-auto pe-1 sm:grid-cols-2 lg:max-h-none lg:flex lg:flex-wrap lg:overflow-visible">
         <Toggle checked={filters.kevOnly} onChange={(v) => update("kevOnly", v)} label={t("kevOnly")} />
         <Toggle checked={filters.exploitAvailable} onChange={(v) => update("exploitAvailable", v)} label={t("exploitAvailable")} />
         <Toggle checked={filters.patchAvailable} onChange={(v) => update("patchAvailable", v)} label={t("patchAvailable")} />
@@ -106,6 +143,7 @@ export function FilterBar({
         <Toggle checked={filters.breakingOnly} onChange={(v) => update("breakingOnly", v)} label={t("breakingOnly")} />
         <Toggle checked={filters.watchlistOnly} onChange={(v) => update("watchlistOnly", v)} label={t("watchlistOnly")} />
         <Button variant="ghost" onClick={onReset}>{t("resetFilters")}</Button>
+      </div>
       </div>
     </section>
   );
