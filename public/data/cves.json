@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-29T00:14:51.023Z",
+  "generatedAt": "2026-05-29T04:47:55.540Z",
   "count": 1000,
   "items": [
     {
@@ -9930,7 +9930,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 3.99,
       "tags": [
@@ -18849,7 +18849,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 3.28,
       "tags": [
@@ -19029,7 +19029,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 3.27,
       "tags": [
@@ -24063,6 +24063,44 @@
       "priorityScore": 3.01,
       "tags": [
         "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-43073",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: x86-64: rename misleadingly named '__copy_user_nocache()' function This function was a masterclass in bad naming, for various historical reasons. It claimed to be a non-cached user copy. It is literally _neither_ of those things. It's a specialty memory copy routine that uses non-temporal stores for the destination (but not the source), and that does exception handling for both source and destination accesses. Also note that while it works for unaligned targets, any unaligned parts (whether at beginning or end) will not use non-temporal stores, since only words and quadwords can be non-temporal on x86. The exception handling means that it _can_ be used for user space accesses, but not on its own - it needs all the normal \"start user space access\" logic around it. But typically the user space access would be the source, not the non-temporal destination. That was the original intention of this, where the destination was some fragile persistent memory target that needed non-temporal stores in order to catch machine check exceptions synchronously and deal with them gracefully. Thus that non-descriptive name: one use case was to copy from user space into a non-cached kernel buffer. However, the existing users are a mix of that intended use-case, and a couple of random drivers that just did this as a performance tweak. Some of those random drivers then actively misused the user copying version (with STAC/CLAC and all) to do kernel copies without ever even caring about the exception handling, _just_ for the non-temporal destination. Rename it as a first small step to actually make it halfway sane, and change the prototype to be more normal: it doesn't take a user pointer unless the caller has done the proper conversion, and the argument size is the full size_t (it still won't actually copy more than 4GB in one go, but there's also no reason to silently truncate the size argument in the caller). Finally, use this now sanely named function in the NTB code, which mis-used a user copy version (with STAC/CLAC and all) of this interface despite it not actually being a user copy at all.",
+      "published": "2026-05-05T16:16:16.650Z",
+      "lastModified": "2026-05-22T14:55:58.977Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02292,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.01,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -29190,50 +29228,6 @@
       ]
     },
     {
-      "id": "CVE-2026-40560",
-      "summary": "Starman versions before 0.4018 for Perl allows HTTP Request Smuggling via Improper Header Precedence. Starman incorrectly prioritizes \"Content-Length\" over \"Transfer-Encoding: chunked\" when both headers are present in an HTTP request. Per RFC 7230 3.3.3, Transfer-Encoding must take precedence. An attacker could exploit this to smuggle malicious HTTP requests via a front-end reverse proxy.",
-      "published": "2026-04-29T00:16:03.927Z",
-      "lastModified": "2026-05-06T16:35:19.297Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00015,
-      "epssPercentile": 0.03102,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-444",
-          "name": "CWE-444",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.73,
-      "tags": [
-        "CWE-444"
-      ]
-    },
-    {
       "id": "CVE-2026-37503",
       "summary": "Cross-Site Scripting (XSS) in V2Board thru 1.7.4. The custom_html field in theme configuration is rendered using Blade unescaped output in public/theme/v2board/dashboard.blade.php. An admin can inject arbitrary JavaScript via the saveThemeConfig API. All site visitors execute the payload, enabling cookie theft, session hijacking, or phishing.",
       "published": "2026-05-01T16:16:30.490Z",
@@ -30854,50 +30848,6 @@
       "priorityScore": 2.61,
       "tags": [
         "WordPress",
-        "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-42615",
-      "summary": "GCHQ CyberChef before 11.0.0 allows XSS via Show Base64 offsets, as demonstrated by the /#recipe=Show_Base64_offsets('%3Cscript substring.",
-      "published": "2026-04-29T04:16:41.750Z",
-      "lastModified": "2026-04-30T15:48:26.580Z",
-      "severity": "High",
-      "cvssScore": 7.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00013,
-      "epssPercentile": 0.02184,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.6,
-      "tags": [
         "CWE-79"
       ]
     },
@@ -33666,6 +33616,50 @@
       "tags": [
         "CWE-285",
         "CWE-639"
+      ]
+    },
+    {
+      "id": "CVE-2026-5766",
+      "summary": "An issue was discovered in 6.0 before 6.0.5 and 5.2 before 5.2.14. ASGI requests with a missing or understated `Content-Length` header can bypass the `FILE_UPLOAD_MAX_MEMORY_SIZE` limit, potentially loading large files into memory and causing service degradation. As a reminder, Django expects a limit to be configured at the web server level rather than solely relying on `FILE_UPLOAD_MAX_MEMORY_SIZE`. Earlier, unsupported Django series (such as 5.0.x, 4.1.x, and 3.2.x) were not evaluated and may also be affected. Django would like to thank Kyle Agronick for reporting this issue.",
+      "published": "2026-05-05T16:16:17.740Z",
+      "lastModified": "2026-05-07T14:16:39.443Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00051,
+      "epssPercentile": 0.16206,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-130",
+          "name": "CWE-130",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.42,
+      "tags": [
+        "CWE-130"
       ]
     },
     {
@@ -43091,50 +43085,6 @@
       ]
     },
     {
-      "id": "CVE-2026-23773",
-      "summary": "Dell Disk Library for Mainframe, version(s) DLm 8700/2700 contain(s) a Server-Side Request Forgery (SSRF) vulnerability. A low privileged attacker with remote access could potentially exploit this vulnerability, leading to Server-side request forgery.",
-      "published": "2026-04-29T04:16:40.867Z",
-      "lastModified": "2026-04-30T15:13:14.230Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00009,
-      "epssPercentile": 0.01071,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.54,
-      "tags": [
-        "CWE-918"
-      ]
-    },
-    {
       "id": "CVE-2026-7677",
       "summary": "A vulnerability was determined in kerwincui FastBee up to 1.2.1. The impacted element is the function Add of the file springboot/fastbee-admin/src/main/java/com/fastbee/web/controller/system/SysNoticeController.java of the component System Notice Handler. This manipulation of the argument noticeContent causes cross site scripting. It is possible to initiate the attack remotely. The exploit has been publicly disclosed and may be utilized. The vendor was contacted early about this disclosure but did not respond in any way.",
       "published": "2026-05-03T05:15:58.857Z",
@@ -44429,6 +44379,44 @@
       "id": "CVE-2026-43066",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ext4: fix iloc.bh leak in ext4_fc_replay_inode() error paths During code review, Joseph found that ext4_fc_replay_inode() calls ext4_get_fc_inode_loc() to get the inode location, which holds a reference to iloc.bh that must be released via brelse(). However, several error paths jump to the 'out' label without releasing iloc.bh: - ext4_handle_dirty_metadata() failure - sync_dirty_buffer() failure - ext4_mark_inode_used() failure - ext4_iget() failure Fix this by introducing an 'out_brelse' label placed just before the existing 'out' label to ensure iloc.bh is always released. Additionally, make ext4_fc_replay_inode() propagate errors properly instead of always returning 0.",
       "published": "2026-05-05T16:16:15.810Z",
+      "lastModified": "2026-05-06T13:08:07.970Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00032,
+      "epssPercentile": 0.09773,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.34,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43072",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/vc4: platform_get_irq_byname() returns an int platform_get_irq_byname() will return a negative value if an error happens, so it should be checked and not just passed directly into devm_request_threaded_irq() hoping all will be ok.",
+      "published": "2026-05-05T16:16:16.540Z",
       "lastModified": "2026-05-06T13:08:07.970Z",
       "severity": "Unknown",
       "cvssScore": 0,
