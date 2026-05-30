@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-30T10:58:46.843Z",
+  "generatedAt": "2026-05-30T12:10:46.530Z",
   "count": 1000,
   "items": [
     {
@@ -23381,6 +23381,52 @@
       ]
     },
     {
+      "id": "CVE-2026-43145",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: remoteproc: imx_rproc: Fix invalid loaded resource table detection imx_rproc_elf_find_loaded_rsc_table() may incorrectly report a loaded resource table even when the current firmware does not provide one. When the device tree contains a \"rsc-table\" entry, priv->rsc_table is non-NULL and denotes where a resource table would be located if one is present in memory. However, when the current firmware has no resource table, rproc->table_ptr is NULL. The function still returns priv->rsc_table, and the remoteproc core interprets this as a valid loaded resource table. Fix this by returning NULL from imx_rproc_elf_find_loaded_rsc_table() when there is no resource table for the current firmware (i.e. when rproc->table_ptr is NULL). This aligns the function's semantics with the remoteproc core: a loaded resource table is only reported when a valid table_ptr exists. With this change, starting firmware without a resource table no longer triggers a crash.",
+      "published": "2026-05-06T12:16:31.983Z",
+      "lastModified": "2026-05-13T21:10:02.407Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02378,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.01,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-401"
+      ]
+    },
+    {
       "id": "CVE-2026-31732",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: gpio: Fix resource leaks on errors in gpiochip_add_data_with_key() Since commit aab5c6f20023 (\"gpio: set device type for GPIO chips\"), `gdev->dev.release` is unset. As a result, the reference count to `gdev->dev` isn't dropped on the error handling paths. Drop the reference on errors. Also reorder the instructions to make the error handling simpler. Now gpiochip_add_data_with_key() roughly looks like: >>> Some memory allocation. Go to ERR ZONE 1 on errors. >>> device_initialize(). gpiodev_release() takes over the responsibility for freeing the resources of `gdev->dev`. The subsequent error handling paths shouldn't go through ERR ZONE 1 again which leads to double free. >>> Some initialization mainly on `gdev`. >>> The rest of initialization. Go to ERR ZONE 2 on errors. >>> Chip registration success and exit. >>> ERR ZONE 2. gpio_device_put() and exit. >>> ERR ZONE 1.",
       "published": "2026-05-01T15:16:35.807Z",
@@ -23608,6 +23654,52 @@
         "F5",
         "Linux",
         "CWE-401"
+      ]
+    },
+    {
+      "id": "CVE-2026-43144",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: brcmfmac: Fix potential kernel oops when probe fails When probe of the sdio brcmfmac device fails for some reasons (i.e. missing firmware), the sdiodev->bus is set to error instead of NULL, thus the cleanup later in brcmf_sdio_remove() tries to free resources via invalid bus pointer. This happens because sdiodev->bus is set 2 times: first in brcmf_sdio_probe() and second time in brcmf_sdiod_probe(). Fix this by chaning the brcmf_sdio_probe() function to return the error code and set sdio->bus only there.",
+      "published": "2026-05-06T12:16:31.870Z",
+      "lastModified": "2026-05-13T21:10:13.997Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02251,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-476"
       ]
     },
     {
@@ -28461,98 +28553,6 @@
       "priorityScore": 2.76,
       "tags": [
         "CWE-669"
-      ]
-    },
-    {
-      "id": "CVE-2026-31786",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: Buffer overflow in drivers/xen/sys-hypervisor.c The build id returned by HYPERVISOR_xen_version(XENVER_build_id) is neither NUL terminated nor a string. The first causes a buffer overflow as sprintf in buildid_show will read and copy till it finds a NUL. 00000000 f4 91 51 f4 dd 38 9e 9d 65 47 52 eb 10 71 db 50 |..Q..8..eGR..q.P| 00000010 b9 a8 01 42 6f 2e 32 |...Bo.2| 00000017 So use a memcpy instead of sprintf to have the correct value: 00000000 f4 91 51 f4 dd 00 9e 9d 65 47 52 eb 10 71 db 50 |..Q.....eGR..q.P| 00000010 b9 a8 01 42 |...B| 00000014 (the above have a hack to embed a zero inside and check it's returned correctly). This is XSA-485 / CVE-2026-31786",
-      "published": "2026-04-30T11:16:20.967Z",
-      "lastModified": "2026-05-06T19:44:30.693Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00006,
-      "epssPercentile": 0.0034,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.74,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-31787",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: xen/privcmd: fix double free via VMA splitting privcmd_vm_ops defines .close (privcmd_close), but neither .may_split nor .open. When userspace does a partial munmap() on a privcmd mapping, the kernel splits the VMA via __split_vma(). Since may_split is NULL, the split is allowed. vm_area_dup() copies vm_private_data (a pages array allocated in alloc_empty_pages()) into the new VMA without any fixup, because there is no .open callback. Both VMAs now point to the same pages array. When the unmapped portion is closed, privcmd_close() calls: - xen_unmap_domain_gfn_range() - xen_free_unpopulated_pages() - kvfree(pages) The surviving VMA still holds the dangling pointer. When it is later destroyed, the same sequence runs again, which leads to a double free. Fix this issue by adding a .may_split callback denying the VMA split. This is XSA-487 / CVE-2026-31787",
-      "published": "2026-04-30T11:16:21.087Z",
-      "lastModified": "2026-05-06T19:38:53.743Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00006,
-      "epssPercentile": 0.0034,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-415",
-          "name": "CWE-415",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.74,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-415"
       ]
     },
     {
@@ -38075,10 +38075,10 @@
       ]
     },
     {
-      "id": "CVE-2026-31692",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: rtnetlink: add missing netlink_ns_capable() check for peer netns rtnl_newlink() lacks a CAP_NET_ADMIN capability check on the peer network namespace when creating paired devices (veth, vxcan, netkit). This allows an unprivileged user with a user namespace to create interfaces in arbitrary network namespaces, including init_net. Add a netlink_ns_capable() check for CAP_NET_ADMIN in the peer namespace before allowing device creation to proceed.",
-      "published": "2026-04-30T11:16:20.860Z",
-      "lastModified": "2026-05-06T20:05:55.800Z",
+      "id": "CVE-2026-43143",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: mfd: core: Add locking around 'mfd_of_node_list' Manipulating a list in the kernel isn't safe without some sort of mutual exclusion. Add a mutex any time we access / modify 'mfd_of_node_list' to prevent possible crashes.",
+      "published": "2026-05-06T12:16:31.747Z",
+      "lastModified": "2026-05-13T18:41:04.083Z",
       "severity": "Medium",
       "cvssScore": 5.5,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
@@ -38093,10 +38093,10 @@
         "availability": "High"
       },
       "epssScore": 0.00013,
-      "epssPercentile": 0.02251,
+      "epssPercentile": 0.02378,
       "isKev": false,
       "kev": null,
-      "vendor": "Linux",
+      "vendor": "F5",
       "product": null,
       "cwe": [],
       "references": [],
@@ -38107,8 +38107,9 @@
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 2,
+      "priorityScore": 2.01,
       "tags": [
+        "F5",
         "Linux"
       ]
     },
