@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-29T23:57:27.134Z",
+  "generatedAt": "2026-05-30T04:03:55.542Z",
   "count": 1000,
   "items": [
     {
@@ -766,57 +766,6 @@
       ]
     },
     {
-      "id": "CVE-2026-7446",
-      "summary": "A vulnerability was detected in VetCoders mcp-server-semgrep 1.0.0. This affects the function analyze_results/filter_results/export_results/compare_results/scan_directory/create_rule of the file src/index.ts of the component MCP Interface. The manipulation of the argument ID results in os command injection. The attack can be executed remotely. The exploit is now public and may be used. Upgrading to version 1.0.1 is able to mitigate this issue. The patch is identified as 141335da044e53c3f5b315e0386e01238405b771. It is advisable to upgrade the affected component.",
-      "published": "2026-04-30T00:16:23.943Z",
-      "lastModified": "2026-04-30T14:52:54.847Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.01785,
-      "epssPercentile": 0.83042,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-77",
-          "name": "CWE-77",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 6.46,
-      "tags": [
-        "F5",
-        "CWE-77",
-        "CWE-78"
-      ]
-    },
-    {
       "id": "CVE-2026-42238",
       "summary": "Nginx UI is a web user interface for the Nginx web server. Prior to version 2.3.8, nginx-ui exposes a backup restore endpoint (POST /api/restore) that is completely unauthenticated during the first 10 minutes after process startup on any fresh installation. An unauthenticated remote attacker can upload a crafted backup archive that overwrites the application's configuration file (app.ini) and SQLite database. Because the attacker controls the restored app.ini, they can inject an arbitrary OS command into the TestConfigCmd setting. After the application automatically restarts to apply the restored config, a single follow-up request triggers that command as the user running nginx-ui — typically root in Docker deployments. This issue has been patched in version 2.3.8.",
       "published": "2026-05-04T21:16:32.707Z",
@@ -1005,56 +954,6 @@
       "tags": [
         "WordPress",
         "CWE-200"
-      ]
-    },
-    {
-      "id": "CVE-2026-7469",
-      "summary": "A vulnerability was detected in Tenda 4G300 US_4G300V1.0Mt_V1.01.42_CN_TDC01. This impacts the function sub_425A28 of the file /goform/DelFil. The manipulation of the argument delflag results in command injection. The attack may be launched remotely. The exploit is now public and may be used.",
-      "published": "2026-04-30T02:16:06.967Z",
-      "lastModified": "2026-04-30T20:41:35.710Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.03733,
-      "epssPercentile": 0.88195,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-77",
-          "name": "CWE-77",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 6.29,
-      "tags": [
-        "CWE-74",
-        "CWE-77"
       ]
     },
     {
@@ -11419,6 +11318,44 @@
       ]
     },
     {
+      "id": "CVE-2026-43114",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: nft_set_pipapo_avx2: don't return non-matching entry on expiry New test case fails unexpectedly when avx2 matching functions are used. The test first loads a ranomly generated pipapo set with 'ipv4 . port' key, i.e. nft -f foo. This works. Then, it reloads the set after a flush: (echo flush set t s; cat foo) | nft -f - This is expected to work, because its the same set after all and it was already loaded once. But with avx2, this fails: nft reports a clashing element. The reported clash is of following form: We successfully re-inserted a . b c . d Then we try to insert a . d avx2 finds the already existing a . d, which (due to 'flush set') is marked as invalid in the new generation. It skips the element and moves to next. Due to incorrect masking, the skip-step finds the next matching element *only considering the first field*, i.e. we return the already reinserted \"a . b\", even though the last field is different and the entry should not have been matched. No such error is reported for the generic c implementation (no avx2) or when the last field has to use the 'nft_pipapo_avx2_lookup_slow' fallback. Bisection points to 7711f4bb4b36 (\"netfilter: nft_set_pipapo: fix range overlap detection\") but that fix merely uncovers this bug. Before this commit, the wrong element is returned, but erronously reported as a full, identical duplicate. The root-cause is too early return in the avx2 match functions. When we process the last field, we should continue to process data until the entire input size has been consumed to make sure no stale bits remain in the map.",
+      "published": "2026-05-06T10:16:25.163Z",
+      "lastModified": "2026-05-08T17:54:04.753Z",
+      "severity": "Critical",
+      "cvssScore": 9.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "Low"
+      },
+      "epssScore": 0.00057,
+      "epssPercentile": 0.18045,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.92,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-2554",
       "summary": "The WCFM – Frontend Manager for WooCommerce along with Bookings Subscription Listings Compatible plugin for WordPress is vulnerable to Insecure Direct Object Reference in all versions up to, and including, 6.7.25 via the 'wcfm_delete_wcfm_customer' due to missing validation on the 'customerid' user controlled key. This makes it possible for authenticated attackers, with Vendor-level access and above, to delete arbitrary users, including Administrators.",
       "published": "2026-05-02T14:16:17.707Z",
@@ -11461,56 +11398,6 @@
       "tags": [
         "WordPress",
         "CWE-639"
-      ]
-    },
-    {
-      "id": "CVE-2026-7470",
-      "summary": "A flaw has been found in Tenda 4G300 US_4G300V1.0Mt_V1.01.42_CN_TDC01. Affected is the function sub_427C3C of the file /goform/SafeMacFilter. This manipulation of the argument page causes stack-based buffer overflow. Remote exploitation of the attack is possible. The exploit has been published and may be used.",
-      "published": "2026-04-30T03:16:01.740Z",
-      "lastModified": "2026-04-30T20:41:24.100Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00079,
-      "epssPercentile": 0.23444,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-119",
-          "name": "CWE-119",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-121",
-          "name": "CWE-121",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.9,
-      "tags": [
-        "CWE-119",
-        "CWE-121"
       ]
     },
     {
@@ -11878,50 +11765,6 @@
       "priorityScore": 3.85,
       "tags": [
         "CWE-15"
-      ]
-    },
-    {
-      "id": "CVE-2026-7445",
-      "summary": "A security vulnerability has been detected in ZachHandley ZMCPTools up to 0.2.2. Affected by this issue is some unknown functionality of the file src/managers/ResourceManager.ts of the component MCP Log Resource Handler. The manipulation of the argument dirname leads to path traversal. Remote exploitation of the attack is possible. The exploit has been disclosed publicly and may be used. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-04-30T00:16:23.340Z",
-      "lastModified": "2026-04-30T14:52:54.847Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00057,
-      "epssPercentile": 0.18064,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.84,
-      "tags": [
-        "CWE-22"
       ]
     },
     {
@@ -15976,6 +15819,52 @@
       ]
     },
     {
+      "id": "CVE-2026-43112",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: fs/smb/client: fix out-of-bounds read in cifs_sanitize_prepath When cifs_sanitize_prepath is called with an empty string or a string containing only delimiters (e.g., \"/\"), the current logic attempts to check *(cursor2 - 1) before cursor2 has advanced. This results in an out-of-bounds read. This patch adds an early exit check after stripping prepended delimiters. If no path content remains, the function returns NULL. The bug was identified via manual audit and verified using a standalone test case compiled with AddressSanitizer, which triggered a SEGV on affected inputs.",
+      "published": "2026-05-06T10:16:24.927Z",
+      "lastModified": "2026-05-08T19:43:23.620Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00043,
+      "epssPercentile": 0.13551,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.55,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-125"
+      ]
+    },
+    {
       "id": "CVE-2026-7591",
       "summary": "A security flaw has been discovered in TimBroddin astro-mcp-server up to 1.1.1. The impacted element is an unknown function of the file src/index.ts of the component MCP Tool Query Construction. Performing a manipulation of the argument request.params.arguments results in sql injection. The attack may be initiated remotely. The exploit has been released to the public and may be used for attacks. The project was informed of the problem early through an issue report but has not responded yet.",
       "published": "2026-05-01T19:16:33.783Z",
@@ -18115,6 +18004,52 @@
       ]
     },
     {
+      "id": "CVE-2026-43113",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: wl1251: validate packet IDs before indexing tx_frames wl1251_tx_packet_cb() uses the firmware completion ID directly to index the fixed 16-entry wl->tx_frames[] array. The ID is a raw u8 from the completion block, and the callback does not currently verify that it fits the array before dereferencing it. Reject completion IDs that fall outside wl->tx_frames[] and keep the existing NULL check in the same guard. This keeps the fix local to the trust boundary and avoids touching the rest of the completion flow.",
+      "published": "2026-05-06T10:16:25.050Z",
+      "lastModified": "2026-05-08T17:58:54.773Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00025,
+      "epssPercentile": 0.07542,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.34,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-476"
+      ]
+    },
+    {
       "id": "CVE-2026-40685",
       "summary": "In Exim before 4.99.2, when JSON lookup is enabled, an out-of-bounds heap write can occur when a JSON operator encounters malformed JSON in an untrusted header, because of an incorrect implementation of \\ skipping.",
       "published": "2026-04-30T22:16:25.633Z",
@@ -18162,6 +18097,44 @@
       "tags": [
         "CWE-684",
         "CWE-787"
+      ]
+    },
+    {
+      "id": "CVE-2026-43110",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: brcmfmac: validate bsscfg indices in IF events brcmf_fweh_handle_if_event() validates the firmware-provided interface index before it touches drvr->iflist[], but it still uses the raw bsscfgidx field as an array index without a matching range check. Reject IF events whose bsscfg index does not fit in drvr->iflist[] before indexing the interface array. [add missing wifi prefix]",
+      "published": "2026-05-06T10:16:24.690Z",
+      "lastModified": "2026-05-08T20:14:50.097Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00024,
+      "epssPercentile": 0.07178,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.33,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -19648,56 +19621,6 @@
       "priorityScore": 3.26,
       "tags": [
         "CWE-285"
-      ]
-    },
-    {
-      "id": "CVE-2026-7447",
-      "summary": "A flaw has been found in SourceCodester Pet Grooming Management Software 1.0. This vulnerability affects unknown code of the file /admin/update_customer.php. This manipulation of the argument type/length/business parameter validity causes sql injection. The attack is possible to be carried out remotely. The exploit has been published and may be used.",
-      "published": "2026-04-30T01:16:02.990Z",
-      "lastModified": "2026-04-30T14:52:54.847Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00011,
-      "epssPercentile": 0.01317,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.25,
-      "tags": [
-        "CWE-74",
-        "CWE-89"
       ]
     },
     {
@@ -26844,6 +26767,51 @@
       ]
     },
     {
+      "id": "CVE-2026-43111",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: HID: roccat: fix use-after-free in roccat_report_event roccat_report_event() iterates over the device->readers list without holding the readers_lock. This allows a concurrent roccat_release() to remove and free a reader while it's still being accessed, leading to a use-after-free. Protect the readers list traversal with the readers_lock mutex.",
+      "published": "2026-05-06T10:16:24.807Z",
+      "lastModified": "2026-05-08T19:45:15.600Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02472,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.82,
+      "tags": [
+        "Linux",
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-36758",
       "summary": "A Server-Side Request Forgery (SSRF) in the /themes/-/install-from-uri endpoint of halo v2.22.14 allows authenticated attackers to scan internal resources via a crafted GET request.",
       "published": "2026-04-30T16:16:42.400Z",
@@ -28842,56 +28810,6 @@
       "priorityScore": 2.73,
       "tags": [
         "CWE-539"
-      ]
-    },
-    {
-      "id": "CVE-2026-7468",
-      "summary": "A security vulnerability has been detected in 1024-lab smart-admin up to 3.30.0. This affects an unknown function of the file /smart-admin-api/druid/index.html of the component Demo Site. The manipulation leads to improper access controls. The attack may be initiated remotely. The exploit has been disclosed publicly and may be used. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-04-30T01:16:03.170Z",
-      "lastModified": "2026-04-30T14:52:54.847Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00017,
-      "epssPercentile": 0.04601,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-266",
-          "name": "CWE-266",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.72,
-      "tags": [
-        "CWE-266",
-        "CWE-284"
       ]
     },
     {
@@ -36718,6 +36636,44 @@
       "priorityScore": 2.03,
       "tags": [
         "F5",
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43115",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: srcu: Use irq_work to start GP in tiny SRCU Tiny SRCU's srcu_gp_start_if_needed() directly calls schedule_work(), which acquires the workqueue pool->lock. This causes a lockdep splat when call_srcu() is called with a scheduler lock held, due to: call_srcu() [holding pi_lock] srcu_gp_start_if_needed() schedule_work() -> pool->lock workqueue_init() / create_worker() [holding pool->lock] wake_up_process() -> try_to_wake_up() -> pi_lock Also add irq_work_sync() to cleanup_srcu_struct() to prevent a use-after-free if a queued irq_work fires after cleanup begins. Tested with rcutorture SRCU-T and no lockdep warnings. [ Thanks to Boqun for similar fix in patch \"rcu: Use an intermediate irq_work to start process_srcu()\" ]",
+      "published": "2026-05-06T10:16:25.290Z",
+      "lastModified": "2026-05-08T17:51:44.920Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00014,
+      "epssPercentile": 0.03027,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.03,
+      "tags": [
         "Linux"
       ]
     },
