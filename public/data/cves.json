@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-30T17:49:32.561Z",
+  "generatedAt": "2026-05-30T19:20:55.361Z",
   "count": 1000,
   "items": [
     {
@@ -5780,50 +5780,6 @@
       ]
     },
     {
-      "id": "CVE-2026-40601",
-      "summary": "Chartbrew is an open-source web application that can connect directly to databases and APIs and use the data to create charts. In version 4.9.0, Chartbrew exposes POST /api/chart/:chart_id/query without authentication. The endpoint only checks team.allowReportRefresh and does not verify that the target chart belongs to a public report, that the project is public, or that sharing policy allows the operation. An unauthenticated attacker who knows a chart identifier can trigger a data refresh and retrieve the current data of private charts. This issue has been patched in version 5.0.0.",
-      "published": "2026-04-30T19:16:10.110Z",
-      "lastModified": "2026-05-01T15:31:02.467Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00103,
-      "epssPercentile": 0.27792,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.6,
-      "tags": [
-        "CWE-862"
-      ]
-    },
-    {
       "id": "CVE-2026-42469",
       "summary": "Buffer overflow vulnerability in Open Vehicle Monitoring System 3 (OVMS3) 3.3.005. In canformat_canswitch.cpp the parser does not properly validate a CANswitch DLC value, allowing remote attackers to cause a denial of service or possibly execute arbitrary code via crafted CANswitch frames.",
       "published": "2026-05-01T17:16:25.260Z",
@@ -7053,50 +7009,6 @@
       ]
     },
     {
-      "id": "CVE-2026-35514",
-      "summary": "Chartbrew is an open-source web application that can connect directly to databases and APIs and use the data to create charts. In version 4.9.0, the endpoint POST /user/invited does not validate any invite token, authentication header, or session. Any unauthenticated attacker can call this endpoint directly to create a fully active account and receive a valid JWT — even when the instance has existing users and signupRestricted is enabled. This bypass is distinct from the normal registration endpoint (POST /user) which enforces signupRestricted and sets active: false pending verification. This issue has been patched in version 5.0.0.",
-      "published": "2026-04-30T19:16:09.217Z",
-      "lastModified": "2026-05-01T15:31:02.467Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00126,
-      "epssPercentile": 0.31458,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.38,
-      "tags": [
-        "CWE-306"
-      ]
-    },
-    {
       "id": "CVE-2026-42482",
       "summary": "A stack-based buffer overflow in mangle_to_hex_lower() and mangle_to_hex_upper() in src/rp_cpu.c in hashcat v7.1.2 allows an attacker to cause a denial of service or possibly execute arbitrary code via a crafted rule file, or via the -j or -k rule options used with password candidates of 128 or more characters. The vulnerability is caused by a bounds check that fails to account for the 2x expansion that occurs when password bytes are converted to hexadecimal.",
       "published": "2026-05-01T14:16:22.577Z",
@@ -7232,6 +7144,45 @@
       "priorityScore": 4.38,
       "tags": [
         "CWE-121"
+      ]
+    },
+    {
+      "id": "CVE-2026-43194",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: consume xmit errors of GSO frames udpgro_frglist.sh and udpgro_bench.sh are the flakiest tests currently in NIPA. They fail in the same exact way, TCP GRO test stalls occasionally and the test gets killed after 10min. These tests use veth to simulate GRO. They attach a trivial (\"return XDP_PASS;\") XDP program to the veth to force TSO off and NAPI on. Digging into the failure mode we can see that the connection is completely stuck after a burst of drops. The sender's snd_nxt is at sequence number N [1], but the receiver claims to have received (rcv_nxt) up to N + 3 * MSS [2]. Last piece of the puzzle is that senders rtx queue is not empty (let's say the block in the rtx queue is at sequence number N - 4 * MSS [3]). In this state, sender sends a retransmission from the rtx queue with a single segment, and sequence numbers N-4*MSS:N-3*MSS [3]. Receiver sees it and responds with an ACK all the way up to N + 3 * MSS [2]. But sender will reject this ack as TCP_ACK_UNSENT_DATA because it has no recollection of ever sending data that far out [1]. And we are stuck. The root cause is the mess of the xmit return codes. veth returns an error when it can't xmit a frame. We end up with a loss event like this: ------------------------------------------------- | GSO super frame 1 | GSO super frame 2 | |-----------------------------------------------| | seg | seg | seg | seg | seg | seg | seg | seg | | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | ------------------------------------------------- x ok ok | ok ok ok \\\\ snd_nxt \"x\" means packet lost by veth, and \"ok\" means it went thru. Since veth has TSO disabled in this test it sees individual segments. Segment 1 is on the retransmit queue and will be resent. So why did the sender not advance snd_nxt even tho it clearly did send up to seg 8? tcp_write_xmit() interprets the return code from the core to mean that data has not been sent at all. Since TCP deals with GSO super frames, not individual segment the crux of the problem is that loss of a single segment can be interpreted as loss of all. TCP only sees the last return code for the last segment of the GSO frame (in brackets in the diagram above). Of course for the problem to occur we need a setup or a device without a Qdisc. Otherwise Qdisc layer disconnects the protocol layer from the device errors completely. We have multiple ways to fix this. 1) make veth not return an error when it lost a packet. While this is what I think we did in the past, the issue keeps reappearing and it's annoying to debug. The game of whack a mole is not great. 2) fix the damn return codes We only talk about NETDEV_TX_OK and NETDEV_TX_BUSY in the documentation, so maybe we should make the return code from ndo_start_xmit() a boolean. I like that the most, but perhaps some ancient, not-really-networking protocol would suffer. 3) make TCP ignore the errors It is not entirely clear to me what benefit TCP gets from interpreting the result of ip_queue_xmit()? Specifically once the connection is established and we're pushing data - packet loss is just packet loss? 4) this fix Ignore the rc in the Qdisc-less+GSO case, since it's unreliable. We already always return OK in the TCQ_F_CAN_BYPASS case. In the Qdisc-less case let's be a bit more conservative and only mask the GSO errors. This path is taken by non-IP-\"networks\" like CAN, MCTP etc, so we could regress some ancient thing. This is the simplest, but also maybe the hackiest fix? Similar fix has been proposed by Eric in the past but never committed because original reporter was working with an OOT driver and wasn't providing feedback (see Link).",
+      "published": "2026-05-06T12:16:38.310Z",
+      "lastModified": "2026-05-11T20:11:10.707Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00068,
+      "epssPercentile": 0.21149,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.37,
+      "tags": [
+        "F5",
+        "Linux"
       ]
     },
     {
@@ -7454,50 +7405,6 @@
       "priorityScore": 4.33,
       "tags": [
         "CWE-89"
-      ]
-    },
-    {
-      "id": "CVE-2026-40595",
-      "summary": "Chartbrew is an open-source web application that can connect directly to databases and APIs and use the data to create charts. In version 4.9.0, Chartbrew exposes public chart retrieval and export routes that only verify project-level public access and, for exports, a team-level export toggle. The routes do not verify whether the target chart is actually allowed on the public report or whether the governing SharePolicy permits public access. An unauthenticated attacker who knows a chart identifier in a public project can read or export chart data for charts that were intentionally hidden from the report. This issue has been patched in version 5.0.0.",
-      "published": "2026-04-30T19:16:09.783Z",
-      "lastModified": "2026-05-01T15:31:02.467Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00063,
-      "epssPercentile": 0.19774,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.32,
-      "tags": [
-        "CWE-284"
       ]
     },
     {
@@ -8343,94 +8250,6 @@
       "tags": [
         "CWE-20",
         "CWE-77"
-      ]
-    },
-    {
-      "id": "CVE-2026-40600",
-      "summary": "Chartbrew is an open-source web application that can connect directly to databases and APIs and use the data to create charts. In version 4.9.0, Chartbrew allows authenticated users with access to one project to update or delete a SharePolicy record that belongs to a different project. The affected routes authorize the caller against the project in the URL path, but they never verify that policy_id belongs to that project. This permits cross-project modification of dashboard sharing rules, including visibility, password requirements, allowed parameters, and expiration settings. This issue has been patched in version 5.0.0.",
-      "published": "2026-04-30T19:16:09.957Z",
-      "lastModified": "2026-05-01T15:31:02.467Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00032,
-      "epssPercentile": 0.09652,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.17,
-      "tags": [
-        "CWE-639"
-      ]
-    },
-    {
-      "id": "CVE-2026-40904",
-      "summary": "Chartbrew is an open-source web application that can connect directly to databases and APIs and use the data to create charts. In version 4.9.0, Chartbrew exposes multiple dataset and dataRequest endpoints that authorize low-privileged project members at the team level instead of binding the requested dataset_id, dataRequest id, and connection_id to the caller's allowed projects. An authenticated attacker who only has access to one project inside a team can read, execute, create, update, and delete datasets and data requests that belong to other projects in the same team. The issue is exploitable remotely with ordinary project-level credentials and leads to cross-project data disclosure and unauthorized use of victim-side database or API connections. This issue has been patched in version 5.0.0.",
-      "published": "2026-04-30T19:16:10.433Z",
-      "lastModified": "2026-05-01T15:31:02.467Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00032,
-      "epssPercentile": 0.09652,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.17,
-      "tags": [
-        "CWE-284"
       ]
     },
     {
@@ -10497,6 +10316,51 @@
       ]
     },
     {
+      "id": "CVE-2026-43198",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: tcp: fix potential race in tcp_v6_syn_recv_sock() Code in tcp_v6_syn_recv_sock() after the call to tcp_v4_syn_recv_sock() is done too late. After tcp_v4_syn_recv_sock(), the child socket is already visible from TCP ehash table and other cpus might use it. Since newinet->pinet6 is still pointing to the listener ipv6_pinfo bad things can happen as syzbot found. Move the problematic code in tcp_v6_mapped_child_init() and call this new helper from tcp_v4_syn_recv_sock() before the ehash insertion. This allows the removal of one tcp_sync_mss(), since tcp_v4_syn_recv_sock() will call it with the correct context.",
+      "published": "2026-05-06T12:16:38.857Z",
+      "lastModified": "2026-05-11T20:12:11.740Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00048,
+      "epssPercentile": 0.15294,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-362",
+          "name": "CWE-362",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.97,
+      "tags": [
+        "Linux",
+        "CWE-362"
+      ]
+    },
+    {
       "id": "CVE-2026-39849",
       "summary": "Pi-hole FTL is the core engine of the Pi-hole network-level advertisement and tracker blocker. In versions before 6.6.1, the `dns.interface` configuration field in Pi-hole FTL accepted newline characters without validation, allowing an attacker to inject arbitrary directives into the generated dnsmasq configuration file. On installations with no admin password set (the default for many deployments), the configuration API is fully accessible without credentials, allowing a network-adjacent attacker to inject the payload, enable the built-in DHCP server, and achieve arbitrary command execution on the host the next time any device on the network requests a DHCP lease. The injected value is persisted to /etc/pihole/pihole.toml and survives restarts. The strncpy in the code path limits the total interface field to 31 bytes, but payloads such as wlan0\\ndhcp-script=/tmp/p fit within this constraint. The dnsmasq config validation introduced in FTL 6.6 only checks syntactic validity, so valid directives injected via newline pass validation successfully. This issue has been fixed in version 6.6.1.",
       "published": "2026-05-05T21:16:22.677Z",
@@ -11445,50 +11309,6 @@
       "tags": [
         "F5",
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-36765",
-      "summary": "An XML external entity (XXE) vulnerability in the /designer/loadReport endpoint of SpringBlade v4.8.0 allows authenticated attackers to execute arbitrary code via injecting a crafted payload.",
-      "published": "2026-04-30T18:16:29.707Z",
-      "lastModified": "2026-05-04T18:16:28.650Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0007,
-      "epssPercentile": 0.21632,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-611",
-          "name": "CWE-611",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.84,
-      "tags": [
-        "CWE-611"
       ]
     },
     {
@@ -12504,6 +12324,51 @@
       "priorityScore": 3.78,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43197",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netconsole: avoid OOB reads, msg is not nul-terminated msg passed to netconsole from the console subsystem is not guaranteed to be nul-terminated. Before recent commit 7eab73b18630 (\"netconsole: convert to NBCON console infrastructure\") the message would be placed in printk_shared_pbufs, a static global buffer, so KASAN had harder time catching OOB accesses. Now we see: printk: console [netcon_ext0] enabled BUG: KASAN: slab-out-of-bounds in string+0x1f7/0x240 Read of size 1 at addr ffff88813b6d4c00 by task pr/netcon_ext0/594 CPU: 65 UID: 0 PID: 594 Comm: pr/netcon_ext0 Not tainted 6.19.0-11754-g4246fd6547c9 Call Trace: kasan_report+0xe4/0x120 string+0x1f7/0x240 vsnprintf+0x655/0xba0 scnprintf+0xba/0x120 netconsole_write+0x3fe/0xa10 nbcon_emit_next_record+0x46e/0x860 nbcon_kthread_func+0x623/0x750 Allocated by task 1: nbcon_alloc+0x1ea/0x450 register_console+0x26b/0xe10 init_netconsole+0xbb0/0xda0 The buggy address belongs to the object at ffff88813b6d4000 which belongs to the cache kmalloc-4k of size 4096 The buggy address is located 0 bytes to the right of allocated 3072-byte region [ffff88813b6d4000, ffff88813b6d4c00)",
+      "published": "2026-05-06T12:16:38.740Z",
+      "lastModified": "2026-05-11T20:11:44.147Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00053,
+      "epssPercentile": 0.16922,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.78,
+      "tags": [
+        "Linux",
+        "CWE-125"
       ]
     },
     {
@@ -14495,50 +14360,6 @@
       ]
     },
     {
-      "id": "CVE-2026-40603",
-      "summary": "Chartbrew is an open-source web application that can connect directly to databases and APIs and use the data to create charts. In version 4.9.0, Chartbrew exposes a legacy dashboard route that returns a project's report data to any authenticated member of the same team, even when that user does not have access to the specific project. The route bypasses project-level authorization and returns the raw project object. As a result, a low-privileged same-team user can read another project's dashboard data and recover the project's stored report password from the response. This issue has been patched in version 5.0.0.",
-      "published": "2026-04-30T19:16:10.253Z",
-      "lastModified": "2026-05-01T15:31:02.467Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00032,
-      "epssPercentile": 0.09652,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.61,
-      "tags": [
-        "CWE-284"
-      ]
-    },
-    {
       "id": "CVE-2026-0703",
       "summary": "The NextMove Lite – Thank You Page for WooCommerce plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the plugin's 'xlwcty_current_date' shortcode in all versions up to, and including, 2.23.0 due to insufficient input sanitization and output escaping on user supplied attributes. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
       "published": "2026-05-02T14:16:17.040Z",
@@ -14769,6 +14590,52 @@
       "priorityScore": 3.61,
       "tags": [
         "CWE-640"
+      ]
+    },
+    {
+      "id": "CVE-2026-43190",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: xt_tcpmss: check remaining length before reading optlen Quoting reporter: In net/netfilter/xt_tcpmss.c (lines 53-68), the TCP option parser reads op[i+1] directly without validating the remaining option length. If the last byte of the option field is not EOL/NOP (0/1), the code attempts to index op[i+1]. In the case where i + 1 == optlen, this causes an out-of-bounds read, accessing memory past the optlen boundary (either reading beyond the stack buffer _opt or the following payload).",
+      "published": "2026-05-06T12:16:37.843Z",
+      "lastModified": "2026-05-11T20:50:14.027Z",
+      "severity": "High",
+      "cvssScore": 8.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00068,
+      "epssPercentile": 0.21144,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.61,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-125"
       ]
     },
     {
@@ -16617,50 +16484,6 @@
       ]
     },
     {
-      "id": "CVE-2026-36762",
-      "summary": "An issue in the fileEntityId parameter in the /a/file/upload endpoint of JeeSite v5.15.1 allows authenticated attackers with file upload permissions to execute a path traversal and write arbitrary files with whitelisted suffixes to arbitrary filesystem locations.",
-      "published": "2026-04-30T18:16:29.263Z",
-      "lastModified": "2026-05-04T18:16:28.487Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00033,
-      "epssPercentile": 0.10059,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.43,
-      "tags": [
-        "CWE-22"
-      ]
-    },
-    {
       "id": "CVE-2026-40684",
       "summary": "In Exim before 4.99.2, on systems using musl libc (not glibc), an attacker can crash the connection instance when malformed DNS data is present in PTR records. This is caused by a dn_expand oddity in octal printing.",
       "published": "2026-04-30T22:16:25.477Z",
@@ -18449,52 +18272,6 @@
       ]
     },
     {
-      "id": "CVE-2026-33845",
-      "summary": "A flaw in GnuTLS DTLS handshake parsing allows malformed fragments with zero length and non-zero offset, leading to an integer underflow during reassembly and resulting in an out-of-bounds read. This issue is remotely exploitable and may cause information disclosure or denial of service.",
-      "published": "2026-04-30T18:16:28.003Z",
-      "lastModified": "2026-05-27T04:16:26.953Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00059,
-      "epssPercentile": 0.18785,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-191",
-          "name": "CWE-191",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.28,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-191"
-      ]
-    },
-    {
       "id": "CVE-2026-43048",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: HID: core: Mitigate potential OOB by removing bogus memset() The memset() in hid_report_raw_event() has the good intention of clearing out bogus data by zeroing the area from the end of the incoming data string to the assumed end of the buffer. However, as we have previously seen, doing so can easily result in OOB reads and writes in the subsequent thread of execution. The current suggestion from one of the HID maintainers is to remove the memset() and simply return if the incoming event buffer size is not large enough to fill the associated report. Suggested-by Benjamin Tissoires [bentiss: changed the return value]",
       "published": "2026-05-01T15:16:51.193Z",
@@ -18626,52 +18403,6 @@
       "tags": [
         "Oracle",
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-3833",
-      "summary": "A flaw was found in gnutls. This vulnerability occurs because gnutls performs case-sensitive comparisons of `nameConstraints` labels, specifically for `dNSName` (DNS) or `rfc822Name` (email) constraints within `excludedSubtrees` or `permittedSubtrees`. A remote attacker can exploit this by crafting a leaf certificate with casing differences in the Subject Alternative Name (SAN), leading to a policy bypass where a certificate that should be rejected is instead accepted. This could result in unauthorized access or information disclosure.",
-      "published": "2026-04-30T18:16:30.577Z",
-      "lastModified": "2026-05-27T04:16:30.053Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00107,
-      "epssPercentile": 0.28501,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-178",
-          "name": "CWE-178",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.27,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-178"
       ]
     },
     {
@@ -19470,6 +19201,45 @@
       "tags": [
         "CWE-74",
         "CWE-94"
+      ]
+    },
+    {
+      "id": "CVE-2026-43199",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net/mlx5e: Fix \"scheduling while atomic\" in IPsec MAC address query Fix a \"scheduling while atomic\" bug in mlx5e_ipsec_init_macs() by replacing mlx5_query_mac_address() with ether_addr_copy() to get the local MAC address directly from netdev->dev_addr. The issue occurs because mlx5_query_mac_address() queries the hardware which involves mlx5_cmd_exec() that can sleep, but it is called from the mlx5e_ipsec_handle_event workqueue which runs in atomic context. The MAC address is already available in netdev->dev_addr, so no need to query hardware. This avoids the sleeping call and resolves the bug. Call trace: BUG: scheduling while atomic: kworker/u112:2/69344/0x00000200 __schedule+0x7ab/0xa20 schedule+0x1c/0xb0 schedule_timeout+0x6e/0xf0 __wait_for_common+0x91/0x1b0 cmd_exec+0xa85/0xff0 [mlx5_core] mlx5_cmd_exec+0x1f/0x50 [mlx5_core] mlx5_query_nic_vport_mac_address+0x7b/0xd0 [mlx5_core] mlx5_query_mac_address+0x19/0x30 [mlx5_core] mlx5e_ipsec_init_macs+0xc1/0x720 [mlx5_core] mlx5e_ipsec_build_accel_xfrm_attrs+0x422/0x670 [mlx5_core] mlx5e_ipsec_handle_event+0x2b9/0x460 [mlx5_core] process_one_work+0x178/0x2e0 worker_thread+0x2ea/0x430",
+      "published": "2026-05-06T12:16:38.970Z",
+      "lastModified": "2026-05-11T20:12:24.760Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00055,
+      "epssPercentile": 0.17407,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.23,
+      "tags": [
+        "F5",
+        "Linux"
       ]
     },
     {
@@ -20353,6 +20123,52 @@
       "priorityScore": 3.18,
       "tags": [
         "CWE-120"
+      ]
+    },
+    {
+      "id": "CVE-2026-43203",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: atm: fore200e: fix use-after-free in tasklets during device removal When the PCA-200E or SBA-200E adapter is being detached, the fore200e is deallocated. However, the tx_tasklet or rx_tasklet may still be running or pending, leading to use-after-free bug when the already freed fore200e is accessed again in fore200e_tx_tasklet() or fore200e_rx_tasklet(). One of the race conditions can occur as follows: CPU 0 (cleanup) | CPU 1 (tasklet) fore200e_pca_remove_one() | fore200e_interrupt() fore200e_shutdown() | tasklet_schedule() kfree(fore200e) | fore200e_tx_tasklet() | fore200e-> // UAF Fix this by ensuring tx_tasklet or rx_tasklet is properly canceled before the fore200e is released. Add tasklet_kill() in fore200e_shutdown() to synchronize with any pending or running tasklets. Moreover, since fore200e_reset() could prevent further interrupts or data transfers, the tasklet_kill() should be placed after fore200e_reset() to prevent the tasklet from being rescheduled in fore200e_interrupt(). Finally, it only needs to do tasklet_kill() when the fore200e state is greater than or equal to FORE200E_STATE_IRQ, since tasklets are uninitialized in earlier states. In a word, the tasklet_kill() should be placed in the FORE200E_STATE_IRQ branch within the switch...case structure. This bug was identified through static analysis.",
+      "published": "2026-05-06T12:16:39.477Z",
+      "lastModified": "2026-05-11T20:10:27.037Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00049,
+      "epssPercentile": 0.15449,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.17,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-416"
       ]
     },
     {
@@ -21892,51 +21708,6 @@
       "tags": [
         "WordPress",
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-7461",
-      "summary": "Improper neutralization of inputs used in an OS command in the FSx Windows File Server volume mounting component in Amazon ECS Agent on Windows before version 1.103.0 might allow a remote authenticated threat actor to execute shell commands with SYSTEM privileges on the underlying host via a specially crafted username field in an ECS task definition. This issue requires permissions to register ECS task definitions or write to the Secrets Manager or SSM Parameter Store credentials used by the FSx volume configuration. To remediate this issue, users should upgrade to version 1.103.0.",
-      "published": "2026-04-30T19:16:10.737Z",
-      "lastModified": "2026-05-05T02:18:07.730Z",
-      "severity": "High",
-      "cvssScore": 7.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00045,
-      "epssPercentile": 0.14266,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.02,
-      "tags": [
-        "Windows",
-        "CWE-78"
       ]
     },
     {
@@ -24992,7 +24763,7 @@
       "patchAvailable": false,
       "workaroundAvailable": true,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 2.83,
       "tags": [
@@ -26718,6 +26489,98 @@
       "tags": [
         "F5",
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43196",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: soc: ti: pruss: Fix double free in pruss_clk_mux_setup() In the pruss_clk_mux_setup(), the devm_add_action_or_reset() indirectly calls pruss_of_free_clk_provider(), which calls of_node_put(clk_mux_np) on the error path. However, after the devm_add_action_or_reset() returns, the of_node_put(clk_mux_np) is called again, causing a double free. Fix by returning directly, to avoid the duplicate of_node_put().",
+      "published": "2026-05-06T12:16:38.607Z",
+      "lastModified": "2026-05-11T20:11:30.810Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02541,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-415",
+          "name": "CWE-415",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.82,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-415"
+      ]
+    },
+    {
+      "id": "CVE-2026-43205",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dpaa2-switch: validate num_ifs to prevent out-of-bounds write The driver obtains sw_attr.num_ifs from firmware via dpsw_get_attributes() but never validates it against DPSW_MAX_IF (64). This value controls iteration in dpaa2_switch_fdb_get_flood_cfg(), which writes port indices into the fixed-size cfg->if_id[DPSW_MAX_IF] array. When firmware reports num_ifs >= 64, the loop can write past the array bounds. Add a bound check for num_ifs in dpaa2_switch_init(). dpaa2_switch_fdb_get_flood_cfg() appends the control interface (port num_ifs) after all matched ports. When num_ifs == DPSW_MAX_IF and all ports match the flood filter, the loop fills all 64 slots and the control interface write overflows by one entry. The check uses >= because num_ifs == DPSW_MAX_IF is also functionally broken. build_if_id_bitmap() silently drops any ID >= 64: if (id[i] < DPSW_MAX_IF) bmap[id[i] / 64] |= ...",
+      "published": "2026-05-06T12:16:39.747Z",
+      "lastModified": "2026-05-11T19:59:54.157Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02541,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.82,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-787"
       ]
     },
     {
@@ -31600,94 +31463,6 @@
       ]
     },
     {
-      "id": "CVE-2026-36761",
-      "summary": "A stored cross-site scripting (XSS) vulnerability in the /msg/msgInner/save endpoint of JeeSite v5.15.1 allows attackers to execute arbitrary web scripts or HTML via injecting a crafted input into the msgContent parameter.",
-      "published": "2026-04-30T18:16:29.087Z",
-      "lastModified": "2026-04-30T19:11:18.200Z",
-      "severity": "Medium",
-      "cvssScore": 6.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00031,
-      "epssPercentile": 0.09634,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.47,
-      "tags": [
-        "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-36763",
-      "summary": "A stored cross-site scripting (XSS) vulnerability in the /api/blade-desk/notice/submit endpoint of SpringBlade v4.8.0 allows attackers to execute arbitrary web scripts or HTML via injecting a crafted input into the content parameter.",
-      "published": "2026-04-30T18:16:29.370Z",
-      "lastModified": "2026-04-30T19:14:15.800Z",
-      "severity": "Medium",
-      "cvssScore": 6.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00031,
-      "epssPercentile": 0.09541,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.47,
-      "tags": [
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-7536",
       "summary": "A vulnerability was determined in Open5GS up to 2.7.7. This vulnerability affects the function bsf_sess_add_by_ip_address of the file /nbsf-management/v1/pcfBindings of the component BSF. Executing a manipulation of the argument ipv4Addr can lead to denial of service. The attack can be launched remotely. The exploit has been publicly disclosed and may be utilized. The project was informed of the problem early through an issue report but has not responded yet.",
       "published": "2026-05-01T02:16:04.347Z",
@@ -31812,7 +31587,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 2.47,
       "tags": [
@@ -31858,7 +31633,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 2.47,
       "tags": [
@@ -33311,56 +33086,6 @@
       ]
     },
     {
-      "id": "CVE-2026-32148",
-      "summary": "Insufficient Verification of Data Authenticity vulnerability in hexpm hex (Hex.RemoteConverger module) allows dependency integrity bypass via unverified lockfile checksums. Hex stores checksums for dependencies in the mix.lock file to ensure reproducible and integrity-checked builds. However, Hex.RemoteConverger.verify_resolved/2 never executes checksum verification because the lock data returned by Hex.Utils.lock/1 uses string-based dependency names, while the verification logic compares against atom-based names. This type mismatch causes the verification code path to be silently skipped. Checksums are still validated when packages are initially downloaded from the registry, but mismatches between the lockfile and resolved dependencies are not detected. An attacker who can influence cached packages (e.g., via local cache poisoning or a compromised registry) can provide modified dependency contents that will be accepted without detection. The mix.lock file is silently rewritten with the checksum values from the registry, erasing evidence of tampering. This issue affects hex: from 0.16.0 before 2.4.2.",
-      "published": "2026-04-30T19:16:09.000Z",
-      "lastModified": "2026-05-05T02:16:49.597Z",
-      "severity": "Medium",
-      "cvssScore": 5.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00019,
-      "epssPercentile": 0.05539,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-354",
-          "name": "CWE-354",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-494",
-          "name": "CWE-494",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.26,
-      "tags": [
-        "CWE-354",
-        "CWE-494"
-      ]
-    },
-    {
       "id": "CVE-2026-40686",
       "summary": "In Exim before 4.99.2, when utf8 operators are enabled, there is an out-of-bounds read if large UTF-8 trailing characters are present (malformed UTF-8 header data). Information might be divulged within an error message produced during handling of an unrelated e-mail message.",
       "published": "2026-04-30T22:16:25.787Z",
@@ -33716,50 +33441,6 @@
       "priorityScore": 2.21,
       "tags": [
         "CWE-358",
-        "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-36766",
-      "summary": "Multiple authenticated cross-site scripting (XSS) vulnerabilities in the XssHttpServletRequestWrapper class of shopizer v3.2.5 allows attackers to execute arbitrary web scripts or HTML via injecting a crafted payload into the getInputStream() or getReader() functions.",
-      "published": "2026-04-30T18:16:29.830Z",
-      "lastModified": "2026-04-30T19:16:09.377Z",
-      "severity": "Medium",
-      "cvssScore": 5.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00029,
-      "epssPercentile": 0.08951,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.2,
-      "tags": [
         "CWE-79"
       ]
     },
@@ -35263,6 +34944,158 @@
       "summary": "In the Linux kernel, the following vulnerability has been resolved: io_uring/zcrx: fix post open error handling Closing a queue doesn't guarantee that all associated page pools are terminated right away, let the refcounting do the work instead of releasing the zcrx ctx directly.",
       "published": "2026-05-06T12:16:35.850Z",
       "lastModified": "2026-05-12T20:01:34.590Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00014,
+      "epssPercentile": 0.03053,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.03,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43191",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/amd/display: Adjust PHY FSM transition to TX_EN-to-PLL_ON for TMDS on DCN35 [Why] A backport of the change made for DCN401 that addresses an issue where we turn off the PHY PLL when disabling TMDS output, which causes the OTG to remain stuck. The OTG being stuck can lead to a hang in the DCHVM's ability to ACK invalidations when it thinks the HUBP is still on but it's not receiving global sync. The transition to PLL_ON needs to be atomic as there's no guarantee that the thread isn't pre-empted or is able to complete before the IOMMU watchdog times out. [How] Backport the implementation from dcn401 back to dcn35. There's a functional difference in when the eDP output is disabled in dcn401 code so we don't want to utilize it directly.",
+      "published": "2026-05-06T12:16:37.970Z",
+      "lastModified": "2026-05-11T20:51:38.467Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00014,
+      "epssPercentile": 0.03053,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.03,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43192",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm mpath: Add missing dm_put_device when failing to get scsi dh name When commit fd81bc5cca8f (\"scsi: device_handler: Return error pointer in scsi_dh_attached_handler_name()\") added code to fail parsing the path if scsi_dh_attached_handler_name() failed with -ENOMEM, it didn't clean up the reference to the path device that had just been taken. Fix this, and steamline the error paths of parse_path() a little.",
+      "published": "2026-05-06T12:16:38.083Z",
+      "lastModified": "2026-05-11T20:36:39.877Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00014,
+      "epssPercentile": 0.03053,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.03,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43193",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nfsd: fix nfs4_file refcount leak in nfsd_get_dir_deleg() Claude pointed out that there is a nfs4_file refcount leak in nfsd_get_dir_deleg(). Ensure that the reference to \"fp\" is released before returning.",
+      "published": "2026-05-06T12:16:38.197Z",
+      "lastModified": "2026-05-11T20:36:27.623Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00014,
+      "epssPercentile": 0.03053,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.03,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43204",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ASoC: qcom: q6asm: drop DSP responses for closed data streams 'Commit a354f030dbce (\"ASoC: qcom: q6asm: handle the responses after closing\")' attempted to ignore DSP responses arriving after a stream had been closed. However, those responses were still handled, causing lockups. Fix this by unconditionally dropping all DSP responses associated with closed data streams.",
+      "published": "2026-05-06T12:16:39.623Z",
+      "lastModified": "2026-05-11T20:06:22.667Z",
       "severity": "Medium",
       "cvssScore": 5.5,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
@@ -37872,6 +37705,84 @@
       ]
     },
     {
+      "id": "CVE-2026-43200",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: PCI: endpoint: Fix swapped parameters in pci_{primary/secondary}_epc_epf_unlink() functions struct configfs_item_operations callbacks are defined like the following: int (*allow_link)(struct config_item *src, struct config_item *target); void (*drop_link)(struct config_item *src, struct config_item *target); While pci_primary_epc_epf_link() and pci_secondary_epc_epf_link() specify the parameters in the correct order, pci_primary_epc_epf_unlink() and pci_secondary_epc_epf_unlink() specify the parameters in the wrong order, leading to the below kernel crash when using the unlink command in configfs: Unable to handle kernel paging request at virtual address 0000000300000857 Mem abort info: ... pc : string+0x54/0x14c lr : vsnprintf+0x280/0x6e8 ... string+0x54/0x14c vsnprintf+0x280/0x6e8 vprintk_default+0x38/0x4c vprintk+0xc4/0xe0 pci_epf_unbind+0xdc/0x108 configfs_unlink+0xe0/0x208+0x44/0x74 vfs_unlink+0x120/0x29c __arm64_sys_unlinkat+0x3c/0x90 invoke_syscall+0x48/0x134 do_el0_svc+0x1c/0x30prop.0+0xd0/0xf0 [mani: cced stable, changed commit message as per https://lore.kernel.org/linux-pci/aV9joi3jF1R6ca02@ryzen]",
+      "published": "2026-05-06T12:16:39.090Z",
+      "lastModified": "2026-05-11T20:10:53.497Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.024,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.01,
+      "tags": [
+        "F5",
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43202",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: fbdev: vt8500lcdfb: fix missing dma_free_coherent() fbi->fb.screen_buffer is allocated with dma_alloc_coherent() but is not freed if the error path is reached.",
+      "published": "2026-05-06T12:16:39.347Z",
+      "lastModified": "2026-05-11T20:10:35.477Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.024,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.01,
+      "tags": [
+        "F5",
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-31713",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: fuse: abort on fatal signal during sync init When sync init is used and the server exits for some reason (error, crash) while processing FUSE_INIT, the filesystem creation will hang. The reason is that while all other threads will exit, the mounting thread (or process) will keep the device fd open, which will prevent an abort from happening. This is a regression from the async mount case, where the mount was done first, and the FUSE_INIT processing afterwards, in which case there's no such recursive syscall keeping the fd open.",
       "published": "2026-05-01T14:16:21.390Z",
@@ -39918,6 +39829,84 @@
       "knownRansomwareUse": false,
       "priorityScore": 2,
       "tags": [
+        "Linux",
+        "iOS"
+      ]
+    },
+    {
+      "id": "CVE-2026-43195",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/amdgpu: validate user queue size constraints Add validation to ensure user queue sizes meet hardware requirements: - Size must be a power of two for efficient ring buffer wrapping - Size must be at least AMDGPU_GPU_PAGE_SIZE to prevent undersized allocations This prevents invalid configurations that could lead to GPU faults or unexpected behavior.",
+      "published": "2026-05-06T12:16:38.487Z",
+      "lastModified": "2026-05-11T20:21:56.267Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02271,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43201",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: APEI/GHES: ARM processor Error: don't go past allocated memory If the BIOS generates a very small ARM Processor Error, or an incomplete one, the current logic will fail to deferrence err->section_length and ctx_info->size Add checks to avoid that. With such changes, such GHESv2 records won't cause OOPSes like this: [ 1.492129] Internal error: Oops: 0000000096000005 [#1] SMP [ 1.495449] Modules linked in: [ 1.495820] CPU: 0 UID: 0 PID: 9 Comm: kworker/0:0 Not tainted 6.18.0-rc1-00017-gabadcc3553dd-dirty #18 PREEMPT [ 1.496125] Hardware name: QEMU QEMU Virtual Machine, BIOS unknown 02/02/2022 [ 1.496433] Workqueue: kacpi_notify acpi_os_execute_deferred [ 1.496967] pstate: 814000c5 (Nzcv daIF +PAN -UAO -TCO +DIT -SSBS BTYPE=--) [ 1.497199] pc : log_arm_hw_error+0x5c/0x200 [ 1.497380] lr : ghes_handle_arm_hw_error+0x94/0x220 0xffff8000811c5324 is in log_arm_hw_error (../drivers/ras/ras.c:75). 70 err_info = (struct cper_arm_err_info *)(err + 1); 71 ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num); 72 ctx_err = (u8 *)ctx_info; 73 74 for (n = 0; n context_info_num; n++) { 75 sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size; 76 ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz); 77 ctx_len += sz; 78 } 79 and similar ones while trying to access section_length on an error dump with too small size. [ rjw: Subject tweaks ]",
+      "published": "2026-05-06T12:16:39.223Z",
+      "lastModified": "2026-05-11T20:20:33.693Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02192,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "F5",
         "Linux",
         "iOS"
       ]
@@ -42855,52 +42844,6 @@
       "priorityScore": 1.48,
       "tags": [
         "CWE-918"
-      ]
-    },
-    {
-      "id": "CVE-2026-3832",
-      "summary": "A flaw was found in gnutls. A remote attacker could exploit this vulnerability by presenting a specially crafted Online Certificate Status Protocol (OCSP) response during a TLS handshake. Due to a logic error in how gnutls processes multi-record OCSP responses, a client with OCSP verification enabled may incorrectly accept a revoked server certificate, potentially leading to a compromise of trust.",
-      "published": "2026-04-30T18:16:30.433Z",
-      "lastModified": "2026-05-11T19:15:57.277Z",
-      "severity": "Low",
-      "cvssScore": 3.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00016,
-      "epssPercentile": 0.04114,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-179",
-          "name": "CWE-179",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.44,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-179"
       ]
     },
     {
