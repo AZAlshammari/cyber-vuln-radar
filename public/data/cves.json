@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-30T23:44:09.799Z",
+  "generatedAt": "2026-05-31T01:55:58.211Z",
   "count": 1000,
   "items": [
     {
@@ -11510,6 +11510,52 @@
       ]
     },
     {
+      "id": "CVE-2026-43260",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: bnxt_en: Fix RSS context delete logic We need to free the corresponding RSS context VNIC in FW everytime an RSS context is deleted in driver. Commit 667ac333dbb7 added a check to delete the VNIC in FW only when netif_running() is true to help delete RSS contexts with interface down. Having that condition will make the driver leak VNICs in FW whenever close() happens with active RSS contexts. On the subsequent open(), as part of RSS context restoration, we will end up trying to create extra VNICs for which we did not make any reservation. FW can fail this request, thereby making us lose active RSS contexts. Suppose an RSS context is deleted already and we try to process a delete request again, then the HWRM functions will check for validity of the request and they simply return if the resource is already freed. So, even for delete-when-down cases, netif_running() check is not necessary. Remove the netif_running() condition check when deleting an RSS context.",
+      "published": "2026-05-06T12:16:46.883Z",
+      "lastModified": "2026-05-08T20:31:55.037Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02495,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-415",
+          "name": "CWE-415",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.82,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-415"
+      ]
+    },
+    {
       "id": "CVE-2025-70069",
       "summary": "An issue in Assimp v.6.0.2 allows a remote attacker to cause a denial of service via the FBXConverter.cpp and ConvertMeshMultiMaterial() method",
       "published": "2026-05-04T14:16:29.473Z",
@@ -14165,106 +14211,6 @@
         "F5",
         "Linux",
         "CWE-125"
-      ]
-    },
-    {
-      "id": "CVE-2026-7512",
-      "summary": "A flaw has been found in UTT HiPER 1200GW up to 2.5.3-1703. The affected element is the function strcpy of the file /goform/formUser. Executing a manipulation can lead to buffer overflow. The attack can be launched remotely. The exploit has been published and may be used.",
-      "published": "2026-05-01T00:16:25.257Z",
-      "lastModified": "2026-05-01T15:26:24.553Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00046,
-      "epssPercentile": 0.14622,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-119",
-          "name": "CWE-119",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-120",
-          "name": "CWE-120",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.59,
-      "tags": [
-        "CWE-119",
-        "CWE-120"
-      ]
-    },
-    {
-      "id": "CVE-2026-7513",
-      "summary": "A vulnerability has been found in UTT HiPER 1200GW up to 2.5.3-170306. The impacted element is the function strcpy of the file /goform/formRemoteControl. The manipulation leads to buffer overflow. The attack may be initiated remotely. The exploit has been disclosed to the public and may be used.",
-      "published": "2026-05-01T00:16:25.443Z",
-      "lastModified": "2026-05-01T15:26:24.553Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00046,
-      "epssPercentile": 0.14622,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-119",
-          "name": "CWE-119",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-120",
-          "name": "CWE-120",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.59,
-      "tags": [
-        "CWE-119",
-        "CWE-120"
       ]
     },
     {
@@ -19423,50 +19369,6 @@
       ]
     },
     {
-      "id": "CVE-2026-7519",
-      "summary": "A vulnerability has been found in Fujian Apex LiveBOS up to 2.0. Impacted is an unknown function of the file /feed/UploadImage.do of the component Endpoint. Such manipulation of the argument filename leads to path traversal. The attack can be launched remotely. The exploit has been disclosed to the public and may be used. Upgrading to version 2.1 is recommended to address this issue. Upgrading the affected component is advised.",
-      "published": "2026-05-01T01:16:17.910Z",
-      "lastModified": "2026-05-01T15:26:24.553Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00056,
-      "epssPercentile": 0.17901,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.18,
-      "tags": [
-        "CWE-22"
-      ]
-    },
-    {
       "id": "CVE-2026-43031",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net: xilinx: axienet: Fix BQL accounting for multi-BD TX packets When a TX packet spans multiple buffer descriptors (scatter-gather), axienet_free_tx_chain sums the per-BD actual length from descriptor status into a caller-provided accumulator. That sum is reset on each NAPI poll. If the BDs for a single packet complete across different polls, the earlier bytes are lost and never credited to BQL. This causes BQL to think bytes are permanently in-flight, eventually stalling the TX queue. The SKB pointer is stored only on the last BD of a packet. When that BD completes, use skb->len for the byte count instead of summing per-BD status lengths. This matches netdev_sent_queue(), which debits skb->len, and naturally survives across polls because no partial packet contributes to the accumulator.",
       "published": "2026-05-01T15:16:47.680Z",
@@ -22284,6 +22186,52 @@
       "tags": [
         "F5",
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43257",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: media: cx88: Add missing unmap in snd_cx88_hw_params() In error path, add cx88_alsa_dma_unmap() to release resource acquired by cx88_alsa_dma_map().",
+      "published": "2026-05-06T12:16:46.520Z",
+      "lastModified": "2026-05-11T18:16:01.917Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.024,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-772",
+          "name": "CWE-772",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.01,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-772"
       ]
     },
     {
@@ -26338,6 +26286,99 @@
       ]
     },
     {
+      "id": "CVE-2026-43256",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: media: qcom: camss: vfe: Fix out-of-bounds access in vfe_isr_reg_update() vfe_isr() iterates using MSM_VFE_IMAGE_MASTERS_NUM(7) as the loop bound and passes the index to vfe_isr_reg_update(). However, vfe->line[] array is defined with VFE_LINE_NUM_MAX(4): struct vfe_line line[VFE_LINE_NUM_MAX]; When index is 4, 5, 6, the access to vfe->line[line_id] exceeds the array bounds and resulting in out-of-bounds memory access. Fix this by using separate loops for output lines and write masters.",
+      "published": "2026-05-06T12:16:46.397Z",
+      "lastModified": "2026-05-11T18:16:48.460Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02541,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.82,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-43258",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: alpha: fix user-space corruption during memory compaction Alpha systems can suffer sporadic user-space crashes and heap corruption when memory compaction is enabled. Symptoms include SIGSEGV, glibc allocator failures (e.g. \"unaligned tcache chunk\"), and compiler internal errors. The failures disappear when compaction is disabled or when using global TLB invalidation. The root cause is insufficient TLB shootdown during page migration. Alpha relies on ASN-based MM context rollover for instruction cache coherency, but this alone is not sufficient to prevent stale data or instruction translations from surviving migration. Fix this by introducing a migration-specific helper that combines: - MM context invalidation (ASN rollover), - immediate per-CPU TLB invalidation (TBI), - synchronous cross-CPU shootdown when required. The helper is used only by migration/compaction paths to avoid changing global TLB semantics. Additionally, update flush_tlb_other(), pte_clear(), to use READ_ONCE()/WRITE_ONCE() for correct SMP memory ordering. This fixes observed crashes on both UP and SMP Alpha systems.",
+      "published": "2026-05-06T12:16:46.650Z",
+      "lastModified": "2026-05-11T18:10:27.473Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02495,
+      "isKev": false,
+      "kev": null,
+      "vendor": "SAP",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.82,
+      "tags": [
+        "SAP",
+        "F5",
+        "Linux",
+        "CWE-787"
+      ]
+    },
+    {
       "id": "CVE-2026-31703",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: writeback: Fix use after free in inode_switch_wbs_work_fn() inode_switch_wbs_work_fn() has a loop like: wb_get(new_wb); while (1) { list = llist_del_all(&new_wb->switch_wbs_ctxs); /* Nothing to do? */ if (!list) break; ... process the items ... } Now adding of items to the list looks like: wb_queue_isw() if (llist_add(&isw->list, &wb->switch_wbs_ctxs)) queue_work(isw_wq, &wb->switch_work); Because inode_switch_wbs_work_fn() loops when processing isw items, it can happen that wb->switch_work is pending while wb->switch_wbs_ctxs is empty. This is a problem because in that case wb can get freed (no isw items -> no wb reference) while the work is still pending causing use-after-free issues. We cannot just fix this by cancelling work when freeing wb because that could still trigger problematic 0 -> 1 transitions on wb refcount due to wb_get() in inode_switch_wbs_work_fn(). It could be all handled with more careful code but that seems unnecessarily complex so let's avoid that until it is proven that the looping actually brings practical benefit. Just remove the loop from inode_switch_wbs_work_fn() instead. That way when wb_queue_isw() queues work, we are guaranteed we have added the first item to wb->switch_wbs_ctxs and nobody is going to remove it (and drop the wb reference it holds) until the queued work runs.",
       "published": "2026-05-01T14:16:20.263Z",
@@ -26734,6 +26775,51 @@
       "tags": [
         "Linux",
         "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-43263",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: media: chips-media: wave5: Fix Null reference while testing fluster When multi instances are created/destroyed, many interrupts happens and structures for decoder are removed. \"struct vpu_instance\" this structure is shared for all flow in the decoder, so if the structure is not protected by lock, Null dereference could happens sometimes. IRQ Handler was spilt to two phases and Lock was added as well.",
+      "published": "2026-05-06T12:16:47.257Z",
+      "lastModified": "2026-05-08T20:33:12.230Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02297,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.81,
+      "tags": [
+        "Linux",
+        "CWE-476"
       ]
     },
     {
@@ -27288,106 +27374,6 @@
       "tags": [
         "Linux",
         "CWE-362"
-      ]
-    },
-    {
-      "id": "CVE-2026-5403",
-      "summary": "SBC codec crash in Wireshark 4.6.0 to 4.6.4 and 4.4.0 to 4.4.14 allows denial of service and possible code execution",
-      "published": "2026-05-01T00:16:24.670Z",
-      "lastModified": "2026-05-01T19:18:04.737Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00009,
-      "epssPercentile": 0.01011,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-122",
-          "name": "CWE-122",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.77,
-      "tags": [
-        "CWE-122",
-        "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-5405",
-      "summary": "RDP protocol dissector crash in Wireshark 4.6.0 to 4.6.4 and 4.4.0 to 4.4.14 allows denial of service and possible code execution",
-      "published": "2026-05-01T00:16:24.963Z",
-      "lastModified": "2026-05-04T20:16:20.830Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00009,
-      "epssPercentile": 0.01011,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-122",
-          "name": "CWE-122",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.77,
-      "tags": [
-        "CWE-122",
-        "CWE-787"
       ]
     },
     {
@@ -29090,50 +29076,6 @@
       "tags": [
         "WordPress",
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-5656",
-      "summary": "Profile import path traversal in Wireshark 4.6.0 to 4.6.4 and 4.4.0 to 4.4.14 allows denial of service and possible code execution",
-      "published": "2026-05-01T00:16:25.097Z",
-      "lastModified": "2026-05-01T19:23:19.983Z",
-      "severity": "High",
-      "cvssScore": 7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00016,
-      "epssPercentile": 0.03866,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.59,
-      "tags": [
-        "CWE-22"
       ]
     },
     {
@@ -32408,94 +32350,6 @@
       "priorityScore": 2.23,
       "tags": [
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-22726",
-      "summary": "Route Services can be leveraged to send app traffic to network destinations outside of an app's configured egress rules. As a result, a malicious developer with access to Cloudfoundry could configure a route-service that would allow it to send requests to HTTP services on internal networks reachable by the Gorouter, which may not have previously had direct access from outside networks, or from the application. Routing release: affected from v0.118.0 through v0.371.0 (inclusive); upgrade to v0.372.0 or greater. CF Deployment: affected from v0.0.2 through v54.14.0 (inclusive); upgrade to v55.0.0 or greater (includes routing_release v0.372.0).",
-      "published": "2026-05-01T00:16:23.650Z",
-      "lastModified": "2026-05-04T18:30:01.760Z",
-      "severity": "Medium",
-      "cvssScore": 5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00042,
-      "epssPercentile": 0.13152,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-923",
-          "name": "CWE-923",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.21,
-      "tags": [
-        "CWE-923"
-      ]
-    },
-    {
-      "id": "CVE-2026-7535",
-      "summary": "A vulnerability was found in Open5GS up to 2.7.7. This affects the function amf_namf_comm_handle_registration_status_update_request in the library /lib/app/ogs-init.c of the file /namf-comm/v1/ue-contexts/{ueContextId}/transfer-update. Performing a manipulation of the argument ueContextId results in denial of service. The attack can be initiated remotely. The exploit has been made public and could be used. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-05-01T01:16:18.087Z",
-      "lastModified": "2026-05-01T15:26:24.553Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00064,
-      "epssPercentile": 0.20137,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-404",
-          "name": "CWE-404",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.21,
-      "tags": [
-        "CWE-404"
       ]
     },
     {
@@ -37413,6 +37267,169 @@
       ]
     },
     {
+      "id": "CVE-2026-43255",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: libertas: fix WARNING in usb_tx_block The function usb_tx_block() submits cardp->tx_urb without ensuring that any previous transmission on this URB has completed. If a second call occurs while the URB is still active (e.g. during rapid firmware loading), usb_submit_urb() detects the active state and triggers a warning: 'URB submitted while active'. Fix this by enforcing serialization: call usb_kill_urb() before submitting the new request. This ensures the URB is idle and safe to reuse.",
+      "published": "2026-05-06T12:16:46.263Z",
+      "lastModified": "2026-05-11T18:18:36.687Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.024,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.01,
+      "tags": [
+        "F5",
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43261",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: arm64: Add support for TSV110 Spectre-BHB mitigation The TSV110 processor is vulnerable to the Spectre-BHB (Branch History Buffer) attack, which can be exploited to leak information through branch prediction side channels. This commit adds the MIDR of TSV110 to the list for software mitigation.",
+      "published": "2026-05-06T12:16:47.003Z",
+      "lastModified": "2026-05-08T20:37:34.800Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.024,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.01,
+      "tags": [
+        "F5",
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-43262",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: gfs2: fiemap page fault fix In gfs2_fiemap(), we are calling iomap_fiemap() while holding the inode glock. This can lead to recursive glock taking if the fiemap buffer is memory mapped to the same inode and accessing it triggers a page fault. Fix by disabling page faults for iomap_fiemap() and faulting in the buffer by hand if necessary. Fixes xfstest generic/742.",
+      "published": "2026-05-06T12:16:47.133Z",
+      "lastModified": "2026-05-08T20:41:51.240Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.024,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.01,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-401"
+      ]
+    },
+    {
+      "id": "CVE-2026-43264",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: fbdev: of: display_timing: fix refcount leak in of_get_display_timings() of_parse_phandle() returns a device_node with refcount incremented, which is stored in 'entry' and then copied to 'native_mode'. When the error paths at lines 184 or 192 jump to 'entryfail', native_mode's refcount is not decremented, causing a refcount leak. Fix this by changing the goto target from 'entryfail' to 'timingfail', which properly calls of_node_put(native_mode) before cleanup.",
+      "published": "2026-05-06T12:16:47.373Z",
+      "lastModified": "2026-05-08T20:33:27.567Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.024,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.01,
+      "tags": [
+        "F5",
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-31713",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: fuse: abort on fatal signal during sync init When sync init is used and the server exits for some reason (error, crash) while processing FUSE_INIT, the filesystem creation will hang. The reason is that while all other threads will exit, the mounting thread (or process) will keep the device fd open, which will prevent an abort from happening. This is a regression from the async mount case, where the mount was done first, and the FUSE_INIT processing afterwards, in which case there's no such recursive syscall keeping the fd open.",
       "published": "2026-05-01T14:16:21.390Z",
@@ -39998,6 +40015,44 @@
       ]
     },
     {
+      "id": "CVE-2026-43259",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: phy: fsl-imx8mq-usb: set platform driver data Add missing platform_set_drvdata() as the data will be used in remove().",
+      "published": "2026-05-06T12:16:46.777Z",
+      "lastModified": "2026-05-08T20:31:42.360Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02271,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-31756",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: usb: dwc2: gadget: Fix spin_lock/unlock mismatch in dwc2_hsotg_udc_stop() dwc2_gadget_exit_clock_gating() internally calls call_gadget() macro, which expects hsotg->lock to be held since it does spin_unlock/spin_lock around the gadget driver callback invocation. However, dwc2_hsotg_udc_stop() calls dwc2_gadget_exit_clock_gating() without holding the lock. This leads to: - spin_unlock on a lock that is not held (undefined behavior) - The lock remaining held after dwc2_gadget_exit_clock_gating() returns, causing a deadlock when spin_lock_irqsave() is called later in the same function. Fix this by acquiring hsotg->lock before calling dwc2_gadget_exit_clock_gating() and releasing it afterwards, which satisfies the locking requirement of the call_gadget() macro.",
       "published": "2026-05-01T15:16:38.580Z",
@@ -41875,51 +41930,6 @@
       ]
     },
     {
-      "id": "CVE-2026-5404",
-      "summary": "K12 RF5 file parser crash in Wireshark 4.6.0 to 4.6.4 and 4.4.0 to 4.4.14 allows denial of service",
-      "published": "2026-05-01T00:16:24.820Z",
-      "lastModified": "2026-05-01T19:22:11.793Z",
-      "severity": "Medium",
-      "cvssScore": 4.7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00011,
-      "epssPercentile": 0.01334,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-120",
-          "name": "CWE-120",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.69,
-      "tags": [
-        "F5",
-        "CWE-120"
-      ]
-    },
-    {
       "id": "CVE-2026-7581",
       "summary": "A security vulnerability has been detected in alexta69 MeTube up to 2026.04.09. This affects the function on_prepare of the file app/main.py of the component CORS Policy. The manipulation leads to permissive cross-domain policy with untrusted domains. The attack is possible to be carried out remotely. The exploit has been disclosed publicly and may be used. Upgrading to version 2026.04.10 is able to mitigate this issue. The identifier of the patch is 0072d3488ae5b8d922d3ee87458d829993742a32. It is recommended to upgrade the affected component.",
       "published": "2026-05-01T13:15:59.477Z",
@@ -42291,50 +42301,6 @@
       "priorityScore": 1.62,
       "tags": [
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-7518",
-      "summary": "A flaw has been found in Open5GS up to 2.7.7. This issue affects the function amf_namf_callback_handle_sdm_data_change_notify of the file /namf-callback/v1/{id}/sdmsubscription-notify of the component AMF SBI Endpoint. This manipulation of the argument changeItem.newValue causes denial of service. The attack can be initiated remotely. The exploit has been published and may be used. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-05-01T01:16:17.307Z",
-      "lastModified": "2026-05-01T15:26:24.553Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00015,
-      "epssPercentile": 0.03098,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-404",
-          "name": "CWE-404",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.61,
-      "tags": [
-        "CWE-404"
       ]
     },
     {
