@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-03T19:09:22.214Z",
+  "generatedAt": "2026-06-03T22:06:59.206Z",
   "count": 1000,
   "items": [
     {
@@ -256,6 +256,50 @@
       "tags": [
         "CWE-78",
         "CWE-306"
+      ]
+    },
+    {
+      "id": "CVE-2026-8153",
+      "summary": "OS command injection in Dashboard Server interface in Universal Robots PolyScope versions prior to 5.25.1 allows unauthenticated attacker to craft commands that will execute code on the robot's OS.",
+      "published": "2026-05-08T12:16:29.977Z",
+      "lastModified": "2026-05-11T10:16:15.380Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.01532,
+      "epssPercentile": 0.81644,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-78",
+          "name": "OS Command Injection",
+          "description": "Improper neutralization of special elements used in OS commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 7.29,
+      "tags": [
+        "CWE-78"
       ]
     },
     {
@@ -675,6 +719,51 @@
       ]
     },
     {
+      "id": "CVE-2026-43284",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfrm: esp: avoid in-place decrypt on shared skb frags MSG_SPLICE_PAGES can attach pages from a pipe directly to an skb. TCP marks such skbs with SKBFL_SHARED_FRAG after skb_splice_from_iter(), so later paths that may modify packet data can first make a private copy. The IPv4/IPv6 datagram append paths did not set this flag when splicing pages into UDP skbs. That leaves an ESP-in-UDP packet made from shared pipe pages looking like an ordinary uncloned nonlinear skb. ESP input then takes the no-COW fast path for uncloned skbs without a frag_list and decrypts in place over data that is not owned privately by the skb. Mark IPv4/IPv6 datagram splice frags with SKBFL_SHARED_FRAG, matching TCP. Also make ESP input fall back to skb_cow_data() when the flag is present, so ESP does not decrypt externally backed frags in place. Private nonlinear skb frags still use the existing fast path. This intentionally does not change ESP output. In esp_output_head(), the path that appends the ESP trailer to existing skb tailroom without calling skb_cow_data() is not reachable for nonlinear skbs: skb_tailroom() returns zero when skb->data_len is nonzero, while ESP tailen is positive. Thus ESP output will either use the separate destination-frag path or fall back to skb_cow_data().",
+      "published": "2026-05-08T08:16:43.827Z",
+      "lastModified": "2026-05-26T18:16:49.533Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.38453,
+      "epssPercentile": 0.97321,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-123",
+          "name": "CWE-123",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.49,
+      "tags": [
+        "Linux",
+        "CWE-123"
+      ]
+    },
+    {
       "id": "CVE-2026-34474",
       "summary": "Sensitive data exposure leading to admin/WLAN credential leak in ZTE ZXHN H298A 1.1 and H108N 2.6. A crafted request to the router web interface can expose sensitive device and account information. In affected builds, the response may include the administrator password and WLAN PSK, enabling authentication bypass and network compromise. Some firmware versions may expose only partial identifiers (e.g., serial number, ESSID, MAC addresses).",
       "published": "2026-05-06T19:16:36.523Z",
@@ -716,52 +805,6 @@
       "priorityScore": 6.47,
       "tags": [
         "CWE-200"
-      ]
-    },
-    {
-      "id": "CVE-2026-42238",
-      "summary": "Nginx UI is a web user interface for the Nginx web server. Prior to version 2.3.8, nginx-ui exposes a backup restore endpoint (POST /api/restore) that is completely unauthenticated during the first 10 minutes after process startup on any fresh installation. An unauthenticated remote attacker can upload a crafted backup archive that overwrites the application's configuration file (app.ini) and SQLite database. Because the attacker controls the restored app.ini, they can inject an arbitrary OS command into the TestConfigCmd setting. After the application automatically restarts to apply the restored config, a single follow-up request triggers that command as the user running nginx-ui — typically root in Docker deployments. This issue has been patched in version 2.3.8.",
-      "published": "2026-05-04T21:16:32.707Z",
-      "lastModified": "2026-05-06T14:45:44.013Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00316,
-      "epssPercentile": 0.54945,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 6.35,
-      "tags": [
-        "Nginx",
-        "Docker",
-        "CWE-94"
       ]
     },
     {
@@ -895,50 +938,6 @@
       "priorityScore": 6.27,
       "tags": [
         "CWE-184"
-      ]
-    },
-    {
-      "id": "CVE-2026-42231",
-      "summary": "n8n is an open source workflow automation platform. Prior to versions 1.123.32, 2.17.4, and 2.18.1, a flaw in the xml2js library used to parse XML request bodies in n8n's webhook handler allowed prototype pollution via a crafted XML payload. An authenticated user with permission to create or modify workflows could exploit this to pollute the JavaScript object prototype and, by chaining the pollution with the Git node's SSH operations, achieve remote code execution on the n8n host. This issue has been patched in versions 1.123.32, 2.17.4, and 2.18.1.",
-      "published": "2026-05-04T19:16:05.417Z",
-      "lastModified": "2026-05-06T17:14:03.970Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00409,
-      "epssPercentile": 0.61543,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-1321",
-          "name": "CWE-1321",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 6.23,
-      "tags": [
-        "CWE-1321"
       ]
     },
     {
@@ -1756,50 +1755,6 @@
       ]
     },
     {
-      "id": "CVE-2026-42232",
-      "summary": "n8n is an open source workflow automation platform. Prior to versions 1.123.32, 2.17.4, and 2.18.1, an authenticated user with permission to create or modify workflows could achieve global prototype pollution via the XML Node leading to RCE when combined with other nodes exploiting the prototype pollution. This issue has been patched in versions 1.123.32, 2.17.4, and 2.18.1.",
-      "published": "2026-05-04T19:16:05.610Z",
-      "lastModified": "2026-05-06T17:15:28.223Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00193,
-      "epssPercentile": 0.41055,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-1321",
-          "name": "CWE-1321",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.52,
-      "tags": [
-        "CWE-1321"
-      ]
-    },
-    {
       "id": "CVE-2026-7252",
       "summary": "The WP-Optimize – Cache, Compress images, Minify & Clean database to boost page speed & performance plugin for WordPress is vulnerable to arbitrary file deletion due to insufficient file path validation in the unscheduled_original_file_deletion function in all versions up to, and including, 4.5.2 This makes it possible for authenticated attackers, with author-level access and above, to delete arbitrary files on the server, which can easily lead to remote code execution when the right file is deleted (such as wp-config.php). This is possible because 'original-file' is a public (non-protected) meta key — it does not begin with an underscore — allowing Authors to freely create or modify it on their own attachment posts via the standard Edit Media form or the REST API.",
       "published": "2026-05-07T06:16:05.567Z",
@@ -2043,6 +1998,50 @@
         "CWE-250",
         "CWE-284",
         "CWE-693"
+      ]
+    },
+    {
+      "id": "CVE-2022-50994",
+      "summary": "DrayTek Vigor 2960 firmware versions prior to 1.5.1.4 contain an OS command injection vulnerability in the CGI login handler that allows unauthenticated remote attackers to execute arbitrary commands by injecting shell metacharacters into the formpassword parameter. Attackers can exploit unsanitized input passed to the otp_check.sh script to achieve remote code execution with web server privileges. Exploitation requires knowledge of a valid username and that the target account has MOTP authentication enabled.",
+      "published": "2026-05-08T13:16:34.150Z",
+      "lastModified": "2026-05-08T15:48:43.467Z",
+      "severity": "High",
+      "cvssScore": 8.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00213,
+      "epssPercentile": 0.43845,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-78",
+          "name": "OS Command Injection",
+          "description": "Improper neutralization of special elements used in OS commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.37,
+      "tags": [
+        "CWE-78"
       ]
     },
     {
@@ -2494,56 +2493,6 @@
       ]
     },
     {
-      "id": "CVE-2026-42235",
-      "summary": "n8n is an open source workflow automation platform. Prior to versions 1.123.32, 2.17.4, and 2.18.1, an unauthenticated attacker could register a malicious MCP OAuth client with a crafted client_name. If a victim user authorized the OAuth consent dialog and a second user subsequently revoked that access, a toast notification would render the injected script. Clicking the link would execute arbitrary JavaScript in the victim's authenticated n8n browser session, enabling credential and session token theft, workflow manipulation, or privilege escalation. This issue has been patched in versions 1.123.32, 2.17.4, and 2.18.1.",
-      "published": "2026-05-04T19:16:06.173Z",
-      "lastModified": "2026-05-06T18:05:44.303Z",
-      "severity": "Critical",
-      "cvssScore": 9.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0008,
-      "epssPercentile": 0.23569,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-87",
-          "name": "CWE-87",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.18,
-      "tags": [
-        "CWE-79",
-        "CWE-87"
-      ]
-    },
-    {
       "id": "CVE-2026-35579",
       "summary": "CoreDNS is a DNS server written in Go. In versions prior to 1.14.3, the gRPC, QUIC, DoH, and DoH3 transport implementations incorrectly handle TSIG authentication. For gRPC and QUIC, the server checks whether the TSIG key name exists in the configuration but never calls dns.TsigVerify() to validate the HMAC. If the key name matches a configured key, the tsigStatus field remains nil and the tsig plugin treats the request as successfully authenticated regardless of the MAC value. For DoH and DoH3, the issue is more severe: the DoHWriter.TsigStatus() method unconditionally returns nil, and the server never inspects the TSIG record at all. Any request containing a TSIG record is treated as authenticated over DoH and DoH3, even if the key name is invalid and the MAC is arbitrary. An unauthenticated network attacker can exploit this to bypass TSIG-protected functionality such as AXFR/IXFR zone transfers, dynamic DNS updates, or other TSIG-gated plugin behavior. The DoH and DoH3 variants have a lower exploitation bar because the attacker does not need to know a valid TSIG key name. This issue has been fixed in version 1.14.3. As a workaround, disable gRPC, QUIC, DoH, and DoH3 listeners where TSIG authentication is required, or restrict network-level access to affected transport ports to trusted sources only.",
       "published": "2026-05-05T21:16:22.247Z",
@@ -2900,51 +2849,6 @@
       ]
     },
     {
-      "id": "CVE-2026-42233",
-      "summary": "n8n is an open source workflow automation platform. Prior to versions 1.123.32, 2.17.4, and 2.18.1, a flaw in the Oracle Database node's select operation allowed user-controlled input passed into the Limit field via expressions to be interpolated directly into the SQL query without sanitization or parameterization. In workflows where external input is passed into the Limit field (e.g., from a webhook), an attacker could inject arbitrary SQL and exfiltrate data from the connected Oracle database. This issue has been patched in versions 1.123.32, 2.17.4, and 2.18.1.",
-      "published": "2026-05-04T19:16:05.847Z",
-      "lastModified": "2026-05-06T18:07:22.830Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00055,
-      "epssPercentile": 0.17433,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Oracle",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.04,
-      "tags": [
-        "Oracle",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-7930",
       "summary": "Insufficient validation of untrusted input in Cookies in Google Chrome prior to 148.0.7778.96 allowed a remote attacker to perform privilege escalation via a crafted HTML page. (Chromium security severity: Medium)",
       "published": "2026-05-06T19:16:41.343Z",
@@ -3262,50 +3166,6 @@
       ]
     },
     {
-      "id": "CVE-2026-42234",
-      "summary": "n8n is an open source workflow automation platform. Prior to versions 1.123.32, 2.17.4, and 2.18.1, an authenticated user with permission to create or modify workflows containing a Python Code Node could escape the sandbox and achieve arbitrary code execution on the task runner container. This issue only affects instances where the Python Task Runner is enabled. This issue has been patched in versions 1.123.32, 2.17.4, and 2.18.1.",
-      "published": "2026-05-04T19:16:06.017Z",
-      "lastModified": "2026-05-06T18:05:52.343Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00083,
-      "epssPercentile": 0.2421,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.93,
-      "tags": [
-        "CWE-94"
-      ]
-    },
-    {
       "id": "CVE-2025-67887",
       "summary": "1C-Bitrix through 25.100.500 allows Remote Code Execution because an actor with SOURCE/WRITE permissions for the Translate Module can upload and execute code by sending a PHP file and a .htaccess file. NOTE: this is disputed by the Supplier because this is intended behavior for the high-privileged users who can upload new translated pages to the website.",
       "published": "2026-05-08T07:16:28.350Z",
@@ -3392,6 +3252,51 @@
       "tags": [
         "F5",
         "CWE-94"
+      ]
+    },
+    {
+      "id": "CVE-2026-5127",
+      "summary": "The User Frontend: AI Powered Frontend Posting, User Directory, Profile, Membership & User Registration plugin for WordPress is vulnerable to Deserialization of Untrusted Data in versions up to, and including, 4.3.1 This is due to insufficient input validation and type checking on the wpuf_files parameter during form submission, combined with unconditional deserialization via maybe_unserialize() when displaying post content. This makes it possible for authenticated attackers, with Subscriber-level access and above, to inject arbitrary PHP objects, which can be leveraged to execute arbitrary code, delete arbitrary files, or perform other malicious actions if a POP chain is present on the target system.",
+      "published": "2026-05-08T09:16:08.803Z",
+      "lastModified": "2026-05-08T15:46:11.563Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0008,
+      "epssPercentile": 0.2362,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-502",
+          "name": "Deserialization of Untrusted Data",
+          "description": "Untrusted serialized data can alter control flow or objects."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.91,
+      "tags": [
+        "WordPress",
+        "CWE-502"
       ]
     },
     {
@@ -3532,50 +3437,6 @@
       ]
     },
     {
-      "id": "CVE-2026-42236",
-      "summary": "n8n is an open source workflow automation platform. Prior to versions 1.123.32, 2.17.4, and 2.18.1, the MCP OAuth client registration endpoint accepted unauthenticated requests and stored client data without adequate resource controls. An unauthenticated remote attacker could exhaust server memory resources by sending large registration payloads, rendering the n8n instance unavailable. The MCP enable/disable toggle gates MCP access but did not restrict client registrations, meaning the endpoint is reachable regardless of whether MCP access is enabled on the instance. This issue has been patched in versions 1.123.32, 2.17.4, and 2.18.1.",
-      "published": "2026-05-04T19:16:06.337Z",
-      "lastModified": "2026-05-06T17:16:02.340Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00151,
-      "epssPercentile": 0.35435,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-770",
-          "name": "CWE-770",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.87,
-      "tags": [
-        "CWE-770"
-      ]
-    },
-    {
       "id": "CVE-2026-7833",
       "summary": "A weakness has been identified in EFM ipTIME C200 up to 1.092. This vulnerability affects the function sub_408F90 of the file /cgi/iux_set.cgi of the component ApplyRestore Endpoint. This manipulation of the argument RestoreFile causes command injection. The attack can be initiated remotely. The exploit has been made available to the public and could be used for attacks. The vendor was contacted early about this disclosure but did not respond in any way.",
       "published": "2026-05-05T13:16:31.413Z",
@@ -3623,6 +3484,51 @@
       "tags": [
         "CWE-74",
         "CWE-77"
+      ]
+    },
+    {
+      "id": "CVE-2026-4935",
+      "summary": "The OttoKit: All-in-One Automation Platform WordPress plugin before 1.1.23 does not properly sanitize user input before using it in a SQL statement, which could allow unauthenticated attackers to perform SQL injection attacks.",
+      "published": "2026-05-08T07:16:29.327Z",
+      "lastModified": "2026-05-08T15:47:53.060Z",
+      "severity": "High",
+      "cvssScore": 8.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00084,
+      "epssPercentile": 0.24562,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.87,
+      "tags": [
+        "WordPress",
+        "CWE-89"
       ]
     },
     {
@@ -3891,51 +3797,6 @@
       "priorityScore": 4.79,
       "tags": [
         "CWE-400"
-      ]
-    },
-    {
-      "id": "CVE-2026-42221",
-      "summary": "Nginx UI is a web user interface for the Nginx web server. From version 2.0.0 to before version 2.3.8, an unauthenticated network attacker can claim the initial administrator account on a fresh nginx-ui instance during the first-run setup window. The public /api/install endpoint is reachable without authentication, and the request-encryption flow only protects payload confidentiality in transit; it does not authenticate who is allowed to perform installation. A remote attacker who reaches the service before the legitimate operator can set the admin email, username, and password, causing permanent initial-instance takeover. This issue has been patched in version 2.3.8.",
-      "published": "2026-05-04T21:16:32.023Z",
-      "lastModified": "2026-05-06T17:17:57.437Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00096,
-      "epssPercentile": 0.26458,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.76,
-      "tags": [
-        "Nginx",
-        "CWE-306"
       ]
     },
     {
@@ -4253,50 +4114,6 @@
       "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 4.7,
-      "tags": [
-        "CWE-89"
-      ]
-    },
-    {
-      "id": "CVE-2026-42229",
-      "summary": "n8n is an open source workflow automation platform. Prior to versions 1.123.32, 2.17.4, and 2.18.1, a flaw in the SeaTable node's row:search and row:get operations allowed user-controlled input to be concatenated directly into SQL query strings without escaping or parameterization. In workflows where external user input is passed via expressions into the SeaTable node's search or row retrieval parameters, an attacker could manipulate the constructed query to retrieve unintended rows from the connected SeaTable base, bypassing row-level filtering logic implemented in the workflow. This issue has been patched in versions 1.123.32, 2.17.4, and 2.18.1.",
-      "published": "2026-05-04T19:16:05.060Z",
-      "lastModified": "2026-05-06T14:56:49.967Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00055,
-      "epssPercentile": 0.17433,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.69,
       "tags": [
         "CWE-89"
       ]
@@ -4748,7 +4565,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 4.57,
       "tags": [
@@ -5184,51 +5001,6 @@
       ]
     },
     {
-      "id": "CVE-2026-25863",
-      "summary": "Conditional Fields for Contact Form 7 WordPress plugin through version 2.7.2 contains an uncontrolled resource consumption vulnerability in the Wpcf7cfMailParser class where the hide_hidden_mail_fields_regex_callback() method reads an iteration count directly from user-supplied POST parameters without validation or upper bound enforcement. Unauthenticated attackers can supply an arbitrarily large integer value through the REST API endpoint to cause unbounded loop execution with multiple preg_replace() operations, exhausting server memory and crashing the PHP process.",
-      "published": "2026-05-04T19:16:02.953Z",
-      "lastModified": "2026-05-26T00:16:50.590Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00085,
-      "epssPercentile": 0.2465,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-1284",
-          "name": "CWE-1284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.49,
-      "tags": [
-        "WordPress",
-        "CWE-1284"
-      ]
-    },
-    {
       "id": "CVE-2026-44116",
       "summary": "OpenClaw before 2026.4.22 contains a server-side request forgery vulnerability in the Zalo plugin's sendPhoto function that fails to validate outbound photo URLs through the SSRF guard. Attackers can bypass SSRF protection by providing malicious photo URLs to the Zalo Bot API, enabling unauthorized access to internal resources.",
       "published": "2026-05-06T20:16:35.637Z",
@@ -5452,57 +5224,6 @@
       ]
     },
     {
-      "id": "CVE-2026-42222",
-      "summary": "Nginx UI is a web user interface for the Nginx web server. In version 2.3.5, an unauthenticated bootstrap takeover exists in nginx-ui during the initial installation window exposed by POST /api/install. At time of publication no public patches are available.",
-      "published": "2026-05-04T21:16:32.173Z",
-      "lastModified": "2026-05-06T17:47:59.360Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00054,
-      "epssPercentile": 0.17283,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.44,
-      "tags": [
-        "Nginx",
-        "CWE-284",
-        "CWE-306"
-      ]
-    },
-    {
       "id": "CVE-2026-33190",
       "summary": "CoreDNS is a DNS server that chains plugins. In versions prior to 1.14.3, the tsig plugin can be bypassed on non-plain-DNS transports (DoT, DoH, DoH3, DoQ, and gRPC) because it trusts the transport writer's TsigStatus() instead of performing verification itself. The DoH and DoH3 writer's TsigStatus() always returns nil, the DoT server does not set TsigSecret on the dns.Server, and the DoQ and gRPC writers also unconditionally return nil. This allows an unauthenticated remote client to bypass TSIG-based authentication and access resources intended to be restricted behind a tsig require all policy. Plain DNS over TCP and UDP are not affected. This issue has been fixed in version 1.14.3.",
       "published": "2026-05-05T20:16:36.167Z",
@@ -5594,50 +5315,6 @@
       "tags": [
         "CWE-22",
         "CWE-829"
-      ]
-    },
-    {
-      "id": "CVE-2026-42237",
-      "summary": "n8n is an open source workflow automation platform. Prior to versions 1.123.32, 2.17.4, and 2.18.1, the fix for GHSA-f3f2-mcxc-pwjx did not cover the Snowflake node or the legacy MySQL v1 node. Both nodes construct SQL queries by directly interpolating user-controlled table names, column names, and update keys into query strings without identifier escaping, enabling SQL injection against the connected database. This issue has been patched in versions 1.123.32, 2.17.4, and 2.18.1.",
-      "published": "2026-05-04T19:16:06.483Z",
-      "lastModified": "2026-05-06T17:16:17.040Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00032,
-      "epssPercentile": 0.09782,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.42,
-      "tags": [
-        "CWE-89"
       ]
     },
     {
@@ -6083,6 +5760,96 @@
       ]
     },
     {
+      "id": "CVE-2026-25077",
+      "summary": "Account users are allowed by default to register templates to be downloaded directly to the primary storage for deploying instances using the KVM hypervisor. Due to missing file name sanitization, an attacker can register malicious templates to execute arbitrary code on the KVM hosts. This can result in the compromise of resource integrity and confidentiality, data loss, denial of service, and availability of the KVM-based infrastructure managed by CloudStack. Users are recommended to upgrade to Apache CloudStack versions 4.20.3.0 or 4.22.0.1, or later, which fixes this issue.",
+      "published": "2026-05-08T13:16:36.133Z",
+      "lastModified": "2026-05-10T15:16:27.330Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00024,
+      "epssPercentile": 0.07187,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-94",
+          "name": "CWE-94",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.33,
+      "tags": [
+        "Apache",
+        "CWE-94"
+      ]
+    },
+    {
+      "id": "CVE-2026-7330",
+      "summary": "The Auto Affiliate Links plugin for WordPress is vulnerable to Stored Cross-Site Scripting in versions up to, and including, 6.8.8 This is due to insufficient input sanitization on the 'url' POST parameter in the aal_url_stats_save_action() function and a complete absence of output escaping in aal_display_clicks(), where the stored value is echoed directly into an anchor element's href attribute and inner text without esc_url(), esc_attr(), or esc_html(). This makes it possible for unauthenticated attackers to inject arbitrary web scripts into the admin statistics page that execute in an administrator's browser when the page is visited, leveraging a publicly exposed nonce and an unauthenticated AJAX endpoint registered via the wp_ajax_nopriv_ hook.",
+      "published": "2026-05-08T09:16:10.100Z",
+      "lastModified": "2026-05-08T15:46:11.563Z",
+      "severity": "High",
+      "cvssScore": 7.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00075,
+      "epssPercentile": 0.22766,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.32,
+      "tags": [
+        "WordPress",
+        "CWE-79"
+      ]
+    },
+    {
       "id": "CVE-2025-14341",
       "summary": "Improperly controlled modification of Dynamically-Determined object attributes, Allocation of resources without limits or throttling vulnerability in DivvyDrive Information Technologies Inc. DivvyDrive allows Excessive Allocation, Flooding. This issue affects DivvyDrive: from 4.8.2.19 before 4.8.3.2.",
       "published": "2026-05-07T14:16:00.660Z",
@@ -6493,56 +6260,12 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 4.25,
       "tags": [
         "Microsoft",
         "CWE-138"
-      ]
-    },
-    {
-      "id": "CVE-2026-42226",
-      "summary": "n8n is an open source workflow automation platform. Prior to versions 1.123.33 and 2.17.5, the dynamic-node-parameters endpoints did not verify whether the authenticated caller was authorized to use a supplied credential reference. An authenticated user with access to a shared workflow could supply a foreign credential ID in the request body, causing the backend to decrypt and use that credential in a helper execution path where the caller also controls the destination URL. This allowed the caller to force the backend to authenticate against attacker-controlled infrastructure using a credential belonging to another user, effectively exfiltrating a reusable API key. The issue is not limited to any single node type; any node that resolves credentials dynamically through these endpoints may be affected. This issue has been patched in versions 1.123.33, 2.17.5, and 2.18.0.",
-      "published": "2026-05-04T19:16:04.563Z",
-      "lastModified": "2026-05-06T18:09:25.757Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00056,
-      "epssPercentile": 0.17685,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.24,
-      "tags": [
-        "CWE-862"
       ]
     },
     {
@@ -7368,94 +7091,6 @@
       ]
     },
     {
-      "id": "CVE-2026-6321",
-      "summary": "fast-uri decoded percent-encoded path separators and dot segments before applying dot-segment removal in its normalize() and equal() functions. Encoded path data was treated like real slashes and parent-directory references, so distinct URIs could collapse onto the same normalized path. Applications that normalize or compare attacker-controlled URLs to enforce path-based policy can be bypassed, with a path that appears confined under an allowed prefix normalizing to a different location. Versions <= 3.1.0 are affected. Update to 3.1.1 or later.",
-      "published": "2026-05-04T20:16:20.950Z",
-      "lastModified": "2026-05-12T18:54:46.870Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00048,
-      "epssPercentile": 0.15386,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.16,
-      "tags": [
-        "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-7768",
-      "summary": "@fastify/accepts-serializer cached serializer-selection results keyed by the request Accept header without a size limit or eviction policy. A remote unauthenticated client could send many distinct but matching Accept header variants to make the cache grow unbounded, eventually exhausting the Node.js heap and crashing the process. Versions <= 6.0.3 are affected. Update to 6.0.4 or later, which bounds the cache via an LRU with a default size of 100 entries, configurable through the new cacheSize plugin option.",
-      "published": "2026-05-04T20:16:21.107Z",
-      "lastModified": "2026-05-29T14:43:17.467Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00048,
-      "epssPercentile": 0.1533,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-770",
-          "name": "CWE-770",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.16,
-      "tags": [
-        "CWE-770"
-      ]
-    },
-    {
       "id": "CVE-2026-34459",
       "summary": "Sandboxie-Plus is an open source sandbox-based isolation software for Windows. In versions 1.17.2 and earlier, the SbieSvc proxy service's GetRawInputDeviceInfoSlave handler contains two vulnerabilities that can be chained for sandbox escape. First, when a sandboxed process sends an IPC request with cbSize set to 0, up to 32KB of uninitialized stack memory from the service process is returned, leaking return addresses and stack cookies which bypass ASLR and /GS protections. Second, the handler performs a memcpy with an attacker-controlled length without verifying it fits within the 32KB stack buffer, enabling a stack buffer overflow. By chaining the information leak with the overflow, a sandboxed process can execute a ROP chain to achieve SYSTEM privilege escalation, even from a Security Hardened Sandbox. Hardware-enforced shadow stacks (Intel CET) prevent the ROP chain execution but do not mitigate the information leak. This issue has been fixed in version 1.17.3.",
       "published": "2026-05-05T20:16:37.317Z",
@@ -7498,50 +7133,6 @@
       "tags": [
         "Windows",
         "CWE-121"
-      ]
-    },
-    {
-      "id": "CVE-2025-67796",
-      "summary": "IKUS Rdiffweb before 2.10.5 has an improper authorization flaw that allows an attacker with any valid or stolen access token to act as other users. The API does not enforce binding between the authenticated subject and the targeted user/tenant, so crafted requests can read or modify other users data and, in some cases, perform privileged actions. This issue may enable cross-tenant access. Fixed in version 2.10.6.",
-      "published": "2026-05-04T20:16:16.260Z",
-      "lastModified": "2026-05-07T15:53:49.717Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.0003,
-      "epssPercentile": 0.09055,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.15,
-      "tags": [
-        "CWE-284"
       ]
     },
     {
@@ -7767,50 +7358,6 @@
       "priorityScore": 4.13,
       "tags": [
         "CWE-1004"
-      ]
-    },
-    {
-      "id": "CVE-2026-42228",
-      "summary": "n8n is an open source workflow automation platform. Prior to versions 1.123.32, 2.17.4, and 2.18.1, the /chat WebSocket endpoint used by the Chat Trigger node's Hosted Chat feature did not verify that an incoming connection was authorized to interact with the target execution. An unauthenticated remote attacker who could identify a valid execution ID for a workflow in a waiting state could attach to that execution, receive the pending prompt intended for the legitimate user, and submit arbitrary input to resume or influence downstream workflow behavior. This issue has been patched in versions 1.123.32, 2.17.4, and 2.18.1.",
-      "published": "2026-05-04T19:16:04.900Z",
-      "lastModified": "2026-05-06T18:08:21.630Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00082,
-      "epssPercentile": 0.24128,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.12,
-      "tags": [
-        "CWE-862"
       ]
     },
     {
@@ -11757,56 +11304,6 @@
       ]
     },
     {
-      "id": "CVE-2026-42154",
-      "summary": "Prometheus is an open-source monitoring system and time series database. Prior to versions 3.5.3 and 3.11.3, the remote read endpoint (/api/v1/read) does not validate the declared decoded length in a snappy-compressed request body before allocating memory. An unauthenticated attacker can send a small payload that causes a huge heap allocation per request. Under concurrent load this can exhaust available memory and crash the Prometheus process. This issue has been patched in versions 3.5.3 and 3.11.3.",
-      "published": "2026-05-04T19:16:04.397Z",
-      "lastModified": "2026-05-11T17:22:42.860Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.0002,
-      "epssPercentile": 0.05816,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-789",
-          "name": "CWE-789",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.83,
-      "tags": [
-        "CWE-400",
-        "CWE-789"
-      ]
-    },
-    {
       "id": "CVE-2026-43870",
       "summary": "Origin Validation Error, Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal'), Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Request/Response Splitting'), Uncontrolled Resource Consumption vulnerability in Apache Thrift. This issue affects Apache Thrift: before 0.23.0. Users are recommended to upgrade to version 0.23.0, which fixes the issue.",
       "published": "2026-05-05T09:16:04.340Z",
@@ -11867,50 +11364,6 @@
         "CWE-113",
         "CWE-346",
         "CWE-400"
-      ]
-    },
-    {
-      "id": "CVE-2026-41922",
-      "summary": "WDR201A WiFi Extender (HW V2.1, FW LFMZX28040922V1.02) contains an OS command injection vulnerability in the wireless.cgi binary that allows unauthenticated remote attackers to execute arbitrary shell commands by injecting malicious input into the sz11gChannel or PIN POST parameters. Attackers can exploit unsanitized parameter handling in the set_wifi_basic and set_wifi_do_wps functions to achieve remote code execution without authentication.",
-      "published": "2026-05-04T20:16:18.860Z",
-      "lastModified": "2026-05-26T14:16:36.380Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.01358,
-      "epssPercentile": 0.80469,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.82,
-      "tags": [
-        "CWE-78"
       ]
     },
     {
@@ -12338,6 +11791,56 @@
       "priorityScore": 3.81,
       "tags": [
         "CWE-601"
+      ]
+    },
+    {
+      "id": "CVE-2025-69691",
+      "summary": "Netgate pfSense CE 2.8.0 allows code execution in the XMLRPC API via pfsense.exec_php. NOTE: the Supplier disputes this because the API call is only available to admins and they are intentionally allowed to execute PHP code.",
+      "published": "2026-05-08T07:16:28.880Z",
+      "lastModified": "2026-05-12T20:39:48.423Z",
+      "severity": "Critical",
+      "cvssScore": 9.9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00032,
+      "epssPercentile": 0.09829,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-284",
+          "name": "CWE-284",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-915",
+          "name": "CWE-915",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.81,
+      "tags": [
+        "CWE-284",
+        "CWE-915"
       ]
     },
     {
@@ -12970,7 +12473,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 3.76,
       "tags": [
@@ -13721,50 +13224,6 @@
       ]
     },
     {
-      "id": "CVE-2026-42230",
-      "summary": "n8n is an open source workflow automation platform. Prior to versions 1.123.32, 2.17.4, and 2.18.1, the /mcp-oauth/register endpoint accepted OAuth client registrations without authentication, allowing arbitrary redirect_uri values to be registered. When a user denies the MCP OAuth consent dialog, the handleDeny handler redirects the user to the registered redirect_uri without validation, enabling an open redirect to an attacker-controlled URL. An attacker can craft a phishing link and send it to a victim; if the victim clicks \"Deny\" on the consent page, they are silently redirected to an external site. This issue has been patched in versions 1.123.32, 2.17.4, and 2.18.1.",
-      "published": "2026-05-04T19:16:05.237Z",
-      "lastModified": "2026-05-06T14:57:11.210Z",
-      "severity": "Medium",
-      "cvssScore": 6.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00051,
-      "epssPercentile": 0.16306,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-601",
-          "name": "CWE-601",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.71,
-      "tags": [
-        "CWE-601"
-      ]
-    },
-    {
       "id": "CVE-2026-42434",
       "summary": "OpenClaw versions 2026.4.5 before 2026.4.10 contain a sandbox escape vulnerability allowing sandboxed agents to override exec routing by specifying host=node. Attackers can bypass sandbox boundaries and route execution to remote nodes instead of intended sandbox paths.",
       "published": "2026-05-05T12:16:17.767Z",
@@ -14255,101 +13714,6 @@
       "priorityScore": 3.67,
       "tags": [
         "CWE-754"
-      ]
-    },
-    {
-      "id": "CVE-2026-42151",
-      "summary": "Prometheus is an open-source monitoring system and time series database. Prior to versions 3.5.3 and 3.11.3, the client_secret field in the Azure AD remote write OAuth configuration (storage/remote/azuread) was typed as string instead of Secret. Prometheus redacts fields of type Secret when serving the configuration via the /-/config HTTP API endpoint. Because the field was a plain string, the Azure OAuth client secret was exposed in plaintext to any user or process with access to that endpoint. This issue has been patched in versions 3.5.3 and 3.11.3.",
-      "published": "2026-05-04T19:16:04.220Z",
-      "lastModified": "2026-05-11T17:22:07.227Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.0001,
-      "epssPercentile": 0.0112,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-312",
-          "name": "CWE-312",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.66,
-      "tags": [
-        "CWE-200",
-        "CWE-312"
-      ]
-    },
-    {
-      "id": "CVE-2026-42223",
-      "summary": "Nginx UI is a web user interface for the Nginx web server. Prior to version 2.3.8, the GetSettings API handler (api/settings/settings.go:24-65) serializes all settings structs to JSON and returns them to authenticated users. Many sensitive fields are tagged with protected:\"true\" - however, this tag is only enforced during writes (via ProtectedFill in SaveSettings) and is completely ignored during reads. This exposes 40+ protected fields including JwtSecret (enabling auth token forgery), NodeSecret (enabling cluster node impersonation), OIDC ClientSecret (enabling OAuth account takeover), and the IP whitelist configuration. This issue has been patched in version 2.3.8.",
-      "published": "2026-05-04T21:16:32.320Z",
-      "lastModified": "2026-05-06T14:46:24.977Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00036,
-      "epssPercentile": 0.11045,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.66,
-      "tags": [
-        "Nginx",
-        "CWE-200"
       ]
     },
     {
@@ -14981,50 +14345,6 @@
       "priorityScore": 3.65,
       "tags": [
         "CWE-1321"
-      ]
-    },
-    {
-      "id": "CVE-2026-42227",
-      "summary": "n8n is an open source workflow automation platform. Prior to versions 1.123.32, 2.17.4, and 2.18.1, an authenticated user with a valid API key scoped to variable:list could read variables from projects they are not a member of by supplying an arbitrary projectId query parameter to the public API variables endpoint. The handler queried the variables repository directly without enforcing project membership checks, bypassing the authorization-aware service layer used by the internal enterprise controller. If variables were misused to store sensitive information such as credentials or tokens, they should be rotated immediately. This issue only affects licensed enterprise or team deployments with multiple projects and the variables feature enabled. This issue has been patched in versions 1.123.32, 2.17.4, and 2.18.1.",
-      "published": "2026-05-04T19:16:04.743Z",
-      "lastModified": "2026-05-06T18:08:47.860Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00033,
-      "epssPercentile": 0.10164,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.63,
-      "tags": [
-        "CWE-639"
       ]
     },
     {
@@ -16177,6 +15497,51 @@
       ]
     },
     {
+      "id": "CVE-2026-25199",
+      "summary": "Instances deployed via the Proxmox extension allow unauthorized access to instances belonging to other tenants. This issue affects Apache CloudStack: from 4.21.0.0 through 4.22.0.0. The Proxmox extension for CloudStack improperly uses a user-editable instance setting, proxmox_vmid, to associate CloudStack instances with Proxmox virtual machines. Because this value is not restricted or validated against tenant ownership and Proxmox VM IDs are predictable, a non-privileged attacker can modify the setting to reference a VM belonging to another account. This allows unauthorized cross-tenant access and enables full control over the targeted VM, including starting, stopping, and destroying the virtual machine. Users are recommended to upgrade to version 4.22.0.1, which fixes this issue. As a workaround for the existing installations, editing of the proxmox_vmid instance detail by users can be prevented by adding this detail name to the global configuration parameter - user.vm.denied.details.",
+      "published": "2026-05-08T13:16:36.273Z",
+      "lastModified": "2026-05-09T07:16:09.180Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00036,
+      "epssPercentile": 0.10921,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-200",
+          "name": "CWE-200",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.57,
+      "tags": [
+        "Apache",
+        "CWE-200"
+      ]
+    },
+    {
       "id": "CVE-2026-43868",
       "summary": "Memory Allocation with Excessive Size Value vulnerability in Apache Thrift. This issue affects Apache Thrift: before 0.23.0. Users are recommended to upgrade to version 0.23.0, which fixes the issue.",
       "published": "2026-05-05T09:16:04.123Z",
@@ -16346,50 +15711,6 @@
       "priorityScore": 3.55,
       "tags": [
         "CWE-367"
-      ]
-    },
-    {
-      "id": "CVE-2026-41923",
-      "summary": "WDR201A WiFi Extender (HW V2.1, FW LFMZX28040922V1.02) contains an OS command injection vulnerability in the internet.cgi binary that allows unauthenticated remote attackers to execute arbitrary shell commands by injecting malicious input into the gateway POST parameter. Attackers can exploit unsanitized parameter concatenation in the set_add_routing function to inject shell commands that are executed via popen() with partial output reflected in the HTTP response.",
-      "published": "2026-05-04T20:16:19.017Z",
-      "lastModified": "2026-05-05T19:47:31.297Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00707,
-      "epssPercentile": 0.72536,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.54,
-      "tags": [
-        "CWE-78"
       ]
     },
     {
@@ -16925,6 +16246,57 @@
       ]
     },
     {
+      "id": "CVE-2025-69233",
+      "summary": "Due to multiple time-of-check time-of-use race conditions in the resource count check and increment logic, as well as missing validations, users of the platform are able to exceed the allocation limits configured for their accounts/domains. This can be used by an attacker to degrade the infrastructure's resources and lead to denial of service conditions. Users are recommended to upgrade to Apache CloudStack versions 4.20.3.0 or 4.22.0.1, or later, which fixes this issue.",
+      "published": "2026-05-08T13:16:35.993Z",
+      "lastModified": "2026-05-09T07:16:08.847Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00024,
+      "epssPercentile": 0.07141,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-367",
+          "name": "CWE-367",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-770",
+          "name": "CWE-770",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.52,
+      "tags": [
+        "Apache",
+        "CWE-367",
+        "CWE-770"
+      ]
+    },
+    {
       "id": "CVE-2026-43215",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: cifs: Fix locking usage for tcon fields We used to use the cifs_tcp_ses_lock to protect a lot of objects that are not just the server, ses or tcon lists. We later introduced srv_lock, ses_lock and tc_lock to protect fields within the corresponding structs. This was done to provide a more granular protection and avoid unnecessary serialization. There were still a couple of uses of cifs_tcp_ses_lock to provide tcon fields. In this patch, I've replaced them with tc_lock.",
       "published": "2026-05-06T12:16:41.063Z",
@@ -17012,50 +16384,6 @@
       "priorityScore": 3.49,
       "tags": [
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-41925",
-      "summary": "WDR201A WiFi Extender (HW V2.1, FW LFMZX28040922V1.02) contains an OS command injection vulnerability in the adm.cgi binary's reboot_time function that allows unauthenticated remote attackers to execute arbitrary shell commands by injecting malicious input into the reboot_time POST parameter. Attackers can send a crafted request with shell metacharacters in the reboot_time parameter when reboot_enabled=1 to achieve remote code execution.",
-      "published": "2026-05-04T20:16:19.300Z",
-      "lastModified": "2026-05-05T19:47:31.297Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00637,
-      "epssPercentile": 0.70841,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.48,
-      "tags": [
-        "CWE-78"
       ]
     },
     {
@@ -17291,50 +16619,6 @@
       "tags": [
         "Apache",
         "CWE-200"
-      ]
-    },
-    {
-      "id": "CVE-2026-41926",
-      "summary": "WDR201A WiFi Extender (HW V2.1, FW LFMZX28040922V1.02) contains an OS command injection vulnerability in the firewall.cgi binary across five request handlers that apply insufficient input validation. Attackers can inject arbitrary shell commands through vulnerable parameters like websURLFilter, websHostFilter, portForward, singlePortForward, and ipportFilter using subshell syntax or unfiltered parameters, with payloads persisting in NVRAM and re-executing on every subsequent firewall.cgi request.",
-      "published": "2026-05-04T20:16:19.450Z",
-      "lastModified": "2026-05-05T19:47:31.297Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00618,
-      "epssPercentile": 0.70326,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.46,
-      "tags": [
-        "CWE-78"
       ]
     },
     {
@@ -18999,6 +18283,51 @@
         "F5",
         "Linux",
         "CWE-415"
+      ]
+    },
+    {
+      "id": "CVE-2013-10075",
+      "summary": "Apache::Session versions through 1.94 for Perl re-creates deleted sessions. The session stores Apache::Session::Store::File and Apache::Session::Store::DB_File will create a session that does not exist. This can lead to sessions being revived, potentially with data that was to be deleted.",
+      "published": "2026-05-08T08:16:43.463Z",
+      "lastModified": "2026-05-08T19:51:16.810Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00015,
+      "epssPercentile": 0.02985,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-672",
+          "name": "CWE-672",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.29,
+      "tags": [
+        "Apache",
+        "CWE-672"
       ]
     },
     {
@@ -21068,50 +20397,6 @@
       ]
     },
     {
-      "id": "CVE-2026-38751",
-      "summary": "OpenSTAManager version 2.10 and earlier contains an arbitrary file upload vulnerability in the module update functionality (modules/aggiornamenti/upload_modules.php)",
-      "published": "2026-05-04T19:16:03.613Z",
-      "lastModified": "2026-05-29T14:41:34.623Z",
-      "severity": "High",
-      "cvssScore": 7.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00051,
-      "epssPercentile": 0.16389,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-434",
-          "name": "CWE-434",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.09,
-      "tags": [
-        "CWE-434"
-      ]
-    },
-    {
       "id": "CVE-2026-2729",
       "summary": "The Forminator plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 1.52.0. This is due to the plugin not properly verifying that a user is authorized to perform an action when processing attacker-supplied Stripe PaymentIntent identifiers in the public payment flow. This makes it possible for unauthenticated attackers to submit high-value paid forms as completed by reusing a previously succeeded low-value Stripe PaymentIntent, resulting in underpayment/payment bypass conditions.",
       "published": "2026-05-05T07:15:59.960Z",
@@ -22899,6 +22184,56 @@
       ]
     },
     {
+      "id": "CVE-2026-6213",
+      "summary": "A vulnerability in Remote Spark SparkView before build 1122 allows an attacker to bypasses the local connection check and achieve arbitrary code execution as root on the server side. Depending on implementation the vulnerability can be exploited by an unauthenticated attacker.",
+      "published": "2026-05-08T10:16:29.270Z",
+      "lastModified": "2026-05-08T15:51:08.590Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00332,
+      "epssPercentile": 0.56313,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-290",
+          "name": "CWE-290",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-807",
+          "name": "CWE-807",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.97,
+      "tags": [
+        "CWE-290",
+        "CWE-807"
+      ]
+    },
+    {
       "id": "CVE-2026-44244",
       "summary": "GitPython is a python library used to interact with Git repositories. Prior to version 3.1.49, GitConfigParser.set_value() passes values to Python's configparser without validating for newlines. GitPython's own _write() converts embedded newlines into indented continuation lines (e.g. \\n becomes \\n\\t), but Git still accepts an indented [core] stanza as a section header — so the injected core.hooksPath becomes effective configuration. Any Git operation that invokes hooks (commit, merge, checkout) will then execute scripts from the attacker-controlled path. This issue has been patched in version 3.1.49.",
       "published": "2026-05-07T19:16:02.357Z",
@@ -22940,6 +22275,51 @@
       "priorityScore": 2.96,
       "tags": [
         "CWE-94"
+      ]
+    },
+    {
+      "id": "CVE-2025-66172",
+      "summary": "The CloudStack Backup plugin has an improper access logic in versions 4.21.0.0 and 4.22.0.0. Anyone with authenticated user-account access in CloudStack 4.21.0.0+ environments, where this plugin is enabled and have access to specific APIs can restore a volume from any other user's backups and attach the volume to their own VMs. Backup plugin users using CloudStack 4.21.0.0+ are recommended to upgrade to CloudStack version 4.22.0.1, which fixes this issue.",
+      "published": "2026-05-08T13:16:35.607Z",
+      "lastModified": "2026-05-12T13:30:53.190Z",
+      "severity": "High",
+      "cvssScore": 8.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00016,
+      "epssPercentile": 0.03561,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-359",
+          "name": "CWE-359",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.96,
+      "tags": [
+        "Apache",
+        "CWE-359"
       ]
     },
     {
@@ -23845,50 +23225,6 @@
       ]
     },
     {
-      "id": "CVE-2026-41924",
-      "summary": "WDR201A WiFi Extender (HW V2.1, FW LFMZX28040922V1.02) contains an OS command injection vulnerability in the makeRequest.cgi binary that allows unauthenticated remote attackers to execute arbitrary shell commands by injecting malicious input into the set_time or StartSniffer functions. Attackers can craft a POST request with specially crafted ampersand-delimited parameters to bypass input sanitization and execute commands with a maximum length of 31 bytes through the date command or channel parameter processing.",
-      "published": "2026-05-04T20:16:19.153Z",
-      "lastModified": "2026-05-05T19:47:31.297Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00298,
-      "epssPercentile": 0.53482,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.87,
-      "tags": [
-        "CWE-78"
-      ]
-    },
-    {
       "id": "CVE-2026-7946",
       "summary": "Insufficient policy enforcement in WebUI in Google Chrome on Linux, Mac, Windows, ChromeOS prior to 148.0.7778.96 allowed a remote attacker who had compromised the renderer process to bypass site isolation via a crafted HTML page. (Chromium security severity: Medium)",
       "published": "2026-05-06T19:16:42.927Z",
@@ -24300,6 +23636,52 @@
       "knownRansomwareUse": false,
       "priorityScore": 2.85,
       "tags": []
+    },
+    {
+      "id": "CVE-2025-66467",
+      "summary": "Missing MinIO policy cleanup on bucket deletion via Apache CloudStack allows users to retain access to buckets which they previously owned. If another user creates a new bucket with the same name, the previous owners can gain unauthorized read and write access to it by using the previously generated access and secret keys. Users are recommended to upgrade to Apache CloudStack versions 4.20.3.0 or 4.22.0.1, or later, which fixes this issue.",
+      "published": "2026-05-08T13:16:35.720Z",
+      "lastModified": "2026-05-11T12:57:20.683Z",
+      "severity": "High",
+      "cvssScore": 8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00011,
+      "epssPercentile": 0.01318,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-459",
+          "name": "CWE-459",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "F5",
+        "Apache",
+        "CWE-459"
+      ]
     },
     {
       "id": "CVE-2026-7844",
@@ -27880,57 +27262,6 @@
       ]
     },
     {
-      "id": "CVE-2026-42220",
-      "summary": "Nginx UI is a web user interface for the Nginx web server. Prior to version 2.3.8, an authenticated user can call GET /api/settings and retrieve sensitive configuration values, including node.secret. The same node.secret is accepted by AuthRequired() through the X-Node-Secret header (or node_secret query parameter), causing the request to be treated as authenticated via the trusted-node path and associated with the init user. This issue has been patched in version 2.3.8.",
-      "published": "2026-05-04T21:16:31.870Z",
-      "lastModified": "2026-05-06T17:16:36.317Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00033,
-      "epssPercentile": 0.10164,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.63,
-      "tags": [
-        "Nginx",
-        "CWE-200",
-        "CWE-863"
-      ]
-    },
-    {
       "id": "CVE-2026-5505",
       "summary": "The WP-Clippy plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the plugin's `clippy` shortcode in all versions up to, and including, 1.0.0. This is due to insufficient input sanitization and output escaping on user supplied attributes. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
       "published": "2026-05-05T03:16:00.100Z",
@@ -29696,50 +29027,6 @@
       ]
     },
     {
-      "id": "CVE-2026-7779",
-      "summary": "A security flaw has been discovered in Open5GS up to 2.7.7. Affected is the function udm_nudr_dr_handle_subscription_authentication of the file /src/udm/nudr-handler.c of the component authentication-subscription Endpoint. Performing a manipulation results in denial of service. Remote exploitation of the attack is possible. The exploit has been released to the public and may be used for attacks. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-05-04T21:16:33.080Z",
-      "lastModified": "2026-05-05T19:10:02.317Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00106,
-      "epssPercentile": 0.28333,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-404",
-          "name": "CWE-404",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.5,
-      "tags": [
-        "CWE-404"
-      ]
-    },
-    {
       "id": "CVE-2026-40934",
       "summary": "Jupyter Server is the backend for Jupyter web applications. In versions 2.17.0 and earlier, the secret used to sign authentication cookies is persisted to a static file at ~/.local/share/jupyter/runtime/jupyter_cookie_secret and is never rotated when a user changes their password. After a password reset and server restart, any previously issued authentication cookie remains cryptographically valid because the signing key has not changed. An attacker who has captured a session cookie through any means retains full authenticated access to the server regardless of subsequent password changes. This affects deployments using password-based authentication, particularly shared or public-facing servers where credential rotation is expected to revoke existing sessions. This issue has been fixed in version 2.18.0.",
       "published": "2026-05-05T22:16:00.820Z",
@@ -30230,6 +29517,51 @@
       ]
     },
     {
+      "id": "CVE-2025-66170",
+      "summary": "The CloudStack Backup plugin has an improper authorization logic in versions 4.21.0.0 and 4.22.0.0. Anyone with authenticated user-account access in CloudStack 4.21.0.0+ environments, where this plugin is enabled and has access to specific APIs can list backups from any account in the environment. This vulnerability does not allow them to see the contents of the backup. Users are recommended to upgrade to version 4.22.0.1, which fixes the issue.",
+      "published": "2026-05-08T13:16:35.360Z",
+      "lastModified": "2026-05-11T15:24:18.350Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00017,
+      "epssPercentile": 0.04355,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-863",
+          "name": "CWE-863",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.43,
+      "tags": [
+        "Apache",
+        "CWE-863"
+      ]
+    },
+    {
       "id": "CVE-2026-5766",
       "summary": "An issue was discovered in 6.0 before 6.0.5 and 5.2 before 5.2.14. ASGI requests with a missing or understated `Content-Length` header can bypass the `FILE_UPLOAD_MAX_MEMORY_SIZE` limit, potentially loading large files into memory and causing service degradation. As a reminder, Django expects a limit to be configured at the web server level rather than solely relying on `FILE_UPLOAD_MAX_MEMORY_SIZE`. Earlier, unsupported Django series (such as 5.0.x, 4.1.x, and 3.2.x) were not evaluated and may also be affected. Django would like to thank Kyle Agronick for reporting this issue.",
       "published": "2026-05-05T16:16:17.740Z",
@@ -30449,6 +29781,51 @@
       "tags": [
         "Linux",
         "CWE-129"
+      ]
+    },
+    {
+      "id": "CVE-2025-66171",
+      "summary": "The CloudStack Backup plugin has an improper access logic in versions 4.21.0.0 and 4.22.0.0. Anyone with authenticated user-account access in CloudStack 4.21.0.0+ environments, where this plugin is enabled and have access to specific APIs can create new VMs using backups of any other user of the environment. Backup plugin users using CloudStack 4.21.0.0+ are recommended to upgrade to CloudStack version 4.22.0.1, which fixes this issue.",
+      "published": "2026-05-08T13:16:35.483Z",
+      "lastModified": "2026-05-12T13:31:00.710Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00016,
+      "epssPercentile": 0.03561,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-359",
+          "name": "CWE-359",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.4,
+      "tags": [
+        "Apache",
+        "CWE-359"
       ]
     },
     {
@@ -30812,6 +30189,141 @@
       "tags": [
         "WordPress",
         "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-5341",
+      "summary": "The NMR Strava activities plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the plugin's `strava_nmr_connect` shortcode in all versions up to, and including, 1.0.14 due to insufficient input sanitization and output escaping on user supplied attributes. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
+      "published": "2026-05-08T10:16:28.917Z",
+      "lastModified": "2026-05-08T15:46:11.563Z",
+      "severity": "Medium",
+      "cvssScore": 6.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02235,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.32,
+      "tags": [
+        "WordPress",
+        "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-7475",
+      "summary": "The Sky Addons plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the `sky-custom-scripts` custom post type in all versions up to, and including, 3.3.2. This is due to the custom post type being registered with `capability_type => 'post'` and `show_in_rest => true`, combined with insufficient input sanitization on the `sky_script_content` meta field and lack of output escaping when rendering scripts on the frontend. This makes it possible for authenticated attackers, with Author-level access and above, to inject arbitrary web scripts via the REST API that execute on every frontend page for all site visitors.",
+      "published": "2026-05-08T10:16:29.440Z",
+      "lastModified": "2026-05-08T15:46:11.563Z",
+      "severity": "Medium",
+      "cvssScore": 6.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02233,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.32,
+      "tags": [
+        "WordPress",
+        "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-7650",
+      "summary": "The E2Pdf – Export Pdf Tool for WordPress plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'id' attribute of the `e2pdf-download` shortcode in all versions up to, and including, 1.32.17. This is due to insufficient input sanitization and output escaping on the shortcode attribute. This makes it possible for authenticated attackers, with Contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
+      "published": "2026-05-08T10:16:29.577Z",
+      "lastModified": "2026-05-08T15:46:11.563Z",
+      "severity": "Medium",
+      "cvssScore": 6.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02235,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.32,
+      "tags": [
+        "WordPress",
+        "CWE-79"
       ]
     },
     {
@@ -36272,6 +35784,46 @@
       ]
     },
     {
+      "id": "CVE-2025-71297",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: rtw88: 8822b: Avoid WARNING in rtw8822b_config_trx_mode() rtw8822b_set_antenna() can be called from userspace when the chip is powered off. In that case a WARNING is triggered in rtw8822b_config_trx_mode() because trying to read the RF registers when the chip is powered off returns an unexpected value. Call rtw8822b_config_trx_mode() in rtw8822b_set_antenna() only when the chip is powered on. ------------[ cut here ]------------ write RF mode table fail WARNING: CPU: 0 PID: 7183 at rtw8822b.c:824 rtw8822b_config_trx_mode.constprop.0+0x835/0x840 [rtw88_8822b] CPU: 0 UID: 0 PID: 7183 Comm: iw Tainted: G W OE 6.17.5-arch1-1 #1 PREEMPT(full) 01c39fc421df2af799dd5e9180b572af860b40c1 Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE Hardware name: LENOVO 82KR/LNVNB161216, BIOS HBCN18WW 08/27/2021 RIP: 0010:rtw8822b_config_trx_mode.constprop.0+0x835/0x840 [rtw88_8822b] Call Trace: rtw8822b_set_antenna+0x57/0x70 [rtw88_8822b 370206f42e5890d8d5f48eb358b759efa37c422b] rtw_ops_set_antenna+0x50/0x80 [rtw88_core 711c8fb4f686162be4625b1d0b8e8c6a5ac850fb] ieee80211_set_antenna+0x60/0x100 [mac80211 f1845d85d2ecacf3b71867635a050ece90486cf3] nl80211_set_wiphy+0x384/0xe00 [cfg80211 296485ee85696d2150309a6d21a7fbca83d3dbda] ? netdev_run_todo+0x63/0x550 genl_family_rcv_msg_doit+0xfc/0x160 genl_rcv_msg+0x1aa/0x2b0 ? __pfx_nl80211_pre_doit+0x10/0x10 [cfg80211 296485ee85696d2150309a6d21a7fbca83d3dbda] ? __pfx_nl80211_set_wiphy+0x10/0x10 [cfg80211 296485ee85696d2150309a6d21a7fbca83d3dbda] ? __pfx_nl80211_post_doit+0x10/0x10 [cfg80211 296485ee85696d2150309a6d21a7fbca83d3dbda] ? __pfx_genl_rcv_msg+0x10/0x10 netlink_rcv_skb+0x59/0x110 genl_rcv+0x28/0x40 netlink_unicast+0x285/0x3c0 ? __alloc_skb+0xdb/0x1a0 netlink_sendmsg+0x20d/0x430 ____sys_sendmsg+0x39f/0x3d0 ? import_iovec+0x2f/0x40 ___sys_sendmsg+0x99/0xe0 ? refill_obj_stock+0x12e/0x240 __sys_sendmsg+0x8a/0xf0 do_syscall_64+0x81/0x970 ? do_syscall_64+0x81/0x970 ? ksys_read+0x73/0xf0 ? do_syscall_64+0x81/0x970 ? count_memcg_events+0xc2/0x190 ? handle_mm_fault+0x1d7/0x2d0 ? do_user_addr_fault+0x21a/0x690 ? exc_page_fault+0x7e/0x1a0 entry_SYSCALL_64_after_hwframe+0x76/0x7e ---[ end trace 0000000000000000 ]---",
+      "published": "2026-05-08T14:16:31.000Z",
+      "lastModified": "2026-05-14T19:20:43.510Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02351,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.01,
+      "tags": [
+        "F5",
+        "Linux",
+        "iOS"
+      ]
+    },
+    {
       "id": "CVE-2026-43064",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: dmaengine: idxd: Fix not releasing workqueue on .release() The workqueue associated with an DSA/IAA device is not released when the object is freed.",
       "published": "2026-05-05T16:16:15.567Z",
@@ -38643,6 +38195,235 @@
       ]
     },
     {
+      "id": "CVE-2025-71296",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/tests: shmem: Hold reservation lock around purge Acquire and release the GEM object's reservation lock around calls to the object's purge operation. The tests use drm_gem_shmem_purge_locked(), which led to errors such as show below. [ 58.709128] WARNING: CPU: 1 PID: 1354 at drivers/gpu/drm/drm_gem_shmem_helper.c:515 drm_gem_shmem_purge_locked+0x51c/0x740 Only export the new helper drm_gem_shmem_purge() for Kunit tests. This is not an interface for regular drivers.",
+      "published": "2026-05-08T14:16:30.887Z",
+      "lastModified": "2026-05-14T19:21:57.783Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02222,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2025-71298",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/tests: shmem: Hold reservation lock around madvise Acquire and release the GEM object's reservation lock around calls to the object's madvide operation. The tests use drm_gem_shmem_madvise_locked(), which led to errors such as show below. [ 58.339389] WARNING: CPU: 1 PID: 1352 at drivers/gpu/drm/drm_gem_shmem_helper.c:499 drm_gem_shmem_madvise_locked+0xde/0x140 Only export the new helper drm_gem_shmem_madvise() for Kunit tests. This is not an interface for regular drivers.",
+      "published": "2026-05-08T14:16:31.153Z",
+      "lastModified": "2026-05-14T19:21:09.073Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02222,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2025-71299",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: spi: cadence-quadspi: Parse DT for flashes with the rest of the DT parsing The recent refactoring of where runtime PM is enabled done in commit f1eb4e792bb1 (\"spi: spi-cadence-quadspi: Enable pm runtime earlier to avoid imbalance\") made the fact that when we do a pm_runtime_disable() in the error paths of probe() we can trigger a runtime disable which in turn results in duplicate clock disables. This is particularly likely to happen when there is missing or broken DT description for the flashes attached to the controller. Early on in the probe function we do a pm_runtime_get_noresume() since the probe function leaves the device in a powered up state but in the error path we can't assume that PM is enabled so we also manually disable everything, including clocks. This means that when runtime PM is active both it and the probe function release the same reference to the main clock for the IP, triggering warnings from the clock subsystem: [ 8.693719] clk:75:7 already disabled [ 8.693791] WARNING: CPU: 1 PID: 185 at /usr/src/kernel/drivers/clk/clk.c:1188 clk_core_disable+0xa0/0xb ... [ 8.694261] clk_core_disable+0xa0/0xb4 (P) [ 8.694272] clk_disable+0x38/0x60 [ 8.694283] cqspi_probe+0x7c8/0xc5c [spi_cadence_quadspi] [ 8.694309] platform_probe+0x5c/0xa4 Dealing with this issue properly is complicated by the fact that we don't know if runtime PM is active so can't tell if it will disable the clocks or not. We can, however, sidestep the issue for the flash descriptions by moving their parsing to when we parse the controller properties which also save us doing a bunch of setup which can never be used so let's do that.",
+      "published": "2026-05-08T14:16:31.267Z",
+      "lastModified": "2026-05-14T19:11:57.097Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02222,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2025-71300",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: Revert \"arm64: zynqmp: Add an OP-TEE node to the device tree\" This reverts commit 06d22ed6b6635b17551f386b50bb5aaff9b75fbe. OP-TEE logic in U-Boot automatically injects a reserved-memory node along with optee firmware node to kernel device tree. The injection logic is dependent on that there is no manually defined optee node. Having the node in zynqmp.dtsi effectively breaks OP-TEE's insertion of the reserved-memory node, causing memory access violations during runtime.",
+      "published": "2026-05-08T14:16:31.387Z",
+      "lastModified": "2026-05-14T19:10:26.850Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02147,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "F5",
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2025-71301",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/tests: shmem: Hold reservation lock around vmap/vunmap Acquire and release the GEM object's reservation lock around vmap and vunmap operations. The tests use vmap_locked, which led to errors such as show below. [ 122.292030] WARNING: CPU: 3 PID: 1413 at drivers/gpu/drm/drm_gem_shmem_helper.c:390 drm_gem_shmem_vmap_locked+0x3a3/0x6f0 [ 122.468066] WARNING: CPU: 3 PID: 1413 at drivers/gpu/drm/drm_gem_shmem_helper.c:293 drm_gem_shmem_pin_locked+0x1fe/0x350 [ 122.563504] WARNING: CPU: 3 PID: 1413 at drivers/gpu/drm/drm_gem_shmem_helper.c:234 drm_gem_shmem_get_pages_locked+0x23c/0x370 [ 122.662248] WARNING: CPU: 2 PID: 1413 at drivers/gpu/drm/drm_gem_shmem_helper.c:452 drm_gem_shmem_vunmap_locked+0x101/0x330 Only export the new vmap/vunmap helpers for Kunit tests. These are not interfaces for regular drivers.",
+      "published": "2026-05-08T14:16:31.497Z",
+      "lastModified": "2026-05-14T19:09:41.500Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02222,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2025-71302",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/panthor: fix for dma-fence safe access rules Commit 506aa8b02a8d6 (\"dma-fence: Add safe access helpers and document the rules\") details the dma-fence safe access rules. The most common culprit is that drm_sched_fence_get_timeline_name may race with group_free_queue.",
+      "published": "2026-05-08T14:16:31.607Z",
+      "lastModified": "2026-05-14T19:07:30.090Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02222,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-7780",
       "summary": "A weakness has been identified in Open5GS up to 2.7.7. Affected by this vulnerability is the function udm_state_operational of the file /src/udm/udm-sm.c of the component smf-registrations Endpoint. Executing a manipulation can lead to denial of service. The attack can be executed remotely. The exploit has been made available to the public and could be used for attacks. The project was informed of the problem early through an issue report but has not responded yet.",
       "published": "2026-05-04T22:16:20.493Z",
@@ -39007,6 +38788,50 @@
       "priorityScore": 1.99,
       "tags": [
         "CWE-22"
+      ]
+    },
+    {
+      "id": "CVE-2026-8076",
+      "summary": "Weak credentials in the CashDro 3 web administration panel, version 24.01.00.26, where the platform allows the use of numeric PINs for user authentication. The system supports the use of PIN-based credentials, maintaining compatibility with POS software integrations deployed since 2012. This could allow an attacker to easily perform a brute-force attack against a user and gain access by trying different PINs without the account being locked. Successful exploitation of this vulnerability could result in unauthorized access to confidential configuration settings, compromising the security of the system.",
+      "published": "2026-05-08T12:16:29.560Z",
+      "lastModified": "2026-05-08T15:51:08.590Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00106,
+      "epssPercentile": 0.28264,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-1391",
+          "name": "CWE-1391",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.99,
+      "tags": [
+        "CWE-1391"
       ]
     },
     {
@@ -39906,50 +39731,6 @@
       "priorityScore": 1.89,
       "tags": [
         "CWE-59"
-      ]
-    },
-    {
-      "id": "CVE-2026-43964",
-      "summary": "Postfix before 3.8.16, 3.9 before 3.9.10, and 3.10 before 3.10.9 sometimes allows a buffer over-read and process crash via an enhanced status code that lacks text after the third number.",
-      "published": "2026-05-04T19:16:07.143Z",
-      "lastModified": "2026-05-11T21:17:31.630Z",
-      "severity": "Low",
-      "cvssScore": 3.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00052,
-      "epssPercentile": 0.16707,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-193",
-          "name": "CWE-193",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.88,
-      "tags": [
-        "CWE-193"
       ]
     },
     {
@@ -41650,95 +41431,6 @@
       ]
     },
     {
-      "id": "CVE-2026-41927",
-      "summary": "WDR201A WiFi Extender (HW V2.1, FW LFMZX28040922V1.02) contains a stack-based buffer overflow vulnerability in the firewall.cgi and makeRequest.cgi binaries that allows unauthenticated attackers to overwrite the saved return address by sending a POST request with a Content-Length header exceeding 512 bytes. Attackers can exploit insufficient length validation in the fgets() call to achieve arbitrary code execution through return-oriented programming or return-to-libc techniques.",
-      "published": "2026-05-04T20:16:19.587Z",
-      "lastModified": "2026-05-05T19:47:31.297Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00055,
-      "epssPercentile": 0.17508,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-121",
-          "name": "CWE-121",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.61,
-      "tags": [
-        "CWE-121"
-      ]
-    },
-    {
-      "id": "CVE-2026-41686",
-      "summary": "Claude SDK for TypeScript provides access to the Claude API from server-side TypeScript or JavaScript applications. From version 0.79.0 to before version 0.91.1, the BetaLocalFilesystemMemoryTool in the Anthropic TypeScript SDK created memory files and directories using the Node.js default modes (0o666 for files, 0o777 for directories), leaving them world-readable on systems with a standard umask and world-writable in environments with a permissive umask such as many Docker base images. A local attacker on a shared host could read persisted agent state, and in containerized deployments could modify memory files to influence subsequent model behavior. This issue has been patched in version 0.91.1.",
-      "published": "2026-05-04T19:16:03.883Z",
-      "lastModified": "2026-05-12T18:37:14.560Z",
-      "severity": "Medium",
-      "cvssScore": 4.4,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00012,
-      "epssPercentile": 0.01834,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Docker",
-      "cwe": [
-        {
-          "id": "CWE-732",
-          "name": "CWE-732",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.6,
-      "tags": [
-        "Docker",
-        "CWE-732"
-      ]
-    },
-    {
       "id": "CVE-2026-7965",
       "summary": "Insufficient validation of untrusted input in DevTools in Google Chrome prior to 148.0.7778.96 allowed a remote attacker who had compromised the renderer process to leak cross-origin data via a crafted HTML page. (Chromium security severity: Medium)",
       "published": "2026-05-06T19:16:47.053Z",
@@ -43326,6 +43018,69 @@
       ]
     },
     {
+      "id": "CVE-2026-8069",
+      "summary": "PredatorSense version 3.00.3136 to 3.00.3196 contain Local Privilege Escalation (LPE) vulnerability.The program exposes a Windows Named Pipe that uses a custom protocol to invoke internal functions. However, this Named Pipe is misconfigured, allowing any authenticated local user to execute arbitrary code with NT AUTHORITY\\SYSTEM privileges and to delete arbitrary files with SYSTEM privileges. By leveraging this, an attacker can execute arbitrary code on the target system with elevated privileges.",
+      "published": "2026-05-08T07:16:29.443Z",
+      "lastModified": "2026-05-08T15:34:56.710Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00029,
+      "epssPercentile": 0.08809,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": "Windows",
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        },
+        {
+          "id": "CWE-269",
+          "name": "Improper Privilege Management",
+          "description": "Privileges are assigned, modified, or checked incorrectly."
+        },
+        {
+          "id": "CWE-284",
+          "name": "CWE-284",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-732",
+          "name": "CWE-732",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.31,
+      "tags": [
+        "Windows",
+        "CWE-22",
+        "CWE-269",
+        "CWE-284",
+        "CWE-732"
+      ]
+    },
+    {
       "id": "CVE-2025-62345",
       "summary": "HCL BigFix RunBookAI is affected by a Continued availability of Less-Secure “Input Text” Vulnerability . A component contains a security weakness in its input handling implementation, increasing the risk of misconfiguration and operational errors.",
       "published": "2026-05-06T12:16:26.957Z",
@@ -43879,6 +43634,50 @@
       ]
     },
     {
+      "id": "CVE-2026-3318",
+      "summary": "Open redirection vulnerability in the latest demo version of the Cradle eCommerce platform. The vulnerability occurs in the login form endpoint, where the ‘returnUrl’ parameter allows redirection because the web application accepts a URL as a parameter without properly validating it. As a result, it is possible to redirect users from the legitimate website to external pages. An attacker could exploit this vulnerability to deceive users and redirect them from a trusted URL to a malicious one without their knowledge.",
+      "published": "2026-05-08T12:16:29.323Z",
+      "lastModified": "2026-05-08T15:51:08.590Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00017,
+      "epssPercentile": 0.04621,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-601",
+          "name": "CWE-601",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.16,
+      "tags": [
+        "CWE-601"
+      ]
+    },
+    {
       "id": "CVE-2026-32699",
       "summary": "FacturaScripts is an open source accounting and invoicing software. In versions 2025.92 and earlier, the application fails to validate the nick parameter during a POST request to the EditUser controller. Although the user interface prevents editing this field, a user can bypass this restriction by intercepting the request and modifying the nick form-data parameter to rename any account, including the administrator account. This leads to unauthorized modification of a field intended to be immutable.",
       "published": "2026-05-05T20:16:35.693Z",
@@ -43920,6 +43719,50 @@
       "priorityScore": 1.12,
       "tags": [
         "CWE-472"
+      ]
+    },
+    {
+      "id": "CVE-2026-44916",
+      "summary": "In OpenStack Ironic before 35.0.2 (in a certain non-default configuration), instance_info['ks_template'] is rendered without sandboxing.",
+      "published": "2026-05-08T07:16:29.163Z",
+      "lastModified": "2026-05-20T16:16:25.813Z",
+      "severity": "Low",
+      "cvssScore": 3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:C/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "High",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00011,
+      "epssPercentile": 0.01368,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-1336",
+          "name": "CWE-1336",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.1,
+      "tags": [
+        "CWE-1336"
       ]
     },
     {
@@ -43977,6 +43820,94 @@
         "Windows",
         "CWE-352",
         "CWE-1021"
+      ]
+    },
+    {
+      "id": "CVE-2026-44927",
+      "summary": "In uriparser before 1.0.2, there is pointer difference truncation to int in various places.",
+      "published": "2026-05-08T08:16:43.973Z",
+      "lastModified": "2026-05-12T15:12:04.613Z",
+      "severity": "Low",
+      "cvssScore": 2.9,
+      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.0001,
+      "epssPercentile": 0.01147,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-197",
+          "name": "CWE-197",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.06,
+      "tags": [
+        "CWE-197"
+      ]
+    },
+    {
+      "id": "CVE-2026-44928",
+      "summary": "In uriparser before 1.0.2, the function family EqualsUri can misclassify two unequal URIs as equal.",
+      "published": "2026-05-08T08:16:44.153Z",
+      "lastModified": "2026-05-12T15:00:56.403Z",
+      "severity": "Low",
+      "cvssScore": 2.9,
+      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.0001,
+      "epssPercentile": 0.01147,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-670",
+          "name": "CWE-670",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.06,
+      "tags": [
+        "CWE-670"
       ]
     },
     {
@@ -44665,6 +44596,50 @@
       ]
     },
     {
+      "id": "CVE-2026-8077",
+      "summary": "Lack of proper authorization implementation in the CashDro 3 web administration panel, version 24.01.00.26. The backend lacks authorization controls, leaving security entirely to the frontend. By modifying the binary string in the ‘Permissions’ field of the JSON response, an attacker could escalate privileges and gain full administrative access. This vulnerability allows all restrictions to be bypassed and completely compromises system management.",
+      "published": "2026-05-08T13:16:49.530Z",
+      "lastModified": "2026-05-08T15:51:08.590Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00035,
+      "epssPercentile": 0.1078,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.38,
+      "tags": [
+        "CWE-862"
+      ]
+    },
+    {
       "id": "CVE-2026-41890",
       "summary": "CI4MS is a CodeIgniter 4-based CMS skeleton that delivers a production-ready, modular architecture with RBAC authorization and theme support. From version 0.31.1.0 to before version 0.31.8.0, the deleteProcess() action accepts a POST parameter tables[] containing arbitrary table names. These are passed directly to $forge->dropTable() without validating that the tables belong to the theme being deleted. The deleteConfirm view correctly populates tables[] from the theme's own migration files, but the server-side deleteProcess does not verify the received values against those files. An authenticated admin can craft a POST request with arbitrary table names and drop any table in the database. This issue has been patched in version 0.31.8.0.",
       "published": "2026-05-07T04:16:33.740Z",
@@ -45150,10 +45125,10 @@
       ]
     },
     {
-      "id": "CVE-2026-34882",
-      "summary": "Rejected reason: DO NOT USE THIS CVE RECORD. ConsultIDs: CVE-2026-6074. Reason: This record is a reservation duplicate of CVE-2026-6074. Notes: All CVE users should reference CVE-2026-6074 instead of this record. All references and descriptions in this record have been removed to prevent accidental usage.",
-      "published": "2026-05-04T20:16:18.320Z",
-      "lastModified": "2026-05-04T20:16:18.320Z",
+      "id": "CVE-2026-8149",
+      "summary": "A vulnerability in Legion of the Bouncy Castle Inc. BC-LTS on Linux, X86_64, AVX, AVX-512f. This vulnerability is associated with program files gcm128w, gcm512w. This issue affects BC-LTS: from 2.73.0 before 2.73.11.",
+      "published": "2026-05-08T07:16:29.603Z",
+      "lastModified": "2026-05-19T00:16:37.920Z",
       "severity": "Unknown",
       "cvssScore": 0,
       "cvssVector": null,
@@ -45167,13 +45142,19 @@
         "integrity": null,
         "availability": null
       },
-      "epssScore": 0,
-      "epssPercentile": 0,
+      "epssScore": 0.00006,
+      "epssPercentile": 0.00426,
       "isKev": false,
       "kev": null,
-      "vendor": null,
+      "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-1068",
+          "name": "CWE-1068",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
@@ -45182,8 +45163,11 @@
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 0,
-      "tags": []
+      "priorityScore": 0.01,
+      "tags": [
+        "Linux",
+        "CWE-1068"
+      ]
     },
     {
       "id": "CVE-2026-7448",
