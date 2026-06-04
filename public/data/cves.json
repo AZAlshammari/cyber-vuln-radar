@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-04T22:12:44.860Z",
+  "generatedAt": "2026-06-04T23:39:43.613Z",
   "count": 1000,
   "items": [
     {
@@ -3691,51 +3691,6 @@
         "CWE-94",
         "CWE-829",
         "CWE-913"
-      ]
-    },
-    {
-      "id": "CVE-2026-40075",
-      "summary": "OpenMRS Core is an open source electronic medical record system platform. In versions 2.7.8 and earlier and versions 2.8.0 through 2.8.5, the `/openmrs/moduleResources/{moduleid}` endpoint is vulnerable to a path traversal attack. The ModuleResourcesServlet constructs a filesystem path from user-controlled input without performing path boundary validation — the getFile() method concatenates the user-supplied path into an absolute filesystem path without calling normalize() or checking that the result stays within the allowed module resources directory. Because this endpoint serves static resources required for rendering the login page, it is not protected by authentication filters, allowing unauthenticated exploitation. An attacker can traverse directories and read arbitrary files from the server filesystem, including /etc/passwd and application configuration files containing database credentials. Successful exploitation requires the target deployment to run on Apache Tomcat versions prior to 8.5.31, where the ..; path parameter bypass is not mitigated by the container. Deployments on Tomcat 8.5.31 or later and Tomcat 9.0.10 or later are protected at the container level, though the underlying code defect remains. This issue has been fixed in versions after 2.7.8 (within the 2.7.x branch) and in version 2.8.6 and later.",
-      "published": "2026-05-05T22:16:00.520Z",
-      "lastModified": "2026-05-12T16:18:14.063Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00088,
-      "epssPercentile": 0.25061,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Apache",
-      "product": "Apache",
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.5,
-      "tags": [
-        "Apache",
-        "CWE-22"
       ]
     },
     {
@@ -11187,51 +11142,6 @@
       ]
     },
     {
-      "id": "CVE-2026-28780",
-      "summary": "Heap-based Buffer Overflow vulnerability in mod_proxy_ajp of Apache HTTP Server. If mod_proxy_ajp connects to a malicious AJP server this AJP server can send a malicious AJP message back to mod_proxy_ajp and cause it to write 4 attacker controlled bytes after the end of a heap based buffer. This issue affects Apache HTTP Server: through 2.4.66. Users are recommended to upgrade to version 2.4.67, which fixes the issue.",
-      "published": "2026-05-05T22:16:00.390Z",
-      "lastModified": "2026-05-06T20:31:10.843Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00024,
-      "epssPercentile": 0.06872,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Apache",
-      "product": "Apache",
-      "cwe": [
-        {
-          "id": "CWE-122",
-          "name": "CWE-122",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.67,
-      "tags": [
-        "Apache",
-        "CWE-122"
-      ]
-    },
-    {
       "id": "CVE-2026-8091",
       "summary": "Incorrect boundary conditions in the Audio/Video: Playback component. This vulnerability was fixed in Firefox 150, Thunderbird 150, Firefox ESR 140.10.1, Thunderbird 140.10.1, and Firefox ESR 115.35.2.",
       "published": "2026-05-07T13:16:14.087Z",
@@ -14467,6 +14377,52 @@
         "F5",
         "Linux",
         "CWE-908"
+      ]
+    },
+    {
+      "id": "CVE-2026-43441",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: bonding: Fix nd_tbl NULL dereference when IPv6 is disabled When booting with the 'ipv6.disable=1' parameter, the nd_tbl is never initialized because inet6_init() exits before ndisc_init() is called which initializes it. If bonding ARP/NS validation is enabled, an IPv6 NS/NA packet received on a slave can reach bond_validate_na(), which calls bond_has_this_ip6(). That path calls ipv6_chk_addr() and can crash in __ipv6_chk_addr_and_flags(). BUG: kernel NULL pointer dereference, address: 00000000000005d8 Oops: Oops: 0000 [#1] SMP NOPTI RIP: 0010:__ipv6_chk_addr_and_flags+0x69/0x170 Call Trace: ipv6_chk_addr+0x1f/0x30 bond_validate_na+0x12e/0x1d0 [bonding] ? __pfx_bond_handle_frame+0x10/0x10 [bonding] bond_rcv_validate+0x1a0/0x450 [bonding] bond_handle_frame+0x5e/0x290 [bonding] ? srso_alias_return_thunk+0x5/0xfbef5 __netif_receive_skb_core.constprop.0+0x3e8/0xe50 ? srso_alias_return_thunk+0x5/0xfbef5 ? update_cfs_rq_load_avg+0x1a/0x240 ? srso_alias_return_thunk+0x5/0xfbef5 ? __enqueue_entity+0x5e/0x240 __netif_receive_skb_one_core+0x39/0xa0 process_backlog+0x9c/0x150 __napi_poll+0x30/0x200 ? srso_alias_return_thunk+0x5/0xfbef5 net_rx_action+0x338/0x3b0 handle_softirqs+0xc9/0x2a0 do_softirq+0x42/0x60 __local_bh_enable_ip+0x62/0x70 __dev_queue_xmit+0x2d3/0x1000 ? srso_alias_return_thunk+0x5/0xfbef5 ? srso_alias_return_thunk+0x5/0xfbef5 ? packet_parse_headers+0x10a/0x1a0 packet_sendmsg+0x10da/0x1700 ? kick_pool+0x5f/0x140 ? srso_alias_return_thunk+0x5/0xfbef5 ? __queue_work+0x12d/0x4f0 __sys_sendto+0x1f3/0x220 __x64_sys_sendto+0x24/0x30 do_syscall_64+0x101/0xf80 ? exc_page_fault+0x6e/0x170 ? srso_alias_return_thunk+0x5/0xfbef5 entry_SYSCALL_64_after_hwframe+0x77/0x7f Fix this by checking ipv6_mod_enabled() before dispatching IPv6 packets to bond_na_rcv(). If IPv6 is disabled, return early from bond_rcv_validate() and avoid the path to ipv6_chk_addr().",
+      "published": "2026-05-08T15:16:56.523Z",
+      "lastModified": "2026-05-21T17:16:14.133Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.0007,
+      "epssPercentile": 0.21527,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.38,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-476"
       ]
     },
     {
@@ -23431,6 +23387,52 @@
       ]
     },
     {
+      "id": "CVE-2026-43440",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net/mana: Null service_wq on setup error to prevent double destroy In mana_gd_setup() error path, set gc->service_wq to NULL after destroy_workqueue() to match the cleanup in mana_gd_cleanup(). This prevents a use-after-free if the workqueue pointer is checked after a failed setup.",
+      "published": "2026-05-08T15:16:56.420Z",
+      "lastModified": "2026-05-21T17:18:44.793Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00013,
+      "epssPercentile": 0.02254,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.81,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-20168",
       "summary": "A vulnerability in the web-based management interface of Cisco IoT Field Network Director could allow an authenticated, remote attacker with low privileges to retrieve files that they do not have permission to access. This vulnerability is due to insufficient file access checks. An attacker could exploit this vulnerability by submitting crafted input in the web-based management interface. A successful exploit could allow the attacker to read files that they are not authorized to access.",
       "published": "2026-05-06T17:16:20.590Z",
@@ -24816,50 +24818,6 @@
       ]
     },
     {
-      "id": "CVE-2026-40110",
-      "summary": "Jupyter Server is the backend for Jupyter web applications. In versions 2.17.0 and earlier, the Origin header validation uses Python's re.match() to check incoming origins against the allow_origin_pat configuration value. Because re.match() only anchors at the start of the string and does not require a full match, a pattern intended to match only a trusted domain (e.g., trusted.example.com) will also match any origin that begins with that domain followed by additional characters (e.g., trusted.example.com.evil.com). An attacker who controls such a domain can bypass the CORS origin restriction and make cross-origin requests to the Jupyter Server API from an untrusted site. This issue has been fixed in version 2.18.0.",
-      "published": "2026-05-05T22:16:00.663Z",
-      "lastModified": "2026-05-11T12:59:21.687Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00012,
-      "epssPercentile": 0.01776,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-777",
-          "name": "CWE-777",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.62,
-      "tags": [
-        "CWE-777"
-      ]
-    },
-    {
       "id": "CVE-2026-41656",
       "summary": "Admidio is an open-source user management solution. Prior to version 5.0.9, the add mode in modules/documents-files.php accepts a name parameter validated only as 'string' type (HTML encoding), allowing path traversal characters (../) to pass through unfiltered. Combined with the absence of CSRF protection on this endpoint and SameSite=Lax session cookies, a low-privileged attacker can trick a documents administrator into clicking a crafted link that registers an arbitrary server file (e.g., install/config.php containing database credentials) into a documents folder accessible to the attacker. This issue has been patched in version 5.0.9.",
       "published": "2026-05-07T04:16:28.633Z",
@@ -25095,6 +25053,44 @@
       "tags": [
         "CWE-266",
         "CWE-284"
+      ]
+    },
+    {
+      "id": "CVE-2026-43442",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: io_uring: fix physical SQE bounds check for SQE_MIXED 128-byte ops When IORING_SETUP_SQE_MIXED is used without IORING_SETUP_NO_SQARRAY, the boundary check for 128-byte SQE operations in io_init_req() validated the logical SQ head position rather than the physical SQE index. The existing check: !(ctx->cached_sq_head & (ctx->sq_entries - 1)) ensures the logical position isn't at the end of the ring, which is correct for NO_SQARRAY rings where physical == logical. However, when sq_array is present, an unprivileged user can remap any logical position to an arbitrary physical index via sq_array. Setting sq_array[N] = sq_entries - 1 places a 128-byte operation at the last physical SQE slot, causing the 128-byte memcpy in io_uring_cmd_sqe_copy() to read 64 bytes past the end of the SQE array. Replace the cached_sq_head alignment check with a direct validation of the physical SQE index, which correctly handles both sq_array and NO_SQARRAY cases.",
+      "published": "2026-05-08T15:16:56.663Z",
+      "lastModified": "2026-05-21T17:10:51.703Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00015,
+      "epssPercentile": 0.02979,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.59,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -25562,50 +25558,6 @@
         "F5",
         "Linux",
         "CWE-125"
-      ]
-    },
-    {
-      "id": "CVE-2026-40934",
-      "summary": "Jupyter Server is the backend for Jupyter web applications. In versions 2.17.0 and earlier, the secret used to sign authentication cookies is persisted to a static file at ~/.local/share/jupyter/runtime/jupyter_cookie_secret and is never rotated when a user changes their password. After a password reset and server restart, any previously issued authentication cookie remains cryptographically valid because the signing key has not changed. An attacker who has captured a session cookie through any means retains full authenticated access to the server regardless of subsequent password changes. This affects deployments using password-based authentication, particularly shared or public-facing servers where credential rotation is expected to revoke existing sessions. This issue has been fixed in version 2.18.0.",
-      "published": "2026-05-05T22:16:00.820Z",
-      "lastModified": "2026-05-11T13:00:39.473Z",
-      "severity": "Medium",
-      "cvssScore": 6.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00018,
-      "epssPercentile": 0.05069,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-613",
-          "name": "CWE-613",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.56,
-      "tags": [
-        "CWE-613"
       ]
     },
     {
@@ -30357,6 +30309,52 @@
       "knownRansomwareUse": false,
       "priorityScore": 2.03,
       "tags": [
+        "Linux",
+        "CWE-476"
+      ]
+    },
+    {
+      "id": "CVE-2026-43443",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ASoC: amd: acp-mach-common: Add missing error check for clock acquisition The acp_card_rt5682_init() and acp_card_rt5682s_init() functions did not check the return values of clk_get(). This could lead to a kernel crash when the invalid pointers are later dereferenced by clock core functions. Fix this by: 1. Changing clk_get() to the device-managed devm_clk_get(). 2. Adding IS_ERR() checks immediately after each clock acquisition.",
+      "published": "2026-05-08T15:16:56.780Z",
+      "lastModified": "2026-05-21T17:09:16.520Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00014,
+      "epssPercentile": 0.02951,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.03,
+      "tags": [
+        "F5",
         "Linux",
         "CWE-476"
       ]
