@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-05T20:27:09.020Z",
+  "generatedAt": "2026-06-05T21:59:22.765Z",
   "count": 1000,
   "items": [
     {
@@ -2918,6 +2918,57 @@
       ]
     },
     {
+      "id": "CVE-2026-42864",
+      "summary": "FireFighter is an incident management application. Prior to 0.0.54, the POST /api/v2/firefighter/raid/jira_bot endpoint (CreateJiraBotView) is reachable without authentication (permission_classes = [permissions.AllowAny]). Its attachments payload is fetched server-side via httpx.get() with no URL validation, then uploaded as an attachment on the Jira ticket that gets created. An unauthenticated caller able to reach the ingress can coerce the pod into fetching arbitrary URLs and exfiltrate the response as a Jira attachment. On EC2/EKS deployments that do not enforce IMDSv2, this allows theft of the temporary AWS credentials attached to the pod's IAM role. The docstring on the view claims a Bearer token is required, but the code does not enforce it. This vulnerability is fixed in 0.0.54.",
+      "published": "2026-05-11T19:16:24.417Z",
+      "lastModified": "2026-05-13T17:24:36.160Z",
+      "severity": "Critical",
+      "cvssScore": 9.9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00063,
+      "epssPercentile": 0.19926,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": "Jira",
+      "cwe": [
+        {
+          "id": "CWE-306",
+          "name": "CWE-306",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-918",
+          "name": "CWE-918",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.16,
+      "tags": [
+        "Jira",
+        "CWE-306",
+        "CWE-918"
+      ]
+    },
+    {
       "id": "CVE-2026-7813",
       "summary": "Authorization vulnerability in pgAdmin 4 server mode affecting Server Groups, Servers, Shared Servers, Background Processes, and Debugger modules. Multiple endpoints fetched user-owned objects without filtering by the requesting user's identity. An authenticated user could access another user's private servers, server groups, background processes, and debugger function arguments by guessing object IDs. Additionally, the Shared Servers feature contained multiple issues including credential leakage (passexec_cmd, passfile, SSL keys), privilege escalation via writable passexec_cmd (a shell command executed when establishing the connection) allowing arbitrary command execution in the owner's process context, and owner-data corruption via SQLAlchemy session mutations. Several owner-only fields (passexec_cmd, passexec_expiration, db_res, db_res_type) were writable by non-owners through the API, and additional fields (kerberos_conn, tags, post_connection_sql) lacked per-user persistence so non-owner edits mutated the owner's record. Fix centralises access control via a new server_access module, scopes all user-owned models with a UserScopedMixin, returns HTTP 410 from connection_manager when access is denied in server mode, suppresses owner-only fields for non-owners across the merge / API response / ServerManager paths, and adds an explicit owner-only write guard. The remediation landed in two pull requests; both are referenced. This issue affects pgAdmin 4: before 9.15.",
       "published": "2026-05-11T16:17:37.470Z",
@@ -3949,51 +4000,6 @@
       ]
     },
     {
-      "id": "CVE-2026-40281",
-      "summary": "Gotenberg is a Docker-powered stateless API for PDF files. In versions 8.30.1 and earlier, the metadata write endpoint validates metadata keys for control characters but leaves metadata values unsanitized. A newline character in a metadata value splits the ExifTool stdin line into two separate arguments, allowing injection of arbitrary ExifTool pseudo-tags such as -FileName, -Directory, -SymLink, and -HardLink. This is a bypass of the incomplete key-sanitization fix introduced in v8.30.1. An unauthenticated attacker can rename or move any PDF being processed to an arbitrary path in the container filesystem, overwrite arbitrary files, or create symlinks and hard links at arbitrary paths.",
-      "published": "2026-05-06T21:16:01.353Z",
-      "lastModified": "2026-05-11T14:46:07.127Z",
-      "severity": "Critical",
-      "cvssScore": 10,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00024,
-      "epssPercentile": 0.0704,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Docker",
-      "cwe": [
-        {
-          "id": "CWE-88",
-          "name": "CWE-88",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.75,
-      "tags": [
-        "Docker",
-        "CWE-88"
-      ]
-    },
-    {
       "id": "CVE-2021-47941",
       "summary": "WordPress Plugin Survey & Poll 1.5.7.3 contains an SQL injection vulnerability that allows unauthenticated attackers to execute arbitrary SQL queries by injecting malicious code through the wp_sap cookie parameter. Attackers can craft SQL payloads in the cookie to extract sensitive database information including usernames, passwords, and other confidential data from the WordPress database.",
       "published": "2026-05-10T13:16:30.493Z",
@@ -4181,6 +4187,51 @@
       "priorityScore": 4.71,
       "tags": [
         "CWE-476"
+      ]
+    },
+    {
+      "id": "CVE-2026-8305",
+      "summary": "A vulnerability was detected in OpenClaw up to 2026.1.24. The impacted element is the function handleBlueBubblesWebhookRequest of the file extensions/bluebubbles/src/monitor.ts of the component bluebubbles Webhook. Performing a manipulation results in improper authentication. It is possible to initiate the attack remotely. The exploit is now public and may be used. Upgrading to version 2026.2.12 is sufficient to resolve this issue. The patch is named a6653be0265f1f02b9de46c06f52ea7c81a836e6. The affected component should be upgraded.",
+      "published": "2026-05-11T18:16:44.800Z",
+      "lastModified": "2026-05-16T03:06:20.693Z",
+      "severity": "High",
+      "cvssScore": 7.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.0041,
+      "epssPercentile": 0.61712,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-287",
+          "name": "Improper Authentication",
+          "description": "Authentication is missing or can be bypassed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.71,
+      "tags": [
+        "F5",
+        "CWE-287"
       ]
     },
     {
@@ -22792,51 +22843,6 @@
       ]
     },
     {
-      "id": "CVE-2026-40197",
-      "summary": "Incus is a system container and virtual machine manager. In versions before 7.0.0, missing validation logic in the storage volume import logic allows an authenticated user with access to the storage volume feature to cause the Incus daemon to crash. The custom volume backup import subsystem contains a nil-pointer dereference vulnerability during import operations. In the snapshot import loop, the daemon iterates over entries from `srcBackup.Config.VolumeSnapshots` and assumes that each slice element is initialized, then dereferences fields such as `Name`, `Config`, `Description`, `CreatedAt`, and `ExpiresAt` without first validating the element itself. Because the yaml unmarshaler accepts explicit null array elements from an attacker-controlled index.yaml and converts them into nil pointers inside the slice, an attacker can supply a backup archive containing a null entry in the volume_snapshots array. This causes a nil-pointer dereference during custom volume import and terminates the daemon, resulting in denial of service on the affected node. Repeated use of this issue can be used to keep Incus offline, causing a denial of service. This issue is fixed in version 7.0.0.",
-      "published": "2026-05-06T21:16:00.930Z",
-      "lastModified": "2026-05-07T17:06:55.910Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00054,
-      "epssPercentile": 0.1734,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.88,
-      "tags": [
-        "Linux",
-        "CWE-476"
-      ]
-    },
-    {
       "id": "CVE-2026-41554",
       "summary": "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') vulnerability in Bricks Builder allows Reflected XSS. This issue affects Bricks Builder: from n/a through 1.9.2 to 2.2.",
       "published": "2026-05-07T14:16:02.710Z",
@@ -24420,6 +24426,50 @@
       ]
     },
     {
+      "id": "CVE-2026-43968",
+      "summary": "Improper Neutralization of CRLF Sequences ('CRLF Injection') vulnerability in ninenines cowlib allows SSE event splitting and injection via unvalidated field values. cow_sse:event/1 in cowlib guards the id and event fields against \\n but not against bare \\r, and the internal prefix_lines/2 function used for data and comment fields splits only on \\n. Because the SSE specification requires decoders to treat \\r\\n, \\r, and \\n as equivalent line terminators, an attacker who controls any of these fields can inject additional SSE lines and forge a complete event with an arbitrary event type and data payload on the receiving end. In typical deployments where browser EventSource clients or other SSE consumers dispatch on event.type and render event.data, this enables event splitting, client-side logic manipulation, and stored-XSS-equivalent behaviour when event data is inserted into the DOM. This issue affects cowlib from 2.6.0 before 2.16.1.",
+      "published": "2026-05-11T19:16:25.100Z",
+      "lastModified": "2026-05-21T13:59:07.077Z",
+      "severity": "Medium",
+      "cvssScore": 4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00039,
+      "epssPercentile": 0.11949,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-93",
+          "name": "CWE-93",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.82,
+      "tags": [
+        "CWE-93"
+      ]
+    },
+    {
       "id": "CVE-2026-8148",
       "summary": "NAVER MYBOX Explorer for Windows before 3.0.11.160 allows a local attacker to escalate privileges to NT AUTHORITY\\SYSTEM via registry manipulation due to improper privilege checks.",
       "published": "2026-05-08T05:16:12.030Z",
@@ -25967,51 +26017,6 @@
       "priorityScore": 2.74,
       "tags": [
         "CWE-338"
-      ]
-    },
-    {
-      "id": "CVE-2026-40243",
-      "summary": "Incus is a system container and virtual machine manager. In versions before 7.0.0, broken TLS validation logic in the OVN database connection logic can allow connections to an attacker's OVN database. The OVN client implementations disable Go standard TLS server verification and replace it with custom peer-certificate verification logic. That replacement verifier does not anchor trust in the configured CA certificate. Instead, it constructs the verification root set from certificates supplied by the peer during the handshake, so the configured CA is parsed but not used as the trust anchor for the final verification decision. In OVN-enabled deployments that use these SSL database connection paths, an attacker able to impersonate or intercept the OVN endpoint on the management network can present a rogue self-signed certificate chain, and Incus will accept this certificate as valid. This issue defeats the intended CA-based trust model for OVN database connections and permits endpoint impersonation by an active attacker in a suitable network position. This issue is fixed in version 7.0.0.",
-      "published": "2026-05-06T21:16:01.070Z",
-      "lastModified": "2026-05-08T17:23:38.943Z",
-      "severity": "Medium",
-      "cvssScore": 4.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00011,
-      "epssPercentile": 0.01502,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-295",
-          "name": "CWE-295",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.73,
-      "tags": [
-        "Linux",
-        "CWE-295"
       ]
     },
     {
@@ -29651,51 +29656,6 @@
       ]
     },
     {
-      "id": "CVE-2026-40195",
-      "summary": "Incus is a system container and virtual machine manager. In versions before 7.0.0, missing validation logic in the storage bucket import logic allows an authenticated user with access to the storage bucket feature to cause the Incus daemon to crash. The vulnerability is present in the backup metadata handling logic, where the daemon processes the index.yaml file from an imported archive and accesses members of the parsed backup configuration without first verifying that the configuration object was initialized. A malicious or malformed index.yaml that omits the config block causes a nil-pointer dereference during bucket import operations and terminates the daemon. Repeated use of this issue can be used to keep Incus offline, causing a denial of service. This issue is fixed in version 7.0.0.",
-      "published": "2026-05-06T21:16:00.793Z",
-      "lastModified": "2026-05-07T17:07:08.320Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00018,
-      "epssPercentile": 0.04892,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.45,
-      "tags": [
-        "Linux",
-        "CWE-476"
-      ]
-    },
-    {
       "id": "CVE-2026-41647",
       "summary": "Incus is a system container and virtual machine manager. Prior to version 7.0.0, a missing error handling could lead an authenticated Incus user to cause a daemon crash through the import of a truncated storage bucket backup file. This issue has been patched in version 7.0.0.",
       "published": "2026-05-07T14:16:03.020Z",
@@ -30085,51 +30045,6 @@
       "priorityScore": 2.42,
       "tags": [
         "CWE-313"
-      ]
-    },
-    {
-      "id": "CVE-2026-40251",
-      "summary": "Incus is a system container and virtual machine manager. In versions before 7.0.0, missing validation logic in the storage volume import logic allows an authenticated user with access to the storage volume feature to cause the Incus daemon to crash. The backup restore subsystem contains an out-of-bounds panic vulnerability caused by an invalid bounds check when indexing snapshot metadata arrays, and the same flawed pattern also appears in the migration path. When iterating through physical snapshots provided in a backup archive, the loop uses the index to look up corresponding metadata in the parsed `Config.Snapshots` and `Config.VolumeSnapshots` slices. The guard condition `len(slice) >= i-1` is incorrect because it can still evaluate to true when the subsequent slice[i] access is out of bounds. An attacker can submit a backup archive that contains physical snapshot directories while supplying a tampered `index.yaml` with an empty or truncated snapshot metadata array, causing the daemon to index beyond the end of the metadata slice and crash. Repeated use of this issue can be used to keep Incus offline, causing a denial of service. This issue is fixed in version 7.0.0.",
-      "published": "2026-05-06T21:16:01.210Z",
-      "lastModified": "2026-05-07T17:06:42.753Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00015,
-      "epssPercentile": 0.03531,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-129",
-          "name": "CWE-129",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.4,
-      "tags": [
-        "Linux",
-        "CWE-129"
       ]
     },
     {
@@ -39910,50 +39825,6 @@
       ]
     },
     {
-      "id": "CVE-2026-40332",
-      "summary": "Masa CMS is affected by an Open Redirect vulnerability due to improper handling of scheme-relative URLs. The application incorrectly interprets paths beginning with double slashes (//) as internal paths, failing to validate the redirect target before processing. The application treats these values as internal paths and processes them without confirming that the redirect target remains on the local site. An attacker can craft a URL on the trusted Masa CMS domain that redirects a victim to an external attacker-controlled site. This can be used for phishing and, in some authentication flows, may expose tokens or other sensitive data to the external site. This issue has been fixed in versions 7.2.10, 7.3.15, 7.4.10, and 7.5.3. As a workaround, reject or rewrite redirect parameters that begin with // and consider disabling forceDirectoryStructure if compatible with the deployment.",
-      "published": "2026-05-06T21:16:01.503Z",
-      "lastModified": "2026-05-06T21:22:50.760Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00079,
-      "epssPercentile": 0.23543,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-601",
-          "name": "CWE-601",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.82,
-      "tags": [
-        "CWE-601"
-      ]
-    },
-    {
       "id": "CVE-2026-40003",
       "summary": "ZTE ZX297520V3 BootROM contains a vulnerability that allows arbitrary memory writes via USB. Attackers can exploit the lack of target address validation in the USB download mode to write data to any location in BootROM runtime memory, thereby overwriting the stack, hijacking the execution flow, bypassing the Secure Boot signature verification mechanism, and achieving unauthorized code execution.",
       "published": "2026-05-07T02:16:03.453Z",
@@ -44060,6 +43931,50 @@
       ]
     },
     {
+      "id": "CVE-2026-42871",
+      "summary": "WeGIA is a web manager for charitable institutions. In versions prior to 3.7.0, atendido/familiar_docfamiliar.php displays an overly descriptive error message, including database-related details. This verbosity leads to information disclosure, which could assist a potential attacker in mapping the backend infrastructure and expanding the attack surface. This vulnerability is fixed in 3.7.0.",
+      "published": "2026-05-11T19:16:24.817Z",
+      "lastModified": "2026-05-13T17:03:32.490Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00055,
+      "epssPercentile": 0.1768,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-200",
+          "name": "CWE-200",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.62,
+      "tags": [
+        "CWE-200"
+      ]
+    },
+    {
       "id": "CVE-2026-7891",
       "summary": "The VerySecureApp made by DIVD using Mendix Studio Pro 11.8.0 Beta allows unintended data exposure due to authorization misconfiguration. The VerySecureApp allows anonymous users of the MyFirstModule with the anonymous user role to gain access to all stored records, even though no access rights are explicitly configured on that role. Anonymous users are required to make a Mendix Entity available publicly. All versions of Mendix Studio Pro up to 11.8.0 Beta silently make an Anonymous user role follow user inheritance rules, without mentioning this explicitly in the documentation.",
       "published": "2026-05-07T22:16:37.070Z",
@@ -44208,6 +44123,50 @@
       "summary": "Vulnerability in Wikimedia Foundation Scribunto. This issue affects Scribunto: from 1.45.0 before 1.45.2.",
       "published": "2026-05-11T16:17:30.293Z",
       "lastModified": "2026-05-12T14:45:49.820Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00052,
+      "epssPercentile": 0.16746,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.59,
+      "tags": [
+        "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-7308",
+      "summary": "An authenticated user with upload permission to a hosted repository can store content that causes arbitrary JavaScript to execute in the browser of any user who browses that repository directory via the HTML index page in Sonatype Nexus Repository versions 3.6.0 through versions before 3.92.0. This could allow the attacker to perform actions in the context of the victim's session.",
+      "published": "2026-05-11T18:16:42.573Z",
+      "lastModified": "2026-05-13T15:36:58.913Z",
       "severity": "Unknown",
       "cvssScore": 0,
       "cvssVector": null,
@@ -44421,6 +44380,56 @@
       "priorityScore": 0.31,
       "tags": [
         "CWE-20"
+      ]
+    },
+    {
+      "id": "CVE-2026-42866",
+      "summary": "Tookie is a advanced OSINT information gathering tool. Prior to 4.1fix, modules/modules.py's write_txt, write_csv, write_json, and (commented-but-shipping) scan_file helpers open their output as open(f\"{user}. \"), where user comes unsanitized from the -u CLI flag or any line of a -U usernames file. A username that contains path-separator sequences (.., /, \\, or an absolute path) causes tookie-osint to write the scan output to an arbitrary path the invoking user has write permission for. This vulnerability is fixed in 4.1fix.",
+      "published": "2026-05-11T19:16:24.617Z",
+      "lastModified": "2026-05-13T18:31:17.630Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00024,
+      "epssPercentile": 0.06956,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        },
+        {
+          "id": "CWE-73",
+          "name": "CWE-73",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.24,
+      "tags": [
+        "CWE-22",
+        "CWE-73"
       ]
     },
     {
