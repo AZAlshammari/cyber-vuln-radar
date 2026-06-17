@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-17T09:19:31.355Z",
+  "generatedAt": "2026-06-17T13:01:35.302Z",
   "count": 1000,
   "items": [
     {
@@ -2829,50 +2829,6 @@
       ]
     },
     {
-      "id": "CVE-2026-7304",
-      "summary": "SGLangs multimodal generation runtime is vulnerable to unauthenticated remote code execution when the --enable-custom-logit-processor option is enabled, as Python objects loaded via dill.loads() will be deserialized without validation.",
-      "published": "2026-05-18T12:16:16.713Z",
-      "lastModified": "2026-05-19T13:38:09.460Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00585,
-      "epssPercentile": 0.43205,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-502",
-          "name": "Deserialization of Untrusted Data",
-          "description": "Untrusted serialized data can alter control flow or objects."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.94,
-      "tags": [
-        "CWE-502"
-      ]
-    },
-    {
       "id": "CVE-2026-2587",
       "summary": "A critical Remote Code Execution (RCE) vulnerability was identified in the server-side template rendering mechanism used by the Glassfish gadget handler. The application processes .xml files and evaluates user-supplied values within a context where Expression Language (EL) “expressions” are processed without proper sanitization or escaping. By injecting expressions such as #{7*7}, the server returns 49, confirming server-side EL evaluation. This issue allows a remote attacker to fully compromise the underlying host, enabling capabilities as reading/modifying data, executing arbitrary commands, persistence, and lateral movement.",
       "published": "2026-05-19T15:16:28.577Z",
@@ -4771,50 +4727,6 @@
       ]
     },
     {
-      "id": "CVE-2026-7301",
-      "summary": "SGLangs multimodal generation runtime scheduler's ROUTER socket binds to 0.0.0.0 by default and contains a sink that calls pickle.loads() on incoming messages, enabling RCE when exposed to the internet.",
-      "published": "2026-05-18T12:16:16.480Z",
-      "lastModified": "2026-05-19T13:49:27.027Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00399,
-      "epssPercentile": 0.31553,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-502",
-          "name": "Deserialization of Untrusted Data",
-          "description": "Untrusted serialized data can alter control flow or objects."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.53,
-      "tags": [
-        "CWE-502"
-      ]
-    },
-    {
       "id": "CVE-2026-43501",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ipv6: rpl: reserve mac_len headroom when recompressed SRH grows ipv6_rpl_srh_rcv() decompresses an RFC 6554 Source Routing Header, swaps the next segment into ipv6_hdr->daddr, recompresses, then pulls the old header and pushes the new one plus the IPv6 header back. The recompressed header can be larger than the received one when the swap reduces the common-prefix length the segments share with daddr (CmprI=0, CmprE>0, seg[0][0] != daddr[0] gives the maximum +8 bytes). pskb_expand_head() was gated on segments_left == 0, so on earlier segments the push consumed unchecked headroom. Once skb_push() leaves fewer than skb->mac_len bytes in front of data, skb_mac_header_rebuild()'s call to: skb_set_mac_header(skb, -skb->mac_len); will store (data - head) - mac_len into the u16 mac_header field, which wraps to ~65530, and the following memmove() writes mac_len bytes ~64KiB past skb->head. A single AF_INET6/SOCK_RAW/IPV6_HDRINCL packet over lo with a two segment type-3 SRH (CmprI=0, CmprE=15) reaches headroom 8 after one pass; KASAN reports a 14-byte OOB write in ipv6_rthdr_rcv. Fix this by expanding the head whenever the remaining room is less than the push size plus mac_len, and request that much extra so the rebuilt MAC header fits afterwards.",
       "published": "2026-05-21T13:16:19.410Z",
@@ -5134,6 +5046,50 @@
       "id": "CVE-2018-25365",
       "summary": "PCViewer vt1000 contains a directory traversal vulnerability that allows unauthenticated attackers to read arbitrary files by submitting relative path sequences in GET requests. Attackers can use path traversal sequences ../../../../../../../../../../../../etc/passwd to access sensitive system files outside the intended directory.",
       "published": "2026-05-25T15:16:19.183Z",
+      "lastModified": "2026-05-26T19:47:48.987Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00785,
+      "epssPercentile": 0.5115,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.42,
+      "tags": [
+        "CWE-22"
+      ]
+    },
+    {
+      "id": "CVE-2018-25374",
+      "summary": "Softneta MedDream PACS Server Premium 6.7.1.1 contains a directory traversal vulnerability that allows unauthenticated attackers to read arbitrary files by manipulating the path parameter. Attackers can send requests to nocache.php with encoded backslash sequences to traverse directories and access sensitive files including system configuration and password files.",
+      "published": "2026-05-25T15:16:20.403Z",
       "lastModified": "2026-05-26T19:47:48.987Z",
       "severity": "High",
       "cvssScore": 7.5,
@@ -5589,50 +5545,6 @@
       "tags": [
         "Linux",
         "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-7302",
-      "summary": "SGLangs multimodal generation runtime is vulnerable to an unauthenticated path traversal vulnerability, allowing an attacker to write arbitrary files anywhere the server process has write access, by including ../ sequences in the upload filename when sent to specific endpoints.",
-      "published": "2026-05-18T12:16:16.600Z",
-      "lastModified": "2026-05-19T13:43:48.420Z",
-      "severity": "Critical",
-      "cvssScore": 9.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00386,
-      "epssPercentile": 0.30228,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-35",
-          "name": "CWE-35",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.24,
-      "tags": [
-        "CWE-35"
       ]
     },
     {
@@ -9084,6 +8996,50 @@
       ]
     },
     {
+      "id": "CVE-2018-25371",
+      "summary": "mooSocial Store Plugin 2.6 contains a blind SQL injection vulnerability that allows unauthenticated attackers to manipulate database queries through the product parameter in URL rewrite functionality. Attackers can inject SQL code using boolean-based blind, time-based blind, or stacked query techniques in the product URI parameter to extract sensitive database information.",
+      "published": "2026-05-25T15:16:19.990Z",
+      "lastModified": "2026-05-26T19:47:48.987Z",
+      "severity": "High",
+      "cvssScore": 8.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00348,
+      "epssPercentile": 0.26461,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.8,
+      "tags": [
+        "CWE-89"
+      ]
+    },
+    {
       "id": "CVE-2026-39531",
       "summary": "Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection') vulnerability in Wp Directory Kit WP Directory Kit allows Blind SQL Injection. This issue affects WP Directory Kit: from n/a through 1.5.0.",
       "published": "2026-05-21T16:16:23.030Z",
@@ -10364,6 +10320,50 @@
       "priorityScore": 4.64,
       "tags": [
         "CWE-74",
+        "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2018-25372",
+      "summary": "MedDream PACS Server Premium 6.7.1.1 contains an SQL injection vulnerability that allows unauthenticated attackers to execute arbitrary SQL queries by injecting malicious code through the email parameter. Attackers can submit crafted POST requests to the userSignup.php endpoint with SQL payloads in the email field to extract sensitive database information from the backend MySQL database.",
+      "published": "2026-05-25T15:16:20.120Z",
+      "lastModified": "2026-05-26T19:47:48.987Z",
+      "severity": "High",
+      "cvssScore": 8.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00305,
+      "epssPercentile": 0.21981,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.64,
+      "tags": [
         "CWE-89"
       ]
     },
@@ -21334,50 +21334,6 @@
       ]
     },
     {
-      "id": "CVE-2026-8802",
-      "summary": "A vulnerability was detected in opensourcepos Open Source Point of Sale up to 3.4.2. This issue affects the function getPicThumb of the file app/Controllers/Items.php. The manipulation of the argument pic_filename results in path traversal. The attack may be launched remotely. The patch is identified as def0c27a0e252668df8d942fc31e16d1edfd7323. A patch should be applied to remediate this issue. The vendor was contacted early about this disclosure.",
-      "published": "2026-05-18T11:16:18.623Z",
-      "lastModified": "2026-05-18T19:20:20.310Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.0039,
-      "epssPercentile": 0.30649,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.58,
-      "tags": [
-        "CWE-22"
-      ]
-    },
-    {
       "id": "CVE-2026-45242",
       "summary": "Summarize prior to 0.15.1 contains a path traversal vulnerability in the /v1/summarize daemon endpoint that allows authenticated callers to write files to arbitrary directories by supplying an absolute path or directory traversal sequence in the slidesDir request parameter. Attackers can exploit this to write slide_*.png and slides.json files to any writable directory and subsequently delete matching files at the specified location through repeat extraction.",
       "published": "2026-05-18T19:16:28.240Z",
@@ -22491,51 +22447,6 @@
       "priorityScore": 3.51,
       "tags": [
         "CWE-918"
-      ]
-    },
-    {
-      "id": "CVE-2026-41119",
-      "summary": "Dell Live Optics Windows and Personal Edition collectors contain an improper certificate validation vulnerability. A remote unauthenticated attacker could potentially exploit this vulnerability leading to loss of confidentiality and integrity.",
-      "published": "2026-05-18T11:16:16.937Z",
-      "lastModified": "2026-05-18T17:45:04.973Z",
-      "severity": "Medium",
-      "cvssScore": 6.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00138,
-      "epssPercentile": 0.03465,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-295",
-          "name": "CWE-295",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.5,
-      "tags": [
-        "Windows",
-        "CWE-295"
       ]
     },
     {
@@ -25824,6 +25735,138 @@
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.22,
+      "tags": [
+        "CWE-120"
+      ]
+    },
+    {
+      "id": "CVE-2018-25373",
+      "summary": "SocuSoft DVD Photo Slideshow Professional 8.07 contains a stack-based buffer overflow vulnerability in the registration name field that allows local attackers to execute arbitrary code by exploiting structured exception handling. Attackers can craft a malicious text file with carefully constructed payload containing junk bytes, SEH chain overwrite, and shellcode, then paste the contents into the Registration Name field via Help > Register to trigger code execution.",
+      "published": "2026-05-25T15:16:20.270Z",
+      "lastModified": "2026-05-26T19:47:48.987Z",
+      "severity": "High",
+      "cvssScore": 8.4,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00182,
+      "epssPercentile": 0.07927,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-121",
+          "name": "CWE-121",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.22,
+      "tags": [
+        "CWE-121"
+      ]
+    },
+    {
+      "id": "CVE-2018-25375",
+      "summary": "SocuSoft iPod Photo Slideshow 8.05 contains a buffer overflow vulnerability in the registration dialog that allows local attackers to execute arbitrary code by overwriting the structured exception handler. Attackers can craft malicious input in the Registration Name and Registration Key fields to trigger a stack-based buffer overflow and execute a reverse shell payload.",
+      "published": "2026-05-25T15:16:20.533Z",
+      "lastModified": "2026-05-26T19:47:48.987Z",
+      "severity": "High",
+      "cvssScore": 8.4,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00182,
+      "epssPercentile": 0.07926,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-121",
+          "name": "CWE-121",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.22,
+      "tags": [
+        "CWE-121"
+      ]
+    },
+    {
+      "id": "CVE-2018-25376",
+      "summary": "Socusoft 3GP Photo Slideshow 8.05 contains a buffer overflow vulnerability in the registration dialog that allows local attackers to execute arbitrary code by exploiting structured exception handling. Attackers can craft malicious input in the Registration Name and Registration Key fields to overwrite the SEH chain and execute shellcode for reverse shell access.",
+      "published": "2026-05-25T15:16:20.663Z",
+      "lastModified": "2026-05-26T19:47:48.987Z",
+      "severity": "High",
+      "cvssScore": 8.4,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00182,
+      "epssPercentile": 0.07927,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-120",
+          "name": "CWE-120",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
@@ -33660,56 +33703,6 @@
       ]
     },
     {
-      "id": "CVE-2026-8803",
-      "summary": "A flaw has been found in opensourcepos Open Source Point of Sale up to 3.4.2. Impacted is the function Login of the file app/Models/Employee.php of the component Employee Login. This manipulation causes use of weak hash. Remote exploitation of the attack is possible. The attack is considered to have high complexity. The exploitability is considered difficult. The actual existence of this vulnerability is currently in question. The vendor explains: \"[T]he code is still there to allow the upgrade path to work. The default password is initially seeded with the old hash function, but then migrated to a newer one after login. [T]he hash version check might be cleaned up in the future. Currently it's not actively in use as any password change will use a newer hash function.\"",
-      "published": "2026-05-18T12:16:17.093Z",
-      "lastModified": "2026-05-18T19:20:20.310Z",
-      "severity": "Low",
-      "cvssScore": 3.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00182,
-      "epssPercentile": 0.07902,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-327",
-          "name": "CWE-327",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-328",
-          "name": "CWE-328",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.57,
-      "tags": [
-        "CWE-327",
-        "CWE-328"
-      ]
-    },
-    {
       "id": "CVE-2025-40904",
       "summary": "A Stored HTML Injection vulnerability was discovered in the Smart Polling functionality due to improper validation of an input parameter. An authenticated user with limited privileges can push malicious remote strategies containing HTML tags through the sync. When a victim views the affected remote strategy in the Smart Polling functionality, the injected HTML renders in their browser, enabling phishing and possibly open redirect attacks. Full XSS exploitation and direct information disclosure are prevented by the existing input validation and Content Security Policy configuration.",
       "published": "2026-05-19T14:16:28.293Z",
@@ -35759,6 +35752,50 @@
       },
       "epssScore": 0.00168,
       "epssPercentile": 0.06467,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-120",
+          "name": "CWE-120",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.4,
+      "tags": [
+        "CWE-120"
+      ]
+    },
+    {
+      "id": "CVE-2018-25369",
+      "summary": "Visual Ping 0.8.0.0 contains a buffer overflow vulnerability in input field handling that allows local attackers to crash the application by supplying oversized data. Attackers can inject malicious payloads exceeding 4108 bytes into the Host, Time Out, Packet Size, Pause, or Loops fields to trigger a denial of service condition.",
+      "published": "2026-05-25T15:16:19.723Z",
+      "lastModified": "2026-05-26T19:47:48.987Z",
+      "severity": "Medium",
+      "cvssScore": 6.2,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.0017,
+      "epssPercentile": 0.06654,
       "isKev": false,
       "kev": null,
       "vendor": null,
@@ -38091,6 +38128,50 @@
       "priorityScore": 2.18,
       "tags": [
         "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2018-25370",
+      "summary": "Admidio 3.3.5 contains a cross-site request forgery vulnerability that allows low-privilege users to increase their permissions by exploiting improper origin checking. Attackers can craft malicious HTML forms targeting roles_function.php with parameters like rol_assign_roles, rol_approve_users, and rol_edit_user set to 1 to escalate privileges without authentication.",
+      "published": "2026-05-25T15:16:19.857Z",
+      "lastModified": "2026-05-26T19:47:48.987Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00192,
+      "epssPercentile": 0.08974,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-352",
+          "name": "Cross-Site Request Forgery",
+          "description": "A web request may execute without user intent."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.17,
+      "tags": [
+        "CWE-352"
       ]
     },
     {
@@ -42690,50 +42771,6 @@
       ]
     },
     {
-      "id": "CVE-2026-4320",
-      "summary": "Authorization Bypass vulnerability in Creartia's ICMS software could allow an attacker to gain unauthorized access to protected features by manipulating the HTTP redirect headers of the login process, causing the script to continue running and enabling privilege escalation without the need for credentials.",
-      "published": "2026-05-18T11:16:18.283Z",
-      "lastModified": "2026-05-18T20:17:10.873Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00254,
-      "epssPercentile": 0.16525,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-288",
-          "name": "CWE-288",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.58,
-      "tags": [
-        "CWE-288"
-      ]
-    },
-    {
       "id": "CVE-2026-44059",
       "summary": "A race condition in the privilege toggle mechanism in Netatalk 2.2.5 through 4.4.2 allows a local attacker to obtain limited information, modify limited data, or cause a minor service disruption.",
       "published": "2026-05-21T08:16:21.467Z",
@@ -44783,50 +44820,6 @@
       "priorityScore": 0.47,
       "tags": [
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-0983",
-      "summary": "Denial-of-service condition in M-Files Server versions before 26.5.16015.0, before 26.2 LTS, and before 25.8 LTS SR3 allows an authenticated user to cause the MFserver process to crash",
-      "published": "2026-05-18T12:16:16.230Z",
-      "lastModified": "2026-05-18T19:32:38.777Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00226,
-      "epssPercentile": 0.13066,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-1286",
-          "name": "CWE-1286",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.46,
-      "tags": [
-        "CWE-1286"
       ]
     },
     {
