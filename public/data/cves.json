@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-28T01:55:57.189Z",
+  "generatedAt": "2026-06-28T06:22:07.700Z",
   "count": 1000,
   "items": [
     {
@@ -2405,6 +2405,50 @@
       "tags": [
         "CWE-89",
         "CWE-94"
+      ]
+    },
+    {
+      "id": "CVE-2026-5241",
+      "summary": "A vulnerability in the LightGlue model loading path of huggingface/transformers version 5.2.0 allows an attacker-controlled model repository to execute arbitrary code during model initialization. The issue arises because the `trust_remote_code` parameter, intended to prevent remote code execution, is overridden by untrusted serialized configuration data in a nested code path. Specifically, when loading a LightGlue model using `AutoModel.from_pretrained()` with `trust_remote_code=False`, the `LightGlueConfig` reads the `trust_remote_code` value from the untrusted `config.json` file and propagates it into nested `AutoConfig.from_pretrained()` calls. This results in the execution of attacker-provided Python modules, even when the victim explicitly disables remote code execution. The vulnerability poses a high risk for environments such as API inference servers, research notebooks, CI/CD pipelines, and model evaluation workers, potentially leading to credential theft, lateral movement, or persistence/backdoor deployment.",
+      "published": "2026-06-03T14:16:46.337Z",
+      "lastModified": "2026-06-17T10:58:39.827Z",
+      "severity": "Critical",
+      "cvssScore": 9.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00433,
+      "epssPercentile": 0.34678,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-829",
+          "name": "CWE-829",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.57,
+      "tags": [
+        "CWE-829"
       ]
     },
     {
@@ -20931,51 +20975,6 @@
       ]
     },
     {
-      "id": "CVE-2026-2128",
-      "summary": "The Breeze plugin for WordPress is vulnerable to Exposure of Sensitive Information to an Unauthorized Actor in all versions up to, and including, 2.5.2 This is due to improper verification of the `wordpress_logged_in_` cookie in the `inc/cache/execute-cache.php` file when the \"Cache Logged-in Users\" setting is enabled. The plugin parses the username directly from the cookie value (e.g., `username|hash`) using `substr()` to retrieve the corresponding cache file but fails to verify the session's cryptographic signature or validity with WordPress core. This makes it possible for unauthenticated attackers to supply a crafted cookie (e.g., `wordpress_logged_in_fake=admin|fake`) to trick the plugin into serving the cached HTML content generated for an administrator, leading to the disclosure of sensitive information such as private posts (including their full content), the Admin Bar, WordPress nonces, and other data visible only to logged-in administrators or other users.",
-      "published": "2026-05-29T05:16:19.267Z",
-      "lastModified": "2026-06-17T10:30:22.077Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00273,
-      "epssPercentile": 0.19094,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.52,
-      "tags": [
-        "WordPress",
-        "CWE-200"
-      ]
-    },
-    {
       "id": "CVE-2026-48527",
       "summary": "HAX CMS helps manage microsite universe with PHP or NodeJs backends. Versions up to and including 26.0.0 are affected by a stored cross-site scripting (XSS) vulnerability in the `/system/api/saveNode` endpoint. An authenticated user with a permission to edit pages can bypass the HTML sanitizer by injecting an event handler attribute without whitespace before the attribute name. @haxtheweb/haxcms-nodejs 26.0.1 and haxcms-php 26.0.2 patch the issue.",
       "published": "2026-05-29T13:16:23.133Z",
@@ -36545,51 +36544,6 @@
       ]
     },
     {
-      "id": "CVE-2026-8995",
-      "summary": "The Poll Maker – Versus Polls, Anonymous Polls, Image Polls plugin for WordPress is vulnerable to Sensitive Information Exposure in versions up to and including 6.3.7. This is due to insufficient access controls on the 'ays_poll_get_user_information' AJAX action, which serializes and returns the complete WP_User object — including the user_pass (bcrypt password hash), user_email, user_login, user_registered, roles, and all capabilities — without any nonce verification or capability check beyond is_user_logged_in(). This makes it possible for authenticated attackers, with subscriber-level access and above, to retrieve sensitive account data including their own password hash, which WordPress does not expose through any of its standard interfaces and which can be leveraged for offline password-cracking attacks.",
-      "published": "2026-05-29T04:17:11.040Z",
-      "lastModified": "2026-06-17T11:04:44.213Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00283,
-      "epssPercentile": 0.20064,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.21,
-      "tags": [
-        "WordPress",
-        "CWE-200"
-      ]
-    },
-    {
       "id": "CVE-2026-34127",
       "summary": "A stored cross-site scripting (XSS) vulnerability has been identified in the web management interface of TP-Link's TL-SG108PE v5 switch due to improper sanitation of the SYSNAM configuration parameter during configuration file import. An attacker with administrator access can inject malicious script into the device configuration, which may be stored and executed in the administrator’s browser when the affected interface is viewed. Successful exploitation may allow session cookie theft, unauthorized configuration changes, or access to sensitive information exposed through the management interface.",
       "published": "2026-05-29T20:16:22.607Z",
@@ -37775,51 +37729,6 @@
       ]
     },
     {
-      "id": "CVE-2026-7430",
-      "summary": "The Post Snippets plugin for WordPress is vulnerable to Stored Cross-Site Scripting in all versions up to, and including, 4.0.19. This is due to insufficient output escaping of imported snippet content when rendering JavaScript variables in the post editor. Specifically, the `jqueryUiDialog()` method in `WPEditor.php` embeds snippet content directly into JavaScript string literals without escaping double quotes (the quote-escaping code on line 214 is commented out). When snippets are imported via the Import/Export feature, the content bypasses WordPress's `wp_magic_quotes()` (which would otherwise add protective backslashes), allowing double quotes in snippet content to break out of the JavaScript string context. This makes it possible for authenticated attackers, with Administrator-level access and above, to inject arbitrary web scripts via a malicious import file that execute whenever any administrator accesses a post editor page. Please note that this does not affect single-site installations as administrators already have the `unfiltered_html` capability.",
-      "published": "2026-05-29T04:17:10.563Z",
-      "lastModified": "2026-06-17T11:02:25.677Z",
-      "severity": "Medium",
-      "cvssScore": 4.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00244,
-      "epssPercentile": 0.15434,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.08,
-      "tags": [
-        "WordPress",
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2025-70100",
       "summary": "A divide-by-zero vulnerability in the ext4_block_set_lb_size function in src/ext4_blockdev.c of the lwext4 1.0.0 library allows attackers to cause a denial of service by providing a malformed ext4 filesystem image that results in a zero logical block size. The vulnerability is triggered during mount or image processing and leads to a Floating-Point Exception (FPE) under sanitizers or a runtime crash in standard builds due to missing validation of lb_size.",
       "published": "2026-06-03T14:16:31.217Z",
@@ -38584,6 +38493,50 @@
       "priorityScore": 2.04,
       "tags": [
         "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-48587",
+      "summary": "An issue was discovered in Django 5.2 before 5.2.15 and 6.0 before 6.0.6. `django.utils.cache.has_vary_header()` in Django does not strip leading or trailing whitespace from `Vary` response header values before comparison, which allows remote attackers to read cached responses via requests to URLs whose responses contain whitespace-padded Vary header values. Earlier, unsupported Django series (such as 5.0.x, 4.1.x, and 3.2.x) were not evaluated and may also be affected. Django would like to thank Navid Rezazadeh for reporting this issue.",
+      "published": "2026-06-03T14:16:44.983Z",
+      "lastModified": "2026-06-17T10:55:07.987Z",
+      "severity": "Low",
+      "cvssScore": 3.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00354,
+      "epssPercentile": 0.27314,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-1023",
+          "name": "CWE-1023",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.04,
+      "tags": [
+        "CWE-1023"
       ]
     },
     {
@@ -41258,6 +41211,50 @@
       ]
     },
     {
+      "id": "CVE-2026-47324",
+      "summary": "ProjectsAndPrograms school-management-system is vulnerable to Stored Cross‑Site Scripting (XSS) in multiple attributes of students and teachers objects. An authorized attacker (e.g., a teacher or administrator) can inject malicious JavaScript that is subsequently executed in other users’ browsers. Critically, when chained with CVE‑2025‑11661, which allows unauthenticated access to backend endpoints, this vulnerability can be exploited by a remote attacker without privileges to inject and execute arbitrary JavaScript. The maintainers were notified early about this vulnerability but did not provide details regarding affected versions. The version corresponding to commit 6b6fae5 was tested and confirmed vulnerable; other versions were not tested and may also be affected.",
+      "published": "2026-06-03T14:16:44.677Z",
+      "lastModified": "2026-06-17T10:54:30.617Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00291,
+      "epssPercentile": 0.20805,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.73,
+      "tags": [
+        "CWE-79"
+      ]
+    },
+    {
       "id": "CVE-2026-9048",
       "summary": "The Slider Revolution plugin for WordPress is vulnerable to Sensitive Information Exposure in versions 7.0.0 - 7.0.14, via the 'slider.get.full' AJAX Action. This makes it possible for authenticated attackers, with Contributor-level access and above, to extract sensitive data including raw social media API credentials: the Instagram OAuth token, Flickr API key, YouTube Data API key, and Facebook App ID, stored in any configured slider's settings.",
       "published": "2026-06-02T00:16:49.907Z",
@@ -41697,6 +41694,50 @@
       "priorityScore": 1.64,
       "tags": [
         "CWE-823"
+      ]
+    },
+    {
+      "id": "CVE-2026-6873",
+      "summary": "An issue was discovered in Django 6.0 before 6.0.6 and 5.2 before 5.2.15. `django.http.HttpRequest.get_signed_cookie` in Django uses a non-injective salt derivation (concatenating the cookie name and salt argument), which allows a remote attacker to use a cookie in a context different from the one where it was signed, via distinct `(name, salt)` pairs that produce the same concatenation. Earlier, unsupported Django series (such as 5.0.x, 4.1.x, and 3.2.x) were not evaluated and may also be affected. Django would like to thank Peng Zhou for reporting this issue.",
+      "published": "2026-06-03T14:16:46.483Z",
+      "lastModified": "2026-06-17T11:01:27.907Z",
+      "severity": "Low",
+      "cvssScore": 3.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00245,
+      "epssPercentile": 0.15609,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-347",
+          "name": "CWE-347",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.63,
+      "tags": [
+        "CWE-347"
       ]
     },
     {
@@ -44095,50 +44136,6 @@
       ]
     },
     {
-      "id": "CVE-2026-7480",
-      "summary": "An Incorrect Permission Assignment for Critical Resource vulnerability in ASUS System Control Interface allows a local user to elevate privileges to SYSTEM and execute arbitrary code via a crafted RPC call that bypass the validation mechanism. Refer to the 'Security Update for ASUS System Control Interface' section on the ASUS Security Advisory for more information.",
-      "published": "2026-05-29T02:16:17.223Z",
-      "lastModified": "2026-06-17T11:02:29.820Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00135,
-      "epssPercentile": 0.03345,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-732",
-          "name": "CWE-732",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.12,
-      "tags": [
-        "CWE-732"
-      ]
-    },
-    {
       "id": "CVE-2026-48595",
       "summary": "Improper Handling of Case Sensitivity vulnerability in elixir-tesla tesla allows credential leakage to a third-party origin on cross-origin redirects. Tesla.Middleware.FollowRedirects strips security-sensitive headers on cross-origin redirects using a case-sensitive string comparison against a lowercase filter list (@filter_headers [\"authorization\", \"host\"]). HTTP header names are case-insensitive per RFC 7230, but Tesla preserves header keys verbatim as supplied by the caller without normalizing case. A header set as {\"Authorization\", \"Bearer …\"} (the RFC 7235 canonical casing used by virtually all HTTP libraries and documentation) does not match the lowercase filter entry and is forwarded to the redirect destination. An attacker who can control or influence a Location: response seen by the client (via their own endpoint, a redirect-open upstream, or a compromised origin) receives the bearer token or other Authorization material on the cross-origin request. This issue affects tesla: from 1.4.0 before 1.18.3.",
       "published": "2026-06-02T20:16:38.390Z",
@@ -44225,50 +44222,6 @@
       "tags": [
         "Microsoft",
         "CWE-918"
-      ]
-    },
-    {
-      "id": "CVE-2026-8070",
-      "summary": "Incorrect permission assignment for a critical resource in Armoury Crate allows a local user to bypass the driver’s validation mechanism, resulting in unauthorized read and write access to physical memory.Refer to the ' Security Update for Armoury Crate App ' section on the ASUS Security Advisory for more information.",
-      "published": "2026-05-29T02:16:17.380Z",
-      "lastModified": "2026-06-17T11:03:26.617Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.0009,
-      "epssPercentile": 0.00587,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-732",
-          "name": "CWE-732",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.02,
-      "tags": [
-        "CWE-732"
       ]
     },
     {
@@ -44828,6 +44781,50 @@
         "Apache",
         "CWE-200",
         "CWE-284"
+      ]
+    },
+    {
+      "id": "CVE-2026-47325",
+      "summary": "ProjectsAndPrograms school-management-system uses predictable credentials by generating student's and teacher's passwords solely from the user’s date of birth (e.g., 12072000 for 12 July 2000). The application does not require or prompt users to change the password upon first login. This behavior allows attackers to easily guess or derive valid credentials, leading to unauthorized account access. The maintainers were notified early about this vulnerability but did not provide details regarding affected versions. The version corresponding to commit 6b6fae5 was tested and confirmed vulnerable; other versions were not tested and may also be affected.",
+      "published": "2026-06-03T14:16:44.823Z",
+      "lastModified": "2026-06-17T10:54:30.730Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00249,
+      "epssPercentile": 0.16106,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-1391",
+          "name": "CWE-1391",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.56,
+      "tags": [
+        "CWE-1391"
       ]
     },
     {
