@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T21:42:56.076Z",
+  "generatedAt": "2026-07-08T22:46:40.824Z",
   "count": 1000,
   "items": [
     {
@@ -30719,7 +30719,7 @@
       "id": "CVE-2026-52906",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: 9p: fix access mode flags being ORed instead of replaced Since commit 1f3e4142c0eb (\"9p: convert to the new mount API\"), v9fs_apply_options() applies parsed mount flags with |= onto flags already set by v9fs_session_init(). For 9P2000.L, session_init sets V9FS_ACCESS_CLIENT as the default, so when the user mounts with \"access=user\", both bits end up set. Access mode checks compare against exact values, so having both bits set matches neither mode. This causes v9fs_fid_lookup() to fall through to the default switch case, using INVALID_UID (nobody/65534) instead of current_fsuid() for all fid lookups. Root is then unable to chown or perform other privileged operations. Fix by clearing the access mask before applying the user's choice.",
       "published": "2026-06-09T14:16:45.047Z",
-      "lastModified": "2026-07-07T18:35:34.340Z",
+      "lastModified": "2026-07-08T21:44:36.060Z",
       "severity": "High",
       "cvssScore": 7.7,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
@@ -39559,6 +39559,52 @@
       ]
     },
     {
+      "id": "CVE-2026-52905",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: mm/damon/core: disallow non-power of two min_region_sz on damon_start() Commit d8f867fa0825 (\"mm/damon: add damon_ctx->min_sz_region\") introduced a bug that allows unaligned DAMON region address ranges. Commit c80f46ac228b (\"mm/damon/core: disallow non-power of two min_region_sz\") fixed it, but only for damon_commit_ctx() use case. Still, DAMON sysfs interface can emit non-power of two min_region_sz via damon_start(). Fix the path by adding the is_power_of_2() check on damon_start(). The issue was discovered by sashiko [1].",
+      "published": "2026-06-09T14:16:44.950Z",
+      "lastModified": "2026-07-08T21:43:12.320Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00155,
+      "epssPercentile": 0.05013,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-1284",
+          "name": "CWE-1284",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.1,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-1284"
+      ]
+    },
+    {
       "id": "CVE-2026-34705",
       "summary": "InDesign Desktop versions 21.3, 20.5.3 and earlier are affected by an out-of-bounds read vulnerability that could lead to disclosure of sensitive memory. An attacker could leverage this vulnerability to disclose sensitive information. Exploitation of this issue requires user interaction in that a victim must open a malicious file.",
       "published": "2026-06-09T18:16:42.833Z",
@@ -45862,44 +45908,6 @@
       "priorityScore": 0.28,
       "tags": [
         "CWE-352"
-      ]
-    },
-    {
-      "id": "CVE-2026-52905",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: mm/damon/core: disallow non-power of two min_region_sz on damon_start() Commit d8f867fa0825 (\"mm/damon: add damon_ctx->min_sz_region\") introduced a bug that allows unaligned DAMON region address ranges. Commit c80f46ac228b (\"mm/damon/core: disallow non-power of two min_region_sz\") fixed it, but only for damon_commit_ctx() use case. Still, DAMON sysfs interface can emit non-power of two min_region_sz via damon_start(). Fix the path by adding the is_power_of_2() check on damon_start(). The issue was discovered by sashiko [1].",
-      "published": "2026-06-09T14:16:44.950Z",
-      "lastModified": "2026-07-07T18:35:34.340Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00155,
-      "epssPercentile": 0.05013,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": true,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.18,
-      "tags": [
-        "Linux"
       ]
     },
     {
