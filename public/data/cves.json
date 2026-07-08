@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T20:22:49.697Z",
+  "generatedAt": "2026-07-08T21:42:56.076Z",
   "count": 1000,
   "items": [
     {
@@ -7453,6 +7453,50 @@
       ]
     },
     {
+      "id": "CVE-2026-46702",
+      "summary": "Russh is a Rust SSH client & server library. From version 0.34.0 to before version 0.61.1, when SSH compression is enabled, russh accepted compressed packets whose on-wire size passed the normal transport packet-length checks but whose decompressed size was much larger. This allowed a remote peer to send oversized post-decompression packets that should have been rejected. In current releases, this is a remote denial-of-service / resource-exhaustion issue in the post-decompression receive path. In older releases before 0.58.0, the same remote decompression path used CryptoVec, which appears to make the historical impact worse. This issue has been patched in version 0.61.1.",
+      "published": "2026-06-10T22:17:00.580Z",
+      "lastModified": "2026-06-17T10:53:50.917Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00268,
+      "epssPercentile": 0.18445,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-770",
+          "name": "CWE-770",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.27,
+      "tags": [
+        "CWE-770"
+      ]
+    },
+    {
       "id": "CVE-2026-11651",
       "summary": "Use after free in Network in Google Chrome prior to 149.0.7827.103 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: High)",
       "published": "2026-06-09T00:16:48.027Z",
@@ -12809,7 +12853,7 @@
       "id": "CVE-2026-46319",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net/sched: act_ct: Only release RCU read lock after ct_ft When looking up a flow table in act_ct in tcf_ct_flow_table_get(), rhashtable_lookup_fast() internally opens and closes an RCU read critical section before returning ct_ft. The tcf_ct_flow_table_cleanup_work() can complete before refcount_inc_not_zero() is invoked on the returned ct_ft resulting in a UAF on the already freed ct_ft object. This vulnerability can lead to privilege escalation. Analysis from zdi-disclosures@trendmicro.com: When initializing act_ct, tcf_ct_init() is called, which internally triggers tcf_ct_flow_table_get(). static int tcf_ct_flow_table_get(struct net *net, struct tcf_ct_params *params) { struct zones_ht_key key = { .net = net, .zone = params->zone }; struct tcf_ct_flow_table *ct_ft; int err = -ENOMEM; mutex_lock(&zones_mutex); ct_ft = rhashtable_lookup_fast(&zones_ht, &key, zones_params); // [1] if (ct_ft && refcount_inc_not_zero(&ct_ft->ref)) // [2] goto out_unlock; ... } static __always_inline void *rhashtable_lookup_fast( struct rhashtable *ht, const void *key, const struct rhashtable_params params) { void *obj; rcu_read_lock(); obj = rhashtable_lookup(ht, key, params); rcu_read_unlock(); return obj; } At [1], rhashtable_lookup_fast() looks up and returns the corresponding ct_ft from zones_ht . The lookup is performed within an RCU read critical section through rcu_read_lock() / rcu_read_unlock(), which prevents the object from being freed. However, at the point of function return, rcu_read_unlock() has already been called, and there is nothing preventing ct_ft from being freed before reaching refcount_inc_not_zero(&ct_ft->ref) at [2]. This interval becomes the race window, during which ct_ft can be freed. Free Process: tcf_ct_flow_table_put() is executed through the path tcf_ct_cleanup() call_rcu() tcf_ct_params_free_rcu() tcf_ct_params_free() tcf_ct_flow_table_put(). static void tcf_ct_flow_table_put(struct tcf_ct_flow_table *ct_ft) { if (refcount_dec_and_test(&ct_ft->ref)) { rhashtable_remove_fast(&zones_ht, &ct_ft->node, zones_params); INIT_RCU_WORK(&ct_ft->rwork, tcf_ct_flow_table_cleanup_work); // [3] queue_rcu_work(act_ct_wq, &ct_ft->rwork); } } At [3], tcf_ct_flow_table_cleanup_work() is scheduled as RCU work static void tcf_ct_flow_table_cleanup_work(struct work_struct *work) { struct tcf_ct_flow_table *ct_ft; struct flow_block *block; ct_ft = container_of(to_rcu_work(work), struct tcf_ct_flow_table, rwork); nf_flow_table_free(&ct_ft->nf_ft); block = &ct_ft->nf_ft.flow_block; down_write(&ct_ft->nf_ft.flow_block_lock); WARN_ON(!list_empty(&block->cb_list)); up_write(&ct_ft->nf_ft.flow_block_lock); kfree(ct_ft); // [4] module_put(THIS_MODULE); } tcf_ct_flow_table_cleanup_work() frees ct_ft at [4]. When this function executes between [1] and [2], UAF occurs. This race condition has a very short race window, making it generally difficult to trigger. Therefore, to trigger the vulnerability an msleep(100) was inserted after[1]",
       "published": "2026-06-09T13:16:37.210Z",
-      "lastModified": "2026-07-07T18:35:34.340Z",
+      "lastModified": "2026-07-08T21:32:40.063Z",
       "severity": "High",
       "cvssScore": 7.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
@@ -12827,9 +12871,15 @@
       "epssPercentile": 0.02583,
       "isKev": false,
       "kev": null,
-      "vendor": "Linux",
+      "vendor": "F5",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
@@ -12840,7 +12890,9 @@
       "knownRansomwareUse": false,
       "priorityScore": 3.82,
       "tags": [
-        "Linux"
+        "F5",
+        "Linux",
+        "CWE-416"
       ]
     },
     {
@@ -16964,56 +17016,6 @@
       "priorityScore": 3.56,
       "tags": [
         "CWE-789"
-      ]
-    },
-    {
-      "id": "CVE-2026-11585",
-      "summary": "A vulnerability was determined in CodeAstro Student Attendance Management System 1.0. Affected is an unknown function of the file /attendance-php/Admin/createClassArms.php. This manipulation of the argument classId causes sql injection. The attack can be initiated remotely. The exploit has been publicly disclosed and may be utilized.",
-      "published": "2026-06-08T21:16:28.177Z",
-      "lastModified": "2026-06-17T10:14:15.427Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.002,
-      "epssPercentile": 0.09979,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.55,
-      "tags": [
-        "CWE-74",
-        "CWE-89"
       ]
     },
     {
@@ -24928,7 +24930,7 @@
       "id": "CVE-2026-46332",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: greybus: gb-beagleplay: bound bootloader receive buffering cc1352_bootloader_rx() appends each serdev chunk into the fixed rx_buffer before parsing bootloader packets. The helper can keep leftover bytes between callbacks and may receive multiple packets in one callback, so a single count value is not constrained by one packet length. Check that the incoming chunk fits in the remaining receive buffer space before memcpy(). If it does not, drop the staged data and consume the bytes instead of overflowing rx_buffer.",
       "published": "2026-06-09T14:16:42.817Z",
-      "lastModified": "2026-07-07T18:35:34.340Z",
+      "lastModified": "2026-07-08T21:40:40.133Z",
       "severity": "High",
       "cvssScore": 8,
       "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
@@ -24948,7 +24950,13 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-120",
+          "name": "CWE-120",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
@@ -24959,7 +24967,8 @@
       "knownRansomwareUse": false,
       "priorityScore": 3.12,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-120"
       ]
     },
     {
@@ -30575,7 +30584,7 @@
       "id": "CVE-2026-46330",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: Revert \"net/smc: Introduce TCP ULP support\" This reverts commit d7cd421da9da2cc7b4d25b8537f66db5c8331c40. As reported by Al Viro, the TCP ULP support for SMC is fundamentally broken. The implementation attempts to convert an active TCP socket into an SMC socket by modifying the underlying `struct file`, dentry, and inode in-place, which violates core VFS invariants that assume these structures are immutable for an open file, creating a risk of use after free errors and general system instability. Given the severity of this design flaw and the fact that cleaner alternatives (e.g., LD_PRELOAD, BPF) exist for legacy application transparency, the correct course of action is to remove this feature entirely.",
       "published": "2026-06-09T14:16:42.723Z",
-      "lastModified": "2026-07-07T18:35:34.340Z",
+      "lastModified": "2026-07-08T21:35:31.607Z",
       "severity": "High",
       "cvssScore": 7.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
@@ -30595,7 +30604,13 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
@@ -30606,14 +30621,15 @@
       "knownRansomwareUse": false,
       "priorityScore": 2.79,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-416"
       ]
     },
     {
       "id": "CVE-2026-52907",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: media: rockchip: rkcif: fix off by one bugs Change these comparisons from > vs >= to avoid accessing one element beyond the end of the arrays. While at it, use ARRAY_SIZE instead of the _MAX enum values. [fix cosmetic issues]",
       "published": "2026-06-09T14:16:45.147Z",
-      "lastModified": "2026-07-07T18:35:34.340Z",
+      "lastModified": "2026-07-08T20:35:59.453Z",
       "severity": "High",
       "cvssScore": 7.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
@@ -30633,7 +30649,13 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-193",
+          "name": "CWE-193",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
@@ -30644,7 +30666,8 @@
       "knownRansomwareUse": false,
       "priorityScore": 2.79,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-193"
       ]
     },
     {
@@ -31174,6 +31197,50 @@
       "priorityScore": 2.74,
       "tags": [
         "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-48011",
+      "summary": "Shopware is an open commerce platform. Prior to versions 6.6.10.18 and 6.7.10.1, an attacker is able to enumerate the usernames of administrator users by performing a timing attack. Versions 6.6.10.18 and 6.7.10.1 fix the issue.",
+      "published": "2026-06-10T22:17:00.850Z",
+      "lastModified": "2026-06-17T10:54:49.930Z",
+      "severity": "Low",
+      "cvssScore": 3.7,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00223,
+      "epssPercentile": 0.12803,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-208",
+          "name": "CWE-208",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.74,
+      "tags": [
+        "CWE-208"
       ]
     },
     {
@@ -37184,6 +37251,50 @@
       ]
     },
     {
+      "id": "CVE-2026-46705",
+      "summary": "Russh is a Rust SSH client & server library. From version 0.34.0-beta.1 to before version 0.61.0, the russh server authentication path keeps internal userauth state across SSH_MSG_USERAUTH_REQUEST messages without separating that state when the request principal changes. RFC 4252 allows the user name and service name fields to change between authentication requests. The issue is not that such changes are invalid. The issue is that russh-owned authentication state, such as remaining methods, partial-success state, and in-progress method state, can remain associated with the connection and then influence a later request for a different (user, service). This is an internal library state mismatch. This issue has been patched in version 0.61.0.",
+      "published": "2026-06-10T22:17:00.713Z",
+      "lastModified": "2026-06-17T10:53:51.113Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00218,
+      "epssPercentile": 0.12219,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-287",
+          "name": "Improper Authentication",
+          "description": "Authentication is missing or can be bypassed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.28,
+      "tags": [
+        "CWE-287"
+      ]
+    },
+    {
       "id": "CVE-2026-34692",
       "summary": "Adobe Experience Manager versions 6.5.24, LTS SP1, 2026.04 and earlier are affected by a DOM-based Cross-Site Scripting (XSS) vulnerability. An attacker could exploit this issue by manipulating the DOM environment to execute malicious JavaScript within the context of the victim's browser. Exploitation of this issue requires user interaction in that a victim must visit a crafted webpage. Scope is changed.",
       "published": "2026-06-09T17:17:05.297Z",
@@ -39400,6 +39511,51 @@
       "tags": [
         "F5",
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-52904",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/nouveau: fix nvkm_device leak on aperture removal failure When aperture_remove_conflicting_pci_devices() fails during probe, the error path returns directly without unwinding the nvkm_device that was just allocated by nvkm_device_pci_new(). This leaks both the device wrapper and the pci_enable_device() reference taken inside it. Jump to the existing fail_nvkm label so nvkm_device_del() runs and balances both. The leak was introduced when the intermediate nvkm_device_del() between detection and aperture removal was dropped in favor of creating the pci device once.",
+      "published": "2026-06-09T14:16:44.830Z",
+      "lastModified": "2026-07-08T21:41:18.277Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00156,
+      "epssPercentile": 0.05198,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.11,
+      "tags": [
+        "Linux",
+        "CWE-401"
       ]
     },
     {
@@ -42379,50 +42535,6 @@
       ]
     },
     {
-      "id": "CVE-2026-44541",
-      "summary": "Fides is an open-source privacy engineering platform. From version 2.33.0 to before version 2.84.5, there is a DOM-based XSS vulnerability in fides.js via the fides_description override. This issue has been patched in version 2.84.5.",
-      "published": "2026-06-08T21:16:45.673Z",
-      "lastModified": "2026-06-17T10:50:45.590Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00297,
-      "epssPercentile": 0.21476,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.75,
-      "tags": [
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-41977",
       "summary": "DoS vulnerability in the log service. Impact: Successful exploitation of this vulnerability may affect availability.",
       "published": "2026-06-09T08:16:27.927Z",
@@ -44808,56 +44920,6 @@
       ]
     },
     {
-      "id": "CVE-2026-40215",
-      "summary": "A race condition in OpenVPN 2.6.0 through 2.6.19 and 2.7_alpha1 through 2.7.1 allows remote attackers to potentially cause a server crash or leak heap memory via a use-after-free triggered during TLS session promotion.",
-      "published": "2026-06-08T21:16:45.453Z",
-      "lastModified": "2026-06-17T10:44:52.483Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00309,
-      "epssPercentile": 0.22706,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.79,
-      "tags": [
-        "CWE-125",
-        "CWE-416"
-      ]
-    },
-    {
       "id": "CVE-2026-47347",
       "summary": "Applications that use GeneralUtility::sanitizeLocalUrl to allow only local URLs are vulnerable to open redirect attacks if the URL is used after it has passed the aforementioned sanitization checks. This enables attackers to redirect users to external content and carry out phishing attacks. This issue affects TYPO3 CMS versions before 10.4.57, 11.0.0-11.5.50, 12.0.0-12.4.45, 13.0.0-13.4.30 and 14.0.0-14.3.2.",
       "published": "2026-06-09T11:16:52.457Z",
@@ -45800,44 +45862,6 @@
       "priorityScore": 0.28,
       "tags": [
         "CWE-352"
-      ]
-    },
-    {
-      "id": "CVE-2026-52904",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/nouveau: fix nvkm_device leak on aperture removal failure When aperture_remove_conflicting_pci_devices() fails during probe, the error path returns directly without unwinding the nvkm_device that was just allocated by nvkm_device_pci_new(). This leaks both the device wrapper and the pci_enable_device() reference taken inside it. Jump to the existing fail_nvkm label so nvkm_device_del() runs and balances both. The leak was introduced when the intermediate nvkm_device_del() between detection and aperture removal was dropped in favor of creating the pci device once.",
-      "published": "2026-06-09T14:16:44.830Z",
-      "lastModified": "2026-07-07T18:35:34.340Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00156,
-      "epssPercentile": 0.05198,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": true,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.18,
-      "tags": [
-        "Linux"
       ]
     },
     {
