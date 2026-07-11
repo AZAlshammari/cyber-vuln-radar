@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-11T10:03:40.665Z",
+  "generatedAt": "2026-07-11T11:20:06.121Z",
   "count": 1000,
   "items": [
     {
@@ -14727,56 +14727,6 @@
       ]
     },
     {
-      "id": "CVE-2026-5497",
-      "summary": "vLLM versions 0.8.0 and later are vulnerable to an Out-of-Memory (OOM) Denial of Service (DoS) attack due to unbounded frame count processing in the `VideoMediaIO.load_base64()` method. When processing `video/jpeg` data URLs, the method splits the base64 data string on commas to extract individual JPEG frames without enforcing a frame count limit. An attacker can exploit this by crafting a single API request containing thousands of comma-separated base64-encoded JPEG frames in a data URL, causing the server to decode all frames into memory and crash due to excessive memory consumption. This vulnerability is reachable via the OpenAI-compatible chat completions API and does not require authentication.",
-      "published": "2026-06-11T10:16:21.903Z",
-      "lastModified": "2026-07-03T13:17:30.490Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00543,
-      "epssPercentile": 0.41774,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-770",
-          "name": "CWE-770",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.09,
-      "tags": [
-        "CWE-400",
-        "CWE-770"
-      ]
-    },
-    {
       "id": "CVE-2026-12060",
       "summary": "Heptabase developed by Hepta Platforms has a Exposed Dangerous Method or Function vulnerability, allowing unauthenticated remote attackers to leverage social engineering techniques to trick a victim into opening or loading a malicious webpage within the Heptabase application, thereby gaining unauthorized access to camera and microphone permissions.",
       "published": "2026-06-12T07:16:21.090Z",
@@ -15141,6 +15091,50 @@
       "tags": [
         "WordPress",
         "CWE-98"
+      ]
+    },
+    {
+      "id": "CVE-2026-10638",
+      "summary": "subsys/net/ip/icmpv6.c reads the network interface from a net_pkt after that packet has been handed to net_try_send_data(). In icmpv6_handle_echo_request() and net_icmpv6_send_error(), the post-send statistics update calls net_pkt_iface(reply)/net_pkt_iface(pkt) on the just-sent packet. The send path (net_try_send_data - net_if_tx) unreferences and may free the packet back to its memory slab before returning — synchronously in the RX thread when no TX queue is configured (CONFIG_NET_TC_TX_COUNT == 0), and asynchronously the driver/L2 may already have freed it otherwise. net_pkt_iface() therefore dereferences a freed (and possibly reused) net_pkt; with CONFIG_NET_STATISTICS_PER_INTERFACE the stale iface pointer is further dereferenced and written through (iface-stats.icmp.sent++), turning the use-after-free read into a write through an attacker-influenceable pointer. The core stack already documents this hazard in net_core.c (\"do not use pkt after that call\") and caches iface before sending; the ICMPv6 callers did not. An unauthenticated remote attacker triggers the flaw simply by sending an ICMPv6 Echo Request (ping) or an IPv6 packet that elicits an ICMPv6 error (unknown next header, fragment reassembly timeout, destination unreachable), leading to denial of service via crash and potential memory corruption. Affected: Zephyr networking with CONFIG_NET_NATIVE_IPV6, roughly v4.2.0 through v4.4.0. The fix caches the interface pointer before sending and uses it for all statistics updates; the sibling commit 86e21665d46 fixes the identical bug in ICMPv4.",
+      "published": "2026-06-16T15:16:34.097Z",
+      "lastModified": "2026-07-01T14:40:19.883Z",
+      "severity": "Medium",
+      "cvssScore": 5.9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00352,
+      "epssPercentile": 0.27346,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.02,
+      "tags": [
+        "CWE-416"
       ]
     },
     {
@@ -22053,6 +22047,50 @@
       ]
     },
     {
+      "id": "CVE-2026-10640",
+      "summary": "Zephyr's IPv6 Neighbor Discovery send paths (net_ipv6_send_na, net_ipv6_send_ns, net_ipv6_send_rs in subsys/net/ip/ipv6_nbr.c) updated the per-interface ICMP-sent statistics by calling net_pkt_iface(pkt) after net_send_data(pkt) had already returned successfully. On the success path the network stack owns and releases the packet's reference (the L2/driver send unrefs it, e.g. ethernet_send - net_pkt_unref), so for a freshly allocated packet with refcount 1 the net_pkt slab block can be freed before the statistics line runs (synchronously when no TX queue thread is configured, or via a concurrent TX thread otherwise). The subsequent net_pkt_iface(pkt) reads pkt-iface from the freed slab block, and with CONFIG_NET_STATISTICS_PER_INTERFACE enabled that loaded pointer is dereferenced to increment iface-stats.icmp.sent, a use-after-free (CWE-416). If the slab block was reallocated in the meantime the read/increment targets unrelated or attacker-influenced memory, yielding corrupted statistics, a fault/crash (denial of service), or potential limited memory corruption. The vulnerable Neighbor Advertisement path is reachable by any unauthenticated on-link node simply by sending ICMPv6 Neighbor Solicitations to a Zephyr node with native IPv6 enabled (handle_ns_input - net_ipv6_send_na). Affected from v3.3.0 through v4.4.0; the fix uses the already-available iface argument instead of touching the sent packet. Configurations without per-interface statistics dereference only a global counter and are not affected by the memory-safety aspect.",
+      "published": "2026-06-16T15:16:34.317Z",
+      "lastModified": "2026-06-26T20:50:24.107Z",
+      "severity": "Medium",
+      "cvssScore": 4.2,
+      "cvssVector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.0037,
+      "epssPercentile": 0.291,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.49,
+      "tags": [
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-50879",
       "summary": "An issue in the uploadPostHandler component of Andrei Marcu linx-server v2.3.8 allows attackers to cause a Denial of Service (DoS) via a crafted POST request.",
       "published": "2026-06-15T20:16:30.827Z",
@@ -23141,50 +23179,6 @@
       "priorityScore": 3.39,
       "tags": [
         "CWE-284"
-      ]
-    },
-    {
-      "id": "CVE-2025-7064",
-      "summary": "Authentication bypass by primary weakness vulnerability in ABB Freelance. This issue affects Freelance: through 2013, 2013 SP1, 2016, 2016 SP1, 2019, 2019 SP1, 2019 SP1 FP1, 2024.",
-      "published": "2026-06-11T10:16:21.053Z",
-      "lastModified": "2026-06-17T10:04:11.283Z",
-      "severity": "Medium",
-      "cvssScore": 6.6,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:H/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "High",
-        "availability": "Low"
-      },
-      "epssScore": 0.00116,
-      "epssPercentile": 0.01922,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-305",
-          "name": "CWE-305",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.38,
-      "tags": [
-        "CWE-305"
       ]
     },
     {
@@ -26336,6 +26330,50 @@
       ]
     },
     {
+      "id": "CVE-2026-10639",
+      "summary": "In Zephyr's native IPv4 stack, icmpv4_handle_echo_request() in subsys/net/ip/icmpv4.c builds an echo-reply packet (reply), hands it to net_try_send_data(), and then, on success, calls net_stats_update_icmp_sent(net_pkt_iface(reply)). net_try_send_data() transfers ownership of reply to the TX path (net_if_try_queue_tx - net_if_tx - L2/driver send, or the asynchronous net_if_tx_thread), which can unref it to refcount 0 and return the struct net_pkt to its slab (net_pkt_unref - k_mem_slab_free) before the stats line runs. net_core.c documents this exact contract ('the pkt might contain garbage already ... do not use pkt after that call'). The post-send net_pkt_iface(reply) therefore reads reply-iface out of a freed (and possibly already reallocated) net_pkt, a use-after-free read; with CONFIG_NET_STATISTICS_PER_INTERFACE the stats macro additionally increments a counter through that value, i.e. a dereference/write through a stale or recycled-slot pointer. The path is reached unauthenticated by any remote host that pings the device (net_icmpv4_input - net_icmp_call_ipv4_handlers - icmpv4_handle_echo_request) and is gated on CONFIG_NET_STATISTICS_ICMP. Impact is a probabilistic read of recycled packet memory plus a possible wild-pointer write under a timing race, leading most likely to corrupted interface statistics or a remotely triggerable crash (DoS). The defect was introduced in 2019 (v1.14) and is present through v4.4.0. The companion change in net_icmpv4_send_error() is not a use-after-free because it reads net_pkt_iface(orig), the caller-owned received packet, which stays alive across the send. The fix caches the interface pointer from the live received packet before sending and uses it for the post-send stats updates.",
+      "published": "2026-06-16T15:16:34.207Z",
+      "lastModified": "2026-07-01T14:45:00.643Z",
+      "severity": "Medium",
+      "cvssScore": 4.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00232,
+      "epssPercentile": 0.14056,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.17,
+      "tags": [
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-6046",
       "summary": "Mattermost versions 11.6.x <= 11.6.1, 11.5.x <= 11.5.4, 10.11.x <= 10.11.15, 10.11.x <= 10.11.16 fail to validate that a username returned during bot registration belongs to a bot account, which allows an unprivileged attacker to intercept private messages sent by plugins via direct message channels by pre-registering a user account with a predictable plugin bot username.. Mattermost Advisory ID: MMSA-2026-00649",
       "published": "2026-06-12T17:16:26.957Z",
@@ -27189,7 +27227,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 3.08,
       "tags": [
@@ -30135,6 +30173,50 @@
       ]
     },
     {
+      "id": "CVE-2026-10637",
+      "summary": "subsys/net/ip/ipv6_mld.c:mld_send() read the packet interface via net_pkt_iface(pkt) after net_send_data(pkt) returned successfully. Per the network stack's ownership contract (include/zephyr/net/net_core.h, and the explicit warning in subsys/net/ip/net_core.c:453-460 'do not use pkt after that call'), a successful send transfers ownership of the net_pkt and the L2 driver frees it (e.g. ethernet_send() unrefs the packet on success, subsys/net/l2/ethernet/ethernet.c:790), returning it to its k_mem_slab. The subsequent net_pkt_iface(pkt) is therefore a read of a freed object; the recovered interface pointer is then dereferenced and incremented by the per-interface statistics path (net_stats.h UPDATE_STAT/SET_STAT) when CONFIG_NET_STATISTICS_PER_INTERFACE is enabled. If the freed slot is concurrently reallocated, pkt-iface may read back as NULL (NULL-pointer dereference / crash) or as a stale/garbage pointer (stray increment write / memory corruption). The path is reachable remotely on the local link without authentication: handle_mld_query() (registered for NET_ICMPV6_MLD_QUERY) responds to a valid MLDv2 General Query (unspecified multicast address, hop limit 1) by calling send_mld_report() - mld_send(). The result is a remotely triggerable denial of service of the networking stack, with a narrow possibility of memory corruption. The fix caches the interface in a local before sending and no longer touches the packet after net_send_data(). The IPv4/IGMP sibling (igmp_send) already used the corrected pattern.",
+      "published": "2026-06-16T15:16:33.987Z",
+      "lastModified": "2026-07-01T14:21:41.650Z",
+      "severity": "Medium",
+      "cvssScore": 5.9,
+      "cvssVector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "High"
+      },
+      "epssScore": 0.00299,
+      "epssPercentile": 0.21711,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.82,
+      "tags": [
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-44780",
       "summary": "Discourse is an open-source discussion platform. From versions 2026.1.0-latest to before 2026.1.4, 2026.3.0-latest to before 2026.3.1, and 2026.4.0-latest to before 2026.4.1, ReviewableQueuedPostSerializer unconditionally included payload[\"raw_email\"] for posts that arrived via incoming email. Category moderation group members reaching the review queue could therefore read the full inbound email source (headers, sender trace, MUA, body) without being in view_raw_email_allowed_groups — the trust boundary that gates the dedicated raw-email endpoint. This issue has been patched in versions 2026.1.4, 2026.3.1, 2026.4.1, and 2026.5.0-latest.1.",
       "published": "2026-06-12T21:16:21.643Z",
@@ -31129,50 +31211,6 @@
       "priorityScore": 2.76,
       "tags": [
         "CWE-918"
-      ]
-    },
-    {
-      "id": "CVE-2022-44630",
-      "summary": "Cross-Site request forgery (CSRF) vulnerability in YITH YITH WooCommerce Product Slider Carousel allows Cross Site Request Forgery. This issue affects YITH WooCommerce Product Slider Carousel: from n/a through 1.16.0.",
-      "published": "2026-06-11T10:16:20.870Z",
-      "lastModified": "2026-06-17T05:08:38.410Z",
-      "severity": "Medium",
-      "cvssScore": 4.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00144,
-      "epssPercentile": 0.04114,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-352",
-          "name": "Cross-Site Request Forgery",
-          "description": "A web request may execute without user intent."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.75,
-      "tags": [
-        "CWE-352"
       ]
     },
     {
@@ -35163,50 +35201,6 @@
       ]
     },
     {
-      "id": "CVE-2026-11850",
-      "summary": "An integer underflow vulnerability was found in MIT krb5 in the berval2tl_data() function in plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c. The function performs an unsigned subtraction (bv_len - 2) without a prior bounds check. When bv_len is 0 or 1, the subtraction wraps to a large value which is then truncated to uint16_t, yielding 0xFFFE (65534) or 0xFFFF (65535). The subsequent malloc succeeds and memcpy reads up to 65534 bytes from a 0-1 byte buffer, resulting in a heap out-of-bounds read. The attack vector involves a malicious or compromised LDAP KDB backend returning a krbExtraData attribute with bv_len < 2, triggering the underflow when the KDC or kadmind reads principal data.",
-      "published": "2026-06-11T10:16:21.217Z",
-      "lastModified": "2026-06-17T10:14:30.383Z",
-      "severity": "Medium",
-      "cvssScore": 5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:L/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00261,
-      "epssPercentile": 0.17512,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-191",
-          "name": "CWE-191",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.36,
-      "tags": [
-        "CWE-191"
-      ]
-    },
-    {
       "id": "CVE-2022-45813",
       "summary": "Missing Authorization vulnerability in BeRocket Advanced AJAX Product Filters allows Exploiting Incorrectly Configured Access Control Security Levels. This issue affects Advanced AJAX Product Filters: from n/a through 1.6.3.3.",
       "published": "2026-06-11T12:16:28.563Z",
@@ -36935,50 +36929,6 @@
         "Windows",
         "CWE-125",
         "CWE-190"
-      ]
-    },
-    {
-      "id": "CVE-2022-42479",
-      "summary": "Missing Authorization vulnerability in TemplateHouse Soledad allows Accessing Functionality Not Properly Constrained by ACLs. This issue affects Soledad: from n/a through 8.2.5.",
-      "published": "2026-06-11T10:16:19.840Z",
-      "lastModified": "2026-06-17T05:05:01.263Z",
-      "severity": "Medium",
-      "cvssScore": 5.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00177,
-      "epssPercentile": 0.07386,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.15,
-      "tags": [
-        "CWE-862"
       ]
     },
     {
@@ -38884,6 +38834,50 @@
       "priorityScore": 1.91,
       "tags": [
         "CWE-119"
+      ]
+    },
+    {
+      "id": "CVE-2026-10636",
+      "summary": "In Zephyr's IPv4 IGMP implementation, igmp_send() in subsys/net/ip/igmp.c read the network interface back out of the packet via net_pkt_iface(pkt) after the packet had been handed to net_send_data(). On the successful-send path the packet's last reference may already have been released by the L2 driver or by the network stack's TX handling (synchronously in the default NET_TC_TX_COUNT=0 immediate-transmit configuration), returning the net_pkt slab block to its free list. The subsequent net_pkt_iface(pkt) dereferences the freed packet, a use-after-free read; with CONFIG_NET_STATISTICS_PER_INTERFACE the resulting dangling interface pointer is further dereferenced for a statistics-counter write. The IGMP send path is reachable without authentication from inbound IPv4 IGMP membership queries addressed to 224.0.0.1 (net_ipv4_igmp_input - send_igmp_report/send_igmp_v3_report - igmp_send), as well as from local multicast join/leave/rejoin operations. Realistic impact is undefined behavior and potential denial of service (sporadic crash or stats corruption); a controllable write requires the asynchronous TX path plus a concurrent slab reuse. The flaw was introduced with IGMPv2 support and affects releases from v2.6.0 through v4.4.0. The fix caches the interface pointer before sending. Note the analogous IPv6 MLD path (mld_send in subsys/net/ip/ipv6_mld.c) retains the same unfixed pattern.",
+      "published": "2026-06-16T15:16:33.867Z",
+      "lastModified": "2026-07-01T14:34:49.837Z",
+      "severity": "Low",
+      "cvssScore": 3.7,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00261,
+      "epssPercentile": 0.17481,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.91,
+      "tags": [
+        "CWE-416"
       ]
     },
     {
@@ -42959,6 +42953,50 @@
       ]
     },
     {
+      "id": "CVE-2026-10831",
+      "summary": "A denial-of-service vulnerability exists in NPort devices because of improper access control on the command port. The command interface does not properly validate whether a sender is associated with a valid data port session before accepting break signal commands. A remote attacker with network access can send crafted requests to disrupt serial communication for an active user session.",
+      "published": "2026-06-16T15:16:34.490Z",
+      "lastModified": "2026-06-17T10:12:35.883Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00292,
+      "epssPercentile": 0.20987,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.73,
+      "tags": [
+        "CWE-862"
+      ]
+    },
+    {
       "id": "CVE-2026-34025",
       "summary": "The Wertheim SafeController Software, AssemblyVersion 6.15.8328.28014, contains an IP restriction bypass vulnerability in the login process. The application restricts user logins based on the IP address associated with a branch location, but the client IP address is derived from the HTTP X-Forwarded-For header when that header is present. An attacker with valid branch user credentials can manipulate the X-Forwarded-For header during login to spoof the expected branch IP address and obtain a valid authenticated session from an unauthorized network location.",
       "published": "2026-06-15T12:16:24.867Z",
@@ -43987,50 +44025,6 @@
       "priorityScore": 0.42,
       "tags": [
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-53911",
-      "summary": "Cerebrate before version 1.37 allowed the id primary key field to be supplied through request input during CRUD edit operations and certain custom entity patching flows. In affected entities that did not explicitly mark id as inaccessible, an authenticated attacker could submit a crafted edit request containing the id of another record, causing the save operation to update that unrelated record instead of the record identified by the route parameter. The issue affected several entity types inheriting permissive mass-assignment defaults, including User, Role, UserSetting, LocalTool, PermissionLimitation, and EnumerationCollection. Since UserSettings edit functionality was reachable by any authenticated user, exploitation could allow unauthorized modification of records within the same entity type, with impact depending on the affected endpoint and writable fields. Cerebrate 1.37 fixes this by stripping id from request input after marshalling callbacks and by globally marking id as inaccessible in the base AppModel entity. The discovery of those potential vulnerabilities are inherited from initial finding from Jeroen Pinoy additional support from AI-Assisted Optus 4.8 (the commit wrongly assign Claude Fable 5 as the model switched) and coordinated by Andras Iklody.",
-      "published": "2026-06-11T10:16:21.757Z",
-      "lastModified": "2026-06-17T10:58:10.027Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00207,
-      "epssPercentile": 0.10814,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.38,
-      "tags": [
-        "CWE-639"
       ]
     },
     {
