@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-13T15:36:24.251Z",
+  "generatedAt": "2026-07-13T17:43:04.432Z",
   "count": 1000,
   "items": [
     {
@@ -20244,50 +20244,6 @@
       ]
     },
     {
-      "id": "CVE-2026-6428",
-      "summary": "SQL Injection in reports/catalogue_out.pl in Koha Community Koha through 22.11.37, 23.x, 24.x before 24.11.16, 25.05.x before 25.05.11, 25.11.x before 25.11.05, 26.05.x before 26.05.01, and 26.11.x before 26.11.00 allows an authenticated staff user with the Reports module flag to read arbitrary data from the Koha application database via the Filter URL parameter when the Criteria parameter matches /branchcode/. The vulnerable sink in sub calculate concatenates the unmodified Filter request parameter directly into a LIKE clause of the auxiliary $strsth2 statement and executes it via DBI without bound parameters: my $f = @$filters[0]; $f =~ s/\\*/%/g; $strsth2 .= \" AND $column LIKE '$f' \"; This enables error-based SQL injection (e.g., via EXTRACTVALUE) and full read access to sensitive tables including borrowers (password hashes, 2FA secrets, PII), borrower_password_recovery, api_keys, and sessions. Proof of concept (error-based, single request): GET /cgi-bin/koha/reports/catalogue_out.pl?do_it=1&output=screen&Limit=10&Criteria=branchcode&Filter=x'+AND+EXTRACTVALUE(1,CONCAT(0x7e,VERSION(),0x7c,USER(),0x7c,DATABASE(),0x7e))--+- Cookie: CGISESSID= The response body contains the DBI exception leaking the MariaDB version, database user, client IP, and database name, after which arbitrary data can be paged out using LIMIT n,1 / SUBSTRING(...). The vulnerable sink was introduced in commit 6bb77ae3e4 (2008-07-09); CVE-2015-4633 patched the same class in sibling files but did not generalise the fix to reports/catalogue_out.pl. Fixed in Koha 22.11.38, 24.11.16, 25.05.11, 25.11.05, 26.05.01, and 26.11.00 by replacing the raw concatenation with a parameterised placeholder.",
-      "published": "2026-06-13T17:16:17.190Z",
-      "lastModified": "2026-06-17T11:00:49.047Z",
-      "severity": "High",
-      "cvssScore": 7.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00244,
-      "epssPercentile": 0.15495,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.2,
-      "tags": [
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2016-20077",
       "summary": "WordPress Plugin Photocart Link 1.6 contains a local file inclusion vulnerability that allows unauthenticated attackers to read arbitrary files by exploiting insufficient input validation in decode.php. Attackers can supply base64-encoded file paths in the 'id' parameter to the decode.php endpoint to retrieve sensitive files like wp-config.php containing database credentials and configuration data.",
       "published": "2026-06-15T14:16:31.077Z",
@@ -37782,6 +37738,56 @@
       "tags": [
         "F5",
         "CWE-669"
+      ]
+    },
+    {
+      "id": "CVE-2026-12450",
+      "summary": "Inappropriate implementation in Media in Google Chrome prior to 149.0.7827.155 allowed a remote attacker to obtain potentially sensitive information from process memory via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-06-17T13:20:00.383Z",
+      "lastModified": "2026-06-17T15:21:40.850Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00184,
+      "epssPercentile": 0.08095,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Microsoft",
+      "product": "Windows",
+      "cwe": [
+        {
+          "id": "CWE-269",
+          "name": "Improper Privilege Management",
+          "description": "Privileges are assigned, modified, or checked incorrectly."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.56,
+      "tags": [
+        "Microsoft",
+        "Apple",
+        "Google",
+        "Linux",
+        "Chrome",
+        "Windows",
+        "CWE-269"
       ]
     },
     {
