@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-12T23:57:42.373Z",
+  "generatedAt": "2026-07-13T03:40:07.447Z",
   "count": 1000,
   "items": [
     {
@@ -6069,6 +6069,52 @@
       ]
     },
     {
+      "id": "CVE-2026-12165",
+      "summary": "The Contest Gallery – Upload & Vote Photos, Media, Sell with PayPal & Stripe plugin for WordPress is vulnerable to Privilege Escalation in all versions up to, and including, 30.0.2 via the `RegistryUserRole` parameter. This is due to the plugin's admin menu being registered at the `edit_posts` capability level — granting Contributor-level users access to the plugin's admin pages and a valid `cg_admin` nonce — while the option-saving handler in `change-options-and-sizes.php` performs no `current_user_can()` capability check beyond `check_admin_referer('cg_admin')`, and the `RegistryUserRole` value is processed only through `sanitize_text_field()` and `htmlentities()` without restriction to an allowlist of permitted role names. This makes it possible for authenticated attackers, with author-level access and above, to overwrite the plugin's stored `RegistryUserRole` option with `administrator`, which the `cg_create_wp_user_from_google_user` function then reads back from the `contest_gal1ery_registry_and_login_options` database table without any allowlist validation and passes directly to `wp_update_user()`, effectively promoting a newly registered Google sign-in account to Administrator.",
+      "published": "2026-06-17T13:19:57.433Z",
+      "lastModified": "2026-06-17T14:44:26.397Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00408,
+      "epssPercentile": 0.32866,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-269",
+          "name": "Improper Privilege Management",
+          "description": "Privileges are assigned, modified, or checked incorrectly."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.23,
+      "tags": [
+        "Google",
+        "WordPress",
+        "CWE-269"
+      ]
+    },
+    {
       "id": "CVE-2026-8442",
       "summary": "The WP Review Slider Pro plugin for WordPress is vulnerable to Arbitrary File Deletion in versions up to and including 12.6.8. This is due to missing authorization checks on the wpfb_hide_review and wprp_save_review_admin AJAX handlers combined with insufficient path validation in the wpfb_hidereview_ajax() function, which uses strpos() to check that a stored media URL starts with the expected prefix but fails to sanitize path traversal sequences in the remaining relative path before passing it to unlink(). This makes it possible for authenticated attackers, with subscriber-level access and above, to delete arbitrary files on the affected site's server which may make remote code execution possible.",
       "published": "2026-06-16T10:16:29.330Z",
@@ -8733,51 +8779,6 @@
       "priorityScore": 5.03,
       "tags": [
         "CWE-98"
-      ]
-    },
-    {
-      "id": "CVE-2026-9848",
-      "summary": "The WP Ticket plugin for WordPress is vulnerable to SQL Injection via the WordPress search query parameter (`s`) in versions up to, and including, 6.0.4 The plugin hooks WordPress's `posts_request` filter with `wp_ticket_com_posts_request()`, which calls `emd_author_search_results()` when the current request is an unauthenticated front-end search. That function reads `$query->query_vars['s']` — already wp_unslash()'d by `WP_Query::parse_query()`, so wp_magic_quotes protection has been stripped — and concatenates the raw value into a SQL `LIKE` clause inside a UNION sub-SELECT appended to the main query, with no `$wpdb->prepare()` or escaping. This makes it possible for unauthenticated attackers to append additional SQL queries into already-existing queries that can be used to extract sensitive information from the database.",
-      "published": "2026-06-13T03:16:22.017Z",
-      "lastModified": "2026-06-17T11:05:41.083Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.0051,
-      "epssPercentile": 0.39934,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.02,
-      "tags": [
-        "WordPress",
-        "CWE-89"
       ]
     },
     {
@@ -12278,6 +12279,51 @@
       ]
     },
     {
+      "id": "CVE-2026-12115",
+      "summary": "The Counter Box – Add Countdowns, Timers & Dynamic Counters to WordPress plugin for WordPress is vulnerable to PHP Object Injection in all versions up to, and including, 2.0.13 via deserialization of untrusted input . This makes it possible for authenticated attackers, with administrator-level access and above, to inject a PHP Object. No known POP chain is present in the vulnerable software, which means this vulnerability has no impact unless another plugin or theme containing a POP chain is installed on the site. If a POP chain is present via an additional plugin or theme installed on the target system, it may allow the attacker to perform actions like delete arbitrary files, retrieve sensitive data, or execute code depending on the POP chain present. Deserialization is triggered automatically upon the post-import redirect that renders the list table, and again when any item is opened for editing, requiring no additional navigation beyond the import action itself.",
+      "published": "2026-06-17T13:19:57.273Z",
+      "lastModified": "2026-06-17T14:44:26.397Z",
+      "severity": "Medium",
+      "cvssScore": 6.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "High",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00535,
+      "epssPercentile": 0.41356,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-502",
+          "name": "Deserialization of Untrusted Data",
+          "description": "Untrusted serialized data can alter control flow or objects."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.76,
+      "tags": [
+        "WordPress",
+        "CWE-502"
+      ]
+    },
+    {
       "id": "CVE-2026-48708",
       "summary": "OliveTin gives access to predefined shell commands from a web interface. In versions 3000.0.0 and prior, the template engine uses a single shared text/template.Template instance (tpl package-level variable in service/internal/tpl/templates.go) across all goroutines. Every action execution calls tpl.Parse(source) followed by t.Execute() on this shared instance with no synchronization. When two or more actions execute concurrently (which is the normal case — each ExecRequest spawns a goroutine), a race condition occurs: one goroutine's Parse overwrites the template tree while another goroutine is calling Execute, causing cross-user command contamination, Go runtime panic, and incorrect command execution. This issue has been resolved in version 3000.13.0.",
       "published": "2026-06-15T21:17:15.570Z",
@@ -14835,50 +14881,6 @@
       ]
     },
     {
-      "id": "CVE-2026-11442",
-      "summary": "Allegra exportReport Directory Traversal Information Disclosure Vulnerability. This vulnerability allows remote attackers to disclose sensitive information on affected installations of Allegra. Authentication is required to exploit this vulnerability. The specific flaw exists within the exportReport method. The issue results from the lack of proper validation of a user-supplied path prior to using it in file operations. An attacker can leverage this vulnerability to disclose information in the context of the service account. Was ZDI-CAN-28208.",
-      "published": "2026-06-13T00:16:23.683Z",
-      "lastModified": "2026-06-17T10:14:02.447Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.01254,
-      "epssPercentile": 0.66011,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.59,
-      "tags": [
-        "CWE-22"
-      ]
-    },
-    {
       "id": "CVE-2026-47835",
       "summary": "In Spring AI Vector Stores, special characters could be used to force the execution of arbitrary queries in Elasticsearch, OpenSearch, and GemFire VectorDB. Affected components: spring-ai-elasticsearch-store, spring-ai-opensearch-store, spring-ai-gemfire-store. Affected versions: Spring AI 1.0.0 through 1.0.x (fix 1.0.9). Spring AI 1.1.0 through 1.1.x (fix 1.1.8).",
       "published": "2026-06-15T20:16:28.840Z",
@@ -16164,6 +16166,95 @@
       ]
     },
     {
+      "id": "CVE-2026-12199",
+      "summary": "A vulnerability in `nltk.app.wordnet_app` up to version 3.9.3 allows unauthenticated remote shutdown of the local WordNet Browser HTTP server when started in its default mode. The server listens on all interfaces and processes a specific unauthenticated GET request (`/SHUTDOWN%20THE%20SERVER`) to terminate the process immediately via `os._exit(0)`. This results in a denial of service, impacting service availability. The issue arises due to insufficient authentication and protection mechanisms for critical server functions.",
+      "published": "2026-06-17T13:19:57.573Z",
+      "lastModified": "2026-06-17T16:30:42.680Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00325,
+      "epssPercentile": 0.2448,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-306",
+          "name": "CWE-306",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.48,
+      "tags": [
+        "CWE-306"
+      ]
+    },
+    {
+      "id": "CVE-2026-12360",
+      "summary": "The JetEngine plugin for WordPress is vulnerable to SQL injection in all versions up to and including 3.8.10.1. The listing_load_more AJAX handler accepts a filtered_query parameter that is intentionally excluded from the HMAC query signature check to support front-end filter integration. However, meta_query row values within filtered_query are not sanitized before being merged into SQL construction. This makes it possible for unauthenticated attackers to perform time-based or boolean blind SQL injection by appending a malicious meta_query value to a Load More AJAX request captured from any public Listing Grid page.",
+      "published": "2026-06-17T13:19:58.577Z",
+      "lastModified": "2026-06-17T14:44:26.397Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00322,
+      "epssPercentile": 0.24164,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.47,
+      "tags": [
+        "WordPress",
+        "CWE-89"
+      ]
+    },
+    {
       "id": "CVE-2026-12295",
       "summary": "Sandbox escape in the DOM: Navigation component. This vulnerability was fixed in Firefox 152, Firefox ESR 140.12, Firefox ESR 115.37, Thunderbird 152, and Thunderbird 140.12.",
       "published": "2026-06-16T13:16:29.737Z",
@@ -16537,6 +16628,50 @@
       "priorityScore": 4.45,
       "tags": [
         "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-12256",
+      "summary": "Contributor PHP Object Injection in Avada <= 3.15.3 versions.",
+      "published": "2026-06-17T13:19:57.723Z",
+      "lastModified": "2026-06-17T14:44:26.397Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00482,
+      "epssPercentile": 0.38247,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-502",
+          "name": "Deserialization of Untrusted Data",
+          "description": "Untrusted serialized data can alter control flow or objects."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.42,
+      "tags": [
+        "CWE-502"
       ]
     },
     {
@@ -27653,6 +27788,54 @@
       ]
     },
     {
+      "id": "CVE-2026-12437",
+      "summary": "Use after free in WebShare in Google Chrome on Windows prior to 149.0.7827.155 allowed a remote attacker who had compromised the renderer process to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: Critical)",
+      "published": "2026-06-17T13:19:58.863Z",
+      "lastModified": "2026-06-18T13:47:47.770Z",
+      "severity": "High",
+      "cvssScore": 8.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00279,
+      "epssPercentile": 0.19761,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Microsoft",
+      "product": "Windows",
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.6,
+      "tags": [
+        "Microsoft",
+        "Google",
+        "Chrome",
+        "Windows",
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-42640",
       "summary": "Unauthenticated Broken Access Control in Classified Listing <= 5.3.8 versions.",
       "published": "2026-06-15T21:16:54.590Z",
@@ -30083,6 +30266,53 @@
       ]
     },
     {
+      "id": "CVE-2026-12438",
+      "summary": "Inappropriate implementation in WebView in Google Chrome on Android prior to 149.0.7827.155 allowed a remote attacker who had compromised the renderer process to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: Critical)",
+      "published": "2026-06-17T13:19:58.980Z",
+      "lastModified": "2026-06-18T13:47:39.107Z",
+      "severity": "High",
+      "cvssScore": 8.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00207,
+      "epssPercentile": 0.10862,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-693",
+          "name": "CWE-693",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.29,
+      "tags": [
+        "Google",
+        "Chrome",
+        "Android",
+        "CWE-693"
+      ]
+    },
+    {
       "id": "CVE-2026-52722",
       "summary": "A signed integer overflow vulnerability was found in GStreamer's VMnc decoder. A crafted VMnc stream with large cursor dimensions can overflow signed integer payload-size arithmetic, bypassing a length check and leading to out-of-bounds reads. A remote attacker could trick a user into opening a specially crafted VMnc file, potentially causing a crash or information disclosure.",
       "published": "2026-06-15T20:16:32.830Z",
@@ -31927,50 +32157,6 @@
       "tags": [
         "Adobe",
         "CWE-122"
-      ]
-    },
-    {
-      "id": "CVE-2026-11443",
-      "summary": "Allegra downloadAttachment Cross-Site Scripting Authentication Bypass Vulnerability. This vulnerability allows remote attackers to execute arbitrary script on affected installations of Allegra. User interaction is required to exploit this vulnerability in that the target must visit a malicious page or open a malicious file. The specific flaw exists within the downloadAttachment method. The issue results from the lack of proper validation of user-supplied data, which can lead to the injection of arbitrary script. An attacker can leverage this vulnerability to execute script in the context of the current user. Was ZDI-CAN-28236.",
-      "published": "2026-06-13T00:16:24.290Z",
-      "lastModified": "2026-06-17T10:14:02.603Z",
-      "severity": "Medium",
-      "cvssScore": 4.6,
-      "cvssVector": "CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00225,
-      "epssPercentile": 0.13093,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.07,
-      "tags": [
-        "CWE-79"
       ]
     },
     {
@@ -34732,50 +34918,6 @@
       ]
     },
     {
-      "id": "CVE-2026-54228",
-      "summary": "A time-of-check time-of-use (TOCTOU) race condition was found in the abrt-dbus D-Bus service's SetElement method. Between dump directory creation and post-create event execution, any local user can call SetElement to write arbitrary text files into the root-owned dump directory, bypassing package validation and allowing crashes of unpackaged binaries to survive post-create processing.",
-      "published": "2026-06-13T03:16:21.440Z",
-      "lastModified": "2026-06-30T03:21:01.697Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00103,
-      "epssPercentile": 0.01179,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-367",
-          "name": "CWE-367",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.77,
-      "tags": [
-        "CWE-367"
-      ]
-    },
-    {
       "id": "CVE-2026-40792",
       "summary": "Subscriber Insecure Direct Object References (IDOR) in KiviCare <= 4.2.1 versions.",
       "published": "2026-06-15T21:16:51.537Z",
@@ -36978,51 +37120,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12089",
-      "summary": "The LWS Optimize – All-in-One Speed Booster & Cache Tools plugin for WordPress is vulnerable to Arbitrary File Read in versions up to, and including, 3.3.19. This is due to the combine_current_css() function trusting values harvested from page HTML and converting same-site URLs to absolute filesystem paths before reading them with file_get_contents()/Minify\\CSS::add(), without enforcing that the resolved path stay within ABSPATH or have a .css extension. This makes it possible for authenticated attackers, with Editor-level access and above, to read arbitrary files.",
-      "published": "2026-06-13T03:16:19.573Z",
-      "lastModified": "2026-06-17T10:14:37.517Z",
-      "severity": "Medium",
-      "cvssScore": 4.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00336,
-      "epssPercentile": 0.2568,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.61,
-      "tags": [
-        "WordPress",
-        "CWE-22"
-      ]
-    },
-    {
       "id": "CVE-2025-64215",
       "summary": "Missing Authorization vulnerability in StylemixThemes MasterStudy LMS Pro allows Accessing Functionality Not Properly Constrained by ACLs. This issue affects MasterStudy LMS Pro: from n/a before 4.7.16.",
       "published": "2026-06-15T14:16:32.753Z",
@@ -37289,52 +37386,6 @@
       "tags": [
         "WordPress",
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-54230",
-      "summary": "A symlink following vulnerability was found in the ABRT post-create event handler scripts in libreport. Event scripts write output files using shell redirections without the O_NOFOLLOW flag. If the target file is replaced with a symlink, the shell process running as root follows the symlink and writes content to the symlink target, allowing arbitrary file overwrites on the system.",
-      "published": "2026-06-13T03:16:21.733Z",
-      "lastModified": "2026-06-30T03:21:02.087Z",
-      "severity": "High",
-      "cvssScore": 7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0014,
-      "epssPercentile": 0.03728,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-59",
-          "name": "CWE-59",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.58,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-59"
       ]
     },
     {
@@ -37935,50 +37986,6 @@
       "priorityScore": 2.49,
       "tags": [
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-54229",
-      "summary": "A race condition was found in the abrt-dbus D-Bus service's ChownProblemDir method. ChownProblemDir opens the dump directory with DD_OPEN_READONLY and calls dd_chown to change ownership of all files to the caller's uid, succeeding even while post-create event handlers hold a write lock. This allows an attacker to gain filesystem-level control of the dump directory while privileged event scripts are still running.",
-      "published": "2026-06-13T03:16:21.587Z",
-      "lastModified": "2026-06-30T03:21:01.893Z",
-      "severity": "High",
-      "cvssScore": 7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00091,
-      "epssPercentile": 0.00632,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-362",
-          "name": "CWE-362",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.47,
-      "tags": [
-        "CWE-362"
       ]
     },
     {
@@ -40826,52 +40833,6 @@
       ]
     },
     {
-      "id": "CVE-2026-54231",
-      "summary": "A content injection vulnerability was found in the ABRT post-create event handler scripts in libreport. The event script queries the systemd journal for log entries matching the crashed process and writes the results to files in the dump directory without sanitizing embedded control characters. A local user can inject arbitrary content into the journal output by embedding newline characters in syslog messages, controlling the content that root writes to dump directory files.",
-      "published": "2026-06-13T03:16:21.877Z",
-      "lastModified": "2026-06-29T17:48:06.683Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00116,
-      "epssPercentile": 0.01929,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.99,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-74"
-      ]
-    },
-    {
       "id": "CVE-2026-11931",
       "summary": "Incorrect default permissions in Kiro IDE on macOS and Linux before version 0.11.133 could expose the authentication token cache file to other local users or processes via world-readable permissions (0644) instead of owner-restricted permissions (0600). To remediate this issue, users should upgrade to Kiro IDE version 0.11.133 or later. After upgrading and restarting the application, the cache file permissions are automatically updated on the next token refresh. Users operating in a multi-user environment can invalidate existing tokens by reauthenticating.",
       "published": "2026-06-15T20:16:25.290Z",
@@ -42809,6 +42770,50 @@
       "priorityScore": 1.6,
       "tags": [
         "CWE-352"
+      ]
+    },
+    {
+      "id": "CVE-2026-11975",
+      "summary": "Stored cross-site scripting (XSS) in NewsItemApiController In SimplCommerce prior to commit 6142d3b5 allows an authenticated administrator to execute arbitrary JavaScript via the ShortContent and FullContent fields, which are stored without HTML sanitization and rendered unencoded via @Html.Raw()",
+      "published": "2026-06-17T13:19:33.940Z",
+      "lastModified": "2026-06-17T17:16:41.917Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00256,
+      "epssPercentile": 0.16967,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.59,
+      "tags": [
+        "CWE-79"
       ]
     },
     {
