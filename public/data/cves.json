@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-14T18:40:19.673Z",
+  "generatedAt": "2026-07-14T19:56:58.920Z",
   "count": 1000,
   "items": [
     {
@@ -21500,9 +21500,9 @@
     },
     {
       "id": "CVE-2026-10638",
-      "summary": "subsys/net/ip/icmpv6.c reads the network interface from a net_pkt after that packet has been handed to net_try_send_data(). In icmpv6_handle_echo_request() and net_icmpv6_send_error(), the post-send statistics update calls net_pkt_iface(reply)/net_pkt_iface(pkt) on the just-sent packet. The send path (net_try_send_data - net_if_tx) unreferences and may free the packet back to its memory slab before returning — synchronously in the RX thread when no TX queue is configured (CONFIG_NET_TC_TX_COUNT == 0), and asynchronously the driver/L2 may already have freed it otherwise. net_pkt_iface() therefore dereferences a freed (and possibly reused) net_pkt; with CONFIG_NET_STATISTICS_PER_INTERFACE the stale iface pointer is further dereferenced and written through (iface-stats.icmp.sent++), turning the use-after-free read into a write through an attacker-influenceable pointer. The core stack already documents this hazard in net_core.c (\"do not use pkt after that call\") and caches iface before sending; the ICMPv6 callers did not. An unauthenticated remote attacker triggers the flaw simply by sending an ICMPv6 Echo Request (ping) or an IPv6 packet that elicits an ICMPv6 error (unknown next header, fragment reassembly timeout, destination unreachable), leading to denial of service via crash and potential memory corruption. Affected: Zephyr networking with CONFIG_NET_NATIVE_IPV6, roughly v4.2.0 through v4.4.0. The fix caches the interface pointer before sending and uses it for all statistics updates; the sibling commit 86e21665d46 fixes the identical bug in ICMPv4.",
+      "summary": "subsys/net/ip/icmpv6.c reads the network interface from a net_pkt after that packet has been handed to net_try_send_data(). In icmpv6_handle_echo_request() and net_icmpv6_send_error(), the post-send statistics update calls net_pkt_iface(reply)/net_pkt_iface(pkt) on the just-sent packet. The send path (net_try_send_data -> net_if_tx) unreferences and may free the packet back to its memory slab before returning — synchronously in the RX thread when no TX queue is configured (CONFIG_NET_TC_TX_COUNT == 0), and asynchronously the driver/L2 may already have freed it otherwise. net_pkt_iface() therefore dereferences a freed (and possibly reused) net_pkt; with CONFIG_NET_STATISTICS_PER_INTERFACE the stale iface pointer is further dereferenced and written through (iface->stats.icmp.sent++), turning the use-after-free read into a write through an attacker-influenceable pointer. The core stack already documents this hazard in net_core.c (\"do not use pkt after that call\") and caches iface before sending; the ICMPv6 callers did not. An unauthenticated remote attacker triggers the flaw simply by sending an ICMPv6 Echo Request (ping) or an IPv6 packet that elicits an ICMPv6 error (unknown next header, fragment reassembly timeout, destination unreachable), leading to denial of service via crash and potential memory corruption. Affected: Zephyr networking with CONFIG_NET_NATIVE_IPV6, roughly v4.2.0 through v4.4.0. The fix caches the interface pointer before sending and uses it for all statistics updates; the sibling commit 86e21665d46 fixes the identical bug in ICMPv4.",
       "published": "2026-06-16T15:16:34.097Z",
-      "lastModified": "2026-07-01T14:40:19.883Z",
+      "lastModified": "2026-07-14T19:16:47.283Z",
       "severity": "Medium",
       "cvssScore": 5.9,
       "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
@@ -21535,7 +21535,7 @@
       "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 4.02,
       "tags": [
@@ -28376,9 +28376,9 @@
     },
     {
       "id": "CVE-2026-10640",
-      "summary": "Zephyr's IPv6 Neighbor Discovery send paths (net_ipv6_send_na, net_ipv6_send_ns, net_ipv6_send_rs in subsys/net/ip/ipv6_nbr.c) updated the per-interface ICMP-sent statistics by calling net_pkt_iface(pkt) after net_send_data(pkt) had already returned successfully. On the success path the network stack owns and releases the packet's reference (the L2/driver send unrefs it, e.g. ethernet_send - net_pkt_unref), so for a freshly allocated packet with refcount 1 the net_pkt slab block can be freed before the statistics line runs (synchronously when no TX queue thread is configured, or via a concurrent TX thread otherwise). The subsequent net_pkt_iface(pkt) reads pkt-iface from the freed slab block, and with CONFIG_NET_STATISTICS_PER_INTERFACE enabled that loaded pointer is dereferenced to increment iface-stats.icmp.sent, a use-after-free (CWE-416). If the slab block was reallocated in the meantime the read/increment targets unrelated or attacker-influenced memory, yielding corrupted statistics, a fault/crash (denial of service), or potential limited memory corruption. The vulnerable Neighbor Advertisement path is reachable by any unauthenticated on-link node simply by sending ICMPv6 Neighbor Solicitations to a Zephyr node with native IPv6 enabled (handle_ns_input - net_ipv6_send_na). Affected from v3.3.0 through v4.4.0; the fix uses the already-available iface argument instead of touching the sent packet. Configurations without per-interface statistics dereference only a global counter and are not affected by the memory-safety aspect.",
+      "summary": "Zephyr's IPv6 Neighbor Discovery send paths (net_ipv6_send_na, net_ipv6_send_ns, net_ipv6_send_rs in subsys/net/ip/ipv6_nbr.c) updated the per-interface ICMP-sent statistics by calling net_pkt_iface(pkt) after net_send_data(pkt) had already returned successfully. On the success path the network stack owns and releases the packet's reference (the L2/driver send unrefs it, e.g. ethernet_send -> net_pkt_unref), so for a freshly allocated packet with refcount 1 the net_pkt slab block can be freed before the statistics line runs (synchronously when no TX queue thread is configured, or via a concurrent TX thread otherwise). The subsequent net_pkt_iface(pkt) reads pkt->iface from the freed slab block, and with CONFIG_NET_STATISTICS_PER_INTERFACE enabled that loaded pointer is dereferenced to increment iface->stats.icmp.sent, a use-after-free (CWE-416). If the slab block was reallocated in the meantime the read/increment targets unrelated or attacker-influenced memory, yielding corrupted statistics, a fault/crash (denial of service), or potential limited memory corruption. The vulnerable Neighbor Advertisement path is reachable by any unauthenticated on-link node simply by sending ICMPv6 Neighbor Solicitations to a Zephyr node with native IPv6 enabled (handle_ns_input -> net_ipv6_send_na). Affected from v3.3.0 through v4.4.0; the fix uses the already-available iface argument instead of touching the sent packet. Configurations without per-interface statistics dereference only a global counter and are not affected by the memory-safety aspect.",
       "published": "2026-06-16T15:16:34.317Z",
-      "lastModified": "2026-06-26T20:50:24.107Z",
+      "lastModified": "2026-07-14T19:16:47.510Z",
       "severity": "Medium",
       "cvssScore": 4.2,
       "cvssVector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L",
@@ -28411,7 +28411,7 @@
       "patchAvailable": true,
       "workaroundAvailable": true,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 3.49,
       "tags": [
@@ -31300,9 +31300,9 @@
     },
     {
       "id": "CVE-2026-10639",
-      "summary": "In Zephyr's native IPv4 stack, icmpv4_handle_echo_request() in subsys/net/ip/icmpv4.c builds an echo-reply packet (reply), hands it to net_try_send_data(), and then, on success, calls net_stats_update_icmp_sent(net_pkt_iface(reply)). net_try_send_data() transfers ownership of reply to the TX path (net_if_try_queue_tx - net_if_tx - L2/driver send, or the asynchronous net_if_tx_thread), which can unref it to refcount 0 and return the struct net_pkt to its slab (net_pkt_unref - k_mem_slab_free) before the stats line runs. net_core.c documents this exact contract ('the pkt might contain garbage already ... do not use pkt after that call'). The post-send net_pkt_iface(reply) therefore reads reply-iface out of a freed (and possibly already reallocated) net_pkt, a use-after-free read; with CONFIG_NET_STATISTICS_PER_INTERFACE the stats macro additionally increments a counter through that value, i.e. a dereference/write through a stale or recycled-slot pointer. The path is reached unauthenticated by any remote host that pings the device (net_icmpv4_input - net_icmp_call_ipv4_handlers - icmpv4_handle_echo_request) and is gated on CONFIG_NET_STATISTICS_ICMP. Impact is a probabilistic read of recycled packet memory plus a possible wild-pointer write under a timing race, leading most likely to corrupted interface statistics or a remotely triggerable crash (DoS). The defect was introduced in 2019 (v1.14) and is present through v4.4.0. The companion change in net_icmpv4_send_error() is not a use-after-free because it reads net_pkt_iface(orig), the caller-owned received packet, which stays alive across the send. The fix caches the interface pointer from the live received packet before sending and uses it for the post-send stats updates.",
+      "summary": "In Zephyr's native IPv4 stack, icmpv4_handle_echo_request() in subsys/net/ip/icmpv4.c builds an echo-reply packet (reply), hands it to net_try_send_data(), and then, on success, calls net_stats_update_icmp_sent(net_pkt_iface(reply)). net_try_send_data() transfers ownership of reply to the TX path (net_if_try_queue_tx -> net_if_tx -> L2/driver send, or the asynchronous net_if_tx_thread), which can unref it to refcount 0 and return the struct net_pkt to its slab (net_pkt_unref -> k_mem_slab_free) before the stats line runs. net_core.c documents this exact contract ('the pkt might contain garbage already ... do not use pkt after that call'). The post-send net_pkt_iface(reply) therefore reads reply->iface out of a freed (and possibly already reallocated) net_pkt, a use-after-free read; with CONFIG_NET_STATISTICS_PER_INTERFACE the stats macro additionally increments a counter through that value, i.e. a dereference/write through a stale or recycled-slot pointer. The path is reached unauthenticated by any remote host that pings the device (net_icmpv4_input -> net_icmp_call_ipv4_handlers -> icmpv4_handle_echo_request) and is gated on CONFIG_NET_STATISTICS_ICMP. Impact is a probabilistic read of recycled packet memory plus a possible wild-pointer write under a timing race, leading most likely to corrupted interface statistics or a remotely triggerable crash (DoS). The defect was introduced in 2019 (v1.14) and is present through v4.4.0. The companion change in net_icmpv4_send_error() is not a use-after-free because it reads net_pkt_iface(orig), the caller-owned received packet, which stays alive across the send. The fix caches the interface pointer from the live received packet before sending and uses it for the post-send stats updates.",
       "published": "2026-06-16T15:16:34.207Z",
-      "lastModified": "2026-07-01T14:45:00.643Z",
+      "lastModified": "2026-07-14T19:16:47.393Z",
       "severity": "Medium",
       "cvssScore": 4.8,
       "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L",
@@ -31335,7 +31335,7 @@
       "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 3.17,
       "tags": [
@@ -34182,9 +34182,9 @@
     },
     {
       "id": "CVE-2026-10637",
-      "summary": "subsys/net/ip/ipv6_mld.c:mld_send() read the packet interface via net_pkt_iface(pkt) after net_send_data(pkt) returned successfully. Per the network stack's ownership contract (include/zephyr/net/net_core.h, and the explicit warning in subsys/net/ip/net_core.c:453-460 'do not use pkt after that call'), a successful send transfers ownership of the net_pkt and the L2 driver frees it (e.g. ethernet_send() unrefs the packet on success, subsys/net/l2/ethernet/ethernet.c:790), returning it to its k_mem_slab. The subsequent net_pkt_iface(pkt) is therefore a read of a freed object; the recovered interface pointer is then dereferenced and incremented by the per-interface statistics path (net_stats.h UPDATE_STAT/SET_STAT) when CONFIG_NET_STATISTICS_PER_INTERFACE is enabled. If the freed slot is concurrently reallocated, pkt-iface may read back as NULL (NULL-pointer dereference / crash) or as a stale/garbage pointer (stray increment write / memory corruption). The path is reachable remotely on the local link without authentication: handle_mld_query() (registered for NET_ICMPV6_MLD_QUERY) responds to a valid MLDv2 General Query (unspecified multicast address, hop limit 1) by calling send_mld_report() - mld_send(). The result is a remotely triggerable denial of service of the networking stack, with a narrow possibility of memory corruption. The fix caches the interface in a local before sending and no longer touches the packet after net_send_data(). The IPv4/IGMP sibling (igmp_send) already used the corrected pattern.",
+      "summary": "subsys/net/ip/ipv6_mld.c:mld_send() read the packet interface via net_pkt_iface(pkt) after net_send_data(pkt) returned successfully. Per the network stack's ownership contract (include/zephyr/net/net_core.h, and the explicit warning in subsys/net/ip/net_core.c:453-460 'do not use pkt after that call'), a successful send transfers ownership of the net_pkt and the L2 driver frees it (e.g. ethernet_send() unrefs the packet on success, subsys/net/l2/ethernet/ethernet.c:790), returning it to its k_mem_slab. The subsequent net_pkt_iface(pkt) is therefore a read of a freed object; the recovered interface pointer is then dereferenced and incremented by the per-interface statistics path (net_stats.h UPDATE_STAT/SET_STAT) when CONFIG_NET_STATISTICS_PER_INTERFACE is enabled. If the freed slot is concurrently reallocated, pkt->iface may read back as NULL (NULL-pointer dereference / crash) or as a stale/garbage pointer (stray increment write / memory corruption). The path is reachable remotely on the local link without authentication: handle_mld_query() (registered for NET_ICMPV6_MLD_QUERY) responds to a valid MLDv2 General Query (unspecified multicast address, hop limit 1) by calling send_mld_report() -> mld_send(). The result is a remotely triggerable denial of service of the networking stack, with a narrow possibility of memory corruption. The fix caches the interface in a local before sending and no longer touches the packet after net_send_data(). The IPv4/IGMP sibling (igmp_send) already used the corrected pattern.",
       "published": "2026-06-16T15:16:33.987Z",
-      "lastModified": "2026-07-01T14:21:41.650Z",
+      "lastModified": "2026-07-14T19:16:47.167Z",
       "severity": "Medium",
       "cvssScore": 5.9,
       "cvssVector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:H",
@@ -34217,7 +34217,7 @@
       "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 2.83,
       "tags": [
@@ -38617,9 +38617,9 @@
     },
     {
       "id": "CVE-2026-10635",
-      "summary": "On Xtensa targets with CONFIG_USERSPACE and CONFIG_XTENSA_MMU, the page-table code (arch/xtensa/core/ptables.c) maintains a global list, xtensa_domain_list, of active memory domains using a list node embedded inside the caller-owned struct k_mem_domain. When a domain is destroyed via k_mem_domain_deinit() - arch_mem_domain_deinit(), the page tables are torn down and domain-arch.ptables is set to NULL, but the domain's node was not removed from xtensa_domain_list. The freed/deinitialized domain therefore remained linked into the global list as a dangling pointer into caller-owned storage that may then be freed or reused. Any subsequent arch_mem_map()/arch_mem_unmap() operation (widely invoked by kernel memory-mapping and demand-paging code) traverses the stale node and dereferences domain-ptables: at minimum a NULL pointer dereference causing a fatal MMU exception (denial of service), and if the k_mem_domain storage has been freed or reused, a use-after-free in which a stale/controlled ptables value is dereferenced and written through during the page-table walk (l2_page_table_map writes l1_table[...] and l2_table[...], and xtensa_mmu_compute_domain_regs writes into the domain struct and the L1 table), yielding page-table memory corruption that can undermine userspace isolation. The vulnerable path is reachable only from privileged kernel/supervisor code (k_mem_domain_deinit is not a syscall), not directly from unprivileged user threads or remotely. Affected: Zephyr v4.4.0 (the Xtensa memory-domain de-initialization feature was introduced in commit 3032b58f52d and first shipped in v4.4.0); fixed on main by adding sys_slist_find_and_remove() in arch_mem_domain_deinit(). The Xtensa MPU path is unaffected.",
+      "summary": "On Xtensa targets with CONFIG_USERSPACE and CONFIG_XTENSA_MMU, the page-table code (arch/xtensa/core/ptables.c) maintains a global list, xtensa_domain_list, of active memory domains using a list node embedded inside the caller-owned struct k_mem_domain. When a domain is destroyed via k_mem_domain_deinit() -> arch_mem_domain_deinit(), the page tables are torn down and domain->arch.ptables is set to NULL, but the domain's node was not removed from xtensa_domain_list. The freed/deinitialized domain therefore remained linked into the global list as a dangling pointer into caller-owned storage that may then be freed or reused. Any subsequent arch_mem_map()/arch_mem_unmap() operation (widely invoked by kernel memory-mapping and demand-paging code) traverses the stale node and dereferences domain->ptables: at minimum a NULL pointer dereference causing a fatal MMU exception (denial of service), and if the k_mem_domain storage has been freed or reused, a use-after-free in which a stale/controlled ptables value is dereferenced and written through during the page-table walk (l2_page_table_map writes l1_table[...] and l2_table[...], and xtensa_mmu_compute_domain_regs writes into the domain struct and the L1 table), yielding page-table memory corruption that can undermine userspace isolation. The vulnerable path is reachable only from privileged kernel/supervisor code (k_mem_domain_deinit is not a syscall), not directly from unprivileged user threads or remotely. Affected: Zephyr v4.4.0 (the Xtensa memory-domain de-initialization feature was introduced in commit 3032b58f52d and first shipped in v4.4.0); fixed on main by adding sys_slist_find_and_remove() in arch_mem_domain_deinit(). The Xtensa MPU path is unaffected.",
       "published": "2026-06-16T06:16:57.770Z",
-      "lastModified": "2026-06-17T10:12:27.227Z",
+      "lastModified": "2026-07-14T19:16:46.933Z",
       "severity": "Medium",
       "cvssScore": 6.3,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:H/A:H",
@@ -38652,7 +38652,7 @@
       "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 2.41,
       "tags": [
@@ -38890,9 +38890,9 @@
     },
     {
       "id": "CVE-2026-10634",
-      "summary": "Zephyr's native TCP stack iterates the global connection list in net_tcp_foreach() (subsys/net/ip/tcp.c) using the SYS_SLIST_FOR_EACH_CONTAINER_SAFE macro, which caches a pointer to the next list node. Prior to this fix the function released tcp_lock while invoking the per-connection callback and re-acquired it afterwards. During that window a concurrent tcp_conn_release(), running on the dedicated TCP work-queue thread when a connection's reference count drops to zero (e.g. a remote peer closing or resetting the connection), can remove and k_mem_slab_free() the cached next connection. When the iterator advances it dereferences the freed (and possibly reallocated) slab memory — a use-after-free that can crash the system (denial of service) and, if the slot has been reused, cause the callback to operate on an attacker-influenced object (potential information disclosure or further fault). net_tcp_foreach() is reached in production via the 'net conn' network shell command and via net_tcp_close_all_for_iface() on interface-down; the freeing side is driven by ordinary TCP traffic. The fix moves the connection/context teardown in tcp_conn_release() inside the tcp_lock critical section and keeps tcp_lock held across the callback in net_tcp_foreach(). The defect was introduced with the modern (TCP2) stack in 2020 and affects releases up to and including v4.4.0.",
+      "summary": "Zephyr's native TCP stack iterates the global connection list in net_tcp_foreach() (subsys/net/ip/tcp.c) using the SYS_SLIST_FOR_EACH_CONTAINER_SAFE macro, which caches a pointer to the next list node. Prior to this fix the function released tcp_lock while invoking the per-connection callback and re-acquired it afterwards. During that window a concurrent tcp_conn_release(), running on the dedicated TCP work-queue thread when a connection's reference count drops to zero (e.g. a remote peer closing or resetting the connection), can remove and k_mem_slab_free() the cached next connection. When the iterator advances it dereferences the freed (and possibly reallocated) slab memory — a use-after-free that can crash the system (denial of service) and, if the slot has been reused, cause the callback to operate on an attacker-influenced object (potential information disclosure or further fault). net_tcp_foreach() is reached in production via the net conn network shell command and via net_tcp_close_all_for_iface() on interface-down; the freeing side is driven by ordinary TCP traffic. The fix moves the connection/context teardown in tcp_conn_release() inside the tcp_lock critical section and keeps tcp_lock held across the callback in net_tcp_foreach(). The defect was introduced with the modern (TCP2) stack in 2020 and affects releases up to and including v4.4.0.",
       "published": "2026-06-15T16:16:32.223Z",
-      "lastModified": "2026-07-01T14:04:32.790Z",
+      "lastModified": "2026-07-14T19:16:46.810Z",
       "severity": "Medium",
       "cvssScore": 4.8,
       "cvssVector": "CVSS:3.1/AV:A/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:H",
@@ -38925,7 +38925,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 2.35,
       "tags": [
@@ -41214,9 +41214,9 @@
     },
     {
       "id": "CVE-2026-10636",
-      "summary": "In Zephyr's IPv4 IGMP implementation, igmp_send() in subsys/net/ip/igmp.c read the network interface back out of the packet via net_pkt_iface(pkt) after the packet had been handed to net_send_data(). On the successful-send path the packet's last reference may already have been released by the L2 driver or by the network stack's TX handling (synchronously in the default NET_TC_TX_COUNT=0 immediate-transmit configuration), returning the net_pkt slab block to its free list. The subsequent net_pkt_iface(pkt) dereferences the freed packet, a use-after-free read; with CONFIG_NET_STATISTICS_PER_INTERFACE the resulting dangling interface pointer is further dereferenced for a statistics-counter write. The IGMP send path is reachable without authentication from inbound IPv4 IGMP membership queries addressed to 224.0.0.1 (net_ipv4_igmp_input - send_igmp_report/send_igmp_v3_report - igmp_send), as well as from local multicast join/leave/rejoin operations. Realistic impact is undefined behavior and potential denial of service (sporadic crash or stats corruption); a controllable write requires the asynchronous TX path plus a concurrent slab reuse. The flaw was introduced with IGMPv2 support and affects releases from v2.6.0 through v4.4.0. The fix caches the interface pointer before sending. Note the analogous IPv6 MLD path (mld_send in subsys/net/ip/ipv6_mld.c) retains the same unfixed pattern.",
+      "summary": "In Zephyr's IPv4 IGMP implementation, igmp_send() in subsys/net/ip/igmp.c read the network interface back out of the packet via net_pkt_iface(pkt) after the packet had been handed to net_send_data(). On the successful-send path the packet's last reference may already have been released by the L2 driver or by the network stack's TX handling (synchronously in the default NET_TC_TX_COUNT=0 immediate-transmit configuration), returning the net_pkt slab block to its free list. The subsequent net_pkt_iface(pkt) dereferences the freed packet, a use-after-free read; with CONFIG_NET_STATISTICS_PER_INTERFACE the resulting dangling interface pointer is further dereferenced for a statistics-counter write. The IGMP send path is reachable without authentication from inbound IPv4 IGMP membership queries addressed to 224.0.0.1 (net_ipv4_igmp_input -> send_igmp_report/send_igmp_v3_report -> igmp_send), as well as from local multicast join/leave/rejoin operations. Realistic impact is undefined behavior and potential denial of service (sporadic crash or stats corruption); a controllable write requires the asynchronous TX path plus a concurrent slab reuse. The flaw was introduced with IGMPv2 support and affects releases from v2.6.0 through v4.4.0. The fix caches the interface pointer before sending. Note the analogous IPv6 MLD path (mld_send in subsys/net/ip/ipv6_mld.c) retains the same unfixed pattern.",
       "published": "2026-06-16T15:16:33.867Z",
-      "lastModified": "2026-07-01T14:34:49.837Z",
+      "lastModified": "2026-07-14T19:16:47.053Z",
       "severity": "Low",
       "cvssScore": 3.7,
       "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
@@ -41249,7 +41249,7 @@
       "patchAvailable": true,
       "workaroundAvailable": true,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 1.91,
       "tags": [
