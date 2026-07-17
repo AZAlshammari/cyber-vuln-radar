@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-17T19:33:52.809Z",
+  "generatedAt": "2026-07-17T20:35:07.760Z",
   "count": 1000,
   "items": [
     {
@@ -210,6 +210,94 @@
       "priorityScore": 7.41,
       "tags": [
         "Docker",
+        "CWE-78"
+      ]
+    },
+    {
+      "id": "CVE-2026-12486",
+      "summary": "Multiple OS command injection vulnerabilities exist in the libNetSetObj.so functionality of GeoVision GV-I/O Box 4E 2.09. A specially crafted network packet can lead to command execution. An attacker can send a network request to trigger this vulnerability. `libNetSetObj.so` is an internal library used by various binaries on the device to configure the network stack (start and stop various services, configure IP, Netmask, gateway, dns, etc.) #### CNetSetObj::m_F_n_Set_IP_Addr command injection The following function takes a string as an ip address, performs no sanitization and calls `system`. This is a classic command injection vulnerability. The function is reachable from both the network-exposed `DVRSearch` service and the `Network.cgi` endpoint. int __fastcall CNetSetObj::m_F_n_Set_IP_Addr(const char **this, char *ip_addr) { bool v2; // zf char v4[72]; // [sp+0h] [bp-48h] BYREF v2 = *this == 0; if ( *this ) v2 = ip_addr == 0; if ( v2 ) return 0; sprintf(v4, \"/sbin/ifconfig %s %s\", *this, ip_addr); // attacker controlled ip address system(v4); return 1; }",
+      "published": "2026-06-24T05:17:26.220Z",
+      "lastModified": "2026-06-25T14:02:35.347Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "High",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0172,
+      "epssPercentile": 0.74911,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-78",
+          "name": "OS Command Injection",
+          "description": "Improper neutralization of special elements used in OS commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.81,
+      "tags": [
+        "CWE-78"
+      ]
+    },
+    {
+      "id": "CVE-2026-12850",
+      "summary": "Multiple OS command injection vulnerabilities exist in the libNetSetObj.so functionality of GeoVision GV-I/O Box 4E 2.09. A specially crafted network packet can lead to command execution. An attacker can send a network request to trigger this vulnerability. `libNetSetObj.so` is an internal library used by various binaries on the device to configure the network stack (start and stop various services, configure IP, Netmask, gateway, dns, etc.) #### CNetSetObj::m_F_n_Set_Gate_way command injection The following function takes a string as a gatewy address, performs no sanitization on it and calls `system`. This is a classic command injection vulnerability. The function is reachable from both the network-exposed `DVRSearch` service and the `Network.cgi` endpoint. int __fastcall CNetSetObj::m_F_n_Set_Gate_way(const char **this, char *gw, char *dev) { char s[324]; // [sp+4h] [bp-144h] BYREF if ( !dev && !*this || !gw ) return 0; system(\"/sbin/route del -net 224.0.0.0 netmask 224.0.0.0\"); system(\"/sbin/route del default \"); if ( dev ) sprintf(s, \"/sbin/route add default gw %s dev %s\", gw, dev); //attacker controlled gw string else sprintf(s, \"/sbin/route add default gw %s dev %s\", gw, *this); //attacker controlled gw string system(s); sprintf(s, \"/sbin/route add -net 224.0.0.0 netmask 224.0.0.0 gw %s dev %s\", gw, *this); //attacker controlled gw string system(s); return 1; }",
+      "published": "2026-06-24T05:17:27.020Z",
+      "lastModified": "2026-06-25T14:02:35.347Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "High",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0172,
+      "epssPercentile": 0.74911,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-78",
+          "name": "OS Command Injection",
+          "description": "Improper neutralization of special elements used in OS commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.81,
+      "tags": [
         "CWE-78"
       ]
     },
@@ -431,6 +519,94 @@
       "priorityScore": 6.79,
       "tags": [
         "CWE-77"
+      ]
+    },
+    {
+      "id": "CVE-2026-12849",
+      "summary": "Multiple OS command injection vulnerabilities exist in the libNetSetObj.so functionality of GeoVision GV-I/O Box 4E 2.09. A specially crafted network packet can lead to command execution. An attacker can send a network request to trigger this vulnerability. `libNetSetObj.so` is an internal library used by various binaries on the device to configure the network stack (start and stop various services, configure IP, Netmask, gateway, dns, etc.) #### CNetSetObj::m_F_n_Set_Net_Mask command injection The following function takes a string as a net mask address, performs no sanitization on it and calls `system`. This is a classic command injection vulnerability. The function is reachable from both the network-exposed `DVRSearch` service and the `Network.cgi` endpoint. int __fastcall CNetSetObj::m_F_n_Set_Net_Mask(const char **this, char *netmask_addr) { bool v2; // zf char v4[72]; // [sp+0h] [bp-48h] BYREF v2 = *this == 0; if ( *this ) v2 = netmask_addr == 0; if ( v2 ) return 0; sprintf(v4, \"/sbin/ifconfig %s netmask %s\", *this, netmask_addr); // attacker controlled netmask_addr system(v4); return 1; }",
+      "published": "2026-06-24T05:17:26.890Z",
+      "lastModified": "2026-06-25T14:02:35.347Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "High",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.01684,
+      "epssPercentile": 0.74423,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-78",
+          "name": "OS Command Injection",
+          "description": "Improper neutralization of special elements used in OS commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.79,
+      "tags": [
+        "CWE-78"
+      ]
+    },
+    {
+      "id": "CVE-2026-12851",
+      "summary": "Multiple OS command injection vulnerabilities exist in the libNetSetObj.so functionality of GeoVision GV-I/O Box 4E 2.09. A specially crafted network packet can lead to command execution. An attacker can send a network request to trigger this vulnerability. `libNetSetObj.so` is an internal library used by various binaries on the device to configure the network stack (start and stop various services, configure IP, Netmask, gateway, dns, etc.) #### CNetSetObj::m_F_n_Set_DNS_Addr command injection The following function can take up to two addresses, performs no sanitization and then calls `system`. This is a classic command injection vulnerability. The function is reachable from both the network-exposed `DVRSearch` service and the `Network.cgi` endpoint. int __fastcall CNetSetObj::m_F_n_Set_DNS_Addr(CNetSetObj *this, char *dns1, char *dns2) { int result; // r0 char v5[80]; // [sp+0h] [bp-50h] BYREF if ( !dns1 ) result = 0; if ( dns1 ) { sprintf(v5, \"/bin/echo nameserver %s > /etc/resolv.conf\", dns1); // attacker controlled dns1 field system(v5); if ( dns2 ) { sprintf(v5, \"/bin/echo nameserver %s >> /etc/resolv.conf\", dns2); system(v5); } return 1; } return result;",
+      "published": "2026-06-24T05:17:27.157Z",
+      "lastModified": "2026-06-25T14:02:35.347Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "High",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.01684,
+      "epssPercentile": 0.74422,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-78",
+          "name": "OS Command Injection",
+          "description": "Improper neutralization of special elements used in OS commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.79,
+      "tags": [
+        "CWE-78"
       ]
     },
     {
@@ -1996,50 +2172,6 @@
       ]
     },
     {
-      "id": "CVE-2026-55200",
-      "summary": "libssh2 through 1.11.1, fixed in commit 7acf3df contains an out-of-bounds write vulnerability in ssh2_transport_read() that fails to enforce upper bounds on packet_length field. Remote attackers can send crafted SSH packets with excessively large packet_length values to corrupt heap memory and achieve remote code execution.",
-      "published": "2026-06-17T20:17:28.667Z",
-      "lastModified": "2026-07-14T22:17:17.183Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00732,
-      "epssPercentile": 0.50208,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-680",
-          "name": "CWE-680",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.59,
-      "tags": [
-        "CWE-680"
-      ]
-    },
-    {
       "id": "CVE-2026-56265",
       "summary": "Crawl4AI before 0.8.7 contains an authentication bypass vulnerability due to a hardcoded default JWT signing key in the Docker API server. Attackers who know the default key can forge valid authentication tokens for any user, bypassing authentication and gaining full access to protected functionality.",
       "published": "2026-06-21T14:16:24.980Z",
@@ -3248,52 +3380,6 @@
       ]
     },
     {
-      "id": "CVE-2026-50107",
-      "summary": "When NGINX Plus or NGINX Open Source is configured as the data plane for NGINX Gateway Fabric, an injection vulnerability exists in the NGINX configuration generator component of NGINX Gateway Fabric. User-supplied string values from the NginxProxy Custom Resource Definition (CRD) access log format setting are rendered directly into NGINX configuration templates without sanitization or escaping. An authenticated attacker with permission to create or modify these CRDs may craft values that inject arbitrary NGINX configuration directives. This is a control plane issue; there is no data plane exposure from the vulnerability trigger itself. Note: Software versions which have reached End of Technical Support (EoTS) are not evaluated.",
-      "published": "2026-06-17T20:17:23.960Z",
-      "lastModified": "2026-06-22T15:00:58.350Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00492,
-      "epssPercentile": 0.3904,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.2,
-      "tags": [
-        "F5",
-        "Nginx",
-        "CWE-74"
-      ]
-    },
-    {
       "id": "CVE-2026-54307",
       "summary": "n8n is an open source workflow automation platform. Prior to 1.123.55, 2.25.7, and 2.26.2, a member-level user with editor access to a shared workflow could reference credentials they do not own via specific public API endpoints. Credential ownership checks were only enforced partially leading to cross-user credential access. This issue affects instances where workflow sharing is enabled and at least one workflow has been shared with a member-level user as an Editor. This vulnerability is fixed in 1.123.55, 2.25.7, and 2.26.2.",
       "published": "2026-06-23T17:17:07.010Z",
@@ -3625,50 +3711,6 @@
         "CWE-200",
         "CWE-306",
         "CWE-400"
-      ]
-    },
-    {
-      "id": "CVE-2026-11407",
-      "summary": "Pimcore CMS/DXP version 12.3.8 contains a sandbox bypass vulnerability that allows authenticated administrative attackers to execute arbitrary methods on PHP objects by exploiting empty checkMethodAllowed() and checkPropertyAllowed() implementations in the custom Twig SecurityPolicy. Attackers can supply malicious Twig templates through the DataObject ClassDefinition Layout\\Text component to perform arbitrary file reads, execute arbitrary database queries, and potentially achieve remote code execution via PHP object gadget chains, with the pimcore_* function wildcard further broadening the bypass to all Pimcore Twig functions.",
-      "published": "2026-06-17T20:16:48.690Z",
-      "lastModified": "2026-06-23T15:16:00.660Z",
-      "severity": "High",
-      "cvssScore": 7.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00623,
-      "epssPercentile": 0.45836,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-1336",
-          "name": "CWE-1336",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.12,
-      "tags": [
-        "CWE-1336"
       ]
     },
     {
@@ -4837,50 +4879,6 @@
       "priorityScore": 4.95,
       "tags": [
         "CWE-20"
-      ]
-    },
-    {
-      "id": "CVE-2026-48814",
-      "summary": "Network-AI is a TypeScript/Node.js multi-agent orchestrator. In versions 5.7.1 and earlier, the MCP SSE server allows unauthenticated cross-origin MCP tool invocation due to an empty default secret. This issue was partially addressed by CVE-2026-46701 in version 5.4.5 by closing the CORS flaw (with Access-Control-Allow-Origin now set only for localhost origins), but the empty-default-secret flaw described in the title remained: the SSE MCP server still defaulted to an empty secret, _isAuthorized() still returned true when the secret was empty, and a non-loopback bind only produced a warning. As a result, the server still ran fully unauthenticated by default. Any non-browser caller (for example, curl, SSRF, or a 0.0.0.0 bind) could invoke all 22 MCP tools (config_set, agent_spawn, blackboard_write, token_*) with no credentials. This issue was fixed in version 5.7.2.",
-      "published": "2026-06-17T20:17:22.260Z",
-      "lastModified": "2026-06-23T15:50:59.400Z",
-      "severity": "Critical",
-      "cvssScore": 9.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00297,
-      "epssPercentile": 0.21652,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.94,
-      "tags": [
-        "CWE-306"
       ]
     },
     {
@@ -6121,50 +6119,6 @@
       ]
     },
     {
-      "id": "CVE-2026-55202",
-      "summary": "Tinyproxy through 1.11.3, fixed in commit 09312a1, fails to properly validate the Host header during stathost detection, allowing unauthenticated attackers to access the stats page by injecting a matching Host header or bypass detection via port manipulation. Remote attackers can trigger unauthorized access to internal proxy statistics or misroute requests as transparent proxy connections to circumvent access controls.",
-      "published": "2026-06-17T20:17:29.250Z",
-      "lastModified": "2026-07-14T22:17:17.450Z",
-      "severity": "High",
-      "cvssScore": 8.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00335,
-      "epssPercentile": 0.257,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-290",
-          "name": "CWE-290",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.77,
-      "tags": [
-        "CWE-290"
-      ]
-    },
-    {
       "id": "CVE-2017-20253",
       "summary": "Joomla! Component My Projects 2.0 contains an SQL injection vulnerability that allows unauthenticated attackers to execute arbitrary SQL queries by injecting malicious code through the VerAyari parameter. Attackers can craft requests to the component endpoint with SQL injection payloads to extract sensitive database information including credentials and system data.",
       "published": "2026-06-19T16:16:14.760Z",
@@ -6871,6 +6825,50 @@
       ]
     },
     {
+      "id": "CVE-2026-12485",
+      "summary": "GV-I/O Box 4E is a smart embedded device with 4 input and 4 relays output that can be controlled over Ethernet and RS-485. DVRSearch is a service running by default on the IOBox listening for UDP messages on port 10001. Any user on the network can send messages to this service and interact with it. Upon receiving a UDP message, the server reads at most 1460 bytes into a local buffer and a pointer to the buffer is stored in a global variable: #### IP field stack overflow The following code is vulnerable to a stack overflow that is attacker-controlled: v3 = strlen(g_network_config->ip_addr); memcpy(&reply_buf[36], g_network_config->ip_addr, v3);",
+      "published": "2026-06-24T05:17:25.973Z",
+      "lastModified": "2026-06-25T14:02:35.347Z",
+      "severity": "Critical",
+      "cvssScore": 10,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00436,
+      "epssPercentile": 0.35367,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-121",
+          "name": "CWE-121",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.74,
+      "tags": [
+        "CWE-121"
+      ]
+    },
+    {
       "id": "CVE-2026-28381",
       "summary": "The Snowflake datasource allows for GET/PUT commands, which can allow any user with access to run queries against the data source to read/write files between the local grafana server and the connected Snowflake host.",
       "published": "2026-06-22T14:16:35.820Z",
@@ -7001,6 +6999,138 @@
       "tags": [
         "Microsoft",
         "CWE-1321"
+      ]
+    },
+    {
+      "id": "CVE-2026-12846",
+      "summary": "GV-I/O Box 4E is a smart embedded device with 4 input and 4 relays output that can be controlled over Ethernet and RS-485. DVRSearch is a service running by default on the IOBox listening for UDP messages on port 10001. Any user on the network can send messages to this service and interact with it. Upon receiving a UDP message, the server reads at most 1460 bytes into a local buffer and a pointer to the buffer is stored in a global variable: #### Net Mask field stack overflow The following code is vulnerable to a stack overflow that is attacker-controlled: v6 = strlen(g_network_config->net_mask); memcpy(&reply_buf[184], g_network_config->net_mask, v6);",
+      "published": "2026-06-24T05:17:26.463Z",
+      "lastModified": "2026-06-25T14:02:35.347Z",
+      "severity": "Critical",
+      "cvssScore": 10,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00427,
+      "epssPercentile": 0.34663,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-121",
+          "name": "CWE-121",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.71,
+      "tags": [
+        "CWE-121"
+      ]
+    },
+    {
+      "id": "CVE-2026-12847",
+      "summary": "GV-I/O Box 4E is a smart embedded device with 4 input and 4 relays output that can be controlled over Ethernet and RS-485. DVRSearch is a service running by default on the IOBox listening for UDP messages on port 10001. Any user on the network can send messages to this service and interact with it. Upon receiving a UDP message, the server reads at most 1460 bytes into a local buffer and a pointer to the buffer is stored in a global variable: #### Gateway field stack overflow The following code is vulnerable to a stack overflow that is attacker-controlled: v7 = strlen(g_network_config->gateway); memcpy(&reply_buf[216], g_network_config->gateway, v7);",
+      "published": "2026-06-24T05:17:26.587Z",
+      "lastModified": "2026-06-25T14:02:35.347Z",
+      "severity": "Critical",
+      "cvssScore": 10,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00427,
+      "epssPercentile": 0.34662,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-121",
+          "name": "CWE-121",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.71,
+      "tags": [
+        "CWE-121"
+      ]
+    },
+    {
+      "id": "CVE-2026-12848",
+      "summary": "GV-I/O Box 4E is a smart embedded device with 4 input and 4 relays output that can be controlled over Ethernet and RS-485. DVRSearch is a service running by default on the IOBox listening for UDP messages on port 10001. Any user on the network can send messages to this service and interact with it. Upon receiving a UDP message, the server reads at most 1460 bytes into a local buffer and a pointer to the buffer is stored in a global variable: #### DNS field stack overflow The following code is vulnerable to a stack overflow that is attacker-controlled: v8 = strlen(g_network_config->dns_addr); memcpy(&reply_buf[248], g_network_config->dns_addr, v8);",
+      "published": "2026-06-24T05:17:26.710Z",
+      "lastModified": "2026-06-25T14:02:35.347Z",
+      "severity": "Critical",
+      "cvssScore": 10,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00427,
+      "epssPercentile": 0.34663,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-121",
+          "name": "CWE-121",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.71,
+      "tags": [
+        "CWE-121"
       ]
     },
     {
@@ -9819,94 +9949,6 @@
       ]
     },
     {
-      "id": "CVE-2026-54387",
-      "summary": "Tinyproxy through 1.11.3, fixed in commit ff45d3b, fails to reconcile conflicting Content-Length and Transfer-Encoding: chunked headers, forwarding both verbatim to the backend while using Content-Length to determine how many request body bytes to consume. Remote attackers can desynchronize the proxy and backend parser state, allowing injection of arbitrary HTTP requests to the backend to enable cache poisoning, access control bypass, and request hijacking.",
-      "published": "2026-06-17T20:17:27.480Z",
-      "lastModified": "2026-07-14T22:17:16.293Z",
-      "severity": "Critical",
-      "cvssScore": 9.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00439,
-      "epssPercentile": 0.35537,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-444",
-          "name": "CWE-444",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.43,
-      "tags": [
-        "CWE-444"
-      ]
-    },
-    {
-      "id": "CVE-2026-54388",
-      "summary": "Tinyproxy through 1.11.3, fixed in commit 364cdb6, fails to reject requests containing multiple Content-Length headers with differing values, forwarding all duplicate headers to the backend while using the first value to determine how many request body bytes to consume. Remote attackers can desynchronize the proxy and backend parser state, allowing injection of arbitrary HTTP requests to the backend to enable cache poisoning, access control bypass, and request hijacking.",
-      "published": "2026-06-17T20:17:27.623Z",
-      "lastModified": "2026-07-14T22:17:16.413Z",
-      "severity": "Critical",
-      "cvssScore": 9.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00439,
-      "epssPercentile": 0.35536,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-444",
-          "name": "CWE-444",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.43,
-      "tags": [
-        "CWE-444"
-      ]
-    },
-    {
       "id": "CVE-2026-10789",
       "summary": "A maliciously crafted webpage, when visited by a user with Autodesk Fusion Desktop running and the MCP extension enabled, can trigger a vulnerability in the MCP extension that could allow arbitrary code execution. A successful exploit may allow code to execute with the privileges of the current user.",
       "published": "2026-06-22T18:16:30.620Z",
@@ -11449,39 +11491,34 @@
       ]
     },
     {
-      "id": "CVE-2026-12529",
-      "summary": "A security vulnerability has been detected in SourceCodester CET Automated Grading System with AI Predictive Analytics 1.0. Affected is an unknown function of the file /index.php of the component Student Self-Registration Endpoint. The manipulation leads to improper access controls. Remote exploitation of the attack is possible.",
-      "published": "2026-06-17T20:16:48.853Z",
-      "lastModified": "2026-06-18T17:16:29.647Z",
+      "id": "CVE-2026-10092",
+      "summary": "The Cincopa video and media plug-in plugin for WordPress is vulnerable to Stored Cross-Site Scripting via cincopa Shortcode in Post Comments in all versions up to, and including, 1.163 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Exploitation is possible because the plugin processes the [cincopa] shortcode via a comment_text filter hook, allowing unauthenticated visitors who can post comments to supply a malicious shortcode argument that persists in the database.",
+      "published": "2026-06-24T07:16:25.520Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
       "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
+      "cvssScore": 7.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
       "cvssBreakdown": {
         "attackVector": "Network",
         "attackComplexity": "Low",
         "privilegesRequired": "None",
         "userInteraction": "None",
-        "scope": "Unchanged",
+        "scope": "Changed",
         "confidentiality": "Low",
         "integrity": "Low",
-        "availability": "Low"
+        "availability": "None"
       },
-      "epssScore": 0.00284,
-      "epssPercentile": 0.20387,
+      "epssScore": 0.00297,
+      "epssPercentile": 0.21645,
       "isKev": false,
       "kev": null,
-      "vendor": null,
-      "product": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
       "cwe": [
         {
-          "id": "CWE-266",
-          "name": "CWE-266",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
         }
       ],
       "references": [],
@@ -11492,10 +11529,10 @@
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 4.27,
+      "priorityScore": 4.28,
       "tags": [
-        "CWE-266",
-        "CWE-284"
+        "WordPress",
+        "CWE-79"
       ]
     },
     {
@@ -12175,51 +12212,6 @@
       "tags": [
         "WordPress",
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-55201",
-      "summary": "Evil-WinRM through 3.9, fixed in commit 6ecd570, contains a path traversal vulnerability in the download_dir() function that allows a rogue or compromised remote Windows server to write files outside the intended download directory by returning filenames with traversal sequences from Get-ChildItem command output that are passed unsanitized to File.join(). Attackers controlling the remote server can exploit this to overwrite sensitive client-side files such as SSH authorized_keys or shell configuration files, achieving persistent access or privilege escalation on the client machine.",
-      "published": "2026-06-17T20:17:29.093Z",
-      "lastModified": "2026-07-14T22:17:17.323Z",
-      "severity": "Medium",
-      "cvssScore": 6.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00304,
-      "epssPercentile": 0.22396,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.16,
-      "tags": [
-        "Windows",
-        "CWE-22"
       ]
     },
     {
@@ -13182,52 +13174,6 @@
       "priorityScore": 4.04,
       "tags": [
         "CWE-78"
-      ]
-    },
-    {
-      "id": "CVE-2026-32682",
-      "summary": "When NGINX Gateway Fabric is configured using GRPCRoutes, an authenticated, remote attacker with permission to create or modify GRPCRoute resources can cause the NGINX Gateway Fabric control plane to terminate by sending undisclosed GRPCRoute configurations containing backendRef filters. Note: Software versions which have reached End of Technical Support (EoTS) are not evaluated.",
-      "published": "2026-06-17T20:16:50.197Z",
-      "lastModified": "2026-07-02T20:03:50.680Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00292,
-      "epssPercentile": 0.21151,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-129",
-          "name": "CWE-129",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.02,
-      "tags": [
-        "F5",
-        "Nginx",
-        "CWE-129"
       ]
     },
     {
@@ -15059,6 +15005,51 @@
       "priorityScore": 3.83,
       "tags": [
         "CWE-863"
+      ]
+    },
+    {
+      "id": "CVE-2026-3652",
+      "summary": "The ARForms plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the `value` parameter of the `arf_save_incomplete_form_data` AJAX action in all versions up to, and including, 7.1.3 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that will execute whenever an administrator views the \"Partial Filled Form Entries\" page in the ARForms dashboard.",
+      "published": "2026-06-24T04:17:06.923Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "High",
+      "cvssScore": 7.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.0019,
+      "epssPercentile": 0.08816,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.83,
+      "tags": [
+        "WordPress",
+        "CWE-79"
       ]
     },
     {
@@ -21558,50 +21549,6 @@
       ]
     },
     {
-      "id": "CVE-2026-10696",
-      "summary": "Use of an incorrectly resolved name or reference in the pinget backend in Devolutions UniGetUI 2026.2.0 and earlier allows a WinGet community catalog contributor to cause an installed application to be correlated to an unrelated, attacker-controlled catalog package and to execute an attacker-controlled installer via a crafted catalog package whose normalized name is contained as a substring within the installed application name when a user applies the proposed update.",
-      "published": "2026-06-17T20:16:47.670Z",
-      "lastModified": "2026-06-24T19:03:13.193Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00268,
-      "epssPercentile": 0.18598,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-706",
-          "name": "CWE-706",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.28,
-      "tags": [
-        "CWE-706"
-      ]
-    },
-    {
       "id": "CVE-2026-54302",
       "summary": "n8n is an open source workflow automation platform. Prior to 1.123.55, 2.25.7, and 2.26.2, an authenticated user with workflow edit access could inject arbitrary JavaScript into the Chat Trigger's generated page by setting a malicious webhookId. When a logged-in user visited the chat URL, the injected code executed in the n8n origin with that user's session privileges. This vulnerability is fixed in 1.123.55, 2.25.7, and 2.26.2.",
       "published": "2026-06-23T17:17:06.193Z",
@@ -22256,51 +22203,6 @@
       ]
     },
     {
-      "id": "CVE-2026-55199",
-      "summary": "libssh2 through 1.11.1, fixed in commit 1762685, contains a pre-authentication denial of service vulnerability in the SSH_MSG_EXT_INFO handler in src/packet.c that allows a malicious SSH server to cause a client CPU exhaustion loop by sending a crafted extension count value. A malicious server can set nr_extensions to 0xFFFFFFFF during key exchange, causing the client to spin in a tight CPU loop for over 60 seconds because return values from _libssh2_get_string() are unchecked and the session timeout does not apply to CPU-bound loops.",
-      "published": "2026-06-17T20:17:28.520Z",
-      "lastModified": "2026-07-14T22:17:17.043Z",
-      "severity": "Medium",
-      "cvssScore": 5.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00408,
-      "epssPercentile": 0.32999,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Exchange",
-      "cwe": [
-        {
-          "id": "CWE-835",
-          "name": "CWE-835",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.22,
-      "tags": [
-        "Exchange",
-        "CWE-835"
-      ]
-    },
-    {
       "id": "CVE-2026-12238",
       "summary": "The WP Go Maps – Most Popular Map Plugin plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 10.1.01. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for unauthenticated attackers to create arbitrary records in plugin database tables (maps, markers, circles, polygons, polylines, rectangles, and point labels) by supplying a WPGMZA-namespaced CRUD-backed class name via the phpClass parameter. The namespace validation check (requiring the 'WPGMZA' prefix) does not prevent exploitation because classes such as WPGMZA\\Map and WPGMZA\\Marker satisfy it while still triggering an INSERT into the corresponding plugin table before the route rejects the request.",
       "published": "2026-06-19T19:16:27.093Z",
@@ -22569,6 +22471,50 @@
       "priorityScore": 3.19,
       "tags": [
         "CWE-613"
+      ]
+    },
+    {
+      "id": "CVE-2026-54639",
+      "summary": "Style Dictionary, a build system for creating cross-platform styles, has a prototype pollution vulnerability starting in version 4.3.0 and prior to version 5.4.4. Impact users have: direct usage of `convertTokenData(tokens, { output: 'object' });`; indirect usage, via using Expand API; and/or indirect usage via SD's transform lifecycle. Impact is high for this when style-dictionary is used as an integration in a NodeJS server application. Impact is moderate for when style-dictionary is used as an integration in a Web application. Impact is low for most common cases where the user of style-dictionary also maintains the tokens, and access is limited via read/write access to the repository/workflows where it is used. A patch has been published in version `5.4.4`. The only known workaround is to sanitize token data first. Whether using DTCG format or old Style Dictionary format, check the token data object recursively for any object keys that include `__proto__`.",
+      "published": "2026-06-24T01:16:25.363Z",
+      "lastModified": "2026-06-25T20:18:11.603Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00132,
+      "epssPercentile": 0.03105,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-1321",
+          "name": "CWE-1321",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.19,
+      "tags": [
+        "CWE-1321"
       ]
     },
     {
@@ -22878,6 +22824,51 @@
       "priorityScore": 3.15,
       "tags": [
         "Microsoft",
+        "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-10091",
+      "summary": "The Email JavaScript Cloak plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the plugin's 'email' shortcode in all versions up to, and including, 1.03 due to insufficient input sanitization and output escaping on user supplied attributes. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
+      "published": "2026-06-24T07:16:25.330Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "High",
+      "cvssScore": 7.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00264,
+      "epssPercentile": 0.17966,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.15,
+      "tags": [
+        "WordPress",
         "CWE-79"
       ]
     },
@@ -26573,6 +26564,51 @@
       "tags": [
         "F5",
         "CWE-59"
+      ]
+    },
+    {
+      "id": "CVE-2026-11614",
+      "summary": "The Xpro Addons — 140+ Widgets for Elementor plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'custom_attributes' parameter in all versions up to, and including, 1.7.2 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with author-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
+      "published": "2026-06-24T04:17:05.340Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "Medium",
+      "cvssScore": 6.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00256,
+      "epssPercentile": 0.16982,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.83,
+      "tags": [
+        "WordPress",
+        "CWE-79"
       ]
     },
     {
@@ -31485,6 +31521,50 @@
       ]
     },
     {
+      "id": "CVE-2026-12488",
+      "summary": "A memory corruption vulnerability exists in the GV-Cloud functionality of GeoVision GV-VMS V20 20.0.2. A specially crafted network request can lead to a denial of service. An attacker can impersonate the legitimate server to trigger this vulnerability.",
+      "published": "2026-06-24T05:17:26.350Z",
+      "lastModified": "2026-06-25T14:02:35.347Z",
+      "severity": "Medium",
+      "cvssScore": 6.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:R/S:C/C:L/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "High",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00197,
+      "epssPercentile": 0.09682,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-121",
+          "name": "CWE-121",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.51,
+      "tags": [
+        "CWE-121"
+      ]
+    },
+    {
       "id": "CVE-2026-44644",
       "summary": "LiquidJS is a Shopify/GitHub Pages compatible template engine written in pure JavaScript. Versions 10.25.7 and below are vulnerable to XSS through a flaw in the strip_html filter logic. The strip_html filter is intended to remove HTML tags from a string before rendering, and is widely used as an XSS sanitizer. The implementation uses a regex whose catch-all branch ( ) does not match line terminators, so any HTML tag containing a \\n or \\r character passes through unmodified. An attacker who can place a newline inside a tag (e.g. ) bypasses sanitization entirely, since browsers treat newlines as whitespace within a tag and execute the resulting onerror/onload/etc. handler. Exploitation is possible for applications that both render attacker-controlled strings via {{ x | strip_html }} to defend against HTML injection and do not separately HTML-escape that output (default behavior — outputEscape is unset by default). This issue has been fixed in version 10.26.0.",
       "published": "2026-06-17T23:17:03.463Z",
@@ -33608,6 +33688,50 @@
       ]
     },
     {
+      "id": "CVE-2026-9539",
+      "summary": "An out-of-bounds heap read and integer underflow in the TCP urgent data handling (sosendoob) in freedesktop.org libslirp version before v4.9.2 on hypervisor host environments (e.g., QEMU) allows a privileged guest VM attacker (root or CAP_NET_RAW) to leak gigabytes of sensitive host-process heap memory via sending crafted TCP segments with manipulated URG flags and urgent pointers (ti_urp).",
+      "published": "2026-06-24T05:17:31.100Z",
+      "lastModified": "2026-06-25T19:26:36.233Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00106,
+      "epssPercentile": 0.01306,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.32,
+      "tags": [
+        "CWE-125"
+      ]
+    },
+    {
       "id": "CVE-2026-56409",
       "summary": "xmlwf in libexpat before 2.8.2 has an integer overflow for the output filename when -d outputDir is used.",
       "published": "2026-06-21T16:16:28.230Z",
@@ -33879,50 +34003,6 @@
       "priorityScore": 2.3,
       "tags": [
         "CWE-613"
-      ]
-    },
-    {
-      "id": "CVE-2026-48817",
-      "summary": "Starlette is a lightweight ASGI framework/toolkit. In versions 1.0.1 and below, when dispatching a request, HTTPEndpoint selects the handler by lowercasing the HTTP method and looking it up as an attribute with getattr, without restricting the lookup to a known set of HTTP verbs. When an HTTPEndpoint subclass is registered through Route(...) without an explicit methods= argument, the route does not constrain the method and every method reaches the endpoint. If a non-standard HTTP method whose lowercased name matches an attribute on the endpoint subclass reaches the endpoint, that attribute is invoked as if it were a request handler. An attacker can use this to reach methods that were never meant to be HTTP handlers, such as internal helpers, without the authorization checks applied by the intended public handler. An application (including Starlette-based frameworks like FastAPI) is affected if it registers an HTTPEndpoint subclass via Route(...) without explicitly setting methods=, and that subclass includes extra methods named like non-standard HTTP verbs that take one request argument and return a response. This issue has been fixed in version 1.1.0.",
-      "published": "2026-06-17T20:17:22.427Z",
-      "lastModified": "2026-06-26T19:18:13.380Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00213,
-      "epssPercentile": 0.11585,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-470",
-          "name": "CWE-470",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.26,
-      "tags": [
-        "CWE-470"
       ]
     },
     {
@@ -35502,50 +35582,6 @@
       "priorityScore": 2.12,
       "tags": [
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-48822",
-      "summary": "Shaarli is a personal bookmarking service. Versions 0.16.1 and prior contain a stored Cross-Site Scripting (XSS) vulnerability in the Markdown-to-HTML conversion process used in the Bookmark Description field. An authenticated user can inject a malicious javascript: URI inside a Markdown link. The vulnerability originates in the filterProtocols method within BookmarkMarkdownFormatter.php.This method attempts to sanitize Markdown links by filtering dangerous protocols (such as javascript:) before rendering. It uses the following regular expression: (#]\\((.*?)\\)#is). This regex is designed to detect inline Markdown links, but it fails to detect Markdown reference-style links because reference-style links are resolved by the Markdown parser after preprocessing. The filterProtocols method never inspects the actual URL used in these references and as a result, an attacker can supply a javascript: URI inside a reference definition. This issue has been fixed in version 0.16.2.",
-      "published": "2026-06-17T20:17:23.060Z",
-      "lastModified": "2026-06-18T17:16:31.583Z",
-      "severity": "Medium",
-      "cvssScore": 5.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:R/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.0012,
-      "epssPercentile": 0.02199,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.11,
-      "tags": [
-        "CWE-79"
       ]
     },
     {
@@ -39048,50 +39084,6 @@
         "iOS",
         "CWE-441",
         "CWE-918"
-      ]
-    },
-    {
-      "id": "CVE-2026-48823",
-      "summary": "Shaarli is a personal bookmarking service. Versions 0.16.1 and prior contain a stored Cross-Site Scripting (XSS) vulnerability in the tag filtering functionality of Shaarli. An authenticated user can inject arbitrary JavaScript into the tags field when creating a bookmark (Shaare). The malicious payload is stored and later executed when users interact with the \"Filter by tag\" search feature on the homepage. User-supplied input in the tags field is not properly sanitized or output-escaped before being rendered in the tag filtering interface. When a bookmark is created with a malicious payload inside the tag field, the payload is stored in the database. Later, when a user searches using the \"Filter by tag\" functionality on the homepage, the application renders matching tags dynamically. If the tag value contains HTML with JavaScript event handlers, it is injected into the DOM. This impacts anyone interacting with the \"Filter by tag\" search functionality, administrators and privileged users. This issue has been fixed in version 0.16.2.",
-      "published": "2026-06-17T20:17:23.210Z",
-      "lastModified": "2026-06-18T14:17:28.167Z",
-      "severity": "Medium",
-      "cvssScore": 4.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:R/S:U/C:H/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00115,
-      "epssPercentile": 0.01848,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.74,
-      "tags": [
-        "CWE-79"
       ]
     },
     {
@@ -43270,50 +43262,6 @@
       ]
     },
     {
-      "id": "CVE-2026-10741",
-      "summary": "Sonatype Nexus Repository Manager before 3.93.0 contains an authorization vulnerability in the proxy repository configuration that allows a delegated repository administrator to disclose stored upstream proxy credentials.",
-      "published": "2026-06-17T20:16:48.187Z",
-      "lastModified": "2026-06-23T15:37:54.137Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.0026,
-      "epssPercentile": 0.1752,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.61,
-      "tags": [
-        "CWE-863"
-      ]
-    },
-    {
       "id": "CVE-2026-11942",
       "summary": "Akaunting 3.1.21 contains an authenticated stored cross-site scripting vulnerability in the reusable delete confirmation flow. A user with permission to create or modify records, such as Items, can store HTML/JavaScript in the record name.",
       "published": "2026-06-22T16:16:33.423Z",
@@ -44619,6 +44567,51 @@
       "tags": [
         "Exchange",
         "CWE-362"
+      ]
+    },
+    {
+      "id": "CVE-2026-12681",
+      "summary": "Improper Validation of Specified Index, Position, or Offset in Input vulnerability in Google go-attestation. parseEfiSignatureList() does not advance the buffer past vendor bytes before reading entries. For hashSHA256SigGUID lists, this allows attacker-controlled vendor header bytes to be appended to the trusted SHA256 hash list. A crafted TPM event log could inject arbitrary SHA256 hashes into the verifier's trusted measurement database, enabling a remote attestation verifier to accept a compromised boot state. This issue affects go-attestation: through 0.6.0.",
+      "published": "2026-06-24T02:16:28.060Z",
+      "lastModified": "2026-06-25T19:51:26.187Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00191,
+      "epssPercentile": 0.0894,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-1285",
+          "name": "CWE-1285",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.31,
+      "tags": [
+        "Google",
+        "CWE-1285"
       ]
     },
     {
