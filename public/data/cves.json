@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-17T22:32:43.161Z",
+  "generatedAt": "2026-07-17T23:35:59.522Z",
   "count": 1000,
   "items": [
     {
@@ -4321,6 +4321,51 @@
       ]
     },
     {
+      "id": "CVE-2026-8705",
+      "summary": "The ClearSale Total plugin for WordPress is vulnerable to SQL Injection via the `pagseguro[metodo]` POST parameter of the `clearsale_total_push` AJAX action in all versions up to, and including, 3.4.2. The handler is registered for unauthenticated users (`wp_ajax_nopriv_clearsale_total_push`), and although a `wp_verify_nonce()` check exists, the failing branch's `die()` is commented out so execution continues regardless of nonce validity. On PHP < 8.0 the attacker-supplied `$metodo` value bypasses the `switch ($metodo) { case 4: ... }` guard via loose type juggling (the string `\"4 AND SLEEP(5)\"` compares equal to integer `4`), reaching an unquoted `UPDATE wp_cs_total_dadosextras SET metodo=$metodo, ...` query. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. Exploitation requires the target server to be running PHP < 8.0.",
+      "published": "2026-06-24T07:16:28.417Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00505,
+      "epssPercentile": 0.39786,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.02,
+      "tags": [
+        "WordPress",
+        "CWE-89"
+      ]
+    },
+    {
       "id": "CVE-2026-45480",
       "summary": "Improper authentication in Azure Active Directory allows an unauthorized attacker to elevate privileges over a network.",
       "published": "2026-06-19T21:16:51.970Z",
@@ -7263,51 +7308,6 @@
       ]
     },
     {
-      "id": "CVE-2026-45617",
-      "summary": "LiquidJS is a Shopify/GitHub Pages compatible template engine written in pure JavaScript. In versions 10.25.7 and below, the built-in strip_html filter uses a regex containing four flawed lazy-quantified alternatives, leading to ReDoS via quadratic backtracking. When the input contains many <script, <style, or <!-- opener tokens without matching closers, the V8 regex engine performs O(N²) backtracking, blocking the Node.js event loop. A single ~350 KB request ('<script'.repeat(50000)) stalls the process for ~10 seconds; cost grows quadratically with input size. The default memoryLimit: Infinity does not bound regex CPU, and even when configured strip_html only charges str.length to the limit — the regex itself runs unbounded. A single unauthenticated request containing crafted untrusted input can cause severe event-loop blocking and CPU amplification that saturates Node.js workers while bypassing memoryLimit protections. This issue has been fixed in version 10.26.0.",
-      "published": "2026-06-17T23:17:04.033Z",
-      "lastModified": "2026-06-22T18:27:30.807Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00385,
-      "epssPercentile": 0.30807,
-      "isKev": false,
-      "kev": null,
-      "vendor": "GitHub",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-1333",
-          "name": "CWE-1333",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.7,
-      "tags": [
-        "GitHub",
-        "CWE-1333"
-      ]
-    },
-    {
       "id": "CVE-2026-56266",
       "summary": "Crawl4AI before 0.8.7 contains a server-side request forgery vulnerability in the /crawl, /crawl/stream, /md, and /llm endpoints that fetch arbitrary user-supplied URLs without validation. Unauthenticated attackers can bypass the internal-address blocklist using IPv6-mapped IPv4 addresses to reach internal services and cloud metadata endpoints.",
       "published": "2026-06-22T22:16:50.937Z",
@@ -7793,6 +7793,51 @@
       "knownRansomwareUse": false,
       "priorityScore": 4.67,
       "tags": [
+        "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-9179",
+      "summary": "The WP Forms Connector plugin for WordPress is vulnerable to SQL Injection via the 'order' parameter of the /wp-json/wp/v3/post/list REST endpoint in versions up to and including 1.8. This is due to insufficient escaping on the user-supplied 'order' parameter (read directly from $_GET['order'] into $shorting) and the lack of sufficient preparation on the existing SQL query in the listPost() function, where the value is concatenated unquoted into the ORDER BY clause and executed via $wpdb->get_results() without $wpdb->prepare(). The endpoint is registered with permission_callback '__return_true' and performs only a broken header-based check that validates the supplied 'Username' corresponds to an administrator account while never verifying the 'Password'. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.",
+      "published": "2026-06-24T07:16:29.257Z",
+      "lastModified": "2026-06-25T14:16:56.503Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00376,
+      "epssPercentile": 0.29842,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.67,
+      "tags": [
+        "WordPress",
         "CWE-89"
       ]
     },
@@ -8767,6 +8812,51 @@
       "priorityScore": 4.57,
       "tags": [
         "CWE-203"
+      ]
+    },
+    {
+      "id": "CVE-2026-9178",
+      "summary": "The WP Forms Connector plugin for WordPress is vulnerable to Information Exposure in all versions up to, and including, 1.8. The plugin registers the REST route wp/v3/user/list/ (callback userDetail()) with permission_callback set to '__return_true', and the function's home-grown authentication only verifies that the supplied 'Username' HTTP header maps to an administrator account and that a 'Password' HTTP header is non-empty. It never validates the password with wp_check_password() (unlike the sibling delete_wc_user() function which does). This makes it possible for unauthenticated attackers to retrieve sensitive information for any registered user ID — including the WordPress password hash (user_pass) and email address — by sending a request with a valid administrator login name (commonly the default 'admin') and any arbitrary password value.",
+      "published": "2026-06-24T07:16:29.133Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00347,
+      "epssPercentile": 0.26936,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.57,
+      "tags": [
+        "WordPress",
+        "CWE-862"
       ]
     },
     {
@@ -12706,51 +12796,6 @@
       ]
     },
     {
-      "id": "CVE-2026-44645",
-      "summary": "LiquidJS is a Shopify/GitHub Pages compatible template engine written in pure JavaScript. In versions 10.25.7 and below, the renderLimit option can be fully bypassed by a {% for %} (or {% tablerow %}) tag whose body is empty. The renderLimit option is documented in docs/source/tutorials/dos.md as the mechanism that \"mitigates this by limiting the time consumed by each render() call.\" The per-iteration time check is reached only when the body contains at least one template node, so a template such as {%- for i in (1..N) -%}{%- endfor -%} iterates the full collection without ever consulting renderLimit. With a configured renderLimit of 50 ms, a single parseAndRenderSync call has been observed to consume 2.26 seconds (~45× over the limit) and scales linearly with N up to memoryLimit, allowing a low-privileged template author to wedge an event-loop thread for an attacker-chosen duration. Deployments that rely on a finite renderLimit for DoS protection (common in multi-tenant template-authoring environments) can still be forced by a single crafted template to monopolize a Node.js event-loop worker for attacker-controlled time, potentially stalling in-flight requests, with availability impact only. This issue has been fixed in version 10.26.0.",
-      "published": "2026-06-17T23:17:03.607Z",
-      "lastModified": "2026-06-22T18:27:30.807Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00317,
-      "epssPercentile": 0.23794,
-      "isKev": false,
-      "kev": null,
-      "vendor": "GitHub",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.11,
-      "tags": [
-        "GitHub",
-        "CWE-400"
-      ]
-    },
-    {
       "id": "CVE-2026-48512",
       "summary": "MessagePack for C# is a MessagePack serializer for C#. Prior to 2.5.301 and 3.1.7, MessagePack-CSharp's JSON conversion helpers contain multiple recursion paths that do not consistently enforce a depth limit. These paths are in the JSON conversion component rather than normal typed MessagePack deserialization. MessagePackSerializer.ConvertFromJson recursively processes nested JSON arrays and objects in FromJsonCore() without consulting MessagePackSecurity.MaximumObjectGraphDepth. TinyJsonReader.ReadNextToken() recursively consumes comma and colon separator characters, allowing even malformed JSON with long separator runs to consume one stack frame per character. MessagePackSerializer.ConvertToJson applies depth checks to arrays and maps, but the typeless extension branch for ext-100 recursively calls ToJsonCore() without applying MessagePackSecurity.DepthStep(ref reader). Each path can allow attacker-controlled input to exhaust the process stack and trigger an uncatchable StackOverflowException instead of failing with a catchable parse or serialization exception. This vulnerability is fixed in 2.5.301 and 3.1.7.",
       "published": "2026-06-22T22:16:47.970Z",
@@ -12886,50 +12931,6 @@
       "tags": [
         "CWE-22",
         "CWE-639"
-      ]
-    },
-    {
-      "id": "CVE-2026-53676",
-      "summary": "ThingsBoard contains a prototype pollution vulnerability which may lead to arbitrary code execution within a sandboxed context by a user who can log in to the affected product with the tenant administrator privilege (TENANT_ADMIN).",
-      "published": "2026-06-17T23:17:04.870Z",
-      "lastModified": "2026-06-22T19:49:09.490Z",
-      "severity": "High",
-      "cvssScore": 7.2,
-      "cvssVector": "CVSS:3.0/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00603,
-      "epssPercentile": 0.44869,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-1321",
-          "name": "CWE-1321",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.09,
-      "tags": [
-        "CWE-1321"
       ]
     },
     {
@@ -15389,50 +15390,6 @@
       ]
     },
     {
-      "id": "CVE-2026-50202",
-      "summary": "Steeltoe is an open source project that provides a collection of libraries that helps users build cloud-native applications. In Steeltoe.Security.Authentication.CloudFoundryBase prior to version 3.4.0, Steeltoe.Security.Authentication.JwtBearer prior to version 4.2.0, and Steeltoe.Security.Authentication.OpenIdConnect prior to version 4.2.0, the JWT signing key cache in `TokenKeyResolver` uses `kid` as the sole cache key without namespacing by authority. In applications with multiple `JwtBearer` schemes pointing to different identity providers, a key fetched for one scheme can satisfy token validation for another. Additionally, cached keys have no expiration, so rotated or revoked keys remain trusted until the application process restarts. Steeltoe.Security.Authentication.CloudFoundryBase version 3.4.0, Steeltoe.Security.Authentication.JwtBearer version 4.2.0, and Steeltoe.Security.Authentication.OpenIdConnect version 4.2.0 patch the issue. If an immediate upgrade is not possible: In multi-scheme deployments, configure only one `JwtBearer` scheme per application when different identity providers are required; and/or restart the application process after an identity provider signing key rotation to clear stale cached keys.",
-      "published": "2026-06-17T23:17:04.450Z",
-      "lastModified": "2026-06-22T18:20:40.350Z",
-      "severity": "Medium",
-      "cvssScore": 5.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.0029,
-      "epssPercentile": 0.20921,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-668",
-          "name": "CWE-668",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.8,
-      "tags": [
-        "CWE-668"
-      ]
-    },
-    {
       "id": "CVE-2026-42488",
       "summary": "Some shadow paging errors paths will switch the page-tables without updating the currently running vCPU reference. This causes a mismatch between the loaded page-tables and the mapcache metadata which can lead to corruption of the mapcache.",
       "published": "2026-06-18T14:17:25.410Z",
@@ -15756,6 +15713,51 @@
       ]
     },
     {
+      "id": "CVE-2026-9175",
+      "summary": "The Devs Accounting – Simple Accounting and Invoicing Solution plugin for WordPress is vulnerable to Missing Authorization in all versions up to, and including, 1.2.0. This is due to the get_single_account() REST API callback being registered with a permission_callback that unconditionally returns true, providing no authentication or authorization checks on the /devs-accounting/v1/get-account/ endpoint. This makes it possible for unauthenticated attackers to read arbitrary private financial account records (including account name, bank name, and opening balance) by enumerating the numeric account ID, resulting in sensitive information disclosure.",
+      "published": "2026-06-24T07:16:29.017Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00348,
+      "epssPercentile": 0.27043,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.8,
+      "tags": [
+        "WordPress",
+        "CWE-862"
+      ]
+    },
+    {
       "id": "CVE-2026-32208",
       "summary": "Improper neutralization of input during web page generation ('cross-site scripting') in Microsoft Entra ID allows an authorized attacker to perform spoofing over a network.",
       "published": "2026-06-19T21:16:41.883Z",
@@ -15886,56 +15888,6 @@
       "priorityScore": 3.78,
       "tags": [
         "CWE-770"
-      ]
-    },
-    {
-      "id": "CVE-2026-50201",
-      "summary": "Steeltoe is an open source project that provides a collection of libraries that helps users build cloud-native applications. In Steeltoe.Management.Endpoint prior to version 4.2.0 and Steeltoe.Management.EndpointCore prior to version 3.4.0, all Steeltoe actuator endpoints default to `EndpointPermissions.Restricted`, which is mappeds to Cloud Foundry's `read_basic_data` permission (granted to Space Auditors and similar low-trust roles). Sensitive actuators including heap dump, environment, and thread dump do not raise this to `EndpointPermissions.Full`, so CF's `read_sensitive_data` permission flag is not enforced for those endpoints. Spring Boot's equivalent Cloud Foundry integration gates these endpoints with `read_sensitive_data` by default. Steeltoe.Management.Endpoint 4.2.0 and Steeltoe.Management.EndpointCore 3.4.0 patch the issue. If an immediate upgrade is not possible, explicitly set `RequiredPermissions = EndpointPermissions.Full` in the options for `HeapDumpEndpointOptions`, `EnvironmentEndpointOptions`, and `ThreadDumpEndpointOptions`; and/or if heap dump, thread dump, or environment are not needed in production, register only the required actuators individually instead of using `AddAllActuators()`.",
-      "published": "2026-06-17T23:17:04.313Z",
-      "lastModified": "2026-06-22T18:20:40.350Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00231,
-      "epssPercentile": 0.13867,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-269",
-          "name": "Improper Privilege Management",
-          "description": "Privileges are assigned, modified, or checked incorrectly."
-        },
-        {
-          "id": "CWE-285",
-          "name": "CWE-285",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.76,
-      "tags": [
-        "CWE-269",
-        "CWE-285"
       ]
     },
     {
@@ -16590,51 +16542,6 @@
       "priorityScore": 3.71,
       "tags": [
         "CWE-306"
-      ]
-    },
-    {
-      "id": "CVE-2026-45357",
-      "summary": "LiquidJS is a Shopify/GitHub Pages compatible template engine written in pure JavaScript. In versions 10.25.7 and below, the date filter's strftime implementation parses width specifiers like %9999999d and forwards the captured width unchecked into pad()/padStart(), leading to memory and render limit bypass. In src/util/underscore.ts, the pad loop performs unbounded string concatenation without consulting the Context's memoryLimit or renderLimit, so a single small template ({{ x | date: '%5000000d' }}) produces megabytes of output and unbounded CPU. The memoryLimit and renderLimit options the docs (src/liquid-options.ts:87-92) advertise as DoS controls — and which the docstring explicitly mentions for strftime — are entirely bypassed. Exploitation can cause large memory allocations, high CPU usage, or OOM crashes per render. This issue has been fixed in version 10.26.0.",
-      "published": "2026-06-17T23:17:03.893Z",
-      "lastModified": "2026-06-22T18:27:30.807Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00385,
-      "epssPercentile": 0.30807,
-      "isKev": false,
-      "kev": null,
-      "vendor": "GitHub",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.7,
-      "tags": [
-        "GitHub",
-        "CWE-400"
       ]
     },
     {
@@ -17528,6 +17435,51 @@
       "priorityScore": 3.65,
       "tags": [
         "CWE-269"
+      ]
+    },
+    {
+      "id": "CVE-2026-9612",
+      "summary": "The WhatsOrder – Instant Checkout for WooCommerce plugin for WordPress is vulnerable to Sensitive Information Exposure in all versions up to, and including, 1.0.1 via the yapacdev_generate_order_pdf. This makes it possible for unauthenticated attackers to extract sensitive customer PII and order details — including full name, email address, phone number, billing address, ordered items with quantities and prices, applied coupons, shipping method, and order total — from any customer's invoice by enumerating sequential order IDs. Invoice HTML files are written to the publicly accessible wp-content/uploads/whatsorder_invoices/ directory, which is created without an .htaccess deny rule or index.php guard, making every invoice directly downloadable over HTTP with no authentication check.",
+      "published": "2026-06-24T07:16:29.610Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00308,
+      "epssPercentile": 0.22776,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-200",
+          "name": "CWE-200",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.65,
+      "tags": [
+        "WordPress",
+        "CWE-200"
       ]
     },
     {
@@ -18508,6 +18460,51 @@
       ]
     },
     {
+      "id": "CVE-2026-8865",
+      "summary": "The Avalon23 Products Filter for WooCommerce plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'avalon23_qr' shortcode in all versions up to, and including, 1.1.6. This is due to insufficient input sanitization and output escaping on user-supplied shortcode attributes (notably 'title' and 'fixed_link') which are concatenated directly into single-quoted HTML attributes by the AVALON23_HELPER::draw_html_item() helper without esc_attr() or any other encoding. This makes it possible for authenticated attackers, with Contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
+      "published": "2026-06-24T07:16:28.543Z",
+      "lastModified": "2026-06-25T14:16:56.293Z",
+      "severity": "Medium",
+      "cvssScore": 6.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00193,
+      "epssPercentile": 0.09191,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.56,
+      "tags": [
+        "WordPress",
+        "CWE-79"
+      ]
+    },
+    {
       "id": "CVE-2026-22551",
       "summary": "In Eclipse Theia versions prior to 1.71.0, the AI chat rendered Markdown image tags from AI responses, triggering HTTP requests to arbitrary external URLs without restriction. Combined with prompt injection in a malicious workspace, an attacker could induce the AI agent to construct image URLs encoding sensitive information from the workspace or conversation context, exfiltrating it to attacker-controlled servers. The workspace trust enforcement introduced in v1.71.0 mitigates the documented attack chain by disabling AI features in untrusted workspaces.",
       "published": "2026-06-18T16:16:52.960Z",
@@ -19337,6 +19334,51 @@
       ]
     },
     {
+      "id": "CVE-2026-8628",
+      "summary": "The EntreDroppers plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via PHP_SELF Parameter in all versions up to, and including, 1.1.2 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link. The payload is delivered via attacker-controlled path-info in the URL (e.g., /wp-admin/admin.php/\"> alert(0) /?page=EntreDroppers.php), which PHP_SELF reflects directly into the form action attribute.",
+      "published": "2026-06-24T07:16:28.050Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "Medium",
+      "cvssScore": 6.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00205,
+      "epssPercentile": 0.10558,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.5,
+      "tags": [
+        "WordPress",
+        "CWE-79"
+      ]
+    },
+    {
       "id": "CVE-2026-49340",
       "summary": "gonic is a music streaming server / free-software subsonic server API implementation. Prior to version 0.21.0, a logic error in `ServeCreateOrUpdatePlaylist` allows any authenticated Subsonic user (including non-admin) to write playlist M3U content to an attacker-controlled absolute filesystem path on the gonic host, and to create intermediate directories with `0o777` permissions. The bug is independent of CVE-2026-49338 and CVE-2026-49339. It is an unreachable guard clause combined with no path containment in `Store.Write`. Version 0.21.0 patches the issue.",
       "published": "2026-06-19T19:16:36.817Z",
@@ -19835,6 +19877,51 @@
       "priorityScore": 3.45,
       "tags": [
         "CWE-829"
+      ]
+    },
+    {
+      "id": "CVE-2026-8690",
+      "summary": "The RentMy Real-Time Rental Management Plugin plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 4.0.4.1. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for unauthenticated attackers to read, create, update, and delete event records stored in the rentmy_events WordPress option, as well as overwrite the rentmy_locationId option.",
+      "published": "2026-06-24T07:16:28.293Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00255,
+      "epssPercentile": 0.16964,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.45,
+      "tags": [
+        "WordPress",
+        "CWE-862"
       ]
     },
     {
@@ -20761,6 +20848,51 @@
       ]
     },
     {
+      "id": "CVE-2026-8622",
+      "summary": "The Image Sizes on Demand plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via PHP_SELF Server Variable in all versions up to, and including, 1.3 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link. The injected payload only executes in the context of an administrator, as the settings page requires the manage_options capability to render.",
+      "published": "2026-06-24T07:16:27.930Z",
+      "lastModified": "2026-06-29T19:16:43.123Z",
+      "severity": "Medium",
+      "cvssScore": 6.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.06453,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.36,
+      "tags": [
+        "WordPress",
+        "CWE-79"
+      ]
+    },
+    {
       "id": "CVE-2026-50169",
       "summary": "Angular is a development platform for building mobile and desktop web applications using TypeScript/JavaScript and other languages. Prior to 22.0.0-rc.2, 21.2.15 20.3.22, and 19.2.23, an issue in the @angular/service-worker package compromises the integrity of request-policy enforcement during request reconstruction. When the Angular Service Worker intercepts network requests for matched assets, it reconstructs a new Request object using an internal helper function. During this reconstruction process, the helper function strips the strict, client-defined request redirect policy configuration (such as redirect: 'error'), falling back to the browser's default 'follow' strategy. If the target web application makes client-side requests with a strict policy (e.g., expecting a network error instead of automatically following redirects), the service worker will bypass this instruction and automatically follow HTTP 3xx redirects to other destinations. This acts as an unintended proxy/intermediary (\"Confused Deputy\") and can result in cookie/credential exposure or same-origin session-restricted data leakage if public dynamic routes redirect to sensitive routes. This vulnerability is fixed in 22.0.0-rc.2, 21.2.15, 20.3.22, and 19.2.23.",
       "published": "2026-06-22T18:16:42.253Z",
@@ -21093,6 +21225,51 @@
       ]
     },
     {
+      "id": "CVE-2026-8617",
+      "summary": "The SearchPlus plugin for WordPress is vulnerable to unauthorized modification and deletion of data in versions up to, and including, 1.7.1. This is due to a missing capability check and missing nonce validation on the searchplus_save_token_action_callback() and searchplus_reset_token_action_callback() functions, both of which are exposed to unauthenticated users through the wp_ajax_nopriv_ hooks. This makes it possible for unauthenticated attackers to overwrite or delete the plugin's stored account token and account name options (dym_token, dym_name, searchplus_token, searchplus_name, sp_token, sp_name).",
+      "published": "2026-06-24T07:16:27.813Z",
+      "lastModified": "2026-06-25T14:16:55.893Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00228,
+      "epssPercentile": 0.13548,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.33,
+      "tags": [
+        "WordPress",
+        "CWE-862"
+      ]
+    },
+    {
       "id": "CVE-2026-54273",
       "summary": "AIOHTTP is an asynchronous HTTP client/server framework for asyncio and Python. Prior to 3.14.1, no limit was present on the number of pipelined requests that could be queued. An attacker may be able to use pipelined requests to use excessive amounts of memory, potentially leading to DoS. This vulnerability is fixed in 3.14.1.",
       "published": "2026-06-22T18:16:45.743Z",
@@ -21273,6 +21450,51 @@
         "Kubernetes",
         "CWE-284",
         "CWE-863"
+      ]
+    },
+    {
+      "id": "CVE-2026-9172",
+      "summary": "The Devs Accounting – Simple Accounting and Invoicing Solution plugin for WordPress is vulnerable to unauthorized modification/deletion of data due to a missing capability check on the delete_single_account() function in versions up to, and including, 1.2.0. The REST route 'devs-accounting/v1/delete-account/(?P \\d+)' is registered without any permission_callback, which causes WordPress to expose the endpoint to public, unauthenticated access. This makes it possible for unauthenticated attackers to soft-delete arbitrary accounting account records (wp_dac_accounts) by issuing a simple GET request to the endpoint with any account ID.",
+      "published": "2026-06-24T07:16:28.897Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00227,
+      "epssPercentile": 0.13411,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.32,
+      "tags": [
+        "WordPress",
+        "CWE-862"
       ]
     },
     {
@@ -22099,34 +22321,34 @@
       ]
     },
     {
-      "id": "CVE-2026-12565",
-      "summary": "The unarchive internal module's archive extraction commands perform no code-level validation on extracted file paths, relying entirely on the behavior of external tools (e.g. GNU tar) which varies by platform. While CVE-2025-10284 addressed git-specific RCE vectors, the underlying archive extraction path traversal was never fixed. On systems with GNU tar < 1.34 (Ubuntu 20.04, Debian Buster, CentOS 7, many Docker base images), a malicious archive can write files outside the intended extraction directory.",
-      "published": "2026-06-17T23:17:02.970Z",
-      "lastModified": "2026-06-22T17:45:43.473Z",
+      "id": "CVE-2026-8905",
+      "summary": "The Osiris Signature Banner plugin for WordPress is vulnerable to Cross-Site Request Forgery in all versions up to, and including, 0.5. This is due to missing or incorrect nonce validation on a function. This makes it possible for unauthenticated attackers to update settings and inject malicious web scripts via a forged request granted they can trick a site administrator into performing an action such as clicking on a link.",
+      "published": "2026-06-24T07:16:28.777Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
       "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:H/A:N",
+      "cvssScore": 6.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
       "cvssBreakdown": {
         "attackVector": "Network",
-        "attackComplexity": "High",
+        "attackComplexity": "Low",
         "privilegesRequired": "None",
         "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
         "availability": "None"
       },
-      "epssScore": 0.00208,
-      "epssPercentile": 0.11004,
+      "epssScore": 0.00135,
+      "epssPercentile": 0.03333,
       "isKev": false,
       "kev": null,
-      "vendor": null,
-      "product": "Docker",
+      "vendor": "WordPress",
+      "product": "WordPress",
       "cwe": [
         {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
+          "id": "CWE-352",
+          "name": "Cross-Site Request Forgery",
+          "description": "A web request may execute without user intent."
         }
       ],
       "references": [],
@@ -22137,10 +22359,10 @@
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 3.24,
+      "priorityScore": 3.25,
       "tags": [
-        "Docker",
-        "CWE-22"
+        "WordPress",
+        "CWE-352"
       ]
     },
     {
@@ -25669,6 +25891,51 @@
       ]
     },
     {
+      "id": "CVE-2026-9183",
+      "summary": "The 24liveblog - live blog tool plugin for WordPress is vulnerable to Exposure of Sensitive Information in versions up to, and including, 2.2. This is due to the lb24_block_enqueue_scripts() function being hooked to enqueue_block_editor_assets and, for any non-administrator user, falling back to loading the administrator-configured site-wide 24liveblog integration secrets (lb24_token, lb24_refresh_token, lb24_uid, lb24_uname) from the options table via get_option() and emitting them through wp_localize_script() as the lb24BlockData JavaScript object. This makes it possible for authenticated attackers, with contributor-level access and above, to extract third-party 24liveblog account credentials (including the API token and refresh token) by simply opening the block editor and inspecting the page source.",
+      "published": "2026-06-24T07:16:29.370Z",
+      "lastModified": "2026-06-29T20:17:41.310Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.0021,
+      "epssPercentile": 0.11271,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-200",
+          "name": "CWE-200",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.9,
+      "tags": [
+        "WordPress",
+        "CWE-200"
+      ]
+    },
+    {
       "id": "CVE-2026-25865",
       "summary": "Punto Switcher through 4.5.0.583 contains an unquoted search path element vulnerability that allows local attackers to execute arbitrary code by exploiting the application's call to WinExec without a fully qualified path for RunDll32.exe when invoking shell32.dll Control_RunDLL input.dll. Attackers can place a malicious executable earlier in the search order to achieve arbitrary code execution in the context of the affected user.",
       "published": "2026-06-18T20:16:12.923Z",
@@ -26023,50 +26290,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12568",
-      "summary": "The postman_download module uses the workspace name field from the Postman API to construct the local directory path without sanitization. If a malicious workspace has a name containing path traversal characters, pathlib resolves the path outside the intended output directory, allowing an attacker to write arbitrary files to the user's system.",
-      "published": "2026-06-17T23:17:03.340Z",
-      "lastModified": "2026-06-22T17:45:43.473Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00251,
-      "epssPercentile": 0.16391,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.85,
-      "tags": [
-        "CWE-22"
-      ]
-    },
-    {
       "id": "CVE-2026-12390",
       "summary": "In AzeoTech DAQFactory versions 21.1 and prior, a Type Confusion vulnerability can be exploited by an attacker using specially crafted .ctl files which can result in code execution.",
       "published": "2026-06-18T19:16:22.130Z",
@@ -26108,50 +26331,6 @@
       "priorityScore": 2.85,
       "tags": [
         "CWE-843"
-      ]
-    },
-    {
-      "id": "CVE-2026-48759",
-      "summary": "TypeBot is a chatbot builder tool. Versions 3.15.2 and below have an Insecure Direct Object Reference vulnerability through cross-workspace Theme Template modification and deletion. The handleSaveThemeTemplate and handleDeleteThemeTemplate handlers validate that the authenticated user is a non-guest member of the provided workspaceId, but then operate on themeTemplateId via Prisma queries that do NOT include workspaceId in the WHERE clause. This allows any authenticated user to modify or delete theme templates belonging to any other workspace and may expose Template IDs via shared typebots or network traffic. This issue has been fixed in version 3.16.0.",
-      "published": "2026-06-17T23:17:04.173Z",
-      "lastModified": "2026-06-22T18:27:30.807Z",
-      "severity": "High",
-      "cvssScore": 7.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "Low"
-      },
-      "epssScore": 0.00202,
-      "epssPercentile": 0.10262,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.84,
-      "tags": [
-        "CWE-639"
       ]
     },
     {
@@ -29650,57 +29829,6 @@
       ]
     },
     {
-      "id": "CVE-2026-50267",
-      "summary": "Steeltoe is an open source project that provides a collection of libraries that helps users build cloud-native applications. In Steeltoe.Configuration.Abstractions 4.0.0 through 4.1.0, when MySQL or PostgreSQL service bindings from `VCAP_SERVICES` include TLS client credentials, the Connectors library writes those credentials to temporary files in `Path.GetTempPath()` using `File.CreateText`. On Linux, `File.CreateText` creates files with mode `0644` (world-readable) under the process umask, and the files are never deleted. The same key material is protected at mode `0400` in `/proc/ /environ`. Steeltoe.Configuration.Abstractions version 4.2.0 patches the issue. If an immediate upgrade is not possible, prevent other processes from running in the container under a different UID with access to `/tmp`.",
-      "published": "2026-06-17T23:17:04.590Z",
-      "lastModified": "2026-06-22T18:20:40.350Z",
-      "severity": "Medium",
-      "cvssScore": 4.7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00065,
-      "epssPercentile": 0.00023,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-312",
-          "name": "CWE-312",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-732",
-          "name": "CWE-732",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.65,
-      "tags": [
-        "Linux",
-        "CWE-312",
-        "CWE-732"
-      ]
-    },
-    {
       "id": "CVE-2026-56022",
       "summary": "Webmin accepts basic authentication without session cookies when an attacker provides the 'User-Agent: webmin' header, allowing bypass of additional MFA requirements. Fixed in 2.641.",
       "published": "2026-06-18T17:16:35.530Z",
@@ -31088,6 +31216,51 @@
       ]
     },
     {
+      "id": "CVE-2026-8896",
+      "summary": "The MIR blocks and shortcodes plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'title' attribute (and other attributes such as 'ready_animation_text') of the 'msc_stats' shortcode in versions up to, and including, 1.0.0. This is due to insufficient input sanitization and output escaping on user supplied shortcode attributes inside the msc_stats() rendering function. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
+      "published": "2026-06-24T07:16:28.660Z",
+      "lastModified": "2026-06-30T05:20:12.507Z",
+      "severity": "Medium",
+      "cvssScore": 6.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00187,
+      "epssPercentile": 0.08467,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.54,
+      "tags": [
+        "WordPress",
+        "CWE-79"
+      ]
+    },
+    {
       "id": "CVE-2026-49342",
       "summary": "YARD is a documentation generation tool for the Ruby programming language. Prior to version 0.9.44, YARD's static cache lookup reads a request path before the router's path cleanup runs. When a server is configured with a document root, a traversal path such as `/../yard-cache-secret.html` is joined against that root and can return a readable sibling `.html` file outside the intended static tree. Version 0.9.44 patches the issue.",
       "published": "2026-06-19T20:16:18.377Z",
@@ -31129,51 +31302,6 @@
       "priorityScore": 2.53,
       "tags": [
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-44646",
-      "summary": "LiquidJS is a Shopify/GitHub Pages compatible template engine written in pure JavaScript. In versions 10.25.7 and below, Context.spawn() creates a child Context for the {% render %} tag but does not propagate the parent context's resolved ownPropertyOnly value, resulting in a silent bypass. The new context re-derives ownPropertyOnly from opts.ownPropertyOnly (the instance-level option), silently discarding any RenderOptions.ownPropertyOnly override that was supplied to parseAndRender(). As a result, a developer who runs a Liquid instance with the backwards-compatible ownPropertyOnly:false and then locks down an untrusted render with parseAndRender(..., { ownPropertyOnly: true }) still leaks prototype-chain properties from inside any {% render %} partial. This is a distinct exploit surface from the previously identified array-filter variants (where, reject, group_by, find, find_index, has) — the underlying root cause in Context.spawn() is shared, but {% render %} is a separately reachable sink that needs no filter usage. This issue has been fixed in version 10.26.0.",
-      "published": "2026-06-17T23:17:03.743Z",
-      "lastModified": "2026-06-22T18:27:30.807Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00271,
-      "epssPercentile": 0.18903,
-      "isKev": false,
-      "kev": null,
-      "vendor": "GitHub",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-693",
-          "name": "CWE-693",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.52,
-      "tags": [
-        "GitHub",
-        "CWE-693"
       ]
     },
     {
@@ -31546,51 +31674,6 @@
       "priorityScore": 2.51,
       "tags": [
         "CWE-121"
-      ]
-    },
-    {
-      "id": "CVE-2026-44644",
-      "summary": "LiquidJS is a Shopify/GitHub Pages compatible template engine written in pure JavaScript. Versions 10.25.7 and below are vulnerable to XSS through a flaw in the strip_html filter logic. The strip_html filter is intended to remove HTML tags from a string before rendering, and is widely used as an XSS sanitizer. The implementation uses a regex whose catch-all branch ( ) does not match line terminators, so any HTML tag containing a \\n or \\r character passes through unmodified. An attacker who can place a newline inside a tag (e.g. ) bypasses sanitization entirely, since browsers treat newlines as whitespace within a tag and execute the resulting onerror/onload/etc. handler. Exploitation is possible for applications that both render attacker-controlled strings via {{ x | strip_html }} to defend against HTML injection and do not separately HTML-escape that output (default behavior — outputEscape is unset by default). This issue has been fixed in version 10.26.0.",
-      "published": "2026-06-17T23:17:03.463Z",
-      "lastModified": "2026-06-22T18:27:30.807Z",
-      "severity": "Medium",
-      "cvssScore": 6.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00203,
-      "epssPercentile": 0.10396,
-      "isKev": false,
-      "kev": null,
-      "vendor": "GitHub",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.5,
-      "tags": [
-        "GitHub",
-        "CWE-79"
       ]
     },
     {
@@ -33987,6 +34070,51 @@
       "priorityScore": 2.3,
       "tags": [
         "CWE-613"
+      ]
+    },
+    {
+      "id": "CVE-2026-9619",
+      "summary": "The Reviews and Rating – Docplanner plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 1.1.4. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for authenticated attackers, with subscriber-level access and above, to trigger outbound scraping of external websites and write scraped review data into the wp_dp_reviews database table, as well as send feature-request emails from the site administrator's email address.",
+      "published": "2026-06-24T07:16:29.850Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00307,
+      "epssPercentile": 0.2266,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.3,
+      "tags": [
+        "WordPress",
+        "CWE-862"
       ]
     },
     {
@@ -36615,6 +36743,51 @@
       ]
     },
     {
+      "id": "CVE-2026-9616",
+      "summary": "The Generate Security.txt plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 1.0.12. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for authenticated attackers, with subscriber-level access and above, to delete the site's security.txt file from the server filesystem or create the .well-known directory by directly invoking the delete_securitytxt or create_wellknown_folder AJAX actions.",
+      "published": "2026-06-24T07:16:29.730Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.0024,
+      "epssPercentile": 0.15037,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.03,
+      "tags": [
+        "WordPress",
+        "CWE-862"
+      ]
+    },
+    {
       "id": "CVE-2026-56307",
       "summary": "Cap-go before 12.128.12 contains a broken cursor pagination vulnerability in the /private/devices endpoint on the Cloudflare/workerd path that allows authenticated attackers to cause duplicate-page loops and make later rows unreachable. Attackers with app.read_devices access can exploit non-advancing cursor filters to trigger infinite pagination loops, prevent dataset traversal, and cause repeated processing in device-management workflows.",
       "published": "2026-06-20T16:17:05.597Z",
@@ -36701,6 +36874,51 @@
       "tags": [
         "F5",
         "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-8614",
+      "summary": "The Assistio plugin for WordPress is vulnerable to unauthorized modification of data due to a missing capability check and missing nonce verification on the assistio_plugin_delete_assistio_settings() function in versions up to, and including, 1.1.2. This makes it possible for authenticated attackers, with Subscriber-level access and above, to delete the plugin's options including the critical 'assistiobot_oauth_settings' option, which disrupts the plugin's integration with the Assistio bot service.",
+      "published": "2026-06-24T07:16:27.693Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00238,
+      "epssPercentile": 0.14834,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.02,
+      "tags": [
+        "WordPress",
+        "CWE-862"
       ]
     },
     {
@@ -37443,6 +37661,51 @@
       ]
     },
     {
+      "id": "CVE-2026-8688",
+      "summary": "The Advance Nav Menu Manager plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 1.3. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for authenticated attackers, with subscriber-level access and above, to duplicate, copy, move, or publish nav_menu_item posts via wp_insert_post(), modifying the site's navigation menus without authorization.",
+      "published": "2026-06-24T07:16:28.170Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00227,
+      "epssPercentile": 0.13377,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.97,
+      "tags": [
+        "WordPress",
+        "CWE-862"
+      ]
+    },
+    {
       "id": "CVE-2026-45034",
       "summary": "PhpSpreadsheet is a pure PHP library for reading and writing spreadsheet files. Prior to 1.30.5, CVE-2026-34084 was patched by the helper File::prohibitWrappers. The helper calls parse_url($filename, PHP_URL_SCHEME) and then checks is_string($scheme) && strlen($scheme) > 1 to reject stream wrappers such as phar://, php://, data:// or expect://. The check is not equivalent to \"does the path contain a wrapper\". When the input has the form phar:///path/file.phar/inner with three or more slashes after the scheme, parse_url returns boolean false instead of returning the scheme string. The is_string($scheme) branch is therefore skipped, the helper returns without throwing, and the caller proceeds. PHP's stream layer, however, still treats phar:///... as a valid phar wrapper and opens the underlying phar file. The result is that IOFactory::load($attackerPath) walks past the patch and still touches the phar wrapper. On PHP 7.x, simply reaching the phar wrapper via is_file is enough for PHP to automatically deserialize the phar metadata, which in turn invokes the magic methods __wakeup and __destruct of an attacker controlled object and gives full RCE. On PHP 8.x, automatic metadata deserialization for plain file ops was removed, so the chain at the PhpSpreadsheet layer reduces to a phar wrapper file read primitive, and RCE only resurfaces if the downstream consumer ever calls Phar::getMetadata. This vulnerability is fixed in 1.30.5.",
       "published": "2026-06-22T21:16:24.403Z",
@@ -37711,6 +37974,51 @@
       "tags": [
         "WordPress",
         "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-9184",
+      "summary": "The 24liveblog - live blog tool plugin for WordPress is vulnerable to unauthorized modification of data due to a missing capability check on the update_lb24_token() AJAX function in versions up to, and including, 2.2. The handler only verifies the 'lb24' nonce (which is generated and localized to any user with block editor access via lb24_block_enqueue_scripts()) and does not verify the user's capabilities or that the supplied user_id belongs to the current user. This makes it possible for authenticated attackers, with author-level access and above, to overwrite the lb24_token, lb24_uid, lb24_refresh_token, and lb24_uname user meta values of any user (including administrators) as well as the corresponding site-wide options, effectively hijacking the plugin's integration with the 24liveblog service.",
+      "published": "2026-06-24T07:16:29.493Z",
+      "lastModified": "2026-06-25T13:26:11.740Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00215,
+      "epssPercentile": 0.11942,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.92,
+      "tags": [
+        "WordPress",
+        "CWE-862"
       ]
     },
     {
@@ -39028,56 +39336,6 @@
       ]
     },
     {
-      "id": "CVE-2026-54445",
-      "summary": "vantage6 is an open-source infrastructure for privacy preserving analysis. Versions prior to 5.0.0 provide an initial user with username `root` and password `root`. This is not ideal because attackers know that almost all vantage6 servers have a user with username `root` that probably has admin rights, and the initial password is very weak and it is possible that administrators forget to reset it. Version 5.0.0 fixes the issue. As a workaround, it is possible to delete the `root` user after it has been used to create other users.",
-      "published": "2026-06-17T23:17:05.030Z",
-      "lastModified": "2026-06-23T15:44:39.343Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00292,
-      "epssPercentile": 0.21142,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-204",
-          "name": "CWE-204",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-1393",
-          "name": "CWE-1393",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.74,
-      "tags": [
-        "CWE-204",
-        "CWE-1393"
-      ]
-    },
-    {
       "id": "CVE-2026-56378",
       "summary": "ImageMagick before 7.1.2-15 (and 6.x before 6.9.13-40) contains a heap out-of-bounds read in the PCD coder's DecodeImage loop. A crafted PCD file can trigger a one-byte heap out-of-bounds read during image decoding, resulting in denial of service and potential disclosure of an adjacent heap byte.",
       "published": "2026-06-21T14:16:25.500Z",
@@ -39163,50 +39421,6 @@
       "priorityScore": 1.74,
       "tags": [
         "CWE-348"
-      ]
-    },
-    {
-      "id": "CVE-2026-54533",
-      "summary": "vantage6 is an open-source infrastructure for privacy preserving analysis. Prior to version 5.0.0, malicious algorithms can potentially access other algorithms input and output files. Version 5.0.0 fixes the issue. As a workaround, verify and restrict the algorithm containers that are allowed to run on the node.",
-      "published": "2026-06-17T23:17:05.167Z",
-      "lastModified": "2026-06-23T15:44:39.343Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00285,
-      "epssPercentile": 0.20533,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.72,
-      "tags": [
-        "CWE-284"
       ]
     },
     {
@@ -39487,94 +39701,6 @@
       ]
     },
     {
-      "id": "CVE-2024-24769",
-      "summary": "vantage6 is an open-source infrastructure for privacy preserving analysis. Prior to version 5.0.0, users can reset their MFA token via API routes that send them an email. Currently the number of emails that is sent is not limited. This gives attackers the option to flood someones mailbox with a lot of emails, and would have adverse effects on the SMTP server which may be seen as spam sender. Note resetting the MFA token requires a correct password, so the potential impact for this is very low. Version 5.0.0 fixes the issue. No known workarounds are available.",
-      "published": "2026-06-17T23:17:02.160Z",
-      "lastModified": "2026-06-23T15:44:39.343Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00278,
-      "epssPercentile": 0.19761,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.69,
-      "tags": [
-        "CWE-400"
-      ]
-    },
-    {
-      "id": "CVE-2024-27928",
-      "summary": "vantage6 is an open-source infrastructure for privacy preserving analysis. Prior to version 5.0.0, if an attacker hacks into a vantage6 user's email account, they can 1) reset the password via email and then 2) reset the 2FA token via email. This way they reduce 2FA to 1FA (email access). Note that most email providers require 2FA to access email, so this issue is not very likely to cause issues. Version 5.0.0 fixes the issue. No known workarounds are available.",
-      "published": "2026-06-17T23:17:02.790Z",
-      "lastModified": "2026-06-23T15:44:39.343Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00278,
-      "epssPercentile": 0.19813,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-308",
-          "name": "CWE-308",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.69,
-      "tags": [
-        "CWE-308"
-      ]
-    },
-    {
       "id": "CVE-2026-48986",
       "summary": "pam_usb provides hardware authentication for Linux using removable media. In pam_usb 0.9.1 and earlier, usb_get_process_parent_id() can cause an infinite loop DoS because it does not initialize *ppid on failure. In pusb_local_login(), the same variable is reused as input and output in a process-tree while loop; if /proc/ /stat cannot be read (for example, when an ancestor process exits during authentication), the PID is not updated and the loop does not terminate. This hangs the authenticating process (such as sudo, sshd, or login) until it is forcibly terminated. This issue has been fixed in version 0.9.2.",
       "published": "2026-06-18T18:16:19.807Z",
@@ -39662,56 +39788,6 @@
       "tags": [
         "GitHub",
         "CWE-290"
-      ]
-    },
-    {
-      "id": "CVE-2026-50268",
-      "summary": "Steeltoe is an open source project that provides a collection of libraries that helps users build cloud-native applications. In Steeltoe.Configuration.Encryption 4.0.0 through 4.1.0, configuring `encrypt:rsa:algorithm=OAEP` does not enable OAEP encryption. Due to an incorrect BouncyCastle transformation string, the `OAEP` setting selects PKCS#1 v1.5, which is the same algorithm as the `DEFAULT` setting. Steeltoe.Configuration.Encryption version 4.2.0 patches the issue.",
-      "published": "2026-06-17T23:17:04.730Z",
-      "lastModified": "2026-06-22T18:20:40.350Z",
-      "severity": "Low",
-      "cvssScore": 1.9,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00046,
-      "epssPercentile": 0.00001,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-256",
-          "name": "CWE-256",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-327",
-          "name": "CWE-327",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.67,
-      "tags": [
-        "CWE-256",
-        "CWE-327"
       ]
     },
     {
@@ -40948,51 +41024,6 @@
       "tags": [
         "Google",
         "CWE-287"
-      ]
-    },
-    {
-      "id": "CVE-2026-12566",
-      "summary": "The docker_pull module uses the realm parameter from a Docker registry's WWW-Authenticate response header as the authentication endpoint without validation. An attacker in a man-in-the-middle position between bbot and a Docker registry could modify this header to redirect the authentication request to an arbitrary endpoint, potentially leaking authentication tokens.",
-      "published": "2026-06-17T23:17:03.100Z",
-      "lastModified": "2026-06-22T17:45:43.473Z",
-      "severity": "Low",
-      "cvssScore": 3.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00167,
-      "epssPercentile": 0.06268,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Docker",
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.3,
-      "tags": [
-        "Docker",
-        "CWE-918"
       ]
     },
     {
@@ -42393,51 +42424,6 @@
       "priorityScore": 0.82,
       "tags": [
         "CWE-290"
-      ]
-    },
-    {
-      "id": "CVE-2026-12567",
-      "summary": "The github_workflows module constructs local directory paths from user-controlled repository names without validating for symlinks. A local attacker sharing the scan directory can plant a symlink at the predictable output path, causing workflow data to be written to an attacker-chosen location.",
-      "published": "2026-06-17T23:17:03.220Z",
-      "lastModified": "2026-06-22T17:45:43.473Z",
-      "severity": "Low",
-      "cvssScore": 2.2,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00091,
-      "epssPercentile": 0.00602,
-      "isKev": false,
-      "kev": null,
-      "vendor": "GitHub",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-59",
-          "name": "CWE-59",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.79,
-      "tags": [
-        "GitHub",
-        "CWE-59"
       ]
     },
     {
