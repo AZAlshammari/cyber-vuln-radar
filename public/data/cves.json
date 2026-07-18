@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-17T23:35:59.522Z",
+  "generatedAt": "2026-07-18T01:07:33.705Z",
   "count": 1000,
   "items": [
     {
@@ -5074,56 +5074,6 @@
       ]
     },
     {
-      "id": "CVE-2026-48768",
-      "summary": "TypeBot is a chatbot builder tool. In versions 3.16.1 and earlier, POST /api/blocks/file-input/v3/generate-upload-url is unauthenticated and uses unsanitized fileName input to construct public/ S3 object keys, while issuing presigned PUT URLs that do not bind Content-Type. As a result, any anonymous visitor to a published bot with a file input can upload attacker-controlled HTML, SVG, or JS to attacker-chosen subpaths, including other tenants’ publicly served result paths, enabling arbitrary content hosting and potential stored XSS on the storage origin. ../ traversal is blocked by S3/MinIO canonicalization (signature mismatch), but forward-slash path injection is exploitable. This issue has been fixed in version 3.17.0.",
-      "published": "2026-06-18T00:16:23.887Z",
-      "lastModified": "2026-06-22T18:27:30.807Z",
-      "severity": "Critical",
-      "cvssScore": 9.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00268,
-      "epssPercentile": 0.18611,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        },
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.91,
-      "tags": [
-        "CWE-22",
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-56382",
       "summary": "Craft CMS (composer package craftcms/cms) versions >= 5.5.0 and <= 5.9.13 contain a remote code execution vulnerability in the FieldsController::actionRenderCardPreview() method, which passes the fieldLayoutConfig POST parameter directly to Fields::createLayout() without calling Component::cleanseConfig(). An authenticated admin user can inject Yii2 event handlers (e.g., 'on init' keys) via the fieldLayoutConfig parameter to execute arbitrary PHP code and disclose sensitive information (such as environment variables containing database credentials and CRAFT_SECURITY_KEY). The issue is fixed in version 5.9.14.",
       "published": "2026-06-21T14:16:25.757Z",
@@ -8990,50 +8940,6 @@
       "priorityScore": 4.55,
       "tags": [
         "CWE-184"
-      ]
-    },
-    {
-      "id": "CVE-2026-48764",
-      "summary": "TypeBot is a chatbot builder tool. In versions prior to 3.17.2, SSRF validation is implemented by resolving a hostname once and checking whether the resolved IP belongs to a forbidden range allowing for DNS rebinding bypass. The root cause is a time-of-check to time-of-use gap in the SSRF guard. The validator resolves the hostname and approves it, but the later request path performs a fresh resolution and connects to whatever IP the hostname maps to at that moment. The actual outbound request is then performed later using the original hostname, without pinning the validated IP to the network connection. An attacker who can supply a URL to a public bot that performs a server-side HTTP Request block or server-side script fetch can use DNS rebinding to pass the initial validation and still force the server to connect to a private or metadata address during the real request. This enables server-side access to private network services, cloud metadata endpoints, and other internal HTTP targets that the validator was intended to block. The exact downstream impact depends on the reachable internal services. Concrete consequences include metadata disclosure, access to internal admin panels, credential theft from metadata services, and further compromise through internal-only HTTP interfaces. This issue has been fixed in version 3.17.2.",
-      "published": "2026-06-18T00:16:23.363Z",
-      "lastModified": "2026-06-22T18:27:30.807Z",
-      "severity": "High",
-      "cvssScore": 8.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00271,
-      "epssPercentile": 0.19087,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.54,
-      "tags": [
-        "CWE-918"
       ]
     },
     {
@@ -13250,6 +13156,51 @@
         "F5",
         "Windows",
         "CWE-74"
+      ]
+    },
+    {
+      "id": "CVE-2026-9643",
+      "summary": "The WP Meta SEO plugin for WordPress is vulnerable to Unauthenticated Stored Cross-Site Scripting via the REQUEST_URI server variable in all versions up to, and including, 4.5.18. When the plugin's `wpmsTemplateRedirect()` hook detects a 404, it concatenates `$_SERVER['HTTP_HOST']` with the raw `$_SERVER['REQUEST_URI']` and inserts that value verbatim into the `wp_wpms_links.link_url` column via `$wpdb->insert()`. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that execute whenever an administrator views the plugin's 404 & Redirects admin page (`/wp-admin/admin.php?page=metaseo_broken_link`).",
+      "published": "2026-06-24T07:16:30.093Z",
+      "lastModified": "2026-06-29T20:17:41.527Z",
+      "severity": "High",
+      "cvssScore": 7.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00241,
+      "epssPercentile": 0.15174,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.05,
+      "tags": [
+        "WordPress",
+        "CWE-79"
       ]
     },
     {
@@ -30269,6 +30220,51 @@
       "priorityScore": 2.62,
       "tags": [
         "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-9620",
+      "summary": "The WP Latest Posts plugin for WordPress is vulnerable to Stored Cross-Site Scripting via crafted image src attributes in post content in versions up to, and including, 5.0.11. This is due to insufficient output escaping in the field() and loop() functions, which extract the raw src attribute value from tags within post_content using a regular expression and then reconstruct new elements or CSS background-image declarations by directly concatenating the unescaped value — bypassing WordPress's kses filtering entirely. This makes it possible for authenticated attackers, with author-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
+      "published": "2026-06-24T07:16:29.973Z",
+      "lastModified": "2026-06-25T14:16:56.720Z",
+      "severity": "Medium",
+      "cvssScore": 6.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00207,
+      "epssPercentile": 0.10882,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.62,
+      "tags": [
+        "WordPress",
+        "CWE-79"
       ]
     },
     {
