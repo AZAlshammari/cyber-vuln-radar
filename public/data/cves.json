@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-18T23:28:41.283Z",
+  "generatedAt": "2026-07-19T01:04:36.119Z",
   "count": 1000,
   "items": [
     {
@@ -1166,50 +1166,6 @@
       ]
     },
     {
-      "id": "CVE-2026-40624",
-      "summary": "Improper input validation in AVer PTC500S, PTC115, PTC500+, and PTC115+ cameras may allow a remote, unauthenticated attacker to achieve arbitrary code execution via a specially crafted web request.",
-      "published": "2026-06-19T00:16:47.693Z",
-      "lastModified": "2026-06-22T20:30:53.723Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00616,
-      "epssPercentile": 0.45536,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-552",
-          "name": "CWE-552",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 6.02,
-      "tags": [
-        "CWE-552"
-      ]
-    },
-    {
       "id": "CVE-2026-49468",
       "summary": "LiteLLM is a proxy server (AI Gateway) to call LLM APIs in OpenAI (or native) format. Prior to 1.84.0, a Host-header parsing flaw in the LiteLLM proxy could, under specific conditions, allow unauthenticated access to protected management routes. The auth layer derived the effective route from request.url.path in litellm/proxy/auth/auth_utils.py::get_request_route(), which Starlette reconstructs from the Host header. A crafted Host could therefore make the auth gate evaluate a different route from the one FastAPI dispatched. This vulnerability is fixed in 1.84.0.",
       "published": "2026-06-22T21:16:25.190Z",
@@ -1295,56 +1251,6 @@
       "priorityScore": 5.89,
       "tags": [
         "CWE-94"
-      ]
-    },
-    {
-      "id": "CVE-2026-12046",
-      "summary": "Two state-mutating endpoints in pgAdmin 4's SQL Editor blueprint -- DELETE /sqleditor/close/ and POST /sqleditor/initialize/sqleditor/update_connection/ / / -- were the only routes in the module missing the @pga_login_required decorator. Both reach a pickle.loads sink on session['gridData'][ ]['command_obj']: the close endpoint via close_sqleditor_session(), and update_sqleditor_connection via check_transaction_status(). In server mode these endpoints were reachable without any authenticated pgAdmin session. The defect is a missing-authentication-on-critical-function (CWE-306) wrapper around a deserialization-of-untrusted-data sink (CWE-502). Exploiting it for remote code execution requires the attacker to also forge a server-side session file whose gridData entry contains a malicious pickle payload, which in turn requires both (a) knowledge of pgAdmin's Flask SECRET_KEY (no chain to leak it is described here -- the attacker must already possess it) and (b) write access to pgAdmin's sessions/ directory on the host. Neither precondition is granted by this defect on its own. When those preconditions are met from another channel (misconfigured deployment, prior compromise, leaked configuration), the missing auth gate is the final hop that turns an existing partial compromise into unauthenticated code execution in the pgAdmin process -- and, by extension, on the host under whatever account runs pgAdmin. Fix is a one-line @pga_login_required decorator on each of the two endpoints, matching the convention used by every other route in the module. The is_authenticated / MFA chain now runs before the trans_id is dereferenced, so an unauthenticated request is rejected before reaching the deserialization path. The defect is server-mode only. In DESKTOP mode pgAdmin's before_request hook re-authenticates DESKTOP_USER on every request, so no endpoint can be exercised in an unauthenticated state and no auth decorator (or its absence) is meaningful. The accompanying regression test mirrors the attacker's path -- harvests an X-pgA-CSRFToken from GET /login and replays it against both endpoints -- and self-skips outside server mode for that reason; it is wired into the existing server-mode CI workflow alongside the data-isolation tests. This issue affects pgAdmin 4: from 6.9 before 9.16.",
-      "published": "2026-06-19T00:16:46.873Z",
-      "lastModified": "2026-07-01T19:27:45.763Z",
-      "severity": "Critical",
-      "cvssScore": 9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0071,
-      "epssPercentile": 0.49409,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-502",
-          "name": "Deserialization of Untrusted Data",
-          "description": "Untrusted serialized data can alter control flow or objects."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.88,
-      "tags": [
-        "CWE-306",
-        "CWE-502"
       ]
     },
     {
@@ -1981,56 +1887,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12045",
-      "summary": "Read-only transaction bypass in the pgAdmin 4 AI Assistant allows an attacker who can influence database content that the assistant reads to execute arbitrary SQL with the privileges of the pgAdmin user's database role. The AI Assistant's execute_sql_query tool runs LLM-generated SQL inside a BEGIN TRANSACTION READ ONLY wrapper to prevent data modification. The LLM-supplied query was forwarded to the database driver without restriction to a single statement or to read-only verbs, so a multi-statement payload beginning with COMMIT, END, ROLLBACK, or ABORT terminated the read-only transaction and ran subsequent statements in autocommit mode. The trailing ROLLBACK then had no effect. Delivery is via prompt injection: an attacker who can write content into any object the AI Assistant may inspect (a row, a column value, a comment) can cause the LLM to emit the multi-statement payload as a tool call. With ordinary write privileges on the pgAdmin user's role the attacker can perform unauthorised data modification. When the pgAdmin user's role is a PostgreSQL superuser or holds pg_execute_server_program, the chain extends to remote code execution on the database server host via COPY ... TO PROGRAM. Fix validates the LLM-supplied query up front: it must parse to exactly one non-empty / non-comment statement whose leading real token (after stripping whitespace, comments, and punctuation) is one of SELECT, WITH, EXPLAIN, SHOW, VALUES, or TABLE. Transaction-control verbs, DML, DDL, CALL, COPY, DO, SET/RESET, and everything else are rejected before any database work happens. PostgreSQL's READ ONLY mode continues to backstop data-modifying CTEs, EXPLAIN ANALYZE on writes, and volatile side effects. This issue affects pgAdmin 4: from 9.13 before 9.16.",
-      "published": "2026-06-19T00:16:46.703Z",
-      "lastModified": "2026-07-01T19:26:30.593Z",
-      "severity": "Critical",
-      "cvssScore": 9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00482,
-      "epssPercentile": 0.38441,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-77",
-          "name": "CWE-77",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.5,
-      "tags": [
-        "CWE-77",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-9843",
       "summary": "The Database for Contact Form 7, WPforms, Elementor forms plugin for WordPress is vulnerable to arbitrary file deletion due to insufficient file path validation in the view_page function in all versions up to, and including, 1.5.1. This makes it possible for unauthenticated attackers to delete arbitrary files on the server, which can easily lead to remote code execution when the right file is deleted (such as wp-config.php). Successful exploitation requires an administrator to view or edit the poisoned form entry, at which point PHP's bracket parser reshapes the attacker-crafted JSON key to bypass the stored-path isset check and trigger deletion of the traversal-specified file.",
       "published": "2026-06-20T02:16:26.910Z",
@@ -2355,56 +2211,6 @@
       "tags": [
         "CWE-77",
         "CWE-78"
-      ]
-    },
-    {
-      "id": "CVE-2026-12044",
-      "summary": "SQL injection in pgAdmin 4 across every dialog template that renders ``COMMENT ON ... IS ' '`` for a user-supplied description field. The Jinja templates for Domains (and their constraints), Foreign Tables, Languages, and Event Triggers, plus the Views OID-lookup query, interpolated the description directly inside a single-quoted SQL literal -- ``'{{ data.description }}'`` -- instead of passing it through the ``qtLiteral`` escape filter. An authenticated pgAdmin user with permission to create or alter the affected object types could submit a description containing an apostrophe, break out of the literal and chain arbitrary SQL. The injected SQL runs under the PostgreSQL role the user is already authenticated as; for a connected role with ``COPY ... TO/FROM PROGRAM`` (typically PostgreSQL superuser), this chains to OS command execution on the PostgreSQL host. The defect does not cross a privilege boundary -- the user already has direct SQL access to that role through pgAdmin's Query Tool -- so the attacker gains no capability beyond what their database role already grants. The marginal impact captures bypass of any application-layer Query Tool gating an operator may have configured. The defect was originally reported against the Domain Dialog ``description`` field; a code-wide audit identified sixteen sites of the same pattern across the templates listed above. The same review also surfaced ten related sinks in the pgstattuple/pgstatindex stats templates -- ``pgstattuple('{{schema}}.{{table}}')`` and the matching pgstatindex shape -- where ``qtIdent`` escapes embedded double quotes inside the identifier but not apostrophes, so a user with CREATE privilege on a schema could plant a table or index named ``foo'bar`` and a later stats viewer would render an unbalanced literal. Fix is layered: 1. Sites: replace every ``'{{ x.description }}'`` with ``{{ x.description|qtLiteral(conn) }}`` (no surrounding quotes -- the filter wraps the value in escaped quotes itself). Plumb ``conn=self.conn`` through every ``render_template`` call that loads one of these templates. Also corrects a ``{ % elif`` Jinja typo in the foreign-table schema diff (dead branch). Rewrite the ten pgstattuple/pgstatindex stats sites to address the relation via OID + ``::oid::regclass`` cast (e.g. ``pgstattuple({{ tid }}::oid::regclass)``), eliminating the embedded literal-call form entirely so that bug-class can no longer recur there. 2. Driver hardening: ``qtLiteral`` (in ``utils/driver/psycopg3/__init__.py``) used to silently return the raw unescaped value when its ``conn`` argument was falsy. It now raises ``ValueError`` -- surfacing the entire bug class going forward. The change immediately uncovered eight latent plumbing bugs (in ``schemas/__init__.py``, ``schemas/functions/__init__.py``, ``schemas/tables/utils.py``, ``foreign_servers/__init__.py``, and seven sites in ``roles/__init__.py``) -- all fixed as part of this patch. The inner ``except`` block that swallowed adapter-level failures and returned the raw value is also removed, so unadaptable inputs raise instead of leaking unescaped values. 3. Regression tests: a per-template behavioural test renders each previously-vulnerable template with an apostrophe-injection payload and asserts the escaped fragment is present and the vulnerable fragment absent; a lint test walks every ``*.sql`` template flagging any ``'{{ ... }}'`` single-quote-wrapped interpolation against an explicit allowlist; unit tests cover the new qtLiteral fail-fast and inner-except raise paths. This issue affects pgAdmin 4: from 1.0 before 9.16.",
-      "published": "2026-06-19T00:16:46.053Z",
-      "lastModified": "2026-07-01T19:23:39.010Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00489,
-      "epssPercentile": 0.38878,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        },
-        {
-          "id": "CWE-116",
-          "name": "CWE-116",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.44,
-      "tags": [
-        "CWE-89",
-        "CWE-116"
       ]
     },
     {
@@ -3862,6 +3668,52 @@
       "tags": [
         "WordPress",
         "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-52974",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: tls: fix strparser anchor skb leak on offload RX setup failure When tls_set_device_offload_rx() fails at tls_dev_add(), the error path calls tls_sw_free_resources_rx() to clean up the SW context that was initialized by tls_set_sw_offload(). This function calls tls_sw_release_resources_rx() (which stops the strparser via tls_strp_stop()) and tls_sw_free_ctx_rx() (which kfrees the context), but never frees the anchor skb that was allocated by alloc_skb(0) in tls_strp_init(). Note that tls_sw_free_resources_rx() is exclusively used for this \"failed to start offload\" code path, there's no other caller. The leak did not exist before commit 84c61fe1a75b (\"tls: rx: do not use the standard strparser\"), because the standard strparser doesn't try to pre-allocate an skb. The normal close path in tls_sk_proto_close() handles cleanup by calling tls_sw_strparser_done() (which calls tls_strp_done()) after dropping the socket lock, because tls_strp_done() does cancel_work_sync() and the strparser work handler takes the socket lock.",
+      "published": "2026-06-24T17:17:07.933Z",
+      "lastModified": "2026-07-14T16:52:45.310Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00506,
+      "epssPercentile": 0.39902,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.02,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-401"
       ]
     },
     {
@@ -16461,56 +16313,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12048",
-      "summary": "Stored cross-site scripting in pgAdmin 4's error-rendering and plan-node-rendering paths. Text returned by a PostgreSQL server (ErrorResponse messages, including object names quoted back inside relation-does-not-exist errors and inside EXPLAIN Recheck Cond / Exact Heap Blocks fields) was passed verbatim through html-react-parser at every user-facing sink — the notifier toasts, FormFooterMessage / FormInput help and error areas, FormNote, ModalProvider AlertContent and confirmDelete, ToolErrorView, the Explain visualiser's NodeText panel, the SQL editor confirm dialogs, ConfirmSaveContent, PreferencesHelper modal alerts, and SelectThemes helper text. A PostgreSQL server an attacker controls — or any server returning attacker-influenced text such as a table or column name a low-privilege database user can create — could inject arbitrary HTML (including ) into the pgAdmin DOM the moment the victim's pgAdmin connected to that server or viewed an Explain plan that referenced the crafted object. The injected iframe's srcdoc could fetch attacker-served JavaScript and, by writing to parent.location, redirect the victim's top-level pgAdmin browser tab to an attacker-controlled URL. Because the injection originates from inside pgAdmin's own interface, standard anti-clickjacking controls (X-Frame-Options, Content-Security-Policy: frame-ancestors) do not mitigate it. A phishing page rendered inside the legitimate pgAdmin window is indistinguishable from a genuine pgAdmin dialog. Fix combines three complementary layers. (1) DOMPurify sanitisation is wrapped around every html-react-parser call site reachable from notifier, alert, form-error, Explain, and SQL-editor flows. (2) A new plain-text rendering contract — SafeMessage / SafeHtmlMessage components plus Notifier.errorText / alertText / warningText / infoText / successText helpers — is introduced; around fifty callers across browser, tools, dashboard, debugger, misc, llm, preferences, schema diff, and the SQL editor that previously interpolated backend-derived strings are migrated to the plain-text variants. (3) Backend HTML-escape is applied at the post-connection-SQL handler (execute_post_connection_sql) via a new sanitize_external_text helper, so third-party JSON consumers (audit logs, API clients) never receive raw markup either; the Explain plan-info renderer is also patched to _.escape Recheck Cond and Exact Heap Blocks at construction (matching every sibling field), giving defence in depth even before DOMPurify runs. This issue affects pgAdmin 4: from 6.0 before 9.16.",
-      "published": "2026-06-19T00:16:47.200Z",
-      "lastModified": "2026-06-29T15:17:13.730Z",
-      "severity": "Critical",
-      "cvssScore": 9.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.0021,
-      "epssPercentile": 0.11247,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-116",
-          "name": "CWE-116",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.65,
-      "tags": [
-        "CWE-79",
-        "CWE-116"
-      ]
-    },
-    {
       "id": "CVE-2026-48500",
       "summary": "Filament is a collection of full-stack components for accelerated Laravel development. From 3.0.0 until 3.3.52, 4.11.5, and 5.6.5, any schema can contain a file upload form field, so Filament applies Livewire's WithFileUploads trait to the Livewire component the schema is embedded in. However, some schemas, such as the panel login form, do not require file uploads, and exposing unauthenticated temporary file uploads on these components is not an acceptable risk. On these components, an unauthenticated attacker could upload arbitrary files to the application's temporary storage, which could be abused to exhaust disk space or inflate storage costs. This vulnerability is fixed in 3.3.52, 4.11.5, and 5.6.5.",
       "published": "2026-06-22T22:16:47.013Z",
@@ -18972,50 +18774,6 @@
         "CWE-284",
         "CWE-639",
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-50034",
-      "summary": "An attacker within BLE communication range can passively intercept wireless traffic and obtain sensitive health-related information, including glucose measurement values.",
-      "published": "2026-06-19T00:16:47.980Z",
-      "lastModified": "2026-06-22T20:30:53.723Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00145,
-      "epssPercentile": 0.04207,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-319",
-          "name": "CWE-319",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.42,
-      "tags": [
-        "CWE-319"
       ]
     },
     {
@@ -21580,6 +21338,52 @@
       ]
     },
     {
+      "id": "CVE-2026-52968",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: KVM: s390: pci: fix GAIT table indexing due to double-scaling pointer arithmetic kvm_s390_pci_aif_enable(), kvm_s390_pci_aif_disable(), and aen_host_forward() index the GAIT by manually multiplying the index with sizeof(struct zpci_gaite). Since aift->gait is already a struct zpci_gaite pointer, this double-scales the offset, accessing element aisb*16 instead of aisb. This causes out-of-bounds accesses when aisb >= 32 (with ZPCI_NR_DEVICES=512) Fix by removing the erroneous sizeof multiplication.",
+      "published": "2026-06-24T17:17:07.243Z",
+      "lastModified": "2026-07-18T08:16:35.323Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00138,
+      "epssPercentile": 0.03627,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.21,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-125"
+      ]
+    },
+    {
       "id": "CVE-2026-12725",
       "summary": "A heap-based buffer overflow was found in dnsmasq. When DNSSEC validation and query logging are both enabled, logging of DS or DNSKEY replies containing unsupported algorithm or digest types can cause dnsmasq to write past the end of an internal logging buffer. A remote attacker able to supply such a DNS response may crash the dnsmasq process, resulting in denial of service.",
       "published": "2026-06-22T16:16:34.490Z",
@@ -22908,50 +22712,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12050",
-      "summary": "SQL injection in pgAdmin 4's named restore point endpoint (POST /browser/server/restore_point/{gid}/{sid}). The user-supplied 'value' field was interpolated directly into the SQL string with str.format() instead of being passed as a bound parameter, allowing an authenticated pgAdmin user with a connected PostgreSQL session to inject additional statements through that endpoint. The injected SQL executes under the database role the user is already authenticated as. The defect does not cross a privilege boundary -- the user already has direct SQL access to that role through the Query Tool -- so the attacker gains no capability beyond what their database role already grants them. The marginal impact accounts for the fact that the injection path is not the documented SQL-execution interface, so a deployment that gates the Query Tool at the application layer could see SQL executed through a path it did not anticipate. Fix passes the restore point name as a bound parameter and schema-qualifies the function call as pg_catalog.pg_create_restore_point so a non-default search_path on the connection cannot redirect the call to a shadow definition. A regression test asserts the value arrives as a bound parameter and not spliced into the SQL string. This issue affects pgAdmin 4: from 1.0 before 9.16.",
-      "published": "2026-06-19T00:16:47.517Z",
-      "lastModified": "2026-06-29T15:15:52.040Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00245,
-      "epssPercentile": 0.15617,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.05,
-      "tags": [
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-54290",
       "summary": "Hono is a Web application framework that provides support for any JavaScript runtime. Prior to 4.12.25, with credentials: true and no explicit origin (the default wildcard), the CORS Middleware reflects the request's Origin and sends Access-Control-Allow-Credentials: true. Any site can then make credentialed cross-origin requests and read the responses, exposing cookie-authenticated endpoints to arbitrary origins. This vulnerability is fixed in 4.12.25.",
       "published": "2026-06-22T18:16:47.620Z",
@@ -24136,50 +23896,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12049",
-      "summary": "Open redirect in pgAdmin 4's multi-factor authentication flow. The MFA validate and register endpoints honoured the user-supplied 'next' query/form parameter without confirming the target pointed back inside pgAdmin, so an authenticated victim who clicked /mfa/validate?next= -- a link typically delivered by phishing -- would be sent to an attacker-controlled host directly out of the trusted auth flow. The defect is a trusted-domain redirect, not a privilege bypass: the attacker gains no read/write access to pgAdmin or the victim's database, but the redirect launders the attacker's destination through pgAdmin's URL, which raises the success rate of credential-phishing follow-on against the victim. Fix introduces a same-origin _is_safe_redirect_url helper and gates every MFA redirect that consumes user-supplied 'next' values through it. The helper allows only relative paths and absolute URLs whose scheme is http(s) and whose host matches the current request host; it rejects external hosts in absolute and protocol-relative form, non-http schemes (javascript:, data:, mailto:), userinfo tricks (http://localhost@attacker/), and backslash variants that some browsers normalize to forward slashes. Unsafe targets fall back to the internal browser index. A dedicated regression test exercises each accept/reject category and the original reporter PoC. This issue affects pgAdmin 4: from 6.0 before 9.16.",
-      "published": "2026-06-19T00:16:47.367Z",
-      "lastModified": "2026-06-29T15:16:21.470Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00218,
-      "epssPercentile": 0.12262,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-601",
-          "name": "CWE-601",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.93,
-      "tags": [
-        "CWE-601"
-      ]
-    },
-    {
       "id": "CVE-2026-55249",
       "summary": "@rtk-ai/rtk-rewrite transparently rewrites shell commands executed via OpenClaw's exec tool to their RTK equivalents. In 1.0.0, the @rtk-ai/rtk-rewrite OpenClaw plugin passes attacker-controlled input directly into a shell-backed execSync() template string without shell-safe escaping. JSON.stringify() wraps the value in double quotes and escapes inner double-quotes and backslashes, but leaves $() and backtick shell metacharacters untouched. Because execSync delegates execution to /bin/sh -c, the shell expands $(...) substitutions even inside double-quoted strings, causing the injected subcommand to execute before rtk is invoked. An attacker who can influence the exec tool's command parameter (e.g., via an LLM agent prompt or gateway/tool-call input) achieves arbitrary OS command execution with the privileges of the plugin/gateway process.",
       "published": "2026-06-23T19:17:11.713Z",
@@ -24645,6 +24361,57 @@
       "tags": [
         "WordPress",
         "CWE-200"
+      ]
+    },
+    {
+      "id": "CVE-2026-52969",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: KVM: Reject wrapped offset in kvm_reset_dirty_gfn() kvm_reset_dirty_gfn() guards the gfn range with if (!memslot || (offset + __fls(mask)) >= memslot->npages) return; but offset is u64 and the addition is unchecked. The check can be silently bypassed by a u64 wrap. The dirty ring backing those entries is MAP_SHARED at KVM_DIRTY_LOG_PAGE_OFFSET of the vcpu fd, so the VMM can rewrite the slot and offset fields of any entry between when the kernel pushes them and when KVM_RESET_DIRTY_RINGS consumes them. On reset, kvm_dirty_ring_reset() re-reads the values via READ_ONCE() and feeds them straight back into this check; only the flags handshake is treated as the handover, the slot/offset payload is taken on trust. Crafting two entries entry[i].offset = 0xffffffffffffffc1 entry[i+1].offset = 0 makes the coalescing loop in kvm_dirty_ring_reset() compute delta = (s64)(0 - 0xffffffffffffffc1) = 63 which falls in [0, BITS_PER_LONG), so it folds entry[i+1] into the existing mask by setting bit 63. The trailing kvm_reset_dirty_gfn() call then sees offset = 0xffffffffffffffc1 and __fls(mask) = 63; the sum is 0 in u64 and the bounds check passes. That offset propagates into kvm_arch_mmu_enable_log_dirty_pt_masked() unchanged. On the legacy MMU path -- kvm_memslots_have_rmaps() == true, i.e. shadow paging, any VM that has allocated shadow roots, or a write-tracked slot -- it reaches gfn_to_rmap(), which indexes slot->arch.rmap[0][] with a near-U64_MAX gfn. That is an out-of-bounds load of a kvm_rmap_head, followed by a conditional clear of PT_WRITABLE_MASK in whatever the loaded pointer points at. The path is reachable from any process holding /dev/kvm. Range-check offset on its own first, so the addition cannot wrap. memslot->npages is bounded well below U64_MAX, so once offset < npages holds, offset + __fls(mask) (with __fls(mask) < BITS_PER_LONG) stays in range.",
+      "published": "2026-06-24T17:17:07.367Z",
+      "lastModified": "2026-07-15T01:16:24.590Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00152,
+      "epssPercentile": 0.04787,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-129",
+          "name": "CWE-129",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-190",
+          "name": "CWE-190",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.9,
+      "tags": [
+        "Linux",
+        "CWE-129",
+        "CWE-190"
       ]
     },
     {
@@ -25198,6 +24965,47 @@
       ]
     },
     {
+      "id": "CVE-2026-52975",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: bonding: 3ad: implement proper RCU rules for port->aggregator syzbot found a data-race in bond_3ad_get_active_agg_info / bond_3ad_state_machine_handler [1] which hints at lack of proper RCU implementation. Add __rcu qualifier to port->aggregator, and add proper RCU API. [1] BUG: KCSAN: data-race in bond_3ad_get_active_agg_info / bond_3ad_state_machine_handler write to 0xffff88813cf5c4b0 of 8 bytes by task 36 on cpu 0: ad_port_selection_logic drivers/net/bonding/bond_3ad.c:1659 [inline] bond_3ad_state_machine_handler+0x9d5/0x2d60 drivers/net/bonding/bond_3ad.c:2569 process_one_work kernel/workqueue.c:3302 [inline] process_scheduled_works+0x4f0/0x9c0 kernel/workqueue.c:3385 worker_thread+0x58a/0x780 kernel/workqueue.c:3466 kthread+0x22a/0x280 kernel/kthread.c:436 ret_from_fork+0x146/0x330 arch/x86/kernel/process.c:158 ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245 read to 0xffff88813cf5c4b0 of 8 bytes by task 22063 on cpu 1: __bond_3ad_get_active_agg_info drivers/net/bonding/bond_3ad.c:2858 [inline] bond_3ad_get_active_agg_info+0x8c/0x230 drivers/net/bonding/bond_3ad.c:2881 bond_fill_info+0xe0f/0x10f0 drivers/net/bonding/bond_netlink.c:853 rtnl_link_info_fill net/core/rtnetlink.c:906 [inline] rtnl_link_fill+0x1d7/0x4e0 net/core/rtnetlink.c:927 rtnl_fill_ifinfo+0xf8e/0x1380 net/core/rtnetlink.c:2168 rtmsg_ifinfo_build_skb+0x11c/0x1b0 net/core/rtnetlink.c:4453 rtmsg_ifinfo_event net/core/rtnetlink.c:4486 [inline] rtmsg_ifinfo+0x6d/0x110 net/core/rtnetlink.c:4495 __dev_notify_flags+0x76/0x390 net/core/dev.c:9790 netif_change_flags+0xac/0xd0 net/core/dev.c:9823 do_setlink+0x905/0x2950 net/core/rtnetlink.c:3180 rtnl_group_changelink net/core/rtnetlink.c:3813 [inline] __rtnl_newlink net/core/rtnetlink.c:3981 [inline] rtnl_newlink+0xf55/0x1400 net/core/rtnetlink.c:4109 rtnetlink_rcv_msg+0x64b/0x720 net/core/rtnetlink.c:6995 netlink_rcv_skb+0x123/0x220 net/netlink/af_netlink.c:2550 rtnetlink_rcv+0x1c/0x30 net/core/rtnetlink.c:7022 netlink_unicast_kernel net/netlink/af_netlink.c:1318 [inline] netlink_unicast+0x5a8/0x680 net/netlink/af_netlink.c:1344 netlink_sendmsg+0x5c8/0x6f0 net/netlink/af_netlink.c:1894 sock_sendmsg_nosec net/socket.c:787 [inline] __sock_sendmsg net/socket.c:802 [inline] ____sys_sendmsg+0x563/0x5b0 net/socket.c:2698 ___sys_sendmsg+0x195/0x1e0 net/socket.c:2752 __sys_sendmsg net/socket.c:2784 [inline] __do_sys_sendmsg net/socket.c:2789 [inline] __se_sys_sendmsg net/socket.c:2787 [inline] __x64_sys_sendmsg+0xd4/0x160 net/socket.c:2787 x64_sys_call+0x194c/0x3020 arch/x86/include/generated/asm/syscalls_64.h:47 do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline] do_syscall_64+0x12c/0x3b0 arch/x86/entry/syscall_64.c:94 entry_SYSCALL_64_after_hwframe+0x77/0x7f value changed: 0x0000000000000000 -> 0xffff88813cf5c400 Reported by Kernel Concurrency Sanitizer on: CPU: 1 UID: 0 PID: 22063 Comm: syz.0.31122 Tainted: G W syzkaller #0 PREEMPT(full) Tainted: [W]=WARN Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026",
+      "published": "2026-06-24T17:17:08.050Z",
+      "lastModified": "2026-07-14T16:52:32.697Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00138,
+      "epssPercentile": 0.03625,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.86,
+      "tags": [
+        "Google",
+        "F5",
+        "Linux",
+        "iOS"
+      ]
+    },
+    {
       "id": "CVE-2026-52947",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net: qrtr: fix refcount saturation and potential UAF in qrtr_port_remove In qrtr_port_remove(), the socket reference count is decremented via __sock_put() before the port is removed from the qrtr_ports XArray and before the RCU grace period elapses. This breaks the fundamental RCU update paradigm. It exposes a race window where a concurrent RCU reader (such as qrtr_reset_ports() or qrtr_port_lookup()) can obtain a pointer to the socket from the XArray, and attempt to call sock_hold() on a socket whose reference count has already dropped to zero. This exact race condition was hit during syzkaller fuzzing, leading to the following refcount saturation warning and a potential Use-After-Free: refcount_t: saturated; leaking memory. WARNING: CPU: 3 PID: 1273 at lib/refcount.c:22 refcount_warn_saturate+0xae/0x1d0 Modules linked in: qrtr(+) bochs drm_shmem_helper ... Call Trace: qrtr_reset_ports net/qrtr/af_qrtr.c:768 [inline] [qrtr] __qrtr_bind.isra.0+0x48b/0x570 net/qrtr/af_qrtr.c:805 [qrtr] qrtr_bind+0x17d/0x210 net/qrtr/af_qrtr.c:901 [qrtr] kernel_bind+0xe4/0x120 net/socket.c:3592 qrtr_ns_init+0x1a6/0x380 net/qrtr/ns.c:715 [qrtr] qrtr_proto_init+0x3b/0xff0 net/qrtr/af_qrtr.c:169 [qrtr] do_one_initcall+0xf5/0x5e0 init/main.c:1283 ... Fix this by deferring the reference count decrement until after the xa_erase() and the synchronize_rcu() complete. (Note: The v1 of this patch incorrectly replaced __sock_put() with sock_put(). As Simon Horman pointed out, the callers of qrtr_port_remove() still hold a reference to the socket, so freeing the socket memory here would lead to a subsequent UAF in the caller. Thus, the __sock_put() is kept, but only repositioned to close the RCU race.)",
       "published": "2026-06-24T17:17:04.760Z",
@@ -25381,6 +25189,154 @@
         "GitHub",
         "CWE-20",
         "CWE-78"
+      ]
+    },
+    {
+      "id": "CVE-2026-52971",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: ena: PHC: Fix potential use-after-free in get_timestamp Move the phc->active check and resp pointer assignment to after acquiring the spinlock. Previously, phc->active was checked without holding the lock, and resp was cached from ena_dev->phc.virt_addr before the lock was acquired. If ena_com_phc_destroy() runs between the lockless active check and the lock acquisition, it sets active=false, releases the lock, frees the DMA memory, and sets virt_addr=NULL. The get_timestamp path would then read a NULL virt_addr and dereference it. With both the active check and the pointer read under the lock, destroy cannot free the memory while get_timestamp is using it.",
+      "published": "2026-06-24T17:17:07.630Z",
+      "lastModified": "2026-07-14T19:44:58.997Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00133,
+      "epssPercentile": 0.03168,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.84,
+      "tags": [
+        "Linux",
+        "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-52973",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: futex: Drop CLONE_THREAD requirement for private default hash alloc Currently need_futex_hash_allocate_default() depends on strict pthread semantics, abusing CLONE_THREAD. This breaks the non-concurrency assumptions when doing the mm->futex_ref pcpu allocations, leading to bugs[0] when sharing the mm in other ways; ie: BUG: KASAN: slab-use-after-free in futex_hash_put ... where the +1 bias can end up on a percpu counter that mm->futex_ref no longer points at. Loosen the check to cover any CLONE_VM clone, except vfork(). Excluding vfork keeps the existing paths untouched (no overhead), and we can't race in the first place: either the parent is suspended and the child runs alone, or mm->futex_ref is already allocated from an earlier CLONE_VM.",
+      "published": "2026-06-24T17:17:07.840Z",
+      "lastModified": "2026-07-15T01:16:25.040Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00134,
+      "epssPercentile": 0.03252,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        },
+        {
+          "id": "CWE-825",
+          "name": "CWE-825",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.84,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-416",
+        "CWE-825"
+      ]
+    },
+    {
+      "id": "CVE-2026-52976",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/xe: Fix error cleanup in xe_exec_queue_create_ioctl() Two error handling issues exist in xe_exec_queue_create_ioctl(): 1. When xe_hw_engine_group_add_exec_queue() fails, the error path jumps to put_exec_queue which skips xe_exec_queue_kill(). If the VM is in preempt fence mode, xe_vm_add_compute_exec_queue() has already added the queue to the VM's compute exec queue list. Skipping the kill leaves the queue on that list, leading to a dangling pointer after the queue is freed. 2. When xa_alloc() fails after xe_hw_engine_group_add_exec_queue() has succeeded, the error path does not call xe_hw_engine_group_del_exec_queue() to remove the queue from the hw engine group list. The queue is then freed while still linked into the hw engine group, causing a use-after-free. Fix both by: - Changing the xe_hw_engine_group_add_exec_queue() failure path to jump to kill_exec_queue so that xe_exec_queue_kill() properly removes the queue from the VM's compute list. - Adding a del_hw_engine_group label before kill_exec_queue for the xa_alloc() failure path, which removes the queue from the hw engine group before proceeding with the rest of the cleanup. (cherry picked from commit 37c831f401746a45d510b312b0ed7a77b1e06ec8)",
+      "published": "2026-06-24T17:17:08.183Z",
+      "lastModified": "2026-07-15T01:16:25.247Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00134,
+      "epssPercentile": 0.03251,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        },
+        {
+          "id": "CWE-825",
+          "name": "CWE-825",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.84,
+      "tags": [
+        "Linux",
+        "CWE-416",
+        "CWE-825"
       ]
     },
     {
@@ -28582,50 +28538,6 @@
       "priorityScore": 2.73,
       "tags": [
         "CWE-295"
-      ]
-    },
-    {
-      "id": "CVE-2026-52866",
-      "summary": "An attacker within BLE communication range can monopolize the device's only available BLE connection slot, preventing legitimate users or applications from establishing a connection.",
-      "published": "2026-06-19T00:16:48.123Z",
-      "lastModified": "2026-06-22T20:30:53.723Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00222,
-      "epssPercentile": 0.12692,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.72,
-      "tags": [
-        "CWE-862"
       ]
     },
     {
@@ -35381,6 +35293,51 @@
       ]
     },
     {
+      "id": "CVE-2026-52972",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: crypto: af_alg - Cap AEAD AD length to 0x80000000 In order to prevent arithmetic overflows when checking the TX buffer size, cap the associated data length to 0x80000000.",
+      "published": "2026-06-24T17:17:07.727Z",
+      "lastModified": "2026-07-15T01:16:24.827Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00144,
+      "epssPercentile": 0.04068,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-190",
+          "name": "CWE-190",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.07,
+      "tags": [
+        "Linux",
+        "CWE-190"
+      ]
+    },
+    {
       "id": "CVE-2026-54014",
       "summary": "Open WebUI is a self-hosted artificial intelligence platform designed to operate entirely offline. Prior to 0.9.6, a path traversal vulnerability exists in open-webui's cache file serving endpoint that allows any authenticated user to read files from sibling directories outside the intended cache directory, by exploiting an incomplete startswith containment check that lacks a trailing path separator. The root cause is that serve_cache_file() in open_webui/main.py validates the resolved path with file_path.startswith(os.path.abspath(CACHE_DIR)) — without appending os.sep. This allows any path resolving to a sibling directory whose name begins with cache (e.g. cache_sibling, cache_backup, cached_models) to pass validation. This vulnerability is fixed in 0.9.6.",
       "published": "2026-06-23T18:18:06.707Z",
@@ -36084,6 +36041,44 @@
       ]
     },
     {
+      "id": "CVE-2026-52970",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: nft_ct: fix missing expect put in obj eval nft_ct_expect_obj_eval() allocates an expectation and may call nf_ct_expect_related(), but never drops its local reference. Add nf_ct_expect_put(exp) before return to balance allocation.",
+      "published": "2026-06-24T17:17:07.500Z",
+      "lastModified": "2026-07-14T19:45:46.273Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00128,
+      "epssPercentile": 0.02809,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.02,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-12619",
       "summary": "Improper Neutralization of Input During Web Page Generation (XSS or 'Cross-site Scripting') vulnerability in Microchip GridTime 3000 allows Cross-Site Scripting (XSS). This issue affects GridTime 3000: from 1.0r0.03 through 1.1r0.0.",
       "published": "2026-06-19T16:16:16.930Z",
@@ -36460,6 +36455,44 @@
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.01,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-52977",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: futex: Prevent lockup in requeue-PI during signal/ timeout wakeup During wait-requeue-pi (task A) and requeue-PI (task B) the following race can happen: Task A Task B futex_wait_requeue_pi() futex_setup_timer() futex_do_wait() futex_requeue() CLASS(hb, hb1)(&key1); CLASS(hb, hb2)(&key2); *timeout* futex_requeue_pi_wakeup_sync() requeue_state = Q_REQUEUE_PI_IGNORE *blocks on hb->lock* futex_proxy_trylock_atomic() futex_requeue_pi_prepare() Q_REQUEUE_PI_IGNORE => -EAGAIN double_unlock_hb(hb1, hb2) *retry* Task B acquires both hb locks and attempts to acquire the PI-lock of the top most waiter (task B). Task A is leaving early due to a signal/ timeout and started removing itself from the queue. It updates its requeue_state but can not remove it from the list because this requires the hb lock which is owned by task B. Usually task A is able to swoop the lock after task B unlocked it. However if task B is of higher priority then task A may not be able to wake up in time and acquire the lock before task B gets it again. Especially on a UP system where A is never scheduled. As a result task A blocks on the lock and task B busy loops, trying to make progress but live locks the system instead. Tragic. This can be fixed by removing the top most waiter from the list in this case. This allows task B to grab the next top waiter (if any) in the next iteration and make progress. Remove the top most waiter if futex_requeue_pi_prepare() fails. Let the waiter conditionally remove itself from the list in handle_early_requeue_pi_wakeup().",
+      "published": "2026-06-24T17:17:08.293Z",
+      "lastModified": "2026-07-14T16:51:53.230Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00122,
+      "epssPercentile": 0.02386,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
@@ -40935,57 +40968,6 @@
       "priorityScore": 1.38,
       "tags": [
         "CWE-305"
-      ]
-    },
-    {
-      "id": "CVE-2026-12047",
-      "summary": "HTML injection in pgAdmin 4's cloud deployment module. The verify_credentials, deploy, regions, and update-server endpoints under /rds/, /azure/, /google/, and the top-level /cloud/ blueprint propagated AWS / Azure / Google SDK exception text — and the related file-resolution and database-commit exception text — into the JSON response body (the info and errormsg fields) without HTML-encoding. The Cloud Wizard frontend rendered these strings through html-react-parser, so an attacker-influenced exception message embedded structural HTML directly into the wizard's DOM. The reported entry point is /rds/verify_credentials/. An authenticated pgAdmin user submits a crafted access_key whose value contains an payload; AWS STS rejects the credential with an IncompleteSignature exception whose text quotes the access_key verbatim; the pgAdmin backend forwards that text into the JSON info field; the Cloud Wizard's FormFooterMessage parses it as HTML. The browser fetches the iframe's src from an attacker-controlled host, and JavaScript executing inside the cross-origin iframe writes to parent.location, redirecting the victim's pgAdmin tab. Because the injection renders inside pgAdmin's own interface, X-Frame-Options and Content-Security-Policy frame-ancestors do not mitigate it. Baseline impact is self-targeted (the same user who supplied the payload sees the injection); escalation against other authenticated users requires an additional cross-site request-forgery primitive capable of submitting the malformed credential request with a valid X-pgA-CSRFToken in the victim's browser context. The same unsanitised-error-into-JSON pattern was present across multiple sibling endpoints — Azure's check_cluster_name_availability, every Google endpoint that surfaces SDK errors (verification_ack, projects, regions, instance_types, database_versions, the verify_credentials path-resolution branches), the central /deploy endpoint that bubbles str(e) from deploy_on_rds / deploy_on_azure / deploy_on_google, and update_cloud_server which surfaces the str(e) from a failing db.session.commit — all of which are now covered. Fix HTML-escapes every external/SDK exception string at the endpoint sink via a new shared sanitize_external_text helper (HTML escape with control-character strip), promoted out of the psycopg3 driver into web/pgadmin/utils/text_sanitize.py. The Cloud Wizard frontend additionally renders its FormFooterMessage in plain-text mode for backend-derived strings, so the value is never parsed as HTML even if a future sink forgets the escape. This issue affects pgAdmin 4: from 6.6 before 9.16.",
-      "published": "2026-06-19T00:16:47.040Z",
-      "lastModified": "2026-06-29T15:18:08.910Z",
-      "severity": "Low",
-      "cvssScore": 3.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00137,
-      "epssPercentile": 0.03537,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-116",
-          "name": "CWE-116",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.35,
-      "tags": [
-        "Google",
-        "CWE-79",
-        "CWE-116"
       ]
     },
     {
