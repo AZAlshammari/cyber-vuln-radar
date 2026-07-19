@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-19T07:16:38.762Z",
+  "generatedAt": "2026-07-19T09:27:56.261Z",
   "count": 1000,
   "items": [
     {
@@ -9689,6 +9689,52 @@
       ]
     },
     {
+      "id": "CVE-2026-53002",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: conntrack: remove sprintf usage Replace it with scnprintf, the buffer sizes are expected to be large enough to hold the result, no need for snprintf+overflow check. Increase buffer size in mangle_content_len() while at it. BUG: KASAN: stack-out-of-bounds in vsnprintf+0xea5/0x1270 Write of size 1 at addr [..] vsnprintf+0xea5/0x1270 sprintf+0xb1/0xe0 mangle_content_len+0x1ac/0x280 nf_nat_sdp_session+0x1cc/0x240 process_sdp+0x8f8/0xb80 process_invite_request+0x108/0x2b0 process_sip_msg+0x5da/0xf50 sip_help_tcp+0x45e/0x780 nf_confirm+0x34d/0x990 [..]",
+      "published": "2026-06-24T17:17:11.263Z",
+      "lastModified": "2026-07-15T01:16:26.590Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00359,
+      "epssPercentile": 0.28159,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.42,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-787"
+      ]
+    },
+    {
       "id": "CVE-2026-9375",
       "summary": "urllib3 version 2.6.3 is vulnerable to a decompression bomb bypass in its streaming API (`preload_content=False`) when using Brotli support. The issue arises due to three independent code paths in `response.py` that bypass the `max_length` protection introduced in version 2.6.0 to mitigate CVE-2025-66471. Specifically, negative `max_length` values can be produced due to buffer arithmetic in `read()`, `flush_decoder` unconditionally overrides `max_length` to `-1`, and `_flush_decoder()` passes no limit at all, defaulting to unlimited decompression. This allows a malicious HTTP server to trigger an out-of-memory (OOM) condition by decompressing large payloads into memory, leading to a denial of service (DoS). The vulnerability affects urllib3 2.6.3 and Brotli 1.2.0 and impacts applications and libraries using `requests` or `urllib3` to stream content from untrusted sources.",
       "published": "2026-06-19T19:16:36.947Z",
@@ -12967,6 +13013,44 @@
       ]
     },
     {
+      "id": "CVE-2026-53003",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: pppoe: drop PFC frames RFC 2516 Section 7 states that Protocol Field Compression (PFC) is NOT RECOMMENDED for PPPoE. In practice, pppd does not support negotiating PFC for PPPoE sessions, and the current PPPoE driver assumes an uncompressed (2-byte) protocol field. However, the generic PPP layer function ppp_input() is not aware of the negotiation result, and still accepts PFC frames. If a peer with a broken implementation or an attacker sends a frame with a compressed (1-byte) protocol field, the subsequent PPP payload is shifted by one byte. This causes the network header to be 4-byte misaligned, which may trigger unaligned access exceptions on some architectures. To reduce the attack surface, drop PPPoE PFC frames. Introduce ppp_skb_is_compressed_proto() helper function to be used in both ppp_generic.c and pppoe.c to avoid open-coding.",
+      "published": "2026-06-24T17:17:11.383Z",
+      "lastModified": "2026-07-14T20:05:57.553Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00508,
+      "epssPercentile": 0.39975,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.02,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-56239",
       "summary": "Capgo before 12.128.2 contains a potential privilege escalation vulnerability in the public.apply_usage_overage SECURITY DEFINER function, which performs sensitive billing operations without enforcing internal authorization checks (no validation of auth.uid(), org membership, or check_min_rights). Because the function runs with the owner's privileges, it bypasses Row Level Security. If EXECUTE permission is available to the authenticated or anon roles (explicitly or via default privileges), an authenticated user could invoke it via Supabase RPC to manipulate billing data for arbitrary organizations, including unauthorized credit depletion and fraudulent overage event insertion.",
       "published": "2026-06-21T14:16:24.457Z",
@@ -13828,51 +13912,6 @@
       "priorityScore": 3.93,
       "tags": [
         "CWE-287"
-      ]
-    },
-    {
-      "id": "CVE-2026-3640",
-      "summary": "The STRABL – A checkout solution plugin for WordPress is vulnerable to Missing Authentication in all versions up to and including 4.5. The plugin registers a REST API webhook endpoint at /wp-json/strabl/webhook/order with a permission_callback of __return_true, which allows all incoming requests without any authentication or authorization checks. No shared secret, signature validation, HMAC verification, or token-based authentication is implemented. This makes it possible for unauthenticated attackers to create fraudulent WooCommerce orders and mark them as completed by supplying paymentStatus=paid, manipulate existing order statuses by providing an externalOrderId, create new WordPress user accounts with the customer role, issue refunds on existing orders, cancel existing orders, and apply chargeback fees — all without making a legitimate payment or having any valid credentials.",
-      "published": "2026-06-19T08:16:16.707Z",
-      "lastModified": "2026-06-22T18:16:36.217Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00382,
-      "epssPercentile": 0.30476,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.92,
-      "tags": [
-        "WordPress",
-        "CWE-862"
       ]
     },
     {
@@ -16528,51 +16567,6 @@
       "priorityScore": 3.64,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-6798",
-      "summary": "The 2Download Connector for 2DL Hosted Checkout plugin for WordPress is vulnerable to unauthorized access in all versions up to, and including, 0.1.5. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for unauthenticated attackers to view arbitrary customers' subscription data including subscription status, product names, order IDs, purchase dates, and expiry dates.",
-      "published": "2026-06-19T08:16:16.960Z",
-      "lastModified": "2026-06-22T20:16:30.570Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00299,
-      "epssPercentile": 0.21843,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.62,
-      "tags": [
-        "WordPress",
-        "CWE-862"
       ]
     },
     {
@@ -27746,50 +27740,6 @@
       ]
     },
     {
-      "id": "CVE-2026-46461",
-      "summary": "Dell Server Hardware Manager, versions prior to 3.2.2, contains an Improper Access Control vulnerability. A low privileged attacker with local access could potentially exploit this vulnerability, leading to Elevation of privileges.",
-      "published": "2026-06-19T08:16:16.840Z",
-      "lastModified": "2026-06-26T21:49:18.300Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.001,
-      "epssPercentile": 0.01059,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.77,
-      "tags": [
-        "CWE-284"
-      ]
-    },
-    {
       "id": "CVE-2026-52910",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: Free reuseport cBPF prog after RCU grace period. Eulgyu Kim reported the splat below with a repro. [0] The repro sets up a UDP reuseport group with a cBPF prog and replaces it with a new one while another thread is sending a UDP packet to the group. The reuseport prog is freed by sk_reuseport_prog_free(). bpf_prog_put() is called for \"e\"BPF prog to destruct through multiple stages while cBPF prog is freed immediately by bpf_release_orig_filter() and bpf_prog_free(). If a reuseport prog is detached from the setsockopt() path (reuseport_attach_prog() or reuseport_detach_prog()), sk_reuseport_prog_free() is called without waiting for RCU readers to complete, resulting in various bugs. Let's defer freeing the reuseport cBPF prog after one RCU grace period. Note \"e\"BPF prog is safe as is unless the fast path starts to touch fields destroyed in bpf_prog_put_deferred() and __bpf_prog_put_noref(). [0]: BUG: KASAN: vmalloc-out-of-bounds in reuseport_select_sock+0xedc/0x1220 net/core/sock_reuseport.c:596 Read of size 4 at addr ffffc9000051e004 by task slowme/10208 CPU: 6 UID: 1000 PID: 10208 Comm: slowme Not tainted 7.0.0-geb7ac95ff75e #32 PREEMPT(full) Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014 Call Trace: dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120 print_address_description mm/kasan/report.c:378 [inline] print_report+0xca/0x240 mm/kasan/report.c:482 kasan_report+0x118/0x150 mm/kasan/report.c:595 reuseport_select_sock+0xedc/0x1220 net/core/sock_reuseport.c:596 udp4_lib_lookup2+0x3bc/0x950 net/ipv4/udp.c:495 __udp4_lib_lookup+0x768/0xe20 net/ipv4/udp.c:723 __udp4_lib_lookup_skb+0x297/0x390 net/ipv4/udp.c:752 __udp4_lib_rcv+0x1312/0x2620 net/ipv4/udp.c:2752 ip_protocol_deliver_rcu+0x282/0x440 net/ipv4/ip_input.c:207 ip_local_deliver_finish+0x3bb/0x6f0 net/ipv4/ip_input.c:241 NF_HOOK+0x30c/0x3a0 include/linux/netfilter.h:318 NF_HOOK+0x30c/0x3a0 include/linux/netfilter.h:318 __netif_receive_skb_one_core net/core/dev.c:6181 [inline] __netif_receive_skb net/core/dev.c:6294 [inline] process_backlog+0xaa4/0x1960 net/core/dev.c:6645 __napi_poll+0xae/0x340 net/core/dev.c:7709 napi_poll net/core/dev.c:7772 [inline] net_rx_action+0x5d7/0xf50 net/core/dev.c:7929 handle_softirqs+0x22b/0x870 kernel/softirq.c:622 do_softirq+0x76/0xd0 kernel/softirq.c:523 __local_bh_enable_ip+0xf8/0x130 kernel/softirq.c:450 local_bh_enable include/linux/bottom_half.h:33 [inline] rcu_read_unlock_bh include/linux/rcupdate.h:924 [inline] __dev_queue_xmit+0x1dd7/0x3710 net/core/dev.c:4890 neigh_output include/net/neighbour.h:556 [inline] ip_finish_output2+0xca9/0x1070 net/ipv4/ip_output.c:237 NF_HOOK_COND include/linux/netfilter.h:307 [inline] ip_output+0x29f/0x450 net/ipv4/ip_output.c:438 ip_send_skb+0x45/0xc0 net/ipv4/ip_output.c:1508 udp_send_skb+0xb04/0x1510 net/ipv4/udp.c:1195 udp_sendmsg+0x1a71/0x2350 net/ipv4/udp.c:1485 sock_sendmsg_nosec net/socket.c:727 [inline] __sock_sendmsg net/socket.c:742 [inline] __sys_sendto+0x554/0x680 net/socket.c:2206 __do_sys_sendto net/socket.c:2213 [inline] __se_sys_sendto net/socket.c:2209 [inline] __x64_sys_sendto+0xde/0x100 net/socket.c:2209 do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline] do_syscall_64+0x160/0xf80 arch/x86/entry/syscall_64.c:94 entry_SYSCALL_64_after_hwframe+0x77/0x7f RIP: 0033:0x415a2d Code: b3 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48 RSP: 002b:00007f6bc31e41e8 EFLAGS: 00000212 ORIG_RAX: 000000000000002c RAX: ffffffffffffffda RBX: 00007f6bc31e4cdc RCX: 0000000000415a2d RDX: 0000000000000001 RSI: 00007f6bc31e421f RDI: 0000000000000003 RBP: 00007f6bc31e4240 R08: 00007f6bc31e4220 R09: 0000000000000010 R10: 0000000000000000 R11: ---truncated---",
       "published": "2026-06-19T15:16:35.487Z",
@@ -36740,6 +36690,44 @@
       "exploitAvailable": false,
       "patchAvailable": true,
       "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.01,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53001",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: xtables: restrict several matches to inet family This is a partial revert of: commit ab4f21e6fb1c (\"netfilter: xtables: use NFPROTO_UNSPEC in more extensions\") to allow ipv4 and ipv6 only. - xt_mac - xt_owner - xt_physdev These extensions are not used by ebtables in userspace. Moreover, xt_realm is only for ipv4, since dst->tclassid is ipv4 specific.",
+      "published": "2026-06-24T17:17:11.143Z",
+      "lastModified": "2026-07-14T20:09:09.140Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00122,
+      "epssPercentile": 0.02387,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
