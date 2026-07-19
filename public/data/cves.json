@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-19T14:58:08.863Z",
+  "generatedAt": "2026-07-19T16:03:35.365Z",
   "count": 1000,
   "items": [
     {
@@ -4550,6 +4550,44 @@
       ]
     },
     {
+      "id": "CVE-2026-53046",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: fix use-after-free from async crypto on Qualcomm crypto engine ksmbd_crypt_message() sets a NULL completion callback on AEAD requests and does not handle the -EINPROGRESS return code from async hardware crypto engines like the Qualcomm Crypto Engine (QCE). When QCE returns -EINPROGRESS, ksmbd treats it as an error and immediately frees the request while the hardware DMA operation is still in flight. The DMA completion callback then dereferences freed memory, causing a NULL pointer crash: pc : qce_skcipher_done+0x24/0x174 lr : vchan_complete+0x230/0x27c ... el1h_64_irq+0x68/0x6c ksmbd_free_work_struct+0x20/0x118 [ksmbd] ksmbd_exit_file_cache+0x694/0xa4c [ksmbd] Use the standard crypto_wait_req() pattern with crypto_req_done() as the completion callback, matching the approach used by the SMB client in fs/smb/client/smb2ops.c. This properly handles both synchronous engines (immediate return) and async engines (-EINPROGRESS followed by callback notification).",
+      "published": "2026-06-24T17:17:16.420Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00531,
+      "epssPercentile": 0.41292,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.88,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-56115",
       "summary": "Bootimus through 0.1.70 contains a broken access control vulnerability that allows authenticated low-privileged users to perform administrative actions by exploiting missing role enforcement in the JWTMiddleware function in internal/auth/auth.go, which validates JWT tokens and account status but fails to inspect the is_admin flag. Attackers can send requests to any endpoint under the /api/users path to create new administrator accounts or reset administrator passwords, thereby gaining full control of the server and the ability to modify boot menus and installation scripts served to PXE clients.",
       "published": "2026-06-23T17:17:09.287Z",
@@ -4591,6 +4629,44 @@
       "priorityScore": 4.87,
       "tags": [
         "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-53045",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: memory: tegra124-emc: Fix dll_change check The code checking whether the specified memory timing enables DLL in the EMRS register was reversed. DLL is enabled if bit A0 is low. Fix the check.",
+      "published": "2026-06-24T17:17:16.290Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00521,
+      "epssPercentile": 0.40757,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.86,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -4870,6 +4946,44 @@
       "tags": [
         "Linux",
         "CWE-787"
+      ]
+    },
+    {
+      "id": "CVE-2026-53049",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: gfs2: add some missing log locking Function gfs2_logd() calls the log flushing functions gfs2_ail1_start(), gfs2_ail1_wait(), and gfs2_ail1_empty() without holding sdp->sd_log_flush_lock, but these functions require exclusion against concurrent transactions. To fix that, add a non-locking __gfs2_log_flush() function. Then, in gfs2_logd(), take sdp->sd_log_flush_lock before calling the above mentioned log flushing functions and __gfs2_log_flush().",
+      "published": "2026-06-24T17:17:16.777Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00509,
+      "epssPercentile": 0.40047,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.83,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -6829,6 +6943,44 @@
       ]
     },
     {
+      "id": "CVE-2026-53055",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: crypto: hisilicon/sec2 - prevent req used-after-free for sec During packet transmission, if the system is under heavy load, the hardware might complete processing the packet and free the request memory (req) before the transmission function finishes. If the software subsequently accesses this req, a use-after-free error will occur. The qp_ctx memory exists throughout the packet sending process, so replace the req with the qp_ctx.",
+      "published": "2026-06-24T17:17:17.527Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00435,
+      "epssPercentile": 0.35299,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.67,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-56211",
       "summary": "A remote code execution vulnerability was found in libaom, the reference AV1 codec implementation. Insufficient bounds validation in the AV1 encoder's SVC (Scalable Video Coding) layer ID control allows an attacker to supply crafted video frame pixels that overlap with internal encoder layer context structures. In fork-based video processing services, an attacker can use this to hijack the cyclic refresh map pointer, brute-force the process base address via a crash oracle, and redirect control flow to achieve arbitrary command execution. Exploitation requires the target service to use libaom with SVC encoding enabled and accept attacker-supplied video frames.",
       "published": "2026-06-19T17:16:30.680Z",
@@ -7360,6 +7512,51 @@
         "F5",
         "Linux",
         "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-53043",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ocfs2/dlm: validate qr_numregions in dlm_match_regions() Patch series \"ocfs2/dlm: fix two bugs in dlm_match_regions()\". In dlm_match_regions(), the qr_numregions field from a DLM_QUERY_REGION network message is used to drive loops over the qr_regions buffer without sufficient validation. This series fixes two issues: - Patch 1 adds a bounds check to reject messages where qr_numregions exceeds O2NM_MAX_REGIONS. The o2net layer only validates message byte length; it does not constrain field values, so a crafted message can set qr_numregions up to 255 and trigger out-of-bounds reads past the 1024-byte qr_regions buffer. - Patch 2 fixes an off-by-one in the local-vs-remote comparison loop, which uses ' 32 causes out-of-bounds reads past the qr_regions buffer. Add a bounds check for qr_numregions before entering the loops.",
+      "published": "2026-06-24T17:17:16.063Z",
+      "lastModified": "2026-07-14T19:27:29.090Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00521,
+      "epssPercentile": 0.40756,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.61,
+      "tags": [
+        "Linux",
+        "CWE-787"
       ]
     },
     {
@@ -11405,6 +11602,44 @@
       ]
     },
     {
+      "id": "CVE-2026-53053",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: iommu/amd: Fix clone_alias() to use the original device's devid Currently clone_alias() assumes first argument (pdev) is always the original device pointer. This function is called by pci_for_each_dma_alias() which based on topology decides to send original or alias device details in first argument. This meant that the source devid used to look up and copy the DTE may be incorrect, leading to wrong or stale DTE entries being propagated to alias device. Fix this by passing the original pdev as the opaque data argument to both the direct clone_alias() call and pci_for_each_dma_alias(). Inside clone_alias(), retrieve the original device from data and compute devid from it.",
+      "published": "2026-06-24T17:17:17.327Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00128,
+      "epssPercentile": 0.02869,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.18,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-56082",
       "summary": "Capgo (Cap-go/capgo) before 12.128.2 contains an improper access control vulnerability in the SECURITY DEFINER PostgREST RPC function public.record_build_time, which is granted to the anon role and callable with only the public Supabase publishable (sb_publishable_*) anon key. An unauthenticated attacker can insert rows into public.build_logs for arbitrary organizations and, because the function uses ON CONFLICT (build_id, org_id) DO UPDATE, can overwrite existing usage/billing records by reusing the same build_id for a target org. This enables cross-tenant tampering of billing build logs and financial-impact denial of service by inflating billable build time.",
       "published": "2026-06-19T22:16:18.143Z",
@@ -14143,140 +14378,6 @@
       "priorityScore": 3.82,
       "tags": [
         "CWE-20"
-      ]
-    },
-    {
-      "id": "CVE-2016-20090",
-      "summary": "Comodo Dragon Browser versions up to 52.15.25.663 contain a privilege escalation vulnerability in the DragonUpdater service due to an unquoted service path running with SYSTEM privileges. A local attacker can insert a malicious executable in the service path and execute arbitrary code with elevated privileges upon service restart or system reboot.",
-      "published": "2026-06-19T15:16:32.797Z",
-      "lastModified": "2026-06-22T21:16:38.603Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00122,
-      "epssPercentile": 0.02377,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.81,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2016-20092",
-      "summary": "NetDrive 2.6.12 contains an unquoted service path vulnerability in the Netdrive2_Service_Netdrive2 service that allows local users to execute arbitrary code with SYSTEM privileges. Attackers can insert malicious executables in the system root path that will be executed during service startup or system reboot, resulting in privilege escalation.",
-      "published": "2026-06-19T15:16:33.060Z",
-      "lastModified": "2026-06-23T15:29:08.570Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0012,
-      "epssPercentile": 0.02153,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.81,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2020-37254",
-      "summary": "Wondershare PDFelement 5.2.9 contains a privilege escalation vulnerability due to an unquoted service path in the WsAppService Windows service. Local attackers can place a malicious executable in the service path and execute code with LocalSystem privileges upon service restart or system reboot.",
-      "published": "2026-06-19T15:16:34.273Z",
-      "lastModified": "2026-06-23T20:16:46.900Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0012,
-      "epssPercentile": 0.02153,
-      "isKev": false,
-      "kev": null,
-      "vendor": "SAP",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.81,
-      "tags": [
-        "SAP",
-        "Windows",
-        "CWE-428"
       ]
     },
     {
@@ -20575,6 +20676,44 @@
       ]
     },
     {
+      "id": "CVE-2026-53057",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: iommu/riscv: Add IOTINVAL after updating DDT/PDT entries Add riscv_iommu_iodir_iotinval() to perform required TLB and context cache invalidations after updating DDT or PDT entries, as mandated by the RISC-V IOMMU specification (Section 6.3.1 and 6.3.2).",
+      "published": "2026-06-24T17:17:17.960Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00127,
+      "epssPercentile": 0.02731,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.18,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-55603",
       "summary": "http-proxy-middleware is node.js http-proxy middleware. From 3.0.4 until 3.0.7 and 4.1.1, fixRequestBody() is the library's documented helper for re-emitting a request body that was already consumed by a body parser. When the outgoing Content-Type is multipart/form-data, it rebuilds the body with handlerFormDataBodyData(), which interpolates each req.body key and value directly into the multipart wire format without neutralizing CR/LF. A \\r\\n inside a value (or key) lets an attacker close the current part and inject an entirely new form part. Because the proxy's own body parser saw a single opaque value, any gateway-side policy or validation performed on req.body is evaluated against a different set of fields than the upstream backend ultimately parses a request/parameter desynchronization across the trust boundary. This vulnerability is fixed in 3.0.7 and 4.1.1.",
       "published": "2026-06-22T21:16:26.033Z",
@@ -21281,51 +21420,6 @@
       ]
     },
     {
-      "id": "CVE-2022-50971",
-      "summary": "Malwarebytes 4.5 contains an unquoted service path vulnerability in the MBAMService executable that allows local attackers to escalate privileges by injecting malicious code into the system root path. Attackers can place executable files in unquoted path directories that execute with LocalSystem privileges during service startup or system reboot.",
-      "published": "2026-06-19T15:16:34.560Z",
-      "lastModified": "2026-06-26T12:59:54.160Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00205,
-      "epssPercentile": 0.10587,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.1,
-      "tags": [
-        "Windows",
-        "CWE-428"
-      ]
-    },
-    {
       "id": "CVE-2026-56280",
       "summary": "Cap-go before 12.128.2 contains a privilege inversion vulnerability in GET /build/logs/:jobId that allows read-only API key holders to cancel running native builds. The endpoint registers an abort listener on the SSE stream that unconditionally invokes cancelBuildOnDisconnect() using the privileged server-side BUILDER_API_KEY when clients disconnect, bypassing the app.build_native permission check required by the explicit POST /build/cancel/:jobId endpoint. Attackers with read-only API keys can repeatedly disrupt native build operations and CI/CD workflows by opening the log stream and dropping the connection.",
       "published": "2026-06-22T22:16:51.197Z",
@@ -21992,51 +22086,6 @@
       "tags": [
         "Linux",
         "CWE-476"
-      ]
-    },
-    {
-      "id": "CVE-2016-20094",
-      "summary": "AnyDesk 2.5.0 contains an unquoted service path vulnerability that allows local users to execute arbitrary code with SYSTEM privileges by exploiting the service installation. Attackers can insert malicious executables in the system root path that execute with elevated privileges during application startup or system reboot.",
-      "published": "2026-06-19T15:16:33.310Z",
-      "lastModified": "2026-06-26T13:02:26.227Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00181,
-      "epssPercentile": 0.07877,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.01,
-      "tags": [
-        "F5",
-        "CWE-428"
       ]
     },
     {
@@ -24624,88 +24673,6 @@
       ]
     },
     {
-      "id": "CVE-2025-71326",
-      "summary": "AVAST Antivirus 25.11 contains an unquoted service path vulnerability in the SecureLine service that allows local non-privileged users to execute code with elevated SYSTEM privileges. Attackers can exploit the unquoted binary path in the service configuration to inject malicious executables that execute with high-level system permissions.",
-      "published": "2026-06-19T15:16:34.890Z",
-      "lastModified": "2026-06-23T15:37:54.137Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00127,
-      "epssPercentile": 0.02754,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.83,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2026-52908",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: RDMA: During rereg_mr ensure that REREG_ACCESS is compatible If IB_MR_REREG_ACCESS changes from RO to RW then the umem has to be re-evaluated to ensure it is properly pinned as RW. Since the umem is hidden inside each driver's mr struct add a ib_umem_check_rereg() function that each driver has to call before processing IB_MR_REREG_ACCESS. mlx4 has to retain its duplicate ib_access_writable check because it implements IB_MR_REREG_ACCESS | IB_MR_REREG_TRANS by changing both items in place sequentially while the MR is live, so it will continue to not support this combination.",
-      "published": "2026-06-19T15:16:35.277Z",
-      "lastModified": "2026-07-08T15:24:27.260Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00129,
-      "epssPercentile": 0.02878,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.83,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-49337",
       "summary": "libde265 is an open source implementation of the h.265 video codec. Prior to version 1.0.20, a crafted sequence of H.265 NAL units causes `decoder_context::read_slice_NAL()` (`libde265/decctx.cc:481`) to attach slice headers to a finished picture object that has no active image unit, resulting in attacker-controlled unbounded heap growth. The retained headers are never freed until the picture is released, which may not happen during continuous streaming. Version 1.0.20 patches the issue.",
       "published": "2026-06-19T21:17:01.720Z",
@@ -25156,6 +25123,82 @@
       ]
     },
     {
+      "id": "CVE-2026-53050",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: quota: Fix race of dquot_scan_active() with quota deactivation dquot_scan_active() can race with quota deactivation in quota_release_workfn() like: CPU0 (quota_release_workfn) CPU1 (dquot_scan_active) ============================== ============================== spin_lock(&dq_list_lock); list_replace_init( &releasing_dquots, &rls_head); /* dquot X on rls_head, dq_count == 0, DQ_ACTIVE_B still set */ spin_unlock(&dq_list_lock); synchronize_srcu(&dquot_srcu); spin_lock(&dq_list_lock); list_for_each_entry(dquot, &inuse_list, dq_inuse) { /* finds dquot X */ dquot_active(X) -> true atomic_inc(&X->dq_count); } spin_unlock(&dq_list_lock); spin_lock(&dq_list_lock); dquot = list_first_entry(&rls_head); WARN_ON_ONCE(atomic_read(&dquot->dq_count)); The problem is not only a cosmetic one as under memory pressure the caller of dquot_scan_active() can end up working on freed dquot. Fix the problem by making sure the dquot is removed from releasing list when we acquire a reference to it.",
+      "published": "2026-06-24T17:17:16.887Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00129,
+      "epssPercentile": 0.02924,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.83,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53054",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/msm: Fix VM_BIND UNMAP locking Wrong argument meant that the objs involved in UNMAP ops were not always getting locked. Since _NO_SHARE objs share a common resv with the VM (which is always locked) this would only show up with non-_NO_SHARE BOs. Patchwork: https://patchwork.freedesktop.org/patch/713898/",
+      "published": "2026-06-24T17:17:17.430Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00127,
+      "epssPercentile": 0.0273,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.83,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-12772",
       "summary": "A security flaw has been discovered in BerriAI litellm up to 1.82.2. This impacts the function authenticate_user of the file litellm/proxy/auth/login_utils.py of the component PROXY_ADMIN database API Key Generator. Performing a manipulation results in session expiration. The attack may be initiated remotely. The exploit has been released to the public and may be used for attacks. The vendor was contacted early about this disclosure.",
       "published": "2026-06-21T03:16:22.960Z",
@@ -25430,10 +25473,10 @@
       ]
     },
     {
-      "id": "CVE-2016-20087",
-      "summary": "Fortitude HTTP 1.0.4.0 contains an unquoted service path vulnerability that allows local users to execute arbitrary code with elevated privileges by exploiting the service binary path. Attackers can insert malicious executables in the system root path that execute with SYSTEM privileges during service startup or system reboot.",
-      "published": "2026-06-19T15:16:32.403Z",
-      "lastModified": "2026-06-23T15:16:00.660Z",
+      "id": "CVE-2026-53062",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache policy smq: fix missing locks in invalidating cache blocks In passthrough mode, the policy invalidate_mapping operation is called simultaneously from multiple workers, thus it should be protected by a lock. Otherwise, we might end up with data races on the allocated blocks counter, or even use-after-free issues with internal data structures when doing concurrent writes. Note that the existing FIXME in smq_invalidate_mapping() doesn't affect passthrough mode since migration tasks don't exist there, but would need attention if supporting fast device shrinking via suspend/resume without target reloading. Reproduce steps: 1. Create a cache device consisting of 1024 cache entries dmsetup create cmeta --table \"0 8192 linear /dev/sdc 0\" dmsetup create cdata --table \"0 131072 linear /dev/sdc 8192\" dmsetup create corig --table \"0 262144 linear /dev/sdc 262144\" dd if=/dev/zero of=/dev/mapper/cmeta bs=4k count=1 oflag=direct dmsetup create cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 writethrough smq 0\" 2. Populate the cache, and record the number of cached blocks fio --name=populate --filename=/dev/mapper/cache --rw=randwrite --bs=4k \\ --size=64m --direct=1 nr_cached=$(dmsetup status cache | awk '{split($7, a, \"/\"); print a[1]}') 3. Reload the cache into passthrough mode dmsetup suspend cache dmsetup reload cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 passthrough smq 0\" dmsetup resume cache 4. Write to the passthrough cache. By setting multiple jobs with I/O size equal to the cache block size, cache blocks are invalidated concurrently from different workers. fio --filename=/dev/mapper/cache --name=test --rw=randwrite --bs=64k \\ --direct=1 --numjobs=2 --randrepeat=0 --size=64m 5. Check if demoted matches cached block count. These numbers should match but may differ due to the data race. nr_demoted=$(dmsetup status cache | awk '{print $12}') echo \"$nr_cached, $nr_demoted\"",
+      "published": "2026-06-24T17:17:19.030Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
       "severity": "High",
       "cvssScore": 7.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
@@ -25447,333 +25490,23 @@
         "integrity": "High",
         "availability": "High"
       },
-      "epssScore": 0.0012,
-      "epssPercentile": 0.02152,
+      "epssScore": 0.00125,
+      "epssPercentile": 0.02614,
       "isKev": false,
       "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2016-20088",
-      "summary": "Comodo Chromodo Browser 52.15.25.664 contains an unquoted service path vulnerability in the ChromodoUpdater service that runs with SYSTEM privileges. A local attacker can insert a malicious executable in the service path and execute arbitrary code with elevated privileges upon service restart or system reboot.",
-      "published": "2026-06-19T15:16:32.530Z",
-      "lastModified": "2026-06-22T21:16:38.603Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0012,
-      "epssPercentile": 0.02152,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2016-20089",
-      "summary": "Iperius Remote 1.7.0 contains an unquoted service path vulnerability that allows local users to execute arbitrary code with SYSTEM privileges by exploiting the service installation path. When installed from directories containing spaces, attackers can place malicious executables in the path to be executed with elevated privileges during service startup or system reboot.",
-      "published": "2026-06-19T15:16:32.660Z",
-      "lastModified": "2026-06-23T20:16:45.670Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00122,
-      "epssPercentile": 0.02377,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2016-20093",
-      "summary": "Wise Care 365 4.27 and Wise Disk Cleaner 9.29 contain unquoted service path vulnerabilities in the WiseBootAssistant and SpyHunter 4 Service respectively, allowing local users to execute arbitrary code with SYSTEM privileges. Attackers can insert malicious executables in the system root path that execute during service startup or system reboot with elevated privileges.",
-      "published": "2026-06-19T15:16:33.183Z",
-      "lastModified": "2026-06-23T15:29:08.570Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0012,
-      "epssPercentile": 0.02153,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2019-25747",
-      "summary": "Network Inventory Advisor 5.0.26.0 installs the niaservice service with an unquoted binary path that allows local attackers to escalate privileges by placing malicious executables in intermediate directories. Attackers can exploit the unquoted path in the service configuration to execute arbitrary code with LocalSystem privileges when the service starts or restarts.",
-      "published": "2026-06-19T15:16:33.597Z",
-      "lastModified": "2026-06-23T15:42:30.483Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0012,
-      "epssPercentile": 0.02154,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2020-37252",
-      "summary": "Realtek Audio Service 1.0.0.55 contains an unquoted service path vulnerability in RtkAudioService64.exe that allows local attackers to escalate privileges by injecting malicious code. Attackers can place executable files in the unquoted service path directory to execute arbitrary code with LocalSystem privileges during service startup or system reboot.",
-      "published": "2026-06-19T15:16:34.017Z",
-      "lastModified": "2026-06-23T15:09:12.060Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00121,
-      "epssPercentile": 0.02269,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "iOS",
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "iOS",
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2023-54353",
-      "summary": "Chromacam 4.0.3.0 contains an unquoted service path vulnerability in the PsyFrameGrabberService that allows local attackers to execute arbitrary code by placing malicious executables in unquoted path directories. Attackers with write access to C:\\ or subdirectories like C:\\Program Files (x86)\\Personify\\ can place a malicious Program.exe or PsyFrameGrabberService.exe file that executes with LocalSystem privileges when the service starts automatically at boot.",
-      "published": "2026-06-19T15:16:34.713Z",
-      "lastModified": "2026-06-23T15:42:30.483Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0012,
-      "epssPercentile": 0.02154,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2026-52909",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: ip6_vti: set netns_immutable on the fallback device. john1988 and Noam Rathaus reported that vti6_init_net() does not set the netns_immutable flag on the per-netns fallback tunnel device (ip6_vti0). Other similar tunnel drivers (like ip6_tunnel, sit, ip6_gre, and ip_tunnel) correctly set this flag during their fallback device initialization to prevent them from being moved to another network namespace.",
-      "published": "2026-06-19T15:16:35.383Z",
-      "lastModified": "2026-07-08T15:24:17.873Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0012,
-      "epssPercentile": 0.0219,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
+      "vendor": "Linux",
       "product": null,
       "cwe": [],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
-      "workaroundAvailable": false,
+      "workaroundAvailable": true,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 2.81,
+      "priorityScore": 2.82,
       "tags": [
-        "F5",
         "Linux"
       ]
     },
@@ -26046,138 +25779,6 @@
       ]
     },
     {
-      "id": "CVE-2016-20095",
-      "summary": "Matrix42 Remote Control Host 3.20.0031 contains an unquoted service path vulnerability in the FastViewerRemoteService and FastViewerRemoteProxy services that allows local users to execute arbitrary code with SYSTEM privileges. Attackers can place a malicious executable in the Program Files directory with a crafted name to be executed by the service during startup, gaining elevated privileges.",
-      "published": "2026-06-19T15:16:33.440Z",
-      "lastModified": "2026-06-23T20:16:46.747Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00119,
-      "epssPercentile": 0.02053,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.8,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2020-37250",
-      "summary": "TFTP Broadband 4.3.0.1465 contains an unquoted service path vulnerability in the tftpt.exe service binary that allows local attackers to execute arbitrary code with system privileges. Attackers can place a malicious executable in the Program Files directory path that will be executed during service startup or system reboot with LocalSystem privileges.",
-      "published": "2026-06-19T15:16:33.740Z",
-      "lastModified": "2026-06-22T21:14:49.503Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00119,
-      "epssPercentile": 0.02051,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.8,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2020-37251",
-      "summary": "RealTimes Desktop Service 18.1.4 contains an unquoted service path vulnerability in the rpdsvc.exe binary that allows local attackers to escalate privileges. Attackers can place malicious executables in unquoted path directories to execute arbitrary code with LocalSystem privileges during service startup or system reboot.",
-      "published": "2026-06-19T15:16:33.877Z",
-      "lastModified": "2026-06-23T15:42:30.483Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00119,
-      "epssPercentile": 0.02052,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.8,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
       "id": "CVE-2026-12770",
       "summary": "A vulnerability was determined in BerriAI litellm up to 1.63.1. The impacted element is an unknown function of the file litellm/proxy/management_endpoints/key_management_endpoints.py of the component Admin Key Handler. This manipulation causes improper authorization. The attack can be initiated remotely. The exploit has been publicly disclosed and may be utilized. Patch name: 23781. It is recommended to apply a patch to fix this issue. The vendor was contacted early about this disclosure.",
       "published": "2026-06-21T01:16:22.847Z",
@@ -26315,184 +25916,6 @@
       "tags": [
         "Linux",
         "CWE-191"
-      ]
-    },
-    {
-      "id": "CVE-2016-20085",
-      "summary": "Realtek High Definition Audio Driver 6.0.1.6730 contains an unquoted service path vulnerability that allows local attackers to escalate privileges by placing a malicious executable in the service path. Attackers can insert an executable file in the unquoted path and restart the service to execute code with LocalSystem privileges.",
-      "published": "2026-06-19T15:16:31.260Z",
-      "lastModified": "2026-06-22T21:14:49.503Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00114,
-      "epssPercentile": 0.01756,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.79,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2016-20086",
-      "summary": "Vembu StoreGrid 4.0 contains an unquoted service path vulnerability in the RemoteBackup and RemoteBackup_webServer services that allows local attackers to escalate privileges. Attackers can place a malicious executable in the unquoted path and restart the service to execute code with LocalSystem privileges.",
-      "published": "2026-06-19T15:16:32.270Z",
-      "lastModified": "2026-06-22T18:40:05.833Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00114,
-      "epssPercentile": 0.01756,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.79,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2016-20091",
-      "summary": "Windows Firewall Control 4.8.6.0 contains an unquoted service path vulnerability that allows local attackers to escalate privileges by inserting malicious executables in the service path. Attackers can place executable files in unquoted path directories that the wfcs.exe service will execute with LocalSystem privileges upon service restart or system reboot.",
-      "published": "2026-06-19T15:16:32.927Z",
-      "lastModified": "2026-06-22T21:14:21.077Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00113,
-      "epssPercentile": 0.01664,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.79,
-      "tags": [
-        "Windows",
-        "CWE-428"
-      ]
-    },
-    {
-      "id": "CVE-2021-47985",
-      "summary": "Brother SAPSprint 7.60 contains an unquoted service path vulnerability in the SAPSprint service binary that allows local attackers to escalate privileges. Attackers can place a malicious executable in the Program Files directory path to be executed with LocalSystem privileges when the service starts automatically.",
-      "published": "2026-06-19T15:16:34.420Z",
-      "lastModified": "2026-06-23T15:42:30.483Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00115,
-      "epssPercentile": 0.01824,
-      "isKev": false,
-      "kev": null,
-      "vendor": "SAP",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.79,
-      "tags": [
-        "SAP",
-        "CWE-428"
       ]
     },
     {
@@ -26834,50 +26257,6 @@
       ]
     },
     {
-      "id": "CVE-2020-37253",
-      "summary": "Winstep 18.06.0096 contains an unquoted service path vulnerability in the Winstep Xtreme Service that allows local attackers to escalate privileges. Attackers can place malicious executables in the Program Files directory to be executed with LocalSystem privileges when the service starts.",
-      "published": "2026-06-19T15:16:34.147Z",
-      "lastModified": "2026-06-23T15:42:30.483Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00109,
-      "epssPercentile": 0.01457,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-428",
-          "name": "CWE-428",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.78,
-      "tags": [
-        "CWE-428"
-      ]
-    },
-    {
       "id": "CVE-2026-27878",
       "summary": "A TraceQL query in Grafana Tempo with a large exemplars hint value can cause the Tempo instance to allocate an excessive amount of memory, resulting in an out-of-memory crash. This could allow an authenticated user to trigger a denial of service against the Tempo service.",
       "published": "2026-06-19T19:16:34.897Z",
@@ -27161,59 +26540,6 @@
         "Linux",
         "CWE-362",
         "CWE-367"
-      ]
-    },
-    {
-      "id": "CVE-2026-52910",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: Free reuseport cBPF prog after RCU grace period. Eulgyu Kim reported the splat below with a repro. [0] The repro sets up a UDP reuseport group with a cBPF prog and replaces it with a new one while another thread is sending a UDP packet to the group. The reuseport prog is freed by sk_reuseport_prog_free(). bpf_prog_put() is called for \"e\"BPF prog to destruct through multiple stages while cBPF prog is freed immediately by bpf_release_orig_filter() and bpf_prog_free(). If a reuseport prog is detached from the setsockopt() path (reuseport_attach_prog() or reuseport_detach_prog()), sk_reuseport_prog_free() is called without waiting for RCU readers to complete, resulting in various bugs. Let's defer freeing the reuseport cBPF prog after one RCU grace period. Note \"e\"BPF prog is safe as is unless the fast path starts to touch fields destroyed in bpf_prog_put_deferred() and __bpf_prog_put_noref(). [0]: BUG: KASAN: vmalloc-out-of-bounds in reuseport_select_sock+0xedc/0x1220 net/core/sock_reuseport.c:596 Read of size 4 at addr ffffc9000051e004 by task slowme/10208 CPU: 6 UID: 1000 PID: 10208 Comm: slowme Not tainted 7.0.0-geb7ac95ff75e #32 PREEMPT(full) Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014 Call Trace: dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120 print_address_description mm/kasan/report.c:378 [inline] print_report+0xca/0x240 mm/kasan/report.c:482 kasan_report+0x118/0x150 mm/kasan/report.c:595 reuseport_select_sock+0xedc/0x1220 net/core/sock_reuseport.c:596 udp4_lib_lookup2+0x3bc/0x950 net/ipv4/udp.c:495 __udp4_lib_lookup+0x768/0xe20 net/ipv4/udp.c:723 __udp4_lib_lookup_skb+0x297/0x390 net/ipv4/udp.c:752 __udp4_lib_rcv+0x1312/0x2620 net/ipv4/udp.c:2752 ip_protocol_deliver_rcu+0x282/0x440 net/ipv4/ip_input.c:207 ip_local_deliver_finish+0x3bb/0x6f0 net/ipv4/ip_input.c:241 NF_HOOK+0x30c/0x3a0 include/linux/netfilter.h:318 NF_HOOK+0x30c/0x3a0 include/linux/netfilter.h:318 __netif_receive_skb_one_core net/core/dev.c:6181 [inline] __netif_receive_skb net/core/dev.c:6294 [inline] process_backlog+0xaa4/0x1960 net/core/dev.c:6645 __napi_poll+0xae/0x340 net/core/dev.c:7709 napi_poll net/core/dev.c:7772 [inline] net_rx_action+0x5d7/0xf50 net/core/dev.c:7929 handle_softirqs+0x22b/0x870 kernel/softirq.c:622 do_softirq+0x76/0xd0 kernel/softirq.c:523 __local_bh_enable_ip+0xf8/0x130 kernel/softirq.c:450 local_bh_enable include/linux/bottom_half.h:33 [inline] rcu_read_unlock_bh include/linux/rcupdate.h:924 [inline] __dev_queue_xmit+0x1dd7/0x3710 net/core/dev.c:4890 neigh_output include/net/neighbour.h:556 [inline] ip_finish_output2+0xca9/0x1070 net/ipv4/ip_output.c:237 NF_HOOK_COND include/linux/netfilter.h:307 [inline] ip_output+0x29f/0x450 net/ipv4/ip_output.c:438 ip_send_skb+0x45/0xc0 net/ipv4/ip_output.c:1508 udp_send_skb+0xb04/0x1510 net/ipv4/udp.c:1195 udp_sendmsg+0x1a71/0x2350 net/ipv4/udp.c:1485 sock_sendmsg_nosec net/socket.c:727 [inline] __sock_sendmsg net/socket.c:742 [inline] __sys_sendto+0x554/0x680 net/socket.c:2206 __do_sys_sendto net/socket.c:2213 [inline] __se_sys_sendto net/socket.c:2209 [inline] __x64_sys_sendto+0xde/0x100 net/socket.c:2209 do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline] do_syscall_64+0x160/0xf80 arch/x86/entry/syscall_64.c:94 entry_SYSCALL_64_after_hwframe+0x77/0x7f RIP: 0033:0x415a2d Code: b3 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48 RSP: 002b:00007f6bc31e41e8 EFLAGS: 00000212 ORIG_RAX: 000000000000002c RAX: ffffffffffffffda RBX: 00007f6bc31e4cdc RCX: 0000000000415a2d RDX: 0000000000000001 RSI: 00007f6bc31e421f RDI: 0000000000000003 RBP: 00007f6bc31e4240 R08: 00007f6bc31e4220 R09: 0000000000000010 R10: 0000000000000000 R11: ---truncated---",
-      "published": "2026-06-19T15:16:35.487Z",
-      "lastModified": "2026-07-15T01:16:22.627Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00104,
-      "epssPercentile": 0.01219,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": "iOS",
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-364",
-          "name": "CWE-364",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.77,
-      "tags": [
-        "F5",
-        "Linux",
-        "iOS",
-        "CWE-125",
-        "CWE-364"
       ]
     },
     {
@@ -29527,6 +28853,51 @@
       ]
     },
     {
+      "id": "CVE-2026-53041",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ocfs2: fix listxattr handling when the buffer is full [BUG] If an OCFS2 inode has both inline and block-based xattrs, listxattr() can return a size larger than the caller's buffer when the inline names consume that buffer exactly. kernel BUG at mm/usercopy.c:102! Oops: invalid opcode: 0000 [#1] SMP KASAN NOPTI RIP: 0010:usercopy_abort+0xb7/0xd0 mm/usercopy.c:102 Call Trace: __check_heap_object+0xe3/0x120 mm/slub.c:8243 check_heap_object mm/usercopy.c:196 [inline] __check_object_size mm/usercopy.c:250 [inline] __check_object_size+0x5c5/0x780 mm/usercopy.c:215 check_object_size include/linux/ucopysize.h:22 [inline] check_copy_size include/linux/ucopysize.h:59 [inline] copy_to_user include/linux/uaccess.h:219 [inline] listxattr+0xb0/0x170 fs/xattr.c:926 filename_listxattr fs/xattr.c:958 [inline] path_listxattrat+0x137/0x320 fs/xattr.c:988 __do_sys_listxattr fs/xattr.c:1001 [inline] __se_sys_listxattr fs/xattr.c:998 [inline] __x64_sys_listxattr+0x7f/0xd0 fs/xattr.c:998 ... [CAUSE] Commit 936b8834366e (\"ocfs2: Refactor xattr list and remove ocfs2_xattr_handler().\") replaced the old per-handler list accounting with ocfs2_xattr_list_entry(), but it kept using size == 0 to detect probe mode. That assumption stops being true once ocfs2_listxattr() finishes the inline-xattr pass. If the inline names fill the caller buffer exactly, the block-xattr pass runs with a non-NULL buffer and a remaining size of zero. ocfs2_xattr_list_entry() then skips the bounds check, keeps counting block names, and returns a positive size larger than the supplied buffer. [FIX] Detect probe mode by testing whether the destination buffer pointer is NULL instead of whether the remaining size is zero. That restores the pre-refactor behavior and matches the OCFS2 getxattr helpers. Once the remaining buffer reaches zero while more names are left, the block-xattr pass now returns -ERANGE instead of reporting a size larger than the allocated list buffer.",
+      "published": "2026-06-24T17:17:15.830Z",
+      "lastModified": "2026-07-14T19:33:34.350Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00126,
+      "epssPercentile": 0.02617,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.58,
+      "tags": [
+        "Linux",
+        "CWE-787"
+      ]
+    },
+    {
       "id": "CVE-2026-12726",
       "summary": "A flaw was found in the AWX GitHub webhook integration. When processing GitHub pull_request webhooks, the controller stores the pull_request.statuses_url value from the webhook payload without validating that it points to a trusted GitHub API endpoint. If a job template is configured with a GitHub Personal Access Token as its webhook credential, the controller later POSTs that token to the stored callback URL when posting job status updates. An attacker who can submit a correctly signed forged webhook using the job template's webhook_key can redirect the callback to an attacker-controlled URL and exfiltrate the configured GitHub PAT.",
       "published": "2026-06-19T19:16:27.217Z",
@@ -29741,6 +29112,97 @@
       "priorityScore": 2.57,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53040",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ocfs2: validate bg_bits during freefrag scan [BUG] A crafted filesystem can trigger an out-of-bounds bitmap walk when OCFS2_IOC_INFO is issued with OCFS2_INFO_FL_NON_COHERENT. BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:68 [inline] BUG: KASAN: use-after-free in _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline] BUG: KASAN: use-after-free in test_bit_le include/asm-generic/bitops/le.h:21 [inline] BUG: KASAN: use-after-free in ocfs2_info_freefrag_scan_chain fs/ocfs2/ioctl.c:495 [inline] BUG: KASAN: use-after-free in ocfs2_info_freefrag_scan_bitmap fs/ocfs2/ioctl.c:588 [inline] BUG: KASAN: use-after-free in ocfs2_info_handle_freefrag fs/ocfs2/ioctl.c:662 [inline] BUG: KASAN: use-after-free in ocfs2_info_handle_request+0x1c66/0x3370 fs/ocfs2/ioctl.c:754 Read of size 8 at addr ffff888031bce000 by task syz.0.636/1435 Call Trace: __dump_stack lib/dump_stack.c:94 [inline] dump_stack_lvl+0xbe/0x130 lib/dump_stack.c:120 print_address_description mm/kasan/report.c:378 [inline] print_report+0xd1/0x650 mm/kasan/report.c:482 kasan_report+0xfb/0x140 mm/kasan/report.c:595 check_region_inline mm/kasan/generic.c:186 [inline] kasan_check_range+0x11c/0x200 mm/kasan/generic.c:200 __kasan_check_read+0x11/0x20 mm/kasan/shadow.c:31 instrument_atomic_read include/linux/instrumented.h:68 [inline] _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline] test_bit_le include/asm-generic/bitops/le.h:21 [inline] ocfs2_info_freefrag_scan_chain fs/ocfs2/ioctl.c:495 [inline] ocfs2_info_freefrag_scan_bitmap fs/ocfs2/ioctl.c:588 [inline] ocfs2_info_handle_freefrag fs/ocfs2/ioctl.c:662 [inline] ocfs2_info_handle_request+0x1c66/0x3370 fs/ocfs2/ioctl.c:754 ocfs2_info_handle+0x18d/0x2a0 fs/ocfs2/ioctl.c:828 ocfs2_ioctl+0x632/0x6e0 fs/ocfs2/ioctl.c:913 vfs_ioctl fs/ioctl.c:51 [inline] __do_sys_ioctl fs/ioctl.c:597 [inline] __se_sys_ioctl fs/ioctl.c:583 [inline] __x64_sys_ioctl+0x197/0x1e0 fs/ioctl.c:583 ... [CAUSE] ocfs2_info_freefrag_scan_chain() uses on-disk bg_bits directly as the bitmap scan limit. The coherent path reads group descriptors through ocfs2_read_group_descriptor(), which validates the descriptor before use. The non-coherent path uses ocfs2_read_blocks_sync() instead and skips that validation, so an impossible bg_bits value can drive the bitmap walk past the end of the block. [FIX] Compute the bitmap capacity from the filesystem format with ocfs2_group_bitmap_size(), report descriptors whose bg_bits exceeds that limit, and clamp the scan to the computed capacity. This keeps the freefrag report going while avoiding reads beyond the buffer.",
+      "published": "2026-06-24T17:17:15.687Z",
+      "lastModified": "2026-07-14T19:33:51.517Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00122,
+      "epssPercentile": 0.02328,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.57,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-53044",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: soc/tegra: cbb: Fix incorrect ARRAY_SIZE in fabric lookup tables Fix incorrect ARRAY_SIZE usage in fabric lookup tables which could cause out-of-bounds access during target timeout lookup.",
+      "published": "2026-06-24T17:17:16.200Z",
+      "lastModified": "2026-07-14T19:25:47.757Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00124,
+      "epssPercentile": 0.025,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.57,
+      "tags": [
+        "Linux",
+        "CWE-125"
       ]
     },
     {
@@ -32592,39 +32054,34 @@
       ]
     },
     {
-      "id": "CVE-2026-21768",
-      "summary": "The compose-rich-editor library (v1.0.0-rc14) used in HCL Verse for Android's rich text email composition fails to properly validate all HTML input thereby allowing malicious content to be executed in certain situations.",
-      "published": "2026-06-19T15:16:35.020Z",
-      "lastModified": "2026-06-22T20:42:41.180Z",
+      "id": "CVE-2026-53059",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm log: fix out-of-bounds write due to region_count overflow The local variable region_count in create_log_context() is declared as unsigned int (32-bit), but dm_sector_div_up() returns sector_t (64-bit). When a device-mapper target has a sufficiently large ti->len with a small region_size, the division result can exceed UINT_MAX. The truncated value is then used to calculate bitset_size, causing clean_bits, sync_bits, and recovering_bits to be allocated far smaller than needed for the actual number of regions. Subsequent log operations (log_set_bit, log_clear_bit, log_test_bit) use region indices derived from the full untruncated region space, causing out-of-bounds writes to kernel heap memory allocated by vmalloc. This can be reproduced by creating a mirror target whose region_count overflows 32 bits: dmsetup create bigzero --table '0 8589934594 zero' dmsetup create mymirror --table '0 8589934594 mirror \\ core 2 2 nosync 2 /dev/mapper/bigzero 0 \\ /dev/mapper/bigzero 0' The status output confirms the truncation (sync_count=1 instead of 4294967297, because 0x100000001 was truncated to 1): $ dmsetup status mymirror 0 8589934594 mirror 2 254:1 254:1 1/4294967297 ... This leads to a kernel crash in core_in_sync: BUG: scheduling while atomic: (udev-worker)/9150/0x00000000 RIP: 0010:core_in_sync+0x14/0x30 [dm_log] CR2: 0000000000000008 Fixing recursive fault but reboot is needed! Fix by widening the local region_count to sector_t and adding an explicit overflow check before the value is assigned to lc->region_count.",
+      "published": "2026-06-24T17:17:18.463Z",
+      "lastModified": "2026-07-15T01:16:27.803Z",
       "severity": "Medium",
       "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:N",
+      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:N/A:H",
       "cvssBreakdown": {
         "attackVector": "Local",
         "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
         "scope": "Unchanged",
         "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
+        "integrity": "None",
+        "availability": "High"
       },
-      "epssScore": 0.00112,
-      "epssPercentile": 0.01607,
+      "epssScore": 0.00127,
+      "epssPercentile": 0.02719,
       "isKev": false,
       "kev": null,
-      "vendor": "Android",
-      "product": "Android",
+      "vendor": "Linux",
+      "product": null,
       "cwe": [
         {
-          "id": "CWE-20",
-          "name": "CWE-20",
+          "id": "CWE-190",
+          "name": "CWE-190",
           "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
         }
       ],
       "references": [],
@@ -32635,11 +32092,10 @@
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 2.26,
+      "priorityScore": 2.3,
       "tags": [
-        "Android",
-        "CWE-20",
-        "CWE-79"
+        "Linux",
+        "CWE-190"
       ]
     },
     {
@@ -36821,6 +36277,51 @@
       "tags": [
         "Linux",
         "CWE-401"
+      ]
+    },
+    {
+      "id": "CVE-2026-53042",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: fwctl: Fix class init ordering to avoid NULL pointer dereference on device removal CXL is linked before fwctl in drivers/Makefile. Both use `module_init, so `cxl_pci_driver_init()` runs first. When `cxl_pci_probe()` calls `fwctl_register()` and then `device_add()`, fwctl_class is not yet registered because fwctl_init() hasn't run, causing `class_to_subsys()` to return NULL and skip knode_class initialization. On device removal, `class_to_subsys()` returns non-NULL, and `device_del()` calls `klist_del()` on the uninitialized knode, triggering a NULL pointer dereference.",
+      "published": "2026-06-24T17:17:15.967Z",
+      "lastModified": "2026-07-14T19:30:54.690Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00121,
+      "epssPercentile": 0.02213,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-824",
+          "name": "CWE-824",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "Linux",
+        "CWE-824"
       ]
     },
     {
@@ -41405,6 +40906,44 @@
       ]
     },
     {
+      "id": "CVE-2026-53065",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ASoC: sti: use managed regmap_field allocations The regmap_field objects allocated at player init are never freed and may leak resources if the driver is removed. Switch to devm_regmap_field_alloc() to automatically limit the lifetime of the allocations the lifetime of the device.",
+      "published": "2026-06-24T17:17:19.490Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00172,
+      "epssPercentile": 0.06771,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.24,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-11972",
       "summary": "When using the \"tarfile\" module with a file opened in \"streaming mode\" (mode=\"r|\") the tarfile module did not properly handle EOF, making archive parsing take exponentially longer.",
       "published": "2026-06-23T23:16:49.033Z",
@@ -41679,50 +41218,6 @@
       "priorityScore": 1.13,
       "tags": [
         "CWE-352"
-      ]
-    },
-    {
-      "id": "CVE-2026-49358",
-      "summary": "PhpWeasyPrint is a PHP library allowing PDF generation from a URL or an HTML page. Prior to version 2.6.0, `AbstractGenerator::$temporaryFiles` is a public array, and `removeTemporaryFiles()` — invoked from `__destruct()` and from a registered shutdown function — calls `unlink()` on every entry without verifying that the path is contained within the temporary folder. Any code holding a reference to a generator instance can push an arbitrary path into the array and have it deleted on script shutdown. This mirrors the KnpLabs/snappy issue GHSA-87qc-37cw-84h4. PhpWeasyPrint version 2.6.0 contains a patch for the issue.",
-      "published": "2026-06-19T15:16:35.143Z",
-      "lastModified": "2026-06-23T03:16:41.250Z",
-      "severity": "Low",
-      "cvssScore": 3,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:N/S:U/C:N/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00112,
-      "epssPercentile": 0.01609,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-73",
-          "name": "CWE-73",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.11,
-      "tags": [
-        "CWE-73"
       ]
     },
     {
@@ -44360,6 +43855,44 @@
       ]
     },
     {
+      "id": "CVE-2026-53047",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: efi/capsule-loader: fix incorrect sizeof in phys array reallocation The krealloc() call for cap_info->phys in __efi_capsule_setup_info() uses sizeof(phys_addr_t *) instead of sizeof(phys_addr_t), which might be causing an undersized allocation. The allocation is also inconsistent with the initial array allocation in efi_capsule_open() that allocates one entry with sizeof(phys_addr_t), and the efi_capsule_write() function that stores phys_addr_t values (not pointers) via page_to_phys(). On 64-bit systems where sizeof(phys_addr_t) == sizeof(phys_addr_t *), this goes unnoticed. On 32-bit systems with PAE where phys_addr_t is 64-bit but pointers are 32-bit, this allocates half the required space, which might lead to a heap buffer overflow when storing physical addresses. This is similar to the bug fixed in commit fccfa646ef36 (\"efi/capsule-loader: fix incorrect allocation size\") which fixed the same issue at the initial allocation site.",
+      "published": "2026-06-24T17:17:16.533Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00195,
+      "epssPercentile": 0.09351,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.33,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-12681",
       "summary": "Improper Validation of Specified Index, Position, or Offset in Input vulnerability in Google go-attestation. parseEfiSignatureList() does not advance the buffer past vendor bytes before reading entries. For hashSHA256SigGUID lists, this allows attacker-controlled vendor header bytes to be appended to the trusted SHA256 hash list. A crafted TPM event log could inject arbitrary SHA256 hashes into the verifier's trusted measurement database, enabling a remote attestation verifier to accept a compromised boot state. This issue affects go-attestation: through 0.6.0.",
       "published": "2026-06-24T02:16:28.060Z",
@@ -44448,6 +43981,349 @@
         "F5",
         "Docker",
         "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-53060",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache metadata: fix memory leak on metadata abort retry When failing to acquire the root_lock in dm_cache_metadata_abort because the block_manager is read-only, the temporary block_manager created outside the root_lock is not properly released, causing a memory leak. Reproduce steps: This can be reproduced by reloading a new table while the metadata is read-only. While the second call to dm_cache_metadata_abort is caused by lack of support for table preload in dm-cache, mentioned in commit 9b1cc9f251af (\"dm cache: share cache-metadata object across inactive and active DM tables\"), it exposes the memory leak in dm_cache_metadata_abort when the function is called multiple times. Specifically, dm-cache fails to sync the new cache object's mode during preresume, creating the reproducer condition. This issue could also occur through concurrent metadata_operation_failed calls due to races in cache mode updates, but the table preload scenario below provides a reliable reproducer. 1. Create a cache device with some faulty trailing metadata blocks dmsetup create cmeta unreferenced object 0xffff8880080c2010 (size 16): comm \"dmsetup\", pid 132, jiffies 4294982580 hex dump (first 16 bytes): 00 38 b9 07 80 88 ff ff 6a 6b 6b 6b 6b 6b 6b a5 ... backtrace (crc 3118f31c): kmemleak_alloc+0x28/0x40 __kmalloc_cache_noprof+0x3d9/0x510 dm_block_manager_create+0x51/0x140 dm_cache_metadata_abort+0x85/0x320 metadata_operation_failed+0x103/0x1e0 cache_preresume+0xacd/0xe70 dm_table_resume_targets+0xd3/0x320 __dm_resume+0x1b/0xf0 dm_resume+0x127/0x170",
+      "published": "2026-06-24T17:17:18.717Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00184,
+      "epssPercentile": 0.08177,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.29,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53056",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/msm/dpu: fix mismatch between power and frequency During DPU runtime suspend, calling dev_pm_opp_set_rate(dev, 0) drops the MMCX rail to MIN_SVS while the core clock frequency remains at its original (highest) rate. When runtime resume re-enables the clock, this may result in a mismatch between the rail voltage and the clock rate. For example, in the DPU bind path, the sequence could be: cpu0: dev_sync_state -> rpmhpd_sync_state cpu1: dpu_kms_hw_init timeline 0 ------------------------------------------------> t After rpmhpd_sync_state, the voltage performance is no longer guaranteed to stay at the highest level. During dpu_kms_hw_init, calling dev_pm_opp_set_rate(dev, 0) drops the voltage, causing the MMCX rail to fall to MIN_SVS while the core clock is still at its maximum frequency. When the power is re-enabled, only the clock is enabled, leading to a situation where the MMCX rail is at MIN_SVS but the core clock is at its highest rate. In this state, the rail cannot sustain the clock rate, which may cause instability or system crash. Remove the call to dev_pm_opp_set_rate(dev, 0) from dpu_runtime_suspend to ensure the correct vote is restored when DPU resumes. Patchwork: https://patchwork.freedesktop.org/patch/710077/",
+      "published": "2026-06-24T17:17:17.663Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.0018,
+      "epssPercentile": 0.07733,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.27,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53063",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache: fix write hang in passthrough mode The invalidate_remove() function has incomplete logic for handling write hit bios after cache invalidation. It sets up the remapping for the overwrite_bio but then drops it immediately without submission, causing write operations to hang. Fix by adding a new invalidate_committed() continuation that submits the remapped writes to the cache origin after metadata commit completes, while using the overwrite_endio hook to ensure proper completion sequencing. This maintains existing coherency. Also improve error handling in invalidate_complete() to preserve the original error status instead of using bio_io_error() unconditionally.",
+      "published": "2026-06-24T17:17:19.173Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.0018,
+      "epssPercentile": 0.07732,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.27,
+      "tags": [
+        "Linux",
+        "iOS"
+      ]
+    },
+    {
+      "id": "CVE-2026-53061",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache: fix dirty mapping checking in passthrough mode switching As mentioned in commit 9b1cc9f251af (\"dm cache: share cache-metadata object across inactive and active DM tables\"), dm-cache assumed table reload occurs after suspension, while LVM's table preload breaks this assumption. The dirty mapping check for passthrough mode was designed around this assumption and is performed during table creation, causing the check to fail with preload while metadata updates are ongoing. This risks loading dirty mappings into passthrough mode, resulting in data loss. Reproduce steps: 1. Create a writeback cache with zero migration_threshold to produce dirty mappings dmsetup create cmeta --table \"0 8192 linear /dev/sdc 0\" dmsetup create cdata --table \"0 131072 linear /dev/sdc 8192\" dmsetup create corig --table \"0 262144 linear /dev/sdc 262144\" dd if=/dev/zero of=/dev/mapper/cmeta bs=4k count=1 oflag=direct dmsetup create cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 writeback smq \\ 2 migration_threshold 0\" 2. Preload a table in passthrough mode dmsetup reload cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 passthrough smq 0\" 3. Write to the first cache block to make it dirty fio --filename=/dev/mapper/cache --name=populate --rw=write --bs=4k \\ --direct=1 --size=64k 4. Resume the inactive table. Now it's possible to load the dirty block into passthrough mode. dmsetup resume cache Fix by moving the checks to the preresume phase to support table preloading. Also remove the unused function dm_cache_metadata_all_clean.",
+      "published": "2026-06-24T17:17:18.880Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00176,
+      "epssPercentile": 0.07323,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.26,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53064",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache: fix null-deref with concurrent writes in passthrough mode In passthrough mode, when dm-cache starts to invalidate a cache entry and bio prison cell lock fails due to concurrent write to the same cached block, mg->cell remains NULL. The error path in invalidate_complete() attempts to unlock and free the cell unconditionally, causing a NULL pointer dereference: KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007] CPU: 0 UID: 0 PID: 134 Comm: fio Not tainted 6.19.0-rc7 #3 PREEMPT RIP: 0010:dm_cell_unlock_v2+0x3f/0x210 Call Trace: invalidate_complete+0xef/0x430 map_bio+0x130f/0x1a10 cache_map+0x320/0x6b0 __map_bio+0x458/0x510 dm_submit_bio+0x40e/0x16d0 __submit_bio+0x419/0x870 Reproduce steps: 1. Create a cache device dmsetup create cmeta --table \"0 8192 linear /dev/sdc 0\" dmsetup create cdata --table \"0 131072 linear /dev/sdc 8192\" dmsetup create corig --table \"0 262144 linear /dev/sdc 262144\" dd if=/dev/zero of=/dev/mapper/cmeta bs=4k count=1 oflag=direct dmsetup create cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 writethrough smq 0\" 2. Promote the first data block into cache fio --filename=/dev/mapper/cache --name=populate --rw=write --bs=4k \\ --direct=1 --size=64k 3. Reload the cache into passthrough mode dmsetup suspend cache dmsetup reload cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 passthrough smq 0\" dmsetup resume cache 4. Write to the first cached block concurrently fio --filename=/dev/mapper/cache --name test --rw=randwrite --bs=4k \\ --randrepeat=0 --direct=1 --numjobs=2 --size 64k Fix by checking if mg->cell is valid before attempting to unlock it.",
+      "published": "2026-06-24T17:17:19.320Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00176,
+      "epssPercentile": 0.07323,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.26,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53051",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: PCI: tegra194: Fix CBB timeout caused by DBI access before core power-on When PERST# is deasserted twice (assert -> deassert -> assert -> deassert), a CBB (Control Backbone) timeout occurs at DBI register offset 0x8bc (PCIE_MISC_CONTROL_1_OFF). This happens because pci_epc_deinit_notify() and dw_pcie_ep_cleanup() are called before reset_control_deassert() powers on the controller core. The call chain that causes the timeout: pex_ep_event_pex_rst_deassert() pci_epc_deinit_notify() pci_epf_test_epc_deinit() pci_epf_test_clear_bar() pci_epc_clear_bar() dw_pcie_ep_clear_bar() __dw_pcie_ep_reset_bar() dw_pcie_dbi_ro_wr_en() core_rst) core_rst). Accessing them before this point results in a CBB timeout because the hardware is not yet operational. Fix this by moving pci_epc_deinit_notify() and dw_pcie_ep_cleanup() to after reset_control_deassert(pcie->core_rst), ensuring the controller is fully powered on before any DBI register accesses occur.",
+      "published": "2026-06-24T17:17:17.083Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00175,
+      "epssPercentile": 0.07193,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.25,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53048",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: gfs2: prevent NULL pointer dereference during unmount When flushing out outstanding glock work during an unmount, gfs2_log_flush() can be called when sdp->sd_jdesc has already been deallocated and sdp->sd_jdesc is NULL. Commit 35264909e9d1 (\"gfs2: Fix NULL pointer dereference in gfs2_log_flush\") added a check for that to gfs2_log_flush() itself, but it missed the sdp->sd_jdesc dereference in gfs2_log_release(). Fix that.",
+      "published": "2026-06-24T17:17:16.660Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00172,
+      "epssPercentile": 0.0685,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.24,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53052",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ASoC: qcom: qdsp6: topology: check widget type before accessing data Check widget type before accessing the private data, as this could a virtual widget which is no associated with a dsp graph, container and module. Accessing witout check could lead to incorrect memory access.",
+      "published": "2026-06-24T17:17:17.200Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00172,
+      "epssPercentile": 0.06849,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.24,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53058",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/bridge: cadence: cdns-mhdp8546-core: Set the mhdp connector earlier in atomic_enable() In case if we get errors in cdns_mhdp_link_up() or cdns_mhdp_reg_read() in atomic_enable, we will go to cdns_mhdp_modeset_retry_fn() and will hit NULL pointer while trying to access the mutex. We need the connector to be set before that. Unlike in legacy cases with flag !DRM_BRIDGE_ATTACH_NO_CONNECTOR, we do not have connector initialised in bridge_attach(), so add the mhdp->connector_ptr in device structure to handle both cases with DRM_BRIDGE_ATTACH_NO_CONNECTOR and !DRM_BRIDGE_ATTACH_NO_CONNECTOR, set it in atomic_enable() earlier to avoid possible NULL pointer dereference in recovery paths like modeset_retry_fn() with the DRM_BRIDGE_ATTACH_NO_CONNECTOR flag set.",
+      "published": "2026-06-24T17:17:18.170Z",
+      "lastModified": "2026-07-14T15:26:52.267Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.06345,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.22,
+      "tags": [
+        "Linux"
       ]
     },
     {
