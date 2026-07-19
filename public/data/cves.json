@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-19T01:04:36.119Z",
+  "generatedAt": "2026-07-19T04:36:23.932Z",
   "count": 1000,
   "items": [
     {
@@ -29551,51 +29551,6 @@
       ]
     },
     {
-      "id": "CVE-2026-11775",
-      "summary": "The User Admin Simplifier plugin for WordPress is vulnerable to Cross-Site Request Forgery in all versions up to, and including, 3.0.0. This is due to missing or incorrect nonce validation on the useradminsimplifier_options_page function. This makes it possible for unauthenticated attackers to reset and permanently delete any user's stored menu and admin-bar configuration via a forged request that triggers uas_save_admin_options() and overwrites the useradminsimplifier_options database entry via a forged request granted they can trick a site administrator into performing an action such as clicking on a link.",
-      "published": "2026-06-19T03:16:13.780Z",
-      "lastModified": "2026-06-22T18:16:31.397Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00128,
-      "epssPercentile": 0.02832,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-352",
-          "name": "Cross-Site Request Forgery",
-          "description": "A web request may execute without user intent."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.6,
-      "tags": [
-        "WordPress",
-        "CWE-352"
-      ]
-    },
-    {
       "id": "CVE-2026-41048",
       "summary": "Incorrect caching of authentication between different polkit methods in qSnapper before version 1.3.3 allowed a local attacker to use functions like \"restore from snapshot\" even if only allowed to do \"delete snapshot\".",
       "published": "2026-06-22T16:16:35.260Z",
@@ -36079,6 +36034,44 @@
       ]
     },
     {
+      "id": "CVE-2026-52978",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: psp: require admin permission for dev-set and key-rotate The dev-set and key-rotate netlink operations modify shared device state (PSP version configuration and cryptographic key material, respectively) but do not require CAP_NET_ADMIN. The only access control is psp_dev_check_access() which merely verifies netns membership.",
+      "published": "2026-06-24T17:17:08.417Z",
+      "lastModified": "2026-07-14T16:51:42.647Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00126,
+      "epssPercentile": 0.02658,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.02,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-12619",
       "summary": "Improper Neutralization of Input During Web Page Generation (XSS or 'Cross-site Scripting') vulnerability in Microchip GridTime 3000 allows Cross-Site Scripting (XSS). This issue affects GridTime 3000: from 1.0r0.03 through 1.1r0.0.",
       "published": "2026-06-19T16:16:16.930Z",
@@ -36499,6 +36492,51 @@
       "priorityScore": 2.01,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-52980",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: sched/fair: Clear rel_deadline when initializing forked entities A yield-triggered crash can happen when a newly forked sched_entity enters the fair class with se->rel_deadline unexpectedly set. The failing sequence is: 1. A task is forked while se->rel_deadline is still set. 2. __sched_fork() initializes vruntime, vlag and other sched_entity state, but does not clear rel_deadline. 3. On the first enqueue, enqueue_entity() calls place_entity(). 4. Because se->rel_deadline is set, place_entity() treats se->deadline as a relative deadline and converts it to an absolute deadline by adding the current vruntime. 5. However, the forked entity's deadline is not a valid inherited relative deadline for this new scheduling instance, so the conversion produces an abnormally large deadline. 6. If the task later calls sched_yield(), yield_task_fair() advances se->vruntime to se->deadline. 7. The inflated vruntime is then used by the following enqueue path, where the vruntime-derived key can overflow when multiplied by the entity weight. 8. This corrupts cfs_rq->sum_w_vruntime, breaks EEVDF eligibility calculation, and can eventually make all entities appear ineligible. pick_next_entity() may then return NULL unexpectedly, leading to a later NULL dereference. A captured trace shows the effect clearly. Before yield, the entity's vruntime was around: 9834017729983308 After yield_task_fair() executed: se->vruntime = se->deadline the vruntime jumped to: 19668035460670230 and the deadline was later advanced further to: 19668035463470230 This shows that the deadline had already become abnormally large before yield_task_fair() copied it into vruntime. rel_deadline is only meaningful when se->deadline really carries a relative deadline that still needs to be placed against vruntime. A freshly forked sched_entity should not inherit or retain this state. Clear se->rel_deadline in __sched_fork(), together with the other sched_entity runtime state, so that the first enqueue does not interpret the new entity's deadline as a stale relative deadline.",
+      "published": "2026-06-24T17:17:08.610Z",
+      "lastModified": "2026-07-14T16:51:26.420Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00122,
+      "epssPercentile": 0.02318,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.01,
+      "tags": [
+        "Linux",
+        "CWE-476"
       ]
     },
     {
@@ -37481,6 +37519,51 @@
       "tags": [
         "Linux",
         "CWE-476"
+      ]
+    },
+    {
+      "id": "CVE-2026-52979",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: psp: check for device unregister when creating assoc psp_assoc_device_get_locked() obtains a psp_dev reference via psp_dev_get_for_sock() (which uses psp_dev_tryget() under RCU); it then acquires psd->lock and drops the reference. Before the lock is taken, psp_dev_unregister() can run to completion: take psd->lock, clear out state, unlock, drop the registration reference. The expectation is that the lock prevents device unregistration, but much like with netdevs special care has to be taken when \"upgrading\" a reference to a locked device. Add the missing check if device is still alive. psp_dev_is_registered() exists already but had no callers, which makes me wonder if I either forgot to add this or lost the check during refactoring...",
+      "published": "2026-06-24T17:17:08.513Z",
+      "lastModified": "2026-07-14T16:51:33.750Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00093,
+      "epssPercentile": 0.00707,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-667",
+          "name": "CWE-667",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.95,
+      "tags": [
+        "Linux",
+        "CWE-667"
       ]
     },
     {
@@ -41472,50 +41555,6 @@
       ]
     },
     {
-      "id": "CVE-2026-8805",
-      "summary": "Integer Overflow or Wraparound vulnerability in the EtherNet/IP function of Mitsubishi Electric MELSEC iQ-F Series FX5-EIP EtherNet/IP module FX5-EIP versions 1.000 and prior allows a remote attacker to cause a denial-of-service (DoS) condition in the affected product by rapidly establishing a large number of TCP connections to it, resulting in an inconsistency in the product's internal connection management process and triggering improper memory access.",
-      "published": "2026-06-19T03:16:14.850Z",
-      "lastModified": "2026-06-22T19:49:09.490Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00379,
-      "epssPercentile": 0.30167,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-190",
-          "name": "CWE-190",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.06,
-      "tags": [
-        "CWE-190"
-      ]
-    },
-    {
       "id": "CVE-2026-11772",
       "summary": "DRIMO CMS is vulnerable to Reflected XSS via q parameter in searching functionality. An attacker can prepare an URL that, when opened, results in arbitrary JavaScript execution in the victim's browser. Product is in End Of Life phase and will not receive any updates. However, deleting info.php file mitigates the vulnerability,",
       "published": "2026-06-23T14:17:22.183Z",
@@ -41557,50 +41596,6 @@
       "priorityScore": 1.05,
       "tags": [
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-8806",
-      "summary": "Expected Behavior Violation vulnerability in Mitsubishi Electric MELSEC iQ-F Series FX5-ENET/IP Ethernet Module FX5-ENET/IP all versions allows a remote attacker to cause a denial-of-service (DoS) condition in the affected product by continuously sending a large number of communication packets to the Ethernet port of the product in a short period of time, increasing the processing load of the product, preventing the internal anomaly-detection processing from being performed, and causing the communication function to stop.",
-      "published": "2026-06-19T03:16:15.010Z",
-      "lastModified": "2026-06-22T19:49:09.490Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00367,
-      "epssPercentile": 0.28933,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-440",
-          "name": "CWE-440",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.01,
-      "tags": [
-        "CWE-440"
       ]
     },
     {
