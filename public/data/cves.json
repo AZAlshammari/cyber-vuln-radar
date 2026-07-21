@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-21T16:42:56.282Z",
+  "generatedAt": "2026-07-21T18:02:08.709Z",
   "count": 1000,
   "items": [
     {
@@ -4760,7 +4760,7 @@
       "id": "CVE-2026-53046",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: fix use-after-free from async crypto on Qualcomm crypto engine ksmbd_crypt_message() sets a NULL completion callback on AEAD requests and does not handle the -EINPROGRESS return code from async hardware crypto engines like the Qualcomm Crypto Engine (QCE). When QCE returns -EINPROGRESS, ksmbd treats it as an error and immediately frees the request while the hardware DMA operation is still in flight. The DMA completion callback then dereferences freed memory, causing a NULL pointer crash: pc : qce_skcipher_done+0x24/0x174 lr : vchan_complete+0x230/0x27c ... el1h_64_irq+0x68/0x6c ksmbd_free_work_struct+0x20/0x118 [ksmbd] ksmbd_exit_file_cache+0x694/0xa4c [ksmbd] Use the standard crypto_wait_req() pattern with crypto_req_done() as the completion callback, matching the approach used by the SMB client in fs/smb/client/smb2ops.c. This properly handles both synchronous engines (immediate return) and async engines (-EINPROGRESS followed by callback notification).",
       "published": "2026-06-24T17:17:16.420Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:22:11.660Z",
       "severity": "Critical",
       "cvssScore": 9.8,
       "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
@@ -4780,18 +4780,25 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 4.88,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-416"
       ]
     },
     {
@@ -4843,7 +4850,7 @@
       "id": "CVE-2026-53045",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: memory: tegra124-emc: Fix dll_change check The code checking whether the specified memory timing enables DLL in the EMRS register was reversed. DLL is enabled if bit A0 is low. Fix the check.",
       "published": "2026-06-24T17:17:16.290Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:12:40.013Z",
       "severity": "Critical",
       "cvssScore": 9.8,
       "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
@@ -4870,7 +4877,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 4.86,
       "tags": [
@@ -5025,7 +5032,7 @@
       "id": "CVE-2026-53049",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: gfs2: add some missing log locking Function gfs2_logd() calls the log flushing functions gfs2_ail1_start(), gfs2_ail1_wait(), and gfs2_ail1_empty() without holding sdp->sd_log_flush_lock, but these functions require exclusion against concurrent transactions. To fix that, add a non-locking __gfs2_log_flush() function. Then, in gfs2_logd(), take sdp->sd_log_flush_lock before calling the above mentioned log flushing functions and __gfs2_log_flush().",
       "published": "2026-06-24T17:17:16.777Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:23:23.533Z",
       "severity": "Critical",
       "cvssScore": 9.8,
       "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
@@ -5045,18 +5052,25 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-667",
+          "name": "CWE-667",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 4.83,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-667"
       ]
     },
     {
@@ -5963,7 +5977,7 @@
       "id": "CVE-2026-53069",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net, bpf: fix null-ptr-deref in xdp_master_redirect() for down master syzkaller reported a kernel panic in bond_rr_gen_slave_id() reached via xdp_master_redirect(). Full decoded trace: https://syzkaller.appspot.com/bug?extid=80e046b8da2820b6ba73 bond_rr_gen_slave_id() dereferences bond->rr_tx_counter, a per-CPU counter that bonding only allocates in bond_open() when the mode is round-robin. If the bond device was never brought up, rr_tx_counter stays NULL. The XDP redirect path can still reach that code on a bond that was never opened: bpf_master_redirect_enabled_key is a global static key, so as soon as any bond device has native XDP attached, the XDP_TX -> xdp_master_redirect() interception is enabled for every slave system-wide. The path xdp_master_redirect() -> bond_xdp_get_xmit_slave() -> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() then runs against a bond that has no rr_tx_counter and crashes. Fix this in the generic xdp_master_redirect() by refusing to call into the master's ->ndo_xdp_get_xmit_slave() when the master device is not up. IFF_UP is only set after ->ndo_open() has successfully returned, so this reliably excludes masters whose XDP state has not been fully initialized. Drop the frame with XDP_ABORTED so the exception is visible via trace_xdp_exception() rather than silently falling through. This is not specific to bonding: any current or future master that defers XDP state allocation to ->ndo_open() is protected.",
       "published": "2026-06-24T17:17:20.280Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:39:18.813Z",
       "severity": "High",
       "cvssScore": 7.5,
       "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
@@ -5983,18 +5997,25 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 4.7,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-476"
       ]
     },
     {
@@ -6444,7 +6465,7 @@
       "id": "CVE-2026-53055",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: crypto: hisilicon/sec2 - prevent req used-after-free for sec During packet transmission, if the system is under heavy load, the hardware might complete processing the packet and free the request memory (req) before the transmission function finishes. If the software subsequently accesses this req, a use-after-free error will occur. The qp_ctx memory exists throughout the packet sending process, so replace the req with the qp_ctx.",
       "published": "2026-06-24T17:17:17.527Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:29:12.720Z",
       "severity": "Critical",
       "cvssScore": 9.8,
       "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
@@ -6464,18 +6485,25 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 4.67,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-416"
       ]
     },
     {
@@ -10414,7 +10442,7 @@
       "id": "CVE-2026-53053",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: iommu/amd: Fix clone_alias() to use the original device's devid Currently clone_alias() assumes first argument (pdev) is always the original device pointer. This function is called by pci_for_each_dma_alias() which based on topology decides to send original or alias device details in first argument. This meant that the source devid used to look up and copy the DTE may be incorrect, leading to wrong or stale DTE entries being propagated to alias device. Fix this by passing the original pdev as the opaque data argument to both the direct clone_alias() call and pci_for_each_dma_alias(). Inside clone_alias(), retrieve the original device from data and compute devid from it.",
       "published": "2026-06-24T17:17:17.327Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:24:06.203Z",
       "severity": "High",
       "cvssScore": 8.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
@@ -10441,11 +10469,55 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 4.18,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2025-60474",
+      "summary": "A buffer overflow in the gf_media_import function (/media_tools/av_parsers.c) of GPAC Project/MP4Box before 26.02.0 allows attackers to cause a Denial of Service (DoS) via supplying a crafted input.",
+      "published": "2026-06-24T23:16:40.137Z",
+      "lastModified": "2026-06-29T23:26:36.770Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00579,
+      "epssPercentile": 0.43892,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-121",
+          "name": "CWE-121",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.16,
+      "tags": [
+        "CWE-121"
       ]
     },
     {
@@ -13317,7 +13389,7 @@
       "id": "CVE-2026-53071",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: l2cap: Add missing chan lock in l2cap_ecred_reconf_rsp l2cap_ecred_reconf_rsp() calls l2cap_chan_del() without holding l2cap_chan_lock(). Every other l2cap_chan_del() caller in the file acquires the lock first. A remote BLE device can send a crafted L2CAP ECRED reconfiguration response to corrupt the channel list while another thread is iterating it. Add l2cap_chan_hold() and l2cap_chan_lock() before l2cap_chan_del(), and l2cap_chan_unlock() and l2cap_chan_put() after, matching the pattern used in l2cap_ecred_conn_rsp() and l2cap_conn_del().",
       "published": "2026-06-24T17:17:20.843Z",
-      "lastModified": "2026-07-21T12:18:56.623Z",
+      "lastModified": "2026-07-21T17:40:16.280Z",
       "severity": "High",
       "cvssScore": 8.8,
       "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
@@ -13335,9 +13407,14 @@
       "epssPercentile": 0.18513,
       "isKev": false,
       "kev": null,
-      "vendor": "Linux",
+      "vendor": "F5",
       "product": null,
       "cwe": [
+        {
+          "id": "CWE-667",
+          "name": "CWE-667",
+          "description": "CWE mapping from source data."
+        },
         {
           "id": "CWE-416",
           "name": "Use After Free",
@@ -13354,7 +13431,9 @@
       "knownRansomwareUse": false,
       "priorityScore": 3.73,
       "tags": [
+        "F5",
         "Linux",
+        "CWE-667",
         "CWE-416"
       ]
     },
@@ -14421,7 +14500,7 @@
       "id": "CVE-2026-53072",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: fix locking in hci_conn_request_evt() with HCI_PROTO_DEFER When protocol sets HCI_PROTO_DEFER, hci_conn_request_evt() calls hci_connect_cfm(conn) without hdev->lock. Generally hci_connect_cfm() assumes it is held, and if conn is deleted concurrently -> UAF. Only SCO and ISO set HCI_PROTO_DEFER and only for defer setup listen, and HCI_EV_CONN_REQUEST is not generated for ISO. In the non-deferred listening socket code paths, hci_connect_cfm(conn) is called with hdev->lock held. Fix by holding the lock.",
       "published": "2026-06-24T17:17:21.017Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:40:24.910Z",
       "severity": "High",
       "cvssScore": 8.8,
       "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
@@ -14441,18 +14520,25 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-667",
+          "name": "CWE-667",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 3.64,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-667"
       ]
     },
     {
@@ -15177,7 +15263,7 @@
       "id": "CVE-2026-53070",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: sctp: disable BH before calling udp_tunnel_xmit_skb() udp_tunnel_xmit_skb() / udp_tunnel6_xmit_skb() are expected to run with BH disabled. After commit 6f1a9140ecda (\"add xmit recursion limit to tunnel xmit functions\"), on the path: udp(6)_tunnel_xmit_skb() -> ip(6)tunnel_xmit() dev_xmit_recursion_inc()/dec() must stay balanced on the same CPU. Without local_bh_disable(), the context may move between CPUs, which can break the inc/dec pairing. This may lead to incorrect recursion level detection and cause packets to be dropped in ip(6)_tunnel_xmit() or __dev_queue_xmit(). Fix it by disabling BH around both IPv4 and IPv6 SCTP UDP xmit paths. In my testing, after enabling the SCTP over UDP: # ip net exec ha sysctl -w net.sctp.udp_port=9899 # ip net exec ha sysctl -w net.sctp.encap_port=9899 # ip net exec hb sysctl -w net.sctp.udp_port=9899 # ip net exec hb sysctl -w net.sctp.encap_port=9899 # ip net exec ha iperf3 -s - without this patch: # ip net exec hb iperf3 -c 192.168.0.1 --sctp [ 5] 0.00-10.00 sec 37.2 MBytes 31.2 Mbits/sec sender [ 5] 0.00-10.00 sec 37.1 MBytes 31.1 Mbits/sec receiver - with this patch: # ip net exec hb iperf3 -c 192.168.0.1 --sctp [ 5] 0.00-10.00 sec 3.14 GBytes 2.69 Gbits/sec sender [ 5] 0.00-10.00 sec 3.14 GBytes 2.69 Gbits/sec receiver",
       "published": "2026-06-24T17:17:20.513Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:39:27.027Z",
       "severity": "High",
       "cvssScore": 7.5,
       "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
@@ -15204,7 +15290,7 @@
       "patchAvailable": true,
       "workaroundAvailable": true,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 3.58,
       "tags": [
@@ -19481,7 +19567,7 @@
       "id": "CVE-2026-53057",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: iommu/riscv: Add IOTINVAL after updating DDT/PDT entries Add riscv_iommu_iodir_iotinval() to perform required TLB and context cache invalidations after updating DDT or PDT entries, as mandated by the RISC-V IOMMU specification (Section 6.3.1 and 6.3.2).",
       "published": "2026-06-24T17:17:17.960Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:29:32.643Z",
       "severity": "High",
       "cvssScore": 8.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
@@ -19508,7 +19594,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 3.18,
       "tags": [
@@ -19557,6 +19643,51 @@
       "priorityScore": 3.17,
       "tags": [
         "CWE-93"
+      ]
+    },
+    {
+      "id": "CVE-2026-53065",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ASoC: sti: use managed regmap_field allocations The regmap_field objects allocated at player init are never freed and may leak resources if the driver is removed. Switch to devm_regmap_field_alloc() to automatically limit the lifetime of the allocations the lifetime of the device.",
+      "published": "2026-06-24T17:17:19.490Z",
+      "lastModified": "2026-07-21T17:36:37.290Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00172,
+      "epssPercentile": 0.06832,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.16,
+      "tags": [
+        "Linux",
+        "CWE-401"
       ]
     },
     {
@@ -22351,6 +22482,51 @@
       ]
     },
     {
+      "id": "CVE-2026-53067",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: PCI: endpoint: pci-ep-msi: Fix error unwind and prevent double alloc pci_epf_alloc_doorbell() stores the allocated doorbell message array in epf->db_msg/epf->num_db before requesting MSI vectors. If MSI allocation fails, the array is freed but the EPF state may still point to freed memory. Clear epf->db_msg and epf->num_db on the MSI allocation failure path so that later cleanup cannot double-free the array and callers can retry allocation. Also return -EBUSY when doorbells have already been allocated to prevent leaking or overwriting an existing allocation.",
+      "published": "2026-06-24T17:17:19.780Z",
+      "lastModified": "2026-07-21T17:37:33.227Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00154,
+      "epssPercentile": 0.05045,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-415",
+          "name": "CWE-415",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.91,
+      "tags": [
+        "Linux",
+        "CWE-415"
+      ]
+    },
+    {
       "id": "CVE-2026-25119",
       "summary": "Gogs is an open source self-hosted Git service. Prior to 0.14.3, when ENABLE_REVERSE_PROXY_AUTHENTICATION is enabled, Gogs accepts the configured authentication header (default: X-WEBAUTH-USER) directly from client requests without validating that the request originated from a trusted reverse proxy. Any remote attacker who can reach the Gogs service can forge this header to impersonate any user or trigger automatic account creation, completely bypassing authentication. This vulnerability is fixed in 0.14.3.",
       "published": "2026-06-24T21:16:52.903Z",
@@ -24071,7 +24247,7 @@
       "id": "CVE-2026-53050",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: quota: Fix race of dquot_scan_active() with quota deactivation dquot_scan_active() can race with quota deactivation in quota_release_workfn() like: CPU0 (quota_release_workfn) CPU1 (dquot_scan_active) ============================== ============================== spin_lock(&dq_list_lock); list_replace_init( &releasing_dquots, &rls_head); /* dquot X on rls_head, dq_count == 0, DQ_ACTIVE_B still set */ spin_unlock(&dq_list_lock); synchronize_srcu(&dquot_srcu); spin_lock(&dq_list_lock); list_for_each_entry(dquot, &inuse_list, dq_inuse) { /* finds dquot X */ dquot_active(X) -> true atomic_inc(&X->dq_count); } spin_unlock(&dq_list_lock); spin_lock(&dq_list_lock); dquot = list_first_entry(&rls_head); WARN_ON_ONCE(atomic_read(&dquot->dq_count)); The problem is not only a cosmetic one as under memory pressure the caller of dquot_scan_active() can end up working on freed dquot. Fix the problem by making sure the dquot is removed from releasing list when we acquire a reference to it.",
       "published": "2026-06-24T17:17:16.887Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:23:37.577Z",
       "severity": "High",
       "cvssScore": 7.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
@@ -24089,27 +24265,35 @@
       "epssPercentile": 0.02945,
       "isKev": false,
       "kev": null,
-      "vendor": "Linux",
+      "vendor": "F5",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-362",
+          "name": "CWE-362",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 2.83,
       "tags": [
-        "Linux"
+        "F5",
+        "Linux",
+        "CWE-362"
       ]
     },
     {
       "id": "CVE-2026-53054",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/msm: Fix VM_BIND UNMAP locking Wrong argument meant that the objs involved in UNMAP ops were not always getting locked. Since _NO_SHARE objs share a common resv with the VM (which is always locked) this would only show up with non-_NO_SHARE BOs. Patchwork: https://patchwork.freedesktop.org/patch/713898/",
       "published": "2026-06-24T17:17:17.430Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:24:23.777Z",
       "severity": "High",
       "cvssScore": 7.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
@@ -24129,18 +24313,76 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-667",
+          "name": "CWE-667",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 2.83,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-667"
+      ]
+    },
+    {
+      "id": "CVE-2026-53059",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm log: fix out-of-bounds write due to region_count overflow The local variable region_count in create_log_context() is declared as unsigned int (32-bit), but dm_sector_div_up() returns sector_t (64-bit). When a device-mapper target has a sufficiently large ti->len with a small region_size, the division result can exceed UINT_MAX. The truncated value is then used to calculate bitset_size, causing clean_bits, sync_bits, and recovering_bits to be allocated far smaller than needed for the actual number of regions. Subsequent log operations (log_set_bit, log_clear_bit, log_test_bit) use region indices derived from the full untruncated region space, causing out-of-bounds writes to kernel heap memory allocated by vmalloc. This can be reproduced by creating a mirror target whose region_count overflows 32 bits: dmsetup create bigzero --table '0 8589934594 zero' dmsetup create mymirror --table '0 8589934594 mirror \\ core 2 2 nosync 2 /dev/mapper/bigzero 0 \\ /dev/mapper/bigzero 0' The status output confirms the truncation (sync_count=1 instead of 4294967297, because 0x100000001 was truncated to 1): $ dmsetup status mymirror 0 8589934594 mirror 2 254:1 254:1 1/4294967297 ... This leads to a kernel crash in core_in_sync: BUG: scheduling while atomic: (udev-worker)/9150/0x00000000 RIP: 0010:core_in_sync+0x14/0x30 [dm_log] CR2: 0000000000000008 Fixing recursive fault but reboot is needed! Fix by widening the local region_count to sector_t and adding an explicit overflow check before the value is assigned to lc->region_count.",
+      "published": "2026-06-24T17:17:18.463Z",
+      "lastModified": "2026-07-21T17:30:06.153Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00127,
+      "epssPercentile": 0.0273,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        },
+        {
+          "id": "CWE-190",
+          "name": "CWE-190",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.83,
+      "tags": [
+        "Linux",
+        "CWE-787",
+        "CWE-190"
       ]
     },
     {
@@ -24275,7 +24517,7 @@
       "id": "CVE-2026-53062",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache policy smq: fix missing locks in invalidating cache blocks In passthrough mode, the policy invalidate_mapping operation is called simultaneously from multiple workers, thus it should be protected by a lock. Otherwise, we might end up with data races on the allocated blocks counter, or even use-after-free issues with internal data structures when doing concurrent writes. Note that the existing FIXME in smq_invalidate_mapping() doesn't affect passthrough mode since migration tasks don't exist there, but would need attention if supporting fast device shrinking via suspend/resume without target reloading. Reproduce steps: 1. Create a cache device consisting of 1024 cache entries dmsetup create cmeta --table \"0 8192 linear /dev/sdc 0\" dmsetup create cdata --table \"0 131072 linear /dev/sdc 8192\" dmsetup create corig --table \"0 262144 linear /dev/sdc 262144\" dd if=/dev/zero of=/dev/mapper/cmeta bs=4k count=1 oflag=direct dmsetup create cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 writethrough smq 0\" 2. Populate the cache, and record the number of cached blocks fio --name=populate --filename=/dev/mapper/cache --rw=randwrite --bs=4k \\ --size=64m --direct=1 nr_cached=$(dmsetup status cache | awk '{split($7, a, \"/\"); print a[1]}') 3. Reload the cache into passthrough mode dmsetup suspend cache dmsetup reload cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 passthrough smq 0\" dmsetup resume cache 4. Write to the passthrough cache. By setting multiple jobs with I/O size equal to the cache block size, cache blocks are invalidated concurrently from different workers. fio --filename=/dev/mapper/cache --name=test --rw=randwrite --bs=64k \\ --direct=1 --numjobs=2 --randrepeat=0 --size=64m 5. Check if demoted matches cached block count. These numbers should match but may differ due to the data race. nr_demoted=$(dmsetup status cache | awk '{print $12}') echo \"$nr_cached, $nr_demoted\"",
       "published": "2026-06-24T17:17:19.030Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:36:16.187Z",
       "severity": "High",
       "cvssScore": 7.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
@@ -24295,18 +24537,25 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-667",
+          "name": "CWE-667",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": true,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 2.82,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-667"
       ]
     },
     {
@@ -27712,7 +27961,7 @@
       "id": "CVE-2026-53068",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/komeda: fix integer overflow in AFBC framebuffer size check The AFBC framebuffer size validation calculates the minimum required buffer size by adding the AFBC payload size to the framebuffer offset. This addition is performed without checking for integer overflow. If the addition oveflows, the size check may incorrectly succed and allow userspace to provide an undersized drm_gem_object, potentially leading to out-of-bounds memory access. Add usage of check_add_overflow() to safely compute the minimum required size and reject the framebuffer if an overflow is detected. This makes the AFBC size validation more robust against malformed. Found by Linux Verification Center (linuxtesting.org) with SVACE.",
       "published": "2026-06-24T17:17:19.900Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T17:39:08.837Z",
       "severity": "High",
       "cvssScore": 7.1,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
@@ -27732,18 +27981,25 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-190",
+          "name": "CWE-190",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 2.55,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-190"
       ]
     },
     {
@@ -28289,50 +28545,6 @@
       "priorityScore": 2.48,
       "tags": [
         "CWE-400"
-      ]
-    },
-    {
-      "id": "CVE-2026-56411",
-      "summary": "xmlwf in libexpat before 2.8.2 has an integer overflow in endDoctypeDecl via NOTATION declarations.",
-      "published": "2026-06-21T17:16:44.523Z",
-      "lastModified": "2026-06-23T16:16:36.417Z",
-      "severity": "Medium",
-      "cvssScore": 6.9,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "Low"
-      },
-      "epssScore": 0.0011,
-      "epssPercentile": 0.01504,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-190",
-          "name": "CWE-190",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.47,
-      "tags": [
-        "CWE-190"
       ]
     },
     {
@@ -29989,51 +30201,6 @@
       ]
     },
     {
-      "id": "CVE-2026-53059",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm log: fix out-of-bounds write due to region_count overflow The local variable region_count in create_log_context() is declared as unsigned int (32-bit), but dm_sector_div_up() returns sector_t (64-bit). When a device-mapper target has a sufficiently large ti->len with a small region_size, the division result can exceed UINT_MAX. The truncated value is then used to calculate bitset_size, causing clean_bits, sync_bits, and recovering_bits to be allocated far smaller than needed for the actual number of regions. Subsequent log operations (log_set_bit, log_clear_bit, log_test_bit) use region indices derived from the full untruncated region space, causing out-of-bounds writes to kernel heap memory allocated by vmalloc. This can be reproduced by creating a mirror target whose region_count overflows 32 bits: dmsetup create bigzero --table '0 8589934594 zero' dmsetup create mymirror --table '0 8589934594 mirror \\ core 2 2 nosync 2 /dev/mapper/bigzero 0 \\ /dev/mapper/bigzero 0' The status output confirms the truncation (sync_count=1 instead of 4294967297, because 0x100000001 was truncated to 1): $ dmsetup status mymirror 0 8589934594 mirror 2 254:1 254:1 1/4294967297 ... This leads to a kernel crash in core_in_sync: BUG: scheduling while atomic: (udev-worker)/9150/0x00000000 RIP: 0010:core_in_sync+0x14/0x30 [dm_log] CR2: 0000000000000008 Fixing recursive fault but reboot is needed! Fix by widening the local region_count to sector_t and adding an explicit overflow check before the value is assigned to lc->region_count.",
-      "published": "2026-06-24T17:17:18.463Z",
-      "lastModified": "2026-07-15T01:16:27.803Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00127,
-      "epssPercentile": 0.0273,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-190",
-          "name": "CWE-190",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.3,
-      "tags": [
-        "Linux",
-        "CWE-190"
-      ]
-    },
-    {
       "id": "CVE-2026-13208",
       "summary": "A flaw was found in KubeVirt's virt-handler domain notify server. The gRPC handlers for HandleDomainEvent and HandleK8SEvent derive the VMI identity (namespace/name) solely from the request body without validating it against the connection's origin. Each virt-launcher pod connects through a per-VMI pipe socket, but no identity tag is propagated from the pipe path to the server handlers. This allows a compromised virt-launcher process to send forged domain lifecycle events for any other VMI scheduled on the same node, causing virt-handler to erroneously update that VMI's state and disrupt its lifecycle management.",
       "published": "2026-06-24T21:16:52.547Z",
@@ -30122,6 +30289,45 @@
         "Microsoft",
         "Google",
         "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-53047",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: efi/capsule-loader: fix incorrect sizeof in phys array reallocation The krealloc() call for cap_info->phys in __efi_capsule_setup_info() uses sizeof(phys_addr_t *) instead of sizeof(phys_addr_t), which might be causing an undersized allocation. The allocation is also inconsistent with the initial array allocation in efi_capsule_open() that allocates one entry with sizeof(phys_addr_t), and the efi_capsule_write() function that stores phys_addr_t values (not pointers) via page_to_phys(). On 64-bit systems where sizeof(phys_addr_t) == sizeof(phys_addr_t *), this goes unnoticed. On 32-bit systems with PAE where phys_addr_t is 64-bit but pointers are 32-bit, this allocates half the required space, which might lead to a heap buffer overflow when storing physical addresses. This is similar to the bug fixed in commit fccfa646ef36 (\"efi/capsule-loader: fix incorrect allocation size\") which fixed the same issue at the initial allocation site.",
+      "published": "2026-06-24T17:17:16.533Z",
+      "lastModified": "2026-07-21T17:22:44.967Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00195,
+      "epssPercentile": 0.09425,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.25,
+      "tags": [
+        "F5",
+        "Linux"
       ]
     },
     {
@@ -30501,6 +30707,51 @@
       ]
     },
     {
+      "id": "CVE-2026-53060",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache metadata: fix memory leak on metadata abort retry When failing to acquire the root_lock in dm_cache_metadata_abort because the block_manager is read-only, the temporary block_manager created outside the root_lock is not properly released, causing a memory leak. Reproduce steps: This can be reproduced by reloading a new table while the metadata is read-only. While the second call to dm_cache_metadata_abort is caused by lack of support for table preload in dm-cache, mentioned in commit 9b1cc9f251af (\"dm cache: share cache-metadata object across inactive and active DM tables\"), it exposes the memory leak in dm_cache_metadata_abort when the function is called multiple times. Specifically, dm-cache fails to sync the new cache object's mode during preresume, creating the reproducer condition. This issue could also occur through concurrent metadata_operation_failed calls due to races in cache mode updates, but the table preload scenario below provides a reliable reproducer. 1. Create a cache device with some faulty trailing metadata blocks dmsetup create cmeta unreferenced object 0xffff8880080c2010 (size 16): comm \"dmsetup\", pid 132, jiffies 4294982580 hex dump (first 16 bytes): 00 38 b9 07 80 88 ff ff 6a 6b 6b 6b 6b 6b 6b a5 ... backtrace (crc 3118f31c): kmemleak_alloc+0x28/0x40 __kmalloc_cache_noprof+0x3d9/0x510 dm_block_manager_create+0x51/0x140 dm_cache_metadata_abort+0x85/0x320 metadata_operation_failed+0x103/0x1e0 cache_preresume+0xacd/0xe70 dm_table_resume_targets+0xd3/0x320 __dm_resume+0x1b/0xf0 dm_resume+0x127/0x170",
+      "published": "2026-06-24T17:17:18.717Z",
+      "lastModified": "2026-07-21T17:35:54.607Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00184,
+      "epssPercentile": 0.08251,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.21,
+      "tags": [
+        "Linux",
+        "CWE-401"
+      ]
+    },
+    {
       "id": "CVE-2026-48493",
       "summary": "Snipe-IT is an IT asset/license management system. In versions prior to 8.6.0, a user with only users.edit can send a PATCH to /api/v1/users/{their_own_id} and grant themselves any permission except admin and superuser — for example `assets.view`, `assets.create`, `reports.view`, import, etc. The issue is patched in version 8.6.0.",
       "published": "2026-06-23T23:16:49.720Z",
@@ -30542,6 +30793,83 @@
       "priorityScore": 2.2,
       "tags": [
         "CWE-863"
+      ]
+    },
+    {
+      "id": "CVE-2026-53056",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/msm/dpu: fix mismatch between power and frequency During DPU runtime suspend, calling dev_pm_opp_set_rate(dev, 0) drops the MMCX rail to MIN_SVS while the core clock frequency remains at its original (highest) rate. When runtime resume re-enables the clock, this may result in a mismatch between the rail voltage and the clock rate. For example, in the DPU bind path, the sequence could be: cpu0: dev_sync_state -> rpmhpd_sync_state cpu1: dpu_kms_hw_init timeline 0 ------------------------------------------------> t After rpmhpd_sync_state, the voltage performance is no longer guaranteed to stay at the highest level. During dpu_kms_hw_init, calling dev_pm_opp_set_rate(dev, 0) drops the voltage, causing the MMCX rail to fall to MIN_SVS while the core clock is still at its maximum frequency. When the power is re-enabled, only the clock is enabled, leading to a situation where the MMCX rail is at MIN_SVS but the core clock is at its highest rate. In this state, the rail cannot sustain the clock rate, which may cause instability or system crash. Remove the call to dev_pm_opp_set_rate(dev, 0) from dpu_runtime_suspend to ensure the correct vote is restored when DPU resumes. Patchwork: https://patchwork.freedesktop.org/patch/710077/",
+      "published": "2026-06-24T17:17:17.663Z",
+      "lastModified": "2026-07-21T17:29:24.507Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.0018,
+      "epssPercentile": 0.07804,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.2,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53063",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache: fix write hang in passthrough mode The invalidate_remove() function has incomplete logic for handling write hit bios after cache invalidation. It sets up the remapping for the overwrite_bio but then drops it immediately without submission, causing write operations to hang. Fix by adding a new invalidate_committed() continuation that submits the remapped writes to the cache origin after metadata commit completes, while using the overwrite_endio hook to ensure proper completion sequencing. This maintains existing coherency. Also improve error handling in invalidate_complete() to preserve the original error status instead of using bio_io_error() unconditionally.",
+      "published": "2026-06-24T17:17:19.173Z",
+      "lastModified": "2026-07-21T17:36:23.310Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.0018,
+      "epssPercentile": 0.07804,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.2,
+      "tags": [
+        "Linux",
+        "iOS"
       ]
     },
     {
@@ -30733,6 +31061,211 @@
       "priorityScore": 2.19,
       "tags": [
         "CWE-470"
+      ]
+    },
+    {
+      "id": "CVE-2026-53051",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: PCI: tegra194: Fix CBB timeout caused by DBI access before core power-on When PERST# is deasserted twice (assert -> deassert -> assert -> deassert), a CBB (Control Backbone) timeout occurs at DBI register offset 0x8bc (PCIE_MISC_CONTROL_1_OFF). This happens because pci_epc_deinit_notify() and dw_pcie_ep_cleanup() are called before reset_control_deassert() powers on the controller core. The call chain that causes the timeout: pex_ep_event_pex_rst_deassert() pci_epc_deinit_notify() pci_epf_test_epc_deinit() pci_epf_test_clear_bar() pci_epc_clear_bar() dw_pcie_ep_clear_bar() __dw_pcie_ep_reset_bar() dw_pcie_dbi_ro_wr_en() core_rst) core_rst). Accessing them before this point results in a CBB timeout because the hardware is not yet operational. Fix this by moving pci_epc_deinit_notify() and dw_pcie_ep_cleanup() to after reset_control_deassert(pcie->core_rst), ensuring the controller is fully powered on before any DBI register accesses occur.",
+      "published": "2026-06-24T17:17:17.083Z",
+      "lastModified": "2026-07-21T17:23:46.997Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00175,
+      "epssPercentile": 0.07263,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.18,
+      "tags": [
+        "F5",
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53061",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache: fix dirty mapping checking in passthrough mode switching As mentioned in commit 9b1cc9f251af (\"dm cache: share cache-metadata object across inactive and active DM tables\"), dm-cache assumed table reload occurs after suspension, while LVM's table preload breaks this assumption. The dirty mapping check for passthrough mode was designed around this assumption and is performed during table creation, causing the check to fail with preload while metadata updates are ongoing. This risks loading dirty mappings into passthrough mode, resulting in data loss. Reproduce steps: 1. Create a writeback cache with zero migration_threshold to produce dirty mappings dmsetup create cmeta --table \"0 8192 linear /dev/sdc 0\" dmsetup create cdata --table \"0 131072 linear /dev/sdc 8192\" dmsetup create corig --table \"0 262144 linear /dev/sdc 262144\" dd if=/dev/zero of=/dev/mapper/cmeta bs=4k count=1 oflag=direct dmsetup create cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 writeback smq \\ 2 migration_threshold 0\" 2. Preload a table in passthrough mode dmsetup reload cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 passthrough smq 0\" 3. Write to the first cache block to make it dirty fio --filename=/dev/mapper/cache --name=populate --rw=write --bs=4k \\ --direct=1 --size=64k 4. Resume the inactive table. Now it's possible to load the dirty block into passthrough mode. dmsetup resume cache Fix by moving the checks to the preresume phase to support table preloading. Also remove the unused function dm_cache_metadata_all_clean.",
+      "published": "2026-06-24T17:17:18.880Z",
+      "lastModified": "2026-07-21T17:36:06.157Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00176,
+      "epssPercentile": 0.07394,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.18,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53064",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache: fix null-deref with concurrent writes in passthrough mode In passthrough mode, when dm-cache starts to invalidate a cache entry and bio prison cell lock fails due to concurrent write to the same cached block, mg->cell remains NULL. The error path in invalidate_complete() attempts to unlock and free the cell unconditionally, causing a NULL pointer dereference: KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007] CPU: 0 UID: 0 PID: 134 Comm: fio Not tainted 6.19.0-rc7 #3 PREEMPT RIP: 0010:dm_cell_unlock_v2+0x3f/0x210 Call Trace: invalidate_complete+0xef/0x430 map_bio+0x130f/0x1a10 cache_map+0x320/0x6b0 __map_bio+0x458/0x510 dm_submit_bio+0x40e/0x16d0 __submit_bio+0x419/0x870 Reproduce steps: 1. Create a cache device dmsetup create cmeta --table \"0 8192 linear /dev/sdc 0\" dmsetup create cdata --table \"0 131072 linear /dev/sdc 8192\" dmsetup create corig --table \"0 262144 linear /dev/sdc 262144\" dd if=/dev/zero of=/dev/mapper/cmeta bs=4k count=1 oflag=direct dmsetup create cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 writethrough smq 0\" 2. Promote the first data block into cache fio --filename=/dev/mapper/cache --name=populate --rw=write --bs=4k \\ --direct=1 --size=64k 3. Reload the cache into passthrough mode dmsetup suspend cache dmsetup reload cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 passthrough smq 0\" dmsetup resume cache 4. Write to the first cached block concurrently fio --filename=/dev/mapper/cache --name test --rw=randwrite --bs=4k \\ --randrepeat=0 --direct=1 --numjobs=2 --size 64k Fix by checking if mg->cell is valid before attempting to unlock it.",
+      "published": "2026-06-24T17:17:19.320Z",
+      "lastModified": "2026-07-21T17:36:29.553Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00176,
+      "epssPercentile": 0.07394,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.18,
+      "tags": [
+        "Linux",
+        "CWE-476"
+      ]
+    },
+    {
+      "id": "CVE-2026-53048",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: gfs2: prevent NULL pointer dereference during unmount When flushing out outstanding glock work during an unmount, gfs2_log_flush() can be called when sdp->sd_jdesc has already been deallocated and sdp->sd_jdesc is NULL. Commit 35264909e9d1 (\"gfs2: Fix NULL pointer dereference in gfs2_log_flush\") added a check for that to gfs2_log_flush() itself, but it missed the sdp->sd_jdesc dereference in gfs2_log_release(). Fix that.",
+      "published": "2026-06-24T17:17:16.660Z",
+      "lastModified": "2026-07-21T17:23:05.930Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00172,
+      "epssPercentile": 0.06915,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.17,
+      "tags": [
+        "Linux",
+        "CWE-476"
+      ]
+    },
+    {
+      "id": "CVE-2026-53052",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ASoC: qcom: qdsp6: topology: check widget type before accessing data Check widget type before accessing the private data, as this could a virtual widget which is no associated with a dsp graph, container and module. Accessing witout check could lead to incorrect memory access.",
+      "published": "2026-06-24T17:17:17.200Z",
+      "lastModified": "2026-07-21T17:23:56.340Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00172,
+      "epssPercentile": 0.06916,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.17,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -31116,6 +31649,51 @@
       "priorityScore": 2.15,
       "tags": [
         "CWE-306"
+      ]
+    },
+    {
+      "id": "CVE-2026-53058",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/bridge: cadence: cdns-mhdp8546-core: Set the mhdp connector earlier in atomic_enable() In case if we get errors in cdns_mhdp_link_up() or cdns_mhdp_reg_read() in atomic_enable, we will go to cdns_mhdp_modeset_retry_fn() and will hit NULL pointer while trying to access the mutex. We need the connector to be set before that. Unlike in legacy cases with flag !DRM_BRIDGE_ATTACH_NO_CONNECTOR, we do not have connector initialised in bridge_attach(), so add the mhdp->connector_ptr in device structure to handle both cases with DRM_BRIDGE_ATTACH_NO_CONNECTOR and !DRM_BRIDGE_ATTACH_NO_CONNECTOR, set it in atomic_enable() earlier to avoid possible NULL pointer dereference in recovery paths like modeset_retry_fn() with the DRM_BRIDGE_ATTACH_NO_CONNECTOR flag set.",
+      "published": "2026-06-24T17:17:18.170Z",
+      "lastModified": "2026-07-21T17:29:42.990Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.06405,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.15,
+      "tags": [
+        "Linux",
+        "CWE-476"
       ]
     },
     {
@@ -31525,6 +32103,51 @@
       "priorityScore": 2.12,
       "tags": [
         "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-53066",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/sun4i: backend: fix error pointer dereference The function drm_atomic_get_plane_state() can return an error pointer and is not checked for it. Add error pointer check. Detected by Smatch: drivers/gpu/drm/sun4i/sun4i_backend.c:496 sun4i_backend_atomic_check() error: 'plane_state' dereferencing possible ERR_PTR()",
+      "published": "2026-06-24T17:17:19.647Z",
+      "lastModified": "2026-07-21T17:37:23.360Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00161,
+      "epssPercentile": 0.05653,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.12,
+      "tags": [
+        "Linux",
+        "CWE-476"
       ]
     },
     {
@@ -36795,50 +37418,6 @@
       ]
     },
     {
-      "id": "CVE-2026-56412",
-      "summary": "libexpat before 2.8.2 does not consider XML_TOK_DATA_CHARS in doCdataSection and thus lacks handler call depth tracking for various calls from within handlers in cases of a policy violation. Thus, a use-after-free can occur. NOTE: this issue exists because of an incomplete fix for CVE-2026-50219.",
-      "published": "2026-06-21T17:16:44.657Z",
-      "lastModified": "2026-06-23T15:31:30.853Z",
-      "severity": "Medium",
-      "cvssScore": 4.9,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00105,
-      "epssPercentile": 0.0125,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.76,
-      "tags": [
-        "CWE-416"
-      ]
-    },
-    {
       "id": "CVE-2026-46548",
       "summary": "NocoDB is software for building databases as spreadsheets. Prior to 2026.04.1, the request-filtering-agent SSRF protection was non-functional in the four notification webhook plugins (Slack, Discord, Mattermost, Teams) because httpAgent / httpsAgent were passed as part of the request body rather than the axios config. An authenticated user with hook-creation permission could direct outbound POST requests to arbitrary internal hosts. This vulnerability is fixed in 2026.04.1.",
       "published": "2026-06-23T21:16:58.077Z",
@@ -39144,44 +39723,6 @@
       "priorityScore": 1.24,
       "tags": [
         "CWE-125"
-      ]
-    },
-    {
-      "id": "CVE-2026-53065",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: ASoC: sti: use managed regmap_field allocations The regmap_field objects allocated at player init are never freed and may leak resources if the driver is removed. Switch to devm_regmap_field_alloc() to automatically limit the lifetime of the allocations the lifetime of the device.",
-      "published": "2026-06-24T17:17:19.490Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00172,
-      "epssPercentile": 0.06832,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.24,
-      "tags": [
-        "Linux"
       ]
     },
     {
@@ -42160,44 +42701,6 @@
       ]
     },
     {
-      "id": "CVE-2026-53047",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: efi/capsule-loader: fix incorrect sizeof in phys array reallocation The krealloc() call for cap_info->phys in __efi_capsule_setup_info() uses sizeof(phys_addr_t *) instead of sizeof(phys_addr_t), which might be causing an undersized allocation. The allocation is also inconsistent with the initial array allocation in efi_capsule_open() that allocates one entry with sizeof(phys_addr_t), and the efi_capsule_write() function that stores phys_addr_t values (not pointers) via page_to_phys(). On 64-bit systems where sizeof(phys_addr_t) == sizeof(phys_addr_t *), this goes unnoticed. On 32-bit systems with PAE where phys_addr_t is 64-bit but pointers are 32-bit, this allocates half the required space, which might lead to a heap buffer overflow when storing physical addresses. This is similar to the bug fixed in commit fccfa646ef36 (\"efi/capsule-loader: fix incorrect allocation size\") which fixed the same issue at the initial allocation site.",
-      "published": "2026-06-24T17:17:16.533Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00195,
-      "epssPercentile": 0.09425,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.33,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-12681",
       "summary": "Improper Validation of Specified Index, Position, or Offset in Input vulnerability in Google go-attestation. parseEfiSignatureList() does not advance the buffer past vendor bytes before reading entries. For hashSHA256SigGUID lists, this allows attacker-controlled vendor header bytes to be appended to the trusted SHA256 hash list. A crafted TPM event log could inject arbitrary SHA256 hashes into the verifier's trusted measurement database, enabling a remote attestation verifier to accept a compromised boot state. This issue affects go-attestation: through 0.6.0.",
       "published": "2026-06-24T02:16:28.060Z",
@@ -42289,197 +42792,6 @@
       ]
     },
     {
-      "id": "CVE-2026-53060",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache metadata: fix memory leak on metadata abort retry When failing to acquire the root_lock in dm_cache_metadata_abort because the block_manager is read-only, the temporary block_manager created outside the root_lock is not properly released, causing a memory leak. Reproduce steps: This can be reproduced by reloading a new table while the metadata is read-only. While the second call to dm_cache_metadata_abort is caused by lack of support for table preload in dm-cache, mentioned in commit 9b1cc9f251af (\"dm cache: share cache-metadata object across inactive and active DM tables\"), it exposes the memory leak in dm_cache_metadata_abort when the function is called multiple times. Specifically, dm-cache fails to sync the new cache object's mode during preresume, creating the reproducer condition. This issue could also occur through concurrent metadata_operation_failed calls due to races in cache mode updates, but the table preload scenario below provides a reliable reproducer. 1. Create a cache device with some faulty trailing metadata blocks dmsetup create cmeta unreferenced object 0xffff8880080c2010 (size 16): comm \"dmsetup\", pid 132, jiffies 4294982580 hex dump (first 16 bytes): 00 38 b9 07 80 88 ff ff 6a 6b 6b 6b 6b 6b 6b a5 ... backtrace (crc 3118f31c): kmemleak_alloc+0x28/0x40 __kmalloc_cache_noprof+0x3d9/0x510 dm_block_manager_create+0x51/0x140 dm_cache_metadata_abort+0x85/0x320 metadata_operation_failed+0x103/0x1e0 cache_preresume+0xacd/0xe70 dm_table_resume_targets+0xd3/0x320 __dm_resume+0x1b/0xf0 dm_resume+0x127/0x170",
-      "published": "2026-06-24T17:17:18.717Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00184,
-      "epssPercentile": 0.08251,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.29,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53056",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/msm/dpu: fix mismatch between power and frequency During DPU runtime suspend, calling dev_pm_opp_set_rate(dev, 0) drops the MMCX rail to MIN_SVS while the core clock frequency remains at its original (highest) rate. When runtime resume re-enables the clock, this may result in a mismatch between the rail voltage and the clock rate. For example, in the DPU bind path, the sequence could be: cpu0: dev_sync_state -> rpmhpd_sync_state cpu1: dpu_kms_hw_init timeline 0 ------------------------------------------------> t After rpmhpd_sync_state, the voltage performance is no longer guaranteed to stay at the highest level. During dpu_kms_hw_init, calling dev_pm_opp_set_rate(dev, 0) drops the voltage, causing the MMCX rail to fall to MIN_SVS while the core clock is still at its maximum frequency. When the power is re-enabled, only the clock is enabled, leading to a situation where the MMCX rail is at MIN_SVS but the core clock is at its highest rate. In this state, the rail cannot sustain the clock rate, which may cause instability or system crash. Remove the call to dev_pm_opp_set_rate(dev, 0) from dpu_runtime_suspend to ensure the correct vote is restored when DPU resumes. Patchwork: https://patchwork.freedesktop.org/patch/710077/",
-      "published": "2026-06-24T17:17:17.663Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.0018,
-      "epssPercentile": 0.07804,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.27,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53063",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache: fix write hang in passthrough mode The invalidate_remove() function has incomplete logic for handling write hit bios after cache invalidation. It sets up the remapping for the overwrite_bio but then drops it immediately without submission, causing write operations to hang. Fix by adding a new invalidate_committed() continuation that submits the remapped writes to the cache origin after metadata commit completes, while using the overwrite_endio hook to ensure proper completion sequencing. This maintains existing coherency. Also improve error handling in invalidate_complete() to preserve the original error status instead of using bio_io_error() unconditionally.",
-      "published": "2026-06-24T17:17:19.173Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.0018,
-      "epssPercentile": 0.07804,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": "iOS",
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.27,
-      "tags": [
-        "Linux",
-        "iOS"
-      ]
-    },
-    {
-      "id": "CVE-2026-53061",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache: fix dirty mapping checking in passthrough mode switching As mentioned in commit 9b1cc9f251af (\"dm cache: share cache-metadata object across inactive and active DM tables\"), dm-cache assumed table reload occurs after suspension, while LVM's table preload breaks this assumption. The dirty mapping check for passthrough mode was designed around this assumption and is performed during table creation, causing the check to fail with preload while metadata updates are ongoing. This risks loading dirty mappings into passthrough mode, resulting in data loss. Reproduce steps: 1. Create a writeback cache with zero migration_threshold to produce dirty mappings dmsetup create cmeta --table \"0 8192 linear /dev/sdc 0\" dmsetup create cdata --table \"0 131072 linear /dev/sdc 8192\" dmsetup create corig --table \"0 262144 linear /dev/sdc 262144\" dd if=/dev/zero of=/dev/mapper/cmeta bs=4k count=1 oflag=direct dmsetup create cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 writeback smq \\ 2 migration_threshold 0\" 2. Preload a table in passthrough mode dmsetup reload cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 passthrough smq 0\" 3. Write to the first cache block to make it dirty fio --filename=/dev/mapper/cache --name=populate --rw=write --bs=4k \\ --direct=1 --size=64k 4. Resume the inactive table. Now it's possible to load the dirty block into passthrough mode. dmsetup resume cache Fix by moving the checks to the preresume phase to support table preloading. Also remove the unused function dm_cache_metadata_all_clean.",
-      "published": "2026-06-24T17:17:18.880Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00176,
-      "epssPercentile": 0.07394,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.26,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53064",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: dm cache: fix null-deref with concurrent writes in passthrough mode In passthrough mode, when dm-cache starts to invalidate a cache entry and bio prison cell lock fails due to concurrent write to the same cached block, mg->cell remains NULL. The error path in invalidate_complete() attempts to unlock and free the cell unconditionally, causing a NULL pointer dereference: KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007] CPU: 0 UID: 0 PID: 134 Comm: fio Not tainted 6.19.0-rc7 #3 PREEMPT RIP: 0010:dm_cell_unlock_v2+0x3f/0x210 Call Trace: invalidate_complete+0xef/0x430 map_bio+0x130f/0x1a10 cache_map+0x320/0x6b0 __map_bio+0x458/0x510 dm_submit_bio+0x40e/0x16d0 __submit_bio+0x419/0x870 Reproduce steps: 1. Create a cache device dmsetup create cmeta --table \"0 8192 linear /dev/sdc 0\" dmsetup create cdata --table \"0 131072 linear /dev/sdc 8192\" dmsetup create corig --table \"0 262144 linear /dev/sdc 262144\" dd if=/dev/zero of=/dev/mapper/cmeta bs=4k count=1 oflag=direct dmsetup create cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 writethrough smq 0\" 2. Promote the first data block into cache fio --filename=/dev/mapper/cache --name=populate --rw=write --bs=4k \\ --direct=1 --size=64k 3. Reload the cache into passthrough mode dmsetup suspend cache dmsetup reload cache --table \"0 262144 cache /dev/mapper/cmeta \\ /dev/mapper/cdata /dev/mapper/corig 128 2 metadata2 passthrough smq 0\" dmsetup resume cache 4. Write to the first cached block concurrently fio --filename=/dev/mapper/cache --name test --rw=randwrite --bs=4k \\ --randrepeat=0 --direct=1 --numjobs=2 --size 64k Fix by checking if mg->cell is valid before attempting to unlock it.",
-      "published": "2026-06-24T17:17:19.320Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00176,
-      "epssPercentile": 0.07394,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.26,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-53093",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: brcmfmac: Fix error pointer dereference The function brcmf_chip_add_core() can return an error pointer and is not checked. Add checks for error pointer. Detected by Smatch: drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c:1010 brcmf_chip_recognition() error: 'core' dereferencing possible ERR_PTR() drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c:1013 brcmf_chip_recognition() error: 'core' dereferencing possible ERR_PTR() drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c:1016 brcmf_chip_recognition() error: 'core' dereferencing possible ERR_PTR() drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c:1019 brcmf_chip_recognition() error: 'core' dereferencing possible ERR_PTR() drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c:1022 brcmf_chip_recognition() error: 'core' dereferencing possible ERR_PTR() [add missing wifi: prefix]",
       "published": "2026-06-24T17:17:23.457Z",
@@ -42513,120 +42825,6 @@
       "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 0.26,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53051",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: PCI: tegra194: Fix CBB timeout caused by DBI access before core power-on When PERST# is deasserted twice (assert -> deassert -> assert -> deassert), a CBB (Control Backbone) timeout occurs at DBI register offset 0x8bc (PCIE_MISC_CONTROL_1_OFF). This happens because pci_epc_deinit_notify() and dw_pcie_ep_cleanup() are called before reset_control_deassert() powers on the controller core. The call chain that causes the timeout: pex_ep_event_pex_rst_deassert() pci_epc_deinit_notify() pci_epf_test_epc_deinit() pci_epf_test_clear_bar() pci_epc_clear_bar() dw_pcie_ep_clear_bar() __dw_pcie_ep_reset_bar() dw_pcie_dbi_ro_wr_en() core_rst) core_rst). Accessing them before this point results in a CBB timeout because the hardware is not yet operational. Fix this by moving pci_epc_deinit_notify() and dw_pcie_ep_cleanup() to after reset_control_deassert(pcie->core_rst), ensuring the controller is fully powered on before any DBI register accesses occur.",
-      "published": "2026-06-24T17:17:17.083Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00175,
-      "epssPercentile": 0.07263,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.25,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53048",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: gfs2: prevent NULL pointer dereference during unmount When flushing out outstanding glock work during an unmount, gfs2_log_flush() can be called when sdp->sd_jdesc has already been deallocated and sdp->sd_jdesc is NULL. Commit 35264909e9d1 (\"gfs2: Fix NULL pointer dereference in gfs2_log_flush\") added a check for that to gfs2_log_flush() itself, but it missed the sdp->sd_jdesc dereference in gfs2_log_release(). Fix that.",
-      "published": "2026-06-24T17:17:16.660Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00172,
-      "epssPercentile": 0.06915,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.24,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53052",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: ASoC: qcom: qdsp6: topology: check widget type before accessing data Check widget type before accessing the private data, as this could a virtual widget which is no associated with a dsp graph, container and module. Accessing witout check could lead to incorrect memory access.",
-      "published": "2026-06-24T17:17:17.200Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00172,
-      "epssPercentile": 0.06916,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.24,
       "tags": [
         "Linux"
       ]
@@ -42858,44 +43056,6 @@
       "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 0.23,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53058",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/bridge: cadence: cdns-mhdp8546-core: Set the mhdp connector earlier in atomic_enable() In case if we get errors in cdns_mhdp_link_up() or cdns_mhdp_reg_read() in atomic_enable, we will go to cdns_mhdp_modeset_retry_fn() and will hit NULL pointer while trying to access the mutex. We need the connector to be set before that. Unlike in legacy cases with flag !DRM_BRIDGE_ATTACH_NO_CONNECTOR, we do not have connector initialised in bridge_attach(), so add the mhdp->connector_ptr in device structure to handle both cases with DRM_BRIDGE_ATTACH_NO_CONNECTOR and !DRM_BRIDGE_ATTACH_NO_CONNECTOR, set it in atomic_enable() earlier to avoid possible NULL pointer dereference in recovery paths like modeset_retry_fn() with the DRM_BRIDGE_ATTACH_NO_CONNECTOR flag set.",
-      "published": "2026-06-24T17:17:18.170Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00168,
-      "epssPercentile": 0.06405,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.22,
       "tags": [
         "Linux"
       ]
@@ -43243,44 +43403,6 @@
       ]
     },
     {
-      "id": "CVE-2026-53066",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/sun4i: backend: fix error pointer dereference The function drm_atomic_get_plane_state() can return an error pointer and is not checked for it. Add error pointer check. Detected by Smatch: drivers/gpu/drm/sun4i/sun4i_backend.c:496 sun4i_backend_atomic_check() error: 'plane_state' dereferencing possible ERR_PTR()",
-      "published": "2026-06-24T17:17:19.647Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00161,
-      "epssPercentile": 0.05653,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.2,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-53109",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: powerpc/pgtable-frag: Fix bad page state in pte_frag_destroy powerpc uses pt_frag_refcount as a reference counter for tracking it's pte and pmd page table fragments. For PTE table, in case of Hash with 64K pagesize, we have 16 fragments of 4K size in one 64K page. Patch series [1] \"mm: free retracted page table by RCU\" added pte_free_defer() to defer the freeing of PTE tables when retract_page_tables() is called for madvise MADV_COLLAPSE on shmem range. [1]: https://lore.kernel.org/all/7cd843a9-aa80-14f-5eb2-33427363c20@google.com/ pte_free_defer() sets the active flag on the corresponding fragment's folio & calls pte_fragment_free(), which reduces the pt_frag_refcount. When pt_frag_refcount reaches 0 (no active fragment using the folio), it checks if the folio active flag is set, if set, it calls call_rcu to free the folio, it the active flag is unset then it calls pte_free_now(). Now, this can lead to following problem in a corner case... [ 265.351553][ T183] BUG: Bad page state in process a.out pfn:20d62 [ 265.353555][ T183] page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x20d62 [ 265.355457][ T183] flags: 0x3ffff800000100(active|node=0|zone=0|lastcpupid=0x7ffff) [ 265.358719][ T183] raw: 003ffff800000100 0000000000000000 5deadbeef0000122 0000000000000000 [ 265.360177][ T183] raw: 0000000000000000 c0000000119caf58 00000000ffffffff 0000000000000000 [ 265.361438][ T183] page dumped because: PAGE_FLAGS_CHECK_AT_FREE flag(s) set [ 265.362572][ T183] Modules linked in: [ 265.364622][ T183] CPU: 0 UID: 0 PID: 183 Comm: a.out Not tainted 6.18.0-rc3-00141-g1ddeaaace7ff-dirty #53 VOLUNTARY [ 265.364785][ T183] Hardware name: IBM pSeries (emulated by qemu) POWER10 (architected) 0x801200 0xf000006 of:SLOF,git-ee03ae pSeries [ 265.364908][ T183] Call Trace: [ 265.364955][ T183] [c000000011e6f7c0] [c000000001cfaa18] dump_stack_lvl+0x130/0x148 (unreliable) [ 265.365202][ T183] [c000000011e6f7f0] [c000000000794758] bad_page+0xb4/0x1c8 [ 265.365384][ T183] [c000000011e6f890] [c00000000079c020] __free_frozen_pages+0x838/0xd08 [ 265.365554][ T183] [c000000011e6f980] [c0000000000a70ac] pte_frag_destroy+0x298/0x310 [ 265.365729][ T183] [c000000011e6fa30] [c0000000000aa764] arch_exit_mmap+0x34/0x218 [ 265.365912][ T183] [c000000011e6fa80] [c000000000751698] exit_mmap+0xb8/0x820 [ 265.366080][ T183] [c000000011e6fc30] [c0000000001b1258] __mmput+0x98/0x300 [ 265.366244][ T183] [c000000011e6fc80] [c0000000001c81f8] do_exit+0x470/0x1508 [ 265.366421][ T183] [c000000011e6fd70] [c0000000001c95e4] do_group_exit+0x88/0x148 [ 265.366602][ T183] [c000000011e6fdc0] [c0000000001c96ec] pid_child_should_wake+0x0/0x178 [ 265.366780][ T183] [c000000011e6fdf0] [c00000000003a270] system_call_exception+0x1b0/0x4e0 [ 265.366958][ T183] [c000000011e6fe50] [c00000000000d05c] system_call_vectored_common+0x15c/0x2ec The bad page state error occurs when such a folio gets freed (with active flag set), from do_exit() path in parallel. ... this can happen when the pte fragment was allocated from this folio, but when all the fragments get freed, the pte_frag_refcount still had some unused fragments. Now, if this process exits, with such folio as it's cached pte_frag in mm->context, then during pte_frag_destroy(), we simply call pagetable_dtor() and pagetable_free(), meaning it doesn't clear the active flag. This, can lead to the above bug. Since we are anyway in do_exit() path, then if the refcount is 0, then I guess it should be ok to simply clear the folio active flag before calling pagetable_dtor() & pagetable_free().",
       "published": "2026-06-24T17:17:25.230Z",
@@ -43400,44 +43522,6 @@
       "priorityScore": 0.18,
       "tags": [
         "CWE-253"
-      ]
-    },
-    {
-      "id": "CVE-2026-53067",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: PCI: endpoint: pci-ep-msi: Fix error unwind and prevent double alloc pci_epf_alloc_doorbell() stores the allocated doorbell message array in epf->db_msg/epf->num_db before requesting MSI vectors. If MSI allocation fails, the array is freed but the EPF state may still point to freed memory. Clear epf->db_msg and epf->num_db on the MSI allocation failure path so that later cleanup cannot double-free the array and callers can retry allocation. Also return -EBUSY when doorbells have already been allocated to prevent leaking or overwriting an existing allocation.",
-      "published": "2026-06-24T17:17:19.780Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00154,
-      "epssPercentile": 0.05045,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.18,
-      "tags": [
-        "Linux"
       ]
     },
     {
@@ -44793,6 +44877,42 @@
       "summary": "Rejected reason: This CVE ID has been rejected or withdrawn by its CVE Numbering Authority.",
       "published": "2026-06-24T22:16:47.033Z",
       "lastModified": "2026-06-24T22:16:47.033Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0,
+      "epssPercentile": 0,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0,
+      "tags": []
+    },
+    {
+      "id": "CVE-2025-8106",
+      "summary": "Rejected reason: This CVE ID has been rejected or withdrawn by its CVE Numbering Authority.",
+      "published": "2026-06-24T23:16:40.277Z",
+      "lastModified": "2026-06-24T23:16:40.277Z",
       "severity": "Unknown",
       "cvssScore": 0,
       "cvssVector": null,
