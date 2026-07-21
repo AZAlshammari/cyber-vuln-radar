@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-21T06:30:41.539Z",
+  "generatedAt": "2026-07-21T09:13:36.100Z",
   "count": 1000,
   "items": [
     {
@@ -10219,44 +10219,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52911",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: scope conn->binding slowpath to bound sessions only When the binding SESSION_SETUP sets conn->binding = true, the flag stays set after the call so that the global session lookup in ksmbd_session_lookup_all() can find the session, which was not added to conn->sessions. Because the flag is connection-wide, the global lookup path will also resolve any other session by id if asked. Tighten the global lookup so that the returned session must have this connection registered in its channel xarray (sess->ksmbd_chann_list). The channel entry is installed by the existing binding_session path in ntlm_authenticate()/krb5_authenticate() when a SESSION_SETUP completes successfully, so this condition is a strict equivalent of \"this connection has been accepted as a channel of this session\". Connections that have not bound to a given session cannot reach it via the global table. The existing conn->binding gate for entering the slowpath is preserved so that non-binding connections keep the fast-path-only behavior, and the session->state check is unchanged.",
-      "published": "2026-06-21T08:16:23.607Z",
-      "lastModified": "2026-07-08T15:13:12.627Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00362,
-      "epssPercentile": 0.28601,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.08,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-56424",
       "summary": "MISP core contained multiple broken access-control flaws where authorization checks were performed against the wrong entity, or where ownership/editability checks were missing on write paths. In affected subsystems, a lower-privileged authenticated user with the relevant feature permission could cause the application to authorize one object but mutate another, or could modify objects that were merely visible rather than editable by the user’s organization. The affected paths included: * Event Reports tag removal: the route-authorized report could differ from the report ID used for tag detachment, enabling cross-organization tag removal from another event report * Collection Elements bulk deletion: bulk deletion authorized against a collection whose ID matched the collection-element row ID, rather than the element’s actual parent collection, enabling deletion of elements from collections the user did not own. * Analyst Data capture/update: nested analyst data updates could overwrite an existing record without applying the normal canEditAnalystData ownership check, enabling cross-organization overwrite of analyst data records. * Template Elements editing: editing authorized against a template whose ID matched the template-element ID, rather than the element’s actual parent template, enabling unauthorized edits to another organization’s template elements. * Decaying Model editing and mappings: write paths loaded models using view-scope access but did not verify edit ownership, enabling users to edit or remap visible models owned by another organization. Successful exploitation could allow an authenticated user with subsystem-specific permissions to perform unauthorized cross-organization modifications or deletions of MISP data, resulting in integrity loss, unauthorized tampering with shared intelligence, and disruption of analyst workflows.",
       "published": "2026-06-22T14:17:50.057Z",
@@ -12705,6 +12667,56 @@
       "tags": [
         "Linux",
         "CWE-476"
+      ]
+    },
+    {
+      "id": "CVE-2026-52809",
+      "summary": "Gogs is an open source self-hosted Git service. Prior to 0.14.3, password-reset tokens are generated using conf.Auth.ActivateCodeLives (the account-activation lifetime), not conf.Auth.ResetPasswordCodeLives. The token lifetime is baked into the token itself at generation time and is re-extracted from the token at verification time, making RESET_PASSWORD_CODE_LIVES irrelevant to actual enforcement. When an administrator configures a shorter reset window (e.g., 10 minutes) for compliance or security reasons, reset tokens remain exploitable for the full activation lifetime instead, while the reset email falsely advertises the shorter expiry. This vulnerability is fixed in 0.14.3.",
+      "published": "2026-06-24T21:16:56.827Z",
+      "lastModified": "2026-06-26T05:16:30.067Z",
+      "severity": "Medium",
+      "cvssScore": 6.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00202,
+      "epssPercentile": 0.10258,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-324",
+          "name": "CWE-324",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-613",
+          "name": "CWE-613",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.74,
+      "tags": [
+        "CWE-324",
+        "CWE-613"
       ]
     },
     {
@@ -24233,106 +24245,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12781",
-      "summary": "A vulnerability was identified in EaseUS Partition Master up to 14.5. The affected element is an unknown function in the library epmntdrv.sys of the component Kernel Driver. The manipulation leads to improper access controls. The attack needs to be performed locally. The exploit is publicly available and might be used. You should upgrade the affected component. The vendor explains: \"We have confirmed that this issue was present only in older versions of the product. Our product has since been updated, and the issue has been resolved in the latest version, so it no longer exists.\"",
-      "published": "2026-06-21T08:16:21.907Z",
-      "lastModified": "2026-06-22T18:24:24.370Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00112,
-      "epssPercentile": 0.01606,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-266",
-          "name": "CWE-266",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.79,
-      "tags": [
-        "CWE-266",
-        "CWE-284"
-      ]
-    },
-    {
-      "id": "CVE-2026-12784",
-      "summary": "A weakness has been identified in IM-Magic Partition Resizer up to 7.9.0. This affects an unknown function in the library MDA_NTDRV.sys of the component Kernel Driver. This manipulation causes improper access controls. The attack requires local access. The exploit has been made available to the public and could be used for attacks. The vendor was contacted early about this disclosure but did not respond in any way.",
-      "published": "2026-06-21T08:16:23.443Z",
-      "lastModified": "2026-06-22T19:16:47.400Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00113,
-      "epssPercentile": 0.01701,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-266",
-          "name": "CWE-266",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.79,
-      "tags": [
-        "CWE-266",
-        "CWE-284"
-      ]
-    },
-    {
       "id": "CVE-2026-12786",
       "summary": "A vulnerability has been found in Ezbsystems UltraISO Premium Edition up to 9.76. Affected by this issue is some unknown functionality in the library bootpt64.sys of the component Kernel Driver. The manipulation leads to improper access controls. Local access is required to approach this attack. The exploit has been disclosed to the public and may be used. The vendor was contacted early about this disclosure but did not respond in any way.",
       "published": "2026-06-21T09:16:25.130Z",
@@ -24596,56 +24508,6 @@
       "tags": [
         "Linux",
         "CWE-825"
-      ]
-    },
-    {
-      "id": "CVE-2026-12782",
-      "summary": "A security flaw has been discovered in EaseUS Partition Master up to 14.5. The impacted element is an unknown function in the library EUEDKEPM.sys of the component Kernel Driver. The manipulation results in improper access controls. The attack requires a local approach. The exploit has been released to the public and may be used for attacks. The affected component should be upgraded. The vendor explains: \"We have confirmed that this issue was present only in older versions of the product. Our product has since been updated, and the issue has been resolved in the latest version, so it no longer exists.\"",
-      "published": "2026-06-21T08:16:23.280Z",
-      "lastModified": "2026-06-23T04:17:33.243Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00109,
-      "epssPercentile": 0.01487,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-266",
-          "name": "CWE-266",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.78,
-      "tags": [
-        "CWE-266",
-        "CWE-284"
       ]
     },
     {
@@ -29627,6 +29489,63 @@
       ]
     },
     {
+      "id": "CVE-2026-52811",
+      "summary": "Gogs is an open source self-hosted Git service. Prior to 0.14.3, (*Repository).UploadRepoFiles checks for symlinks only on the leaf of the upload target (osx.IsSymlink(targetPath)). The siblings UpdateRepoFile, DeleteRepoFile, and GetDiffPreview use hasSymlinkInPath, which lstats every component — UploadRepoFiles is the lone outlier. An attacker with repo-write access plus a multipart upload whose filename contains a literal backslash (preserved by filepath.Base on Linux, then converted to / by pathx.Clean) redirects the write through a previously-committed directory symlink. iox.CopyFile opens the destination with os.Create (no O_NOFOLLOW), so the kernel follows the parent symlink and writes attacker bytes anywhere the gogs UID can write — ~git/.ssh/authorized_keys → SSH foothold, or .git/hooks/post-receive → next-push RCE. This vulnerability is fixed in 0.14.3.",
+      "published": "2026-06-24T21:16:57.093Z",
+      "lastModified": "2026-06-26T05:16:30.213Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00474,
+      "epssPercentile": 0.38011,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        },
+        {
+          "id": "CWE-59",
+          "name": "CWE-59",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-61",
+          "name": "CWE-61",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.33,
+      "tags": [
+        "Linux",
+        "CWE-22",
+        "CWE-59",
+        "CWE-61"
+      ]
+    },
+    {
       "id": "CVE-2026-54288",
       "summary": "Hono is a Web application framework that provides support for any JavaScript runtime. Prior to 4.12.25, the Body Limit Middleware trusts the request's Content-Length header to decide whether a body is within the limit. On AWS Lambda (API Gateway v1/v2, ALB, VPC Lattice, and Lambda@Edge) the body is delivered fully buffered and the adapter builds the request with the client-declared Content-Length, which need not match the actual payload. A client can declare a tiny Content-Length while sending a much larger body, slipping past the limit. This vulnerability is fixed in 4.12.25.",
       "published": "2026-06-22T19:17:19.553Z",
@@ -30542,6 +30461,50 @@
         "F5",
         "Windows",
         "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-52810",
+      "summary": "Gogs is an open source self-hosted Git service. Prior to 0.14.3, Git smart HTTP authorizes POST …/git-receive-pack using the client-supplied service query string (so ?service=git-upload-pack is evaluated as read access) while routing still runs git receive-pack, allowing push where only read should be allowed. This vulnerability is fixed in 0.14.3.",
+      "published": "2026-06-24T21:16:56.960Z",
+      "lastModified": "2026-06-25T16:16:38.927Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00427,
+      "epssPercentile": 0.3475,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-284",
+          "name": "CWE-284",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.22,
+      "tags": [
+        "CWE-284"
       ]
     },
     {
@@ -38717,6 +38680,62 @@
       "priorityScore": 1.52,
       "tags": [
         "CWE-352"
+      ]
+    },
+    {
+      "id": "CVE-2026-52812",
+      "summary": "Gogs is an open source self-hosted Git service. Prior to 0.14.3, Git LFS storage is content-addressed by OID alone ( / / / ) but per-repo authorization lives in the lfs_object table keyed (repo_id, oid). serveUpload skips re-uploading when the OID file already exists on disk and inserts a new (repo_id, oid) row pointing at it without verifying the request body hashes to the OID being claimed. Any user with write access to one repo can bind their repo to an OID owned by a private repo and download the original bytes via their own download endpoint. This vulnerability is fixed in 0.14.3.",
+      "published": "2026-06-24T21:16:57.223Z",
+      "lastModified": "2026-06-26T00:16:53.583Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00236,
+      "epssPercentile": 0.14699,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-345",
+          "name": "CWE-345",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-639",
+          "name": "CWE-639",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.51,
+      "tags": [
+        "CWE-345",
+        "CWE-639",
+        "CWE-862"
       ]
     },
     {
