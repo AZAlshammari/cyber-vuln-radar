@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-21T18:02:08.709Z",
+  "generatedAt": "2026-07-21T19:45:44.895Z",
   "count": 1000,
   "items": [
     {
@@ -15686,7 +15686,7 @@
       "id": "CVE-2026-53076",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: Fix OOB in pcpu_init_value An out-of-bounds read occurs when copying element from a BPF_MAP_TYPE_CGROUP_STORAGE map to another pcpu map with the same value_size that is not rounded up to 8 bytes. The issue happens when: 1. A CGROUP_STORAGE map is created with value_size not aligned to 8 bytes (e.g., 4 bytes) 2. A pcpu map is created with the same value_size (e.g., 4 bytes) 3. Update element in 2 with data in 1 pcpu_init_value assumes that all sources are rounded up to 8 bytes, and invokes copy_map_value_long to make a data copy, However, the assumption doesn't stand since there are some cases where the source may not be rounded up to 8 bytes, e.g., CGROUP_STORAGE, skb->data. the verifier verifies exactly the size that the source claims, not the size rounded up to 8 bytes by kernel, an OOB happens when the source has only 4 bytes while the copy size(4) is rounded up to 8.",
       "published": "2026-06-24T17:17:21.623Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T18:14:03.883Z",
       "severity": "High",
       "cvssScore": 7.1,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
@@ -15704,20 +15704,28 @@
       "epssPercentile": 0.01926,
       "isKev": false,
       "kev": null,
-      "vendor": "Linux",
+      "vendor": "F5",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 3.55,
       "tags": [
-        "Linux"
+        "F5",
+        "Linux",
+        "CWE-125"
       ]
     },
     {
@@ -16572,6 +16580,50 @@
       "priorityScore": 3.47,
       "tags": [
         "CWE-200"
+      ]
+    },
+    {
+      "id": "CVE-2026-39899",
+      "summary": "Cacti is an open source performance and fault management framework. Versions 1.2.30 and prior are vulnerable to Path Traversal via filename parameter in package_import.php. This issue has been fixed in version 1.2.31.",
+      "published": "2026-06-24T23:16:40.367Z",
+      "lastModified": "2026-06-26T00:16:51.793Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00261,
+      "epssPercentile": 0.1771,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.47,
+      "tags": [
+        "CWE-22"
       ]
     },
     {
@@ -17506,7 +17558,7 @@
       "id": "CVE-2026-53075",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ppp: require CAP_NET_ADMIN in target netns for unattached ioctls /dev/ppp open is currently authorized against file->f_cred->user_ns, while unattached administrative ioctls operate on current->nsproxy->net_ns. As a result, a local unprivileged user can create a new user namespace with CLONE_NEWUSER, gain CAP_NET_ADMIN only in that new user namespace, and still issue PPPIOCNEWUNIT, PPPIOCATTACH, or PPPIOCATTCHAN against an inherited network namespace. Require CAP_NET_ADMIN in the user namespace that owns the target network namespace before handling unattached PPP administrative ioctls. This preserves normal pppd operation in the network namespace it is actually privileged in, while rejecting the userns-only inherited-netns case.",
       "published": "2026-06-24T17:17:21.450Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T18:05:50.960Z",
       "severity": "High",
       "cvssScore": 8.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
@@ -17533,7 +17585,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 3.36,
       "tags": [
@@ -19688,6 +19740,52 @@
       "tags": [
         "Linux",
         "CWE-401"
+      ]
+    },
+    {
+      "id": "CVE-2026-53073",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: hci_ldisc: Clear HCI_UART_PROTO_INIT on error When hci_register_dev() fails in hci_uart_register_dev() HCI_UART_PROTO_INIT is not cleared before calling hu->proto->close(hu) and setting hu->hdev to NULL. This means incoming UART data will reach the protocol-specific recv handler in hci_uart_tty_receive() after resources are freed. Clear HCI_UART_PROTO_INIT with a write lock before calling hu->proto->close() and setting hu->hdev to NULL. The write lock ensures all active readers have completed and no new reader can enter the protocol recv path before resources are freed. This allows the protocol-specific recv functions to remove the \"HCI_UART_REGISTERED\" guard without risking a null pointer dereference if hci_register_dev() fails.",
+      "published": "2026-06-24T17:17:21.163Z",
+      "lastModified": "2026-07-21T18:05:01.443Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00172,
+      "epssPercentile": 0.06832,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.16,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-476"
       ]
     },
     {
@@ -22066,6 +22164,96 @@
       ]
     },
     {
+      "id": "CVE-2026-53097",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: mt7996: fix use-after-free bugs in mt7996_mac_dump_work() When the mt7996 pci chip is detaching, the mt7996_crash_data is released in mt7996_coredump_unregister(). However, the work item dump_work may still be running or pending, leading to UAF bugs when the already freed crash_data is dereferenced again in mt7996_mac_dump_work(). The race condition can occur as follows: CPU 0 (removal path) | CPU 1 (workqueue) mt7996_pci_remove() | mt7996_sys_recovery_set() mt7996_unregister_device() | mt7996_reset() mt7996_coredump_unregister() | queue_work() vfree(dev->coredump.crash_data) | mt7996_mac_dump_work() | crash_data-> // UAF Fix this by ensuring dump_work is properly canceled before the crash_data is deallocated. Add cancel_work_sync() in mt7996_unregister_device() to synchronize with any pending or executing dump work.",
+      "published": "2026-06-24T17:17:23.923Z",
+      "lastModified": "2026-07-21T18:21:38.230Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.06403,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.95,
+      "tags": [
+        "Linux",
+        "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-53098",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: mt7915: fix use-after-free bugs in mt7915_mac_dump_work() When the mt7915 pci chip is detaching, the mt7915_crash_data is released in mt7915_coredump_unregister(). However, the work item dump_work may still be running or pending, leading to UAF bugs when the already freed crash_data is dereferenced again in mt7915_mac_dump_work(). The race condition can occur as follows: CPU 0 (removal path) | CPU 1 (workqueue) mt7915_pci_remove() | mt7915_sys_recovery_set() mt7915_unregister_device() | mt7915_reset() mt7915_coredump_unregister() | queue_work() vfree(dev->coredump.crash_data) | mt7915_mac_dump_work() | crash_data-> // UAF Fix this by ensuring dump_work is properly canceled before the crash_data is deallocated. Add cancel_work_sync() in mt7915_unregister_device() to synchronize with any pending or executing dump work.",
+      "published": "2026-06-24T17:17:24.027Z",
+      "lastModified": "2026-07-21T18:21:29.883Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.064,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.95,
+      "tags": [
+        "Linux",
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-57303",
       "summary": "Jenkins Assembla Plugin 1.4 and earlier does not configure its XML parser to prevent XML external entity (XXE) attacks, allowing attackers able to control the responses of the configured Assembla server to extract secrets from the Jenkins controller or perform server-side request forgery.",
       "published": "2026-06-24T14:17:36.407Z",
@@ -23751,7 +23939,7 @@
       "id": "CVE-2026-53096",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: Use RCU-safe iteration in dev_map_redirect_multi() SKB path The DEVMAP_HASH branch in dev_map_redirect_multi() uses hlist_for_each_entry_safe() to iterate hash buckets, but this function runs under RCU protection (called from xdp_do_generic_redirect_map() in softirq context). Concurrent writers (__dev_map_hash_update_elem, dev_map_hash_delete_elem) modify the list using RCU primitives (hlist_add_head_rcu, hlist_del_rcu). hlist_for_each_entry_safe() performs plain pointer dereferences without rcu_dereference(), missing the acquire barrier needed to pair with writers' rcu_assign_pointer(). On weakly-ordered architectures (ARM64, POWER), a reader can observe a partially-constructed node. It also defeats CONFIG_PROVE_RCU lockdep validation and KCSAN data-race detection. Replace with hlist_for_each_entry_rcu() using rcu_read_lock_bh_held() as the lockdep condition, consistent with the rcu_dereference_check() used in the DEVMAP (non-hash) branch of the same functions. Also fix the same incorrect lockdep_is_held(&dtab->index_lock) condition in dev_map_enqueue_multi(), where the lock is not held either.",
       "published": "2026-06-24T17:17:23.800Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T18:21:51.533Z",
       "severity": "High",
       "cvssScore": 7.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
@@ -23771,18 +23959,25 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 2.84,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-476"
       ]
     },
     {
@@ -24389,7 +24584,7 @@
       "id": "CVE-2026-53094",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: Fix stale offload->prog pointer after constant blinding When a dev-bound-only BPF program (BPF_F_XDP_DEV_BOUND_ONLY) undergoes JIT compilation with constant blinding enabled (bpf_jit_harden >= 2), bpf_jit_blind_constants() clones the program. The original prog is then freed in bpf_jit_prog_release_other(), which updates aux->prog to point to the surviving clone, but fails to update offload->prog. This leaves offload->prog pointing to the freed original program. When the network namespace is subsequently destroyed, cleanup_net() triggers bpf_dev_bound_netdev_unregister(), which iterates ondev->progs and calls __bpf_prog_offload_destroy(offload->prog). Accessing the freed prog causes a page fault: BUG: unable to handle page fault for address: ffffc900085f1038 Workqueue: netns cleanup_net RIP: 0010:__bpf_prog_offload_destroy+0xc/0x80 Call Trace: __bpf_offload_dev_netdev_unregister+0x257/0x350 bpf_dev_bound_netdev_unregister+0x4a/0x90 unregister_netdevice_many_notify+0x2a2/0x660 ... cleanup_net+0x21a/0x320 The test sequence that triggers this reliably is: 1. Set net.core.bpf_jit_harden=2 (echo 2 > /proc/sys/net/core/bpf_jit_harden) 2. Run xdp_metadata selftest, which creates a dev-bound-only XDP program on a veth inside a netns (./test_progs -t xdp_metadata) 3. cleanup_net -> page fault in __bpf_prog_offload_destroy Dev-bound-only programs are unique in that they have an offload structure but go through the normal JIT path instead of bpf_prog_offload_compile(). This means they are subject to constant blinding's prog clone-and-replace, while also having offload->prog that must stay in sync. Fix this by updating offload->prog in bpf_jit_prog_release_other(), alongside the existing aux->prog update. Both are back-pointers to the prog that must be kept in sync when the prog is replaced.",
       "published": "2026-06-24T17:17:23.580Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T18:22:07.227Z",
       "severity": "High",
       "cvssScore": 7.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
@@ -24416,7 +24611,7 @@
       "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 2.83,
       "tags": [
@@ -24787,7 +24982,7 @@
       "id": "CVE-2026-53077",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net/rds: Restrict use of RDS/IB to the initial network namespace Prevent using RDS/IB in network namespaces other than the initial one. The existing RDS/IB code will not work properly in non-initial network namespaces.",
       "published": "2026-06-24T17:17:21.730Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T18:14:17.387Z",
       "severity": "High",
       "cvssScore": 7.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
@@ -24814,7 +25009,7 @@
       "patchAvailable": false,
       "workaroundAvailable": true,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 2.81,
       "tags": [
@@ -25086,7 +25281,7 @@
       "id": "CVE-2026-53078",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: Fix same-register dst/src OOB read and pointer leak in sock_ops When a BPF sock_ops program accesses ctx fields with dst_reg == src_reg, the SOCK_OPS_GET_SK() and SOCK_OPS_GET_FIELD() macros fail to zero the destination register in the !fullsock / !locked_tcp_sock path. Both macros borrow a temporary register to check is_fullsock / is_locked_tcp_sock when dst_reg == src_reg, because dst_reg holds the ctx pointer. When the check is false (e.g., TCP_NEW_SYN_RECV state with a request_sock), dst_reg should be zeroed but is not, leaving the stale ctx pointer: - SOCK_OPS_GET_SK: dst_reg retains the ctx pointer, passes NULL checks as PTR_TO_SOCKET_OR_NULL, and can be used as a bogus socket pointer, leading to stack-out-of-bounds access in helpers like bpf_skc_to_tcp6_sock(). - SOCK_OPS_GET_FIELD: dst_reg retains the ctx pointer which the verifier believes is a SCALAR_VALUE, leaking a kernel pointer. Fix both macros by: - Changing JMP_A(1) to JMP_A(2) in the fullsock path to skip the added instruction. - Adding BPF_MOV64_IMM(si->dst_reg, 0) after the temp register restore in the !fullsock path, placed after the restore because dst_reg == src_reg means we need src_reg intact to read ctx->temp.",
       "published": "2026-06-24T17:17:21.850Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
+      "lastModified": "2026-07-21T18:14:26.080Z",
       "severity": "High",
       "cvssScore": 7.8,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
@@ -25106,18 +25301,25 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 2.79,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-125"
       ]
     },
     {
@@ -31697,6 +31899,51 @@
       ]
     },
     {
+      "id": "CVE-2026-53101",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: mt7921: fix potential deadlock in mt7921_roc_abort_sync roc_abort_sync() can deadlock with roc_work(). roc_work() holds dev->mt76.mutex, while cancel_work_sync() waits for roc_work() to finish. If the caller already owns the same mutex, both sides block and no progress is possible. This deadlock can occur during station removal when mt76_sta_state() -> mt76_sta_remove() -> mt7921_mac_sta_remove() -> mt7921_roc_abort_sync() invokes cancel_work_sync() while roc_work() is still running and holding dev->mt76.mutex. This avoids the mutex deadlock and preserves exactly-once work ownership.",
+      "published": "2026-06-24T17:17:24.377Z",
+      "lastModified": "2026-07-21T18:20:43.130Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.06488,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-667",
+          "name": "CWE-667",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.15,
+      "tags": [
+        "Linux",
+        "CWE-667"
+      ]
+    },
+    {
       "id": "CVE-2026-13023",
       "summary": "Uninitialized Use in GPU in Google Chrome prior to 149.0.7827.197 allowed a remote attacker who had compromised the renderer process to obtain potentially sensitive information from process memory via a crafted HTML page. (Chromium security severity: High)",
       "published": "2026-06-24T19:17:08.567Z",
@@ -31794,50 +32041,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12804",
-      "summary": "A vulnerability was detected in lemonldap-ng up to 2.23.0. Impacted is an unknown function in the library lemonldap-ng-portal/lib/Lemonldap/NG/Portal/CDC.pm of the component SAML Common Domain Cookie Endpoint. Performing a manipulation of the argument url results in open redirect. The attack is possible to be carried out remotely. The exploit is now public and may be used. Applying a patch is the recommended action to fix this issue. The vendor confirms, that \"it has been fixed some days ago and will be available in 2.23.1. CDC is quite never used, so the impact is very low.\"",
-      "published": "2026-06-21T19:16:23.097Z",
-      "lastModified": "2026-06-22T18:24:24.370Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00264,
-      "epssPercentile": 0.1802,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-601",
-          "name": "CWE-601",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.14,
-      "tags": [
-        "CWE-601"
-      ]
-    },
-    {
       "id": "CVE-2026-44273",
       "summary": "Dell Wyse Management Suite (WMS), versions prior to WMS 2605, contain a Use of Default Credentials vulnerability. A high privileged attacker with local access could potentially exploit this vulnerability, leading to Information Disclosure.",
       "published": "2026-06-22T20:16:29.350Z",
@@ -31880,6 +32083,172 @@
       "tags": [
         "F5",
         "CWE-1392"
+      ]
+    },
+    {
+      "id": "CVE-2026-53074",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: reject short IPv4/IPv6 inputs in bpf_prog_test_run_skb bpf_prog_test_run_skb() calls eth_type_trans() first and then uses skb->protocol to initialize sk family and address fields for the test run. For IPv4 and IPv6 packets, it may access ip_hdr(skb) or ipv6_hdr(skb) even when the provided test input only contains an Ethernet header. Reject the input earlier if the Ethernet frame carries IPv4/IPv6 EtherType but the L3 header is too short. Fold the IPv4/IPv6 header length checks into the existing protocol switch and return -EINVAL before accessing the network headers.",
+      "published": "2026-06-24T17:17:21.317Z",
+      "lastModified": "2026-07-21T18:05:44.080Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00164,
+      "epssPercentile": 0.06045,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.14,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53095",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: Fix abuse of kprobe_write_ctx via freplace uprobe programs are allowed to modify struct pt_regs. Since the actual program type of uprobe is KPROBE, it can be abused to modify struct pt_regs via kprobe+freplace when the kprobe attaches to kernel functions. For example, SEC(\"?kprobe\") int kprobe(struct pt_regs *regs) { return 0; } SEC(\"?freplace\") int freplace_kprobe(struct pt_regs *regs) { regs->di = 0; return 0; } freplace_kprobe prog will attach to kprobe prog. kprobe prog will attach to a kernel function. Without this patch, when the kernel function runs, its first arg will always be set as 0 via the freplace_kprobe prog. To fix the abuse of kprobe_write_ctx=true via kprobe+freplace, disallow attaching freplace programs on kprobe programs with different kprobe_write_ctx values.",
+      "published": "2026-06-24T17:17:23.693Z",
+      "lastModified": "2026-07-21T18:21:59.100Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00166,
+      "epssPercentile": 0.06194,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.14,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53100",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: fix deadlock in remain-on-channel mt76_remain_on_channel() and mt76_roc_complete() call mt76_set_channel() while already holding dev->mutex. Since mt76_set_channel() also acquires dev->mutex, this results in a deadlock. Use __mt76_set_channel() instead of mt76_set_channel(). Add cancel_delayed_work_sync() for mac_work before acquiring the mutex in mt76_remain_on_channel() to prevent a secondary deadlock with the mac_work workqueue.",
+      "published": "2026-06-24T17:17:24.257Z",
+      "lastModified": "2026-07-21T18:21:01.780Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00166,
+      "epssPercentile": 0.06264,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-667",
+          "name": "CWE-667",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.14,
+      "tags": [
+        "Linux",
+        "CWE-667"
+      ]
+    },
+    {
+      "id": "CVE-2026-53103",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: mt7925: fix potential deadlock in mt7925_roc_abort_sync roc_abort_sync() can deadlock with roc_work(). roc_work() holds dev->mt76.mutex, while cancel_work_sync() waits for roc_work() to finish. If the caller already owns the same mutex, both sides block and no progress is possible. This deadlock can occur during station removal when mt76_sta_state() -> mt76_sta_remove() -> mt7925_mac_sta_remove_link() -> mt7925_mac_link_sta_remove() -> mt7925_roc_abort_sync() invokes cancel_work_sync() while roc_work() is still running and holding dev->mt76.mutex. This avoids the mutex deadlock and preserves exactly-once work ownership.",
+      "published": "2026-06-24T17:17:24.567Z",
+      "lastModified": "2026-07-21T18:20:17.650Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00166,
+      "epssPercentile": 0.06265,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-667",
+          "name": "CWE-667",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.14,
+      "tags": [
+        "Linux",
+        "CWE-667"
       ]
     },
     {
@@ -32248,6 +32617,89 @@
         "CWE-311",
         "CWE-319",
         "CWE-636"
+      ]
+    },
+    {
+      "id": "CVE-2026-53099",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: Switch CONFIG_CFI_CLANG to CONFIG_CFI This was renamed in commit 23ef9d439769 (\"kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI\") as it is now a compiler-agnostic option. Using the wrong name results in the code getting compiled out. Meaning the CFI failures for btf_dtor_kfunc_t would still trigger.",
+      "published": "2026-06-24T17:17:24.140Z",
+      "lastModified": "2026-07-21T18:21:22.497Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00156,
+      "epssPercentile": 0.05185,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.11,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53102",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: Fix memory leak after mt76_connac_mcu_alloc_sta_req() mt76_connac_mcu_alloc_sta_req() allocates an skb which is expected to be freed eventually by mt76_mcu_skb_send_msg(). However, currently if an intermediate function fails before sending, the allocated skb is leaked. Specifically, mt76_connac_mcu_sta_wed_update() and mt76_connac_mcu_sta_key_tlv() may fail, leading to an immediate memory leak in the error path. Fix this by explicitly freeing the skb in these error paths. Commit 7c0f63fe37a5 (\"wifi: mt76: mt7996: fix memory leak on mt7996_mcu_sta_key_tlv error\") made a similar change. Compile tested only. Issue found using a prototype static analysis tool and code review.",
+      "published": "2026-06-24T17:17:24.473Z",
+      "lastModified": "2026-07-21T18:20:28.790Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00156,
+      "epssPercentile": 0.05186,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.11,
+      "tags": [
+        "Linux",
+        "CWE-401"
       ]
     },
     {
@@ -39726,44 +40178,6 @@
       ]
     },
     {
-      "id": "CVE-2026-53073",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: hci_ldisc: Clear HCI_UART_PROTO_INIT on error When hci_register_dev() fails in hci_uart_register_dev() HCI_UART_PROTO_INIT is not cleared before calling hu->proto->close(hu) and setting hu->hdev to NULL. This means incoming UART data will reach the protocol-specific recv handler in hci_uart_tty_receive() after resources are freed. Clear HCI_UART_PROTO_INIT with a write lock before calling hu->proto->close() and setting hu->hdev to NULL. The write lock ensures all active readers have completed and no new reader can enter the protocol recv path before resources are freed. This allows the protocol-specific recv functions to remove the \"HCI_UART_REGISTERED\" guard without risking a null pointer dereference if hci_register_dev() fails.",
-      "published": "2026-06-24T17:17:21.163Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00172,
-      "epssPercentile": 0.06832,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.24,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-11972",
       "summary": "When using the \"tarfile\" module with a file opened in \"streaming mode\" (mode=\"r|\") the tarfile module did not properly handle EOF, making archive parsing take exponentially longer.",
       "published": "2026-06-23T23:16:49.033Z",
@@ -42946,44 +43360,6 @@
       ]
     },
     {
-      "id": "CVE-2026-53101",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: mt7921: fix potential deadlock in mt7921_roc_abort_sync roc_abort_sync() can deadlock with roc_work(). roc_work() holds dev->mt76.mutex, while cancel_work_sync() waits for roc_work() to finish. If the caller already owns the same mutex, both sides block and no progress is possible. This deadlock can occur during station removal when mt76_sta_state() -> mt76_sta_remove() -> mt7921_mac_sta_remove() -> mt7921_roc_abort_sync() invokes cancel_work_sync() while roc_work() is still running and holding dev->mt76.mutex. This avoids the mutex deadlock and preserves exactly-once work ownership.",
-      "published": "2026-06-24T17:17:24.377Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00168,
-      "epssPercentile": 0.06488,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.23,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-53105",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: mt7925: prevent NULL vif dereference in mt7925_mac_write_txwi Check for a NULL `vif` before accessing `ieee80211_vif_is_mld(vif)` to avoid a potential kernel panic in scenarios where `vif` might not be initialized.",
       "published": "2026-06-24T17:17:24.760Z",
@@ -43061,196 +43437,6 @@
       ]
     },
     {
-      "id": "CVE-2026-53095",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: Fix abuse of kprobe_write_ctx via freplace uprobe programs are allowed to modify struct pt_regs. Since the actual program type of uprobe is KPROBE, it can be abused to modify struct pt_regs via kprobe+freplace when the kprobe attaches to kernel functions. For example, SEC(\"?kprobe\") int kprobe(struct pt_regs *regs) { return 0; } SEC(\"?freplace\") int freplace_kprobe(struct pt_regs *regs) { regs->di = 0; return 0; } freplace_kprobe prog will attach to kprobe prog. kprobe prog will attach to a kernel function. Without this patch, when the kernel function runs, its first arg will always be set as 0 via the freplace_kprobe prog. To fix the abuse of kprobe_write_ctx=true via kprobe+freplace, disallow attaching freplace programs on kprobe programs with different kprobe_write_ctx values.",
-      "published": "2026-06-24T17:17:23.693Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00166,
-      "epssPercentile": 0.06194,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.22,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53097",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: mt7996: fix use-after-free bugs in mt7996_mac_dump_work() When the mt7996 pci chip is detaching, the mt7996_crash_data is released in mt7996_coredump_unregister(). However, the work item dump_work may still be running or pending, leading to UAF bugs when the already freed crash_data is dereferenced again in mt7996_mac_dump_work(). The race condition can occur as follows: CPU 0 (removal path) | CPU 1 (workqueue) mt7996_pci_remove() | mt7996_sys_recovery_set() mt7996_unregister_device() | mt7996_reset() mt7996_coredump_unregister() | queue_work() vfree(dev->coredump.crash_data) | mt7996_mac_dump_work() | crash_data-> // UAF Fix this by ensuring dump_work is properly canceled before the crash_data is deallocated. Add cancel_work_sync() in mt7996_unregister_device() to synchronize with any pending or executing dump work.",
-      "published": "2026-06-24T17:17:23.923Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00168,
-      "epssPercentile": 0.06403,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.22,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53098",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: mt7915: fix use-after-free bugs in mt7915_mac_dump_work() When the mt7915 pci chip is detaching, the mt7915_crash_data is released in mt7915_coredump_unregister(). However, the work item dump_work may still be running or pending, leading to UAF bugs when the already freed crash_data is dereferenced again in mt7915_mac_dump_work(). The race condition can occur as follows: CPU 0 (removal path) | CPU 1 (workqueue) mt7915_pci_remove() | mt7915_sys_recovery_set() mt7915_unregister_device() | mt7915_reset() mt7915_coredump_unregister() | queue_work() vfree(dev->coredump.crash_data) | mt7915_mac_dump_work() | crash_data-> // UAF Fix this by ensuring dump_work is properly canceled before the crash_data is deallocated. Add cancel_work_sync() in mt7915_unregister_device() to synchronize with any pending or executing dump work.",
-      "published": "2026-06-24T17:17:24.027Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00168,
-      "epssPercentile": 0.064,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.22,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53100",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: fix deadlock in remain-on-channel mt76_remain_on_channel() and mt76_roc_complete() call mt76_set_channel() while already holding dev->mutex. Since mt76_set_channel() also acquires dev->mutex, this results in a deadlock. Use __mt76_set_channel() instead of mt76_set_channel(). Add cancel_delayed_work_sync() for mac_work before acquiring the mutex in mt76_remain_on_channel() to prevent a secondary deadlock with the mac_work workqueue.",
-      "published": "2026-06-24T17:17:24.257Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00166,
-      "epssPercentile": 0.06264,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.22,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53103",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: mt7925: fix potential deadlock in mt7925_roc_abort_sync roc_abort_sync() can deadlock with roc_work(). roc_work() holds dev->mt76.mutex, while cancel_work_sync() waits for roc_work() to finish. If the caller already owns the same mutex, both sides block and no progress is possible. This deadlock can occur during station removal when mt76_sta_state() -> mt76_sta_remove() -> mt7925_mac_sta_remove_link() -> mt7925_mac_link_sta_remove() -> mt7925_roc_abort_sync() invokes cancel_work_sync() while roc_work() is still running and holding dev->mt76.mutex. This avoids the mutex deadlock and preserves exactly-once work ownership.",
-      "published": "2026-06-24T17:17:24.567Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00166,
-      "epssPercentile": 0.06265,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.22,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-53104",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: Fix memory leak destroying device All MT76 rx queues have an associated page_pool even if the queue is not associated to a NAPI (e.g. WED RRO queues with WED enabled). Destroy the page_pool running mt76_dma_cleanup routine during module unload. Moreover returns pages to the page pool if WED is not enabled for WED RRO queues.",
       "published": "2026-06-24T17:17:24.667Z",
@@ -43284,44 +43470,6 @@
       "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 0.22,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53074",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: reject short IPv4/IPv6 inputs in bpf_prog_test_run_skb bpf_prog_test_run_skb() calls eth_type_trans() first and then uses skb->protocol to initialize sk family and address fields for the test run. For IPv4 and IPv6 packets, it may access ip_hdr(skb) or ipv6_hdr(skb) even when the provided test input only contains an Ethernet header. Reject the input earlier if the Ethernet frame carries IPv4/IPv6 EtherType but the L3 header is too short. Fold the IPv4/IPv6 header length checks into the existing protocol switch and return -EINVAL before accessing the network headers.",
-      "published": "2026-06-24T17:17:21.317Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00164,
-      "epssPercentile": 0.06045,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.21,
       "tags": [
         "Linux"
       ]
@@ -43591,82 +43739,6 @@
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.18,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53099",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: Switch CONFIG_CFI_CLANG to CONFIG_CFI This was renamed in commit 23ef9d439769 (\"kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI\") as it is now a compiler-agnostic option. Using the wrong name results in the code getting compiled out. Meaning the CFI failures for btf_dtor_kfunc_t would still trigger.",
-      "published": "2026-06-24T17:17:24.140Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00156,
-      "epssPercentile": 0.05185,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.18,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-53102",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: Fix memory leak after mt76_connac_mcu_alloc_sta_req() mt76_connac_mcu_alloc_sta_req() allocates an skb which is expected to be freed eventually by mt76_mcu_skb_send_msg(). However, currently if an intermediate function fails before sending, the allocated skb is leaked. Specifically, mt76_connac_mcu_sta_wed_update() and mt76_connac_mcu_sta_key_tlv() may fail, leading to an immediate memory leak in the error path. Fix this by explicitly freeing the skb in these error paths. Commit 7c0f63fe37a5 (\"wifi: mt76: mt7996: fix memory leak on mt7996_mcu_sta_key_tlv error\") made a similar change. Compile tested only. Issue found using a prototype static analysis tool and code review.",
-      "published": "2026-06-24T17:17:24.473Z",
-      "lastModified": "2026-07-14T15:26:52.267Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00156,
-      "epssPercentile": 0.05186,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
