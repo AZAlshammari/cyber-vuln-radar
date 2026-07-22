@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-22T20:48:30.161Z",
+  "generatedAt": "2026-07-22T22:05:47.519Z",
   "count": 1000,
   "items": [
     {
@@ -1248,50 +1248,6 @@
       "priorityScore": 6.01,
       "tags": [
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-49468",
-      "summary": "LiteLLM is a proxy server (AI Gateway) to call LLM APIs in OpenAI (or native) format. Prior to 1.84.0, a Host-header parsing flaw in the LiteLLM proxy could, under specific conditions, allow unauthenticated access to protected management routes. The auth layer derived the effective route from request.url.path in litellm/proxy/auth/auth_utils.py::get_request_route(), which Starlette reconstructs from the Host header. A crafted Host could therefore make the auth gate evaluate a different route from the one FastAPI dispatched. This vulnerability is fixed in 1.84.0.",
-      "published": "2026-06-22T21:16:25.190Z",
-      "lastModified": "2026-07-15T02:22:35.767Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00559,
-      "epssPercentile": 0.43083,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-290",
-          "name": "CWE-290",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.94,
-      "tags": [
-        "CWE-290"
       ]
     },
     {
@@ -5904,6 +5860,51 @@
       ]
     },
     {
+      "id": "CVE-2026-53247",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: ethernet: mtk_eth_soc: Fix use-after-free in metadata dst teardown mtk_free_dev() calls metadata_dst_free() which frees the metadata_dst with kfree() immediately, bypassing the RCU grace period. In the RX path, skb_dst_set_noref() sets a non-refcounted pointer from the skb to the metadata_dst. This function requires RCU read-side protection and the dst must remain valid until all RCU readers complete. Since metadata_dst_free() calls kfree() directly, a use-after-free can occur if any skb still holds a noref pointer to the dst when the driver tears it down. Replace metadata_dst_free() with dst_release() which properly goes through the refcount path: when the refcount drops to zero, it schedules the actual free via call_rcu_hurry(), ensuring all RCU readers have completed before the memory is freed.",
+      "published": "2026-06-25T09:16:42.657Z",
+      "lastModified": "2026-07-07T22:16:24.543Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00507,
+      "epssPercentile": 0.40247,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.84,
+      "tags": [
+        "Linux",
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-52799",
       "summary": "Gogs is an open source self-hosted Git service. Prior to 0.14.3, GET /attachments/:uuid returns the raw attachment file without verifying whether the requester has view permission for the associated Issue/Comment/Release or the repository. In a test environment with REQUIRE_SIGNIN_VIEW = false, we confirmed that an unauthenticated user can download attachments belonging to a private repository. This vulnerability is fixed in 0.14.3.",
       "published": "2026-06-24T21:16:55.670Z",
@@ -6136,6 +6137,51 @@
         "Windows",
         "CWE-22",
         "CWE-284"
+      ]
+    },
+    {
+      "id": "CVE-2026-53246",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: sctp: validate cached peer INIT chunk length in COOKIE_ECHO processing When a listening SCTP server processes a COOKIE_ECHO chunk, the cached peer INIT chunk embedded after the cookie is parsed and its parameters are later walked by sctp_process_init() using sctp_walk_params(). However, the chunk header length of this cached INIT chunk was not validated against the remaining buffer in the COOKIE_ECHO payload. If the length field is inflated, the parameter walk can run beyond the actual received data, leading to out-of-bounds reads and potential memory corruption during later parameter handling (e.g. STATE_COOKIE processing and kmemdup() copies). Add a bounds check in sctp_unpack_cookie() to ensure the cached INIT chunk length does not exceed the available data in the COOKIE_ECHO buffer before it is used.",
+      "published": "2026-06-25T09:16:42.567Z",
+      "lastModified": "2026-07-07T22:16:52.450Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00481,
+      "epssPercentile": 0.38633,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.78,
+      "tags": [
+        "Linux",
+        "CWE-787"
       ]
     },
     {
@@ -10143,6 +10189,51 @@
       ]
     },
     {
+      "id": "CVE-2026-53240",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfrm: iptfs: fix use-after-free on first_skb in __input_process_payload __input_process_payload() stores first_skb into xtfs->ra_newskb under drop_lock when starting partial reassembly, then unlocks and breaks out of the processing loop. The post-loop check reads xtfs->ra_newskb without the lock to decide whether first_skb is still owned: if (first_skb && first_iplen && !defer && first_skb != xtfs->ra_newskb) Between spin_unlock and this read, a concurrent CPU running iptfs_reassem_cont() (or the drop_timer hrtimer) can complete reassembly, NULL xtfs->ra_newskb, and free the skb. The check then evaluates first_skb != NULL as true, and pskb_trim/ip_summed/consume_skb operate on the freed skb — a use-after-free in skbuff_head_cache. Replace the unlocked read with a local bool that records whether first_skb was handed to the reassembly state in the current call. The flag is set after the existing spin_unlock, before the break, using the pointer equality that is stable at that point (first_skb == skb iff first_skb was stored in ra_newskb).",
+      "published": "2026-06-25T09:16:41.960Z",
+      "lastModified": "2026-07-08T13:05:31.967Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00418,
+      "epssPercentile": 0.34187,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.28,
+      "tags": [
+        "Linux",
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-12095",
       "summary": "The Kargo Takip plugin for WordPress is vulnerable to Server-Side Request Forgery in all versions up to, and including, 1.2 via the 'api_url' parameter. This makes it possible for unauthenticated attackers to make web requests to arbitrary locations originating from the web application and can be used to query and modify information from internal services. The script echoes internal API response data (specifically the value of any 'auth' key in a JSON response body) verbatim back to the attacker's browser, enabling direct exfiltration of responses from internal services such as cloud instance metadata endpoints.",
       "published": "2026-06-24T07:16:26.527Z",
@@ -10570,6 +10661,51 @@
       ]
     },
     {
+      "id": "CVE-2026-53248",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: airoha: Fix use-after-free in metadata dst teardown airoha_metadata_dst_free() runs metadata_dst_free() which frees the metadata_dst with kfree() immediately, bypassing the RCU grace period. In the RX path, skb_dst_set_noref() sets a non-refcounted pointer from the skb to the metadata_dst. This function requires RCU read-side protection and the dst must remain valid until all RCU readers complete. Since metadata_dst_free() calls kfree() directly, an use-after-free can occur if any skb still holds a noref pointer to the dst when the driver tears it down. Replace metadata_dst_free() with dst_release() which properly goes through the refcount path: when the refcount drops to zero, it schedules the actual free via call_rcu_hurry(), ensuring all RCU readers have completed before the memory is freed.",
+      "published": "2026-06-25T09:16:42.753Z",
+      "lastModified": "2026-07-07T22:12:46.240Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00391,
+      "epssPercentile": 0.31615,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.19,
+      "tags": [
+        "Linux",
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-53053",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: iommu/amd: Fix clone_alias() to use the original device's devid Currently clone_alias() assumes first argument (pdev) is always the original device pointer. This function is called by pci_for_each_dma_alias() which based on topology decides to send original or alias device details in first argument. This meant that the source devid used to look up and copy the DTE may be incorrect, leading to wrong or stale DTE entries being propagated to alias device. Fix this by passing the original pdev as the opaque data argument to both the direct clone_alias() call and pci_for_each_dma_alias(). Inside clone_alias(), retrieve the original device from data and compute devid from it.",
       "published": "2026-06-24T17:17:17.327Z",
@@ -10649,6 +10785,52 @@
       "priorityScore": 4.17,
       "tags": [
         "CWE-121"
+      ]
+    },
+    {
+      "id": "CVE-2026-53253",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: bnep: reject short frames before parsing A BNEP peer can send a short BNEP SDU. bnep_rx_frame() reads the packet type byte immediately and, for control packets, reads the control opcode and setup UUID-size byte before proving that those bytes are present. bnep_rx_control() also dereferences the control opcode without rejecting an empty control payload. Use skb_pull_data() for the fixed fields in bnep_rx_frame() so a NULL return gates each dereference. Split the control handler so the frame path can pass an opcode that has already been pulled, and keep the byte-buffer wrapper for extension control payloads. For BNEP_SETUP_CONN_REQ, name the UUID-size byte before pulling the setup payload. struct bnep_setup_conn_req carries destination and source service UUIDs after that byte, each uuid_size bytes, so the parser now documents that tuple explicitly instead of leaving the pull length as an opaque multiplication. Validation reproduced this kernel report: KASAN slab-out-of-bounds in bnep_rx_frame.isra.0+0x130c/0x1790 The buggy address belongs to the object at ffff88800c0f7908 which belongs to the cache kmalloc-8 of size 8 The buggy address is located 0 bytes to the right of allocated 1-byte region [ffff88800c0f7908, ffff88800c0f7909) Read of size 1 Call trace: dump_stack_lvl+0xb3/0x140 (?:?) print_address_description+0x57/0x3a0 (?:?) bnep_rx_frame+0x130c/0x1790 (net/bluetooth/bnep/core.c:306) print_report+0xb9/0x2b0 (?:?) __virt_addr_valid+0x1ba/0x3a0 (?:?) srso_alias_return_thunk+0x5/0xfbef5 (?:?) kasan_addr_to_slab+0x21/0x60 (?:?) kasan_report+0xe0/0x110 (?:?) process_one_work+0xfce/0x17e0 (kernel/workqueue.c:3200) worker_thread+0x65c/0xe40 (?:?) __kthread_parkme+0x184/0x230 (?:?) kthread+0x35e/0x470 (?:?) _raw_spin_unlock_irq+0x28/0x50 (?:?) ret_from_fork+0x586/0x870 (?:?) __switch_to+0x74f/0xdc0 (?:?) ret_from_fork_asm+0x1a/0x30 (?:?)",
+      "published": "2026-06-25T09:16:43.253Z",
+      "lastModified": "2026-07-08T16:46:13.950Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00274,
+      "epssPercentile": 0.19483,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.17,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-125"
       ]
     },
     {
@@ -15214,6 +15396,44 @@
       ]
     },
     {
+      "id": "CVE-2026-53244",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: VFS: fix possible failure to unlock in nfsd4_create_file() atomic_create() in fs/namei.c drops the reference to the dentry when it returns an error. This behaviour was imported into dentry_create() so that it will drop the reference if an error is returned from atomic_create(), though not if vfs_create() returns an error (in the case where ->atomic_create is not supported). The caller - nfsd4_create_file() - is made aware of this by checking path->dentry, which will either be a counted reference to a dentry, or an error pointer. However the change to use start_creating()/end_creating() (which landed shortly before the dentry_create() change landed, though was likely developed around the same time) means that nfsd4_create_file() *needs* a valid dentry so that it can unlock the parent. The net result is that if NFSD exports a filesystem which uses ->atomic_create, and if a call to ->atomic_create returns an error, then nfsd4_create_file() will pass an error pointer to end_creating() and the parent will not be unlocked. Fix this by changing dentry_create() to make sure path->dentry is always a valid dentry, never an error-pointer. The actual error is already returned a different way. Note that if ->atomic_create() returns a different dentry (which may not be possible in practice) we are guaranteed (because it is only ever provided by d_spliace_alias()) that it will have the same d_parent and so it will have the same effect when passed to end_creating().",
+      "published": "2026-06-25T09:16:42.350Z",
+      "lastModified": "2026-07-07T22:19:58.843Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00359,
+      "epssPercentile": 0.28362,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.62,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2025-71365",
       "summary": "picklescan before 0.0.33 fails to detect malicious pickle files that invoke numpy.f2py.crackfortran.myeval function through the reduce method. Attackers can craft malicious pickle files embedding arbitrary code that evades picklescan detection and executes remote code when loaded.",
       "published": "2026-06-23T13:16:38.617Z",
@@ -17534,56 +17754,6 @@
       ]
     },
     {
-      "id": "CVE-2026-44727",
-      "summary": "Jupyter Server is the backend for Jupyter web applications. Prior to 2.20, the nbconvert HTTP handlers in jupyter_server render user-authored notebook HTML under the Jupyter origin without a sandbox directive in their Content-Security-Policy. Combined with nbconvert.HTMLExporter's default non-sanitizing behavior, a notebook carrying an HTML payload in a display_data output triggers stored XSS with cookie access, full /api/* authority, and kernel RCE. This vulnerability is fixed in 2.20.",
-      "published": "2026-06-22T21:16:24.260Z",
-      "lastModified": "2026-07-22T12:18:06.240Z",
-      "severity": "Medium",
-      "cvssScore": 5.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00227,
-      "epssPercentile": 0.13493,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-1021",
-          "name": "CWE-1021",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": true,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.36,
-      "tags": [
-        "CWE-79",
-        "CWE-1021"
-      ]
-    },
-    {
       "id": "CVE-2026-8622",
       "summary": "The Image Sizes on Demand plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via PHP_SELF Server Variable in all versions up to, and including, 1.3 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link. The injected payload only executes in the context of an administrator, as the settings page requires the manage_options capability to render.",
       "published": "2026-06-24T07:16:27.930Z",
@@ -19405,50 +19575,6 @@
       ]
     },
     {
-      "id": "CVE-2026-55603",
-      "summary": "http-proxy-middleware is node.js http-proxy middleware. From 3.0.4 until 3.0.7 and 4.1.1, fixRequestBody() is the library's documented helper for re-emitting a request body that was already consumed by a body parser. When the outgoing Content-Type is multipart/form-data, it rebuilds the body with handlerFormDataBodyData(), which interpolates each req.body key and value directly into the multipart wire format without neutralizing CR/LF. A \\r\\n inside a value (or key) lets an attacker close the current part and inject an entirely new form part. Because the proxy's own body parser saw a single opaque value, any gateway-side policy or validation performed on req.body is evaluated against a different set of fields than the upstream backend ultimately parses a request/parameter desynchronization across the trust boundary. This vulnerability is fixed in 3.0.7 and 4.1.1.",
-      "published": "2026-06-22T21:16:26.033Z",
-      "lastModified": "2026-06-24T16:44:28.870Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00243,
-      "epssPercentile": 0.15583,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-93",
-          "name": "CWE-93",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.17,
-      "tags": [
-        "CWE-93"
-      ]
-    },
-    {
       "id": "CVE-2026-9154",
       "summary": "Arbitrary File Write vulnerability in Rapid7 InsightConnect Sed Plugin on Linux allows authenticated attackers to write attacker-controlled content to arbitrary file paths via the expression parameter.",
       "published": "2026-06-25T01:16:27.673Z",
@@ -19728,50 +19854,6 @@
       "tags": [
         "Linux",
         "CWE-125"
-      ]
-    },
-    {
-      "id": "CVE-2026-55599",
-      "summary": "phpseclib is a PHP secure communications library. From 0.1.1 until 1.0.30, 2.0.55, and 3.0.54, when an application validates an untrusted X.509 certificate with phpseclib, X509::validateSignature() reads a URL out of that certificate's Authority Information Access (AIA) extension and connects to it. Attacker who supplies certificate fully controls host, port, and path of that connection. URL fetching is enabled by default, and no destination is blocked. An unauthenticated attacker can therefore make a validating server open connections to internal hosts and ports it should never reach, for example loopback 127.0.0.1, cloud metadata address 169.254.169.254, and internal-only services. This is a server-side request forgery (SSRF) caused by an insecure default. This vulnerability is fixed in 1.0.30, 2.0.55, and 3.0.54.",
-      "published": "2026-06-22T21:16:25.903Z",
-      "lastModified": "2026-06-26T20:10:05.340Z",
-      "severity": "Medium",
-      "cvssScore": 5.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00133,
-      "epssPercentile": 0.03206,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.14,
-      "tags": [
-        "CWE-918"
       ]
     },
     {
@@ -20304,50 +20386,6 @@
       ]
     },
     {
-      "id": "CVE-2026-41479",
-      "summary": "Authlib is a Python library which builds OAuth and OpenID Connect servers. Prior to 1.6.10 and 1.7.1, Authlib's OAuth 2.0 authorization endpoint can be turned into an unauthenticated open redirect when a request uses an unsupported response_type and supplies an attacker-controlled redirect_uri. The vulnerable behavior happens before client lookup and before any redirect URI validation. As a result, an attacker does not need a valid client registration, an authenticated user, or any prior state. A single request to the authorization endpoint is enough to obtain a 302 Location response to an arbitrary attacker-controlled URL. This vulnerability is fixed in 1.6.10 and 1.7.1.",
-      "published": "2026-06-22T21:16:24.017Z",
-      "lastModified": "2026-06-26T20:10:38.003Z",
-      "severity": "Medium",
-      "cvssScore": 5.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.0016,
-      "epssPercentile": 0.05634,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-601",
-          "name": "CWE-601",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.09,
-      "tags": [
-        "CWE-601"
-      ]
-    },
-    {
       "id": "CVE-2026-7574",
       "summary": "Anthropic Claude Desktop Cowork VM image handling (confirmed across v1.1348.0 through v1.2278.0, including v1.1348.0, v1.1617.0, and v1.2278.0) validates only file presence and a version marker string before booting rootfs.img, but does not verify image content integrity at time-of-use. A local attacker with unprivileged code execution as the victim macOS user can modify the VM root filesystem image and have it trusted on subsequent Cowork VM boots, enabling persistent arbitrary code execution in the VM and access to host-mounted directories. The estimated CWE mapping is CWE-353 (Missing Support for Integrity Check).",
       "published": "2026-06-24T00:16:34.173Z",
@@ -20837,10 +20875,10 @@
       ]
     },
     {
-      "id": "CVE-2026-49461",
-      "summary": "pypdf is a free and open-source pure-python PDF library. Prior to 6.12.2, an attacker who uses this vulnerability can craft a PDF which leads to large memory usage. This requires extracting the text of a page which contains a form XObject with self-references. This vulnerability is fixed in 6.12.2.",
-      "published": "2026-06-22T21:16:25.070Z",
-      "lastModified": "2026-06-25T16:48:15.403Z",
+      "id": "CVE-2026-53241",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ALSA: seq: dummy: fix UMP event stack overread The dummy sequencer port forwards events by copying an incoming struct snd_seq_event into a stack temporary, rewriting source and destination, and dispatching the temporary to subscribers. That legacy event storage is smaller than struct snd_seq_ump_event. When a UMP event reaches the dummy client, the copy leaves the UMP flag set but only provides legacy-sized stack storage. The subscriber delivery path then uses snd_seq_event_packet_size() and copies a UMP-sized packet from that stack object, reading past the end of the temporary. Use the existing union __snd_seq_event storage and copy the packet size reported for the incoming event before rewriting the common routing fields. This preserves the full UMP packet for UMP events while keeping legacy event handling unchanged.",
+      "published": "2026-06-25T09:16:42.047Z",
+      "lastModified": "2026-07-07T22:22:37.240Z",
       "severity": "Medium",
       "cvssScore": 5.5,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
@@ -20854,19 +20892,13 @@
         "integrity": "None",
         "availability": "High"
       },
-      "epssScore": 0.00123,
-      "epssPercentile": 0.02467,
+      "epssScore": 0.00127,
+      "epssPercentile": 0.02781,
       "isKev": false,
       "kev": null,
-      "vendor": null,
+      "vendor": "Linux",
       "product": null,
-      "cwe": [
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        }
-      ],
+      "cwe": [],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
@@ -20875,16 +20907,16 @@
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 3.01,
+      "priorityScore": 3.02,
       "tags": [
-        "CWE-400"
+        "Linux"
       ]
     },
     {
-      "id": "CVE-2026-54530",
-      "summary": "pypdf is a free and open-source pure-python PDF library. Prior to 6.13.0, an attacker who uses this vulnerability can craft a PDF which leads to an infinite loop. This requires extracting the text in layout mode. This vulnerability is fixed in 6.13.0.",
-      "published": "2026-06-22T21:16:25.420Z",
-      "lastModified": "2026-06-25T16:47:28.623Z",
+      "id": "CVE-2026-53249",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ipv4: restrict IPOPT_SSRR and IPOPT_LSRR options This patch restricts setting Loose Source and Record Route (LSRR) and Strict Source and Record Route (SSRR) IP options to users with CAP_NET_RAW capability. This prevents unprivileged applications from forcing packets to route through attacker-controlled nodes to leak TCP ISN and possibly other protocol information. While LSRR and SSRR are commonly filtered in many network environments, they may still be supported and forwarded along some network paths. RFC 7126 (Recommendations on Filtering of IPv4 Packets Containing IPv4 Options) recommend to drop these options in 4.3 and 4.4.",
+      "published": "2026-06-25T09:16:42.847Z",
+      "lastModified": "2026-07-07T22:06:51.483Z",
       "severity": "Medium",
       "cvssScore": 5.5,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
@@ -20898,74 +20930,24 @@
         "integrity": "None",
         "availability": "High"
       },
-      "epssScore": 0.00123,
-      "epssPercentile": 0.02466,
+      "epssScore": 0.00128,
+      "epssPercentile": 0.02836,
       "isKev": false,
       "kev": null,
-      "vendor": null,
+      "vendor": "Linux",
       "product": null,
-      "cwe": [
-        {
-          "id": "CWE-835",
-          "name": "CWE-835",
-          "description": "CWE mapping from source data."
-        }
-      ],
+      "cwe": [],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": true,
-      "workaroundAvailable": false,
+      "workaroundAvailable": true,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 3.01,
+      "priorityScore": 3.02,
       "tags": [
-        "CWE-835"
-      ]
-    },
-    {
-      "id": "CVE-2026-54531",
-      "summary": "pypdf is a free and open-source pure-python PDF library. Prior to 6.13.0, an attacker who uses this vulnerability can craft a PDF which leads to an infinite loop. This requires merging a file with outlines into a writer. This vulnerability is fixed in 6.13.0.",
-      "published": "2026-06-22T21:16:25.550Z",
-      "lastModified": "2026-06-25T16:46:14.707Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00123,
-      "epssPercentile": 0.02467,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-835",
-          "name": "CWE-835",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.01,
-      "tags": [
-        "CWE-835"
+        "Linux"
       ]
     },
     {
@@ -21585,50 +21567,6 @@
       "priorityScore": 2.99,
       "tags": [
         "CWE-78"
-      ]
-    },
-    {
-      "id": "CVE-2026-54651",
-      "summary": "pypdf is a free and open-source pure-python PDF library. Prior to 6.13.1, an attacker who uses this vulnerability can craft a PDF which leads to an infinite loop. This requires merging a file with threads/articles into a writer. This vulnerability is fixed in 6.13.1.",
-      "published": "2026-06-22T21:16:25.680Z",
-      "lastModified": "2026-06-24T16:41:34.240Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00111,
-      "epssPercentile": 0.01578,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-835",
-          "name": "CWE-835",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.98,
-      "tags": [
-        "CWE-835"
       ]
     },
     {
@@ -23534,33 +23472,33 @@
       ]
     },
     {
-      "id": "CVE-2026-39904",
-      "summary": "Gophish through 0.12.1 contains a denial of service vulnerability that allows authenticated users with the User role to exhaust server memory by uploading a crafted Office document as an email template attachment. The ApplyTemplate() function in models/attachment.go processes Office documents as ZIP archives and calls ioutil.ReadAll() on each contained file entry without enforcing size restrictions on uncompressed content, allowing a zip bomb payload to expand to several gigabytes in memory and cause the process to be terminated by the operating system.",
-      "published": "2026-06-22T21:16:23.873Z",
-      "lastModified": "2026-07-14T21:16:46.580Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "id": "CVE-2026-53242",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ALSA: PCM: Fix wait queue list corruption in snd_pcm_drain() on linked streams snd_pcm_drain() uses init_waitqueue_entry which does not clear entry.prev/next, and add_wait_queue with a conditional remove_wait_queue that is skipped when to_check is no longer in the group after concurrent UNLINK. The orphaned wait entry remains on the unlinked substream sleep queue. On the next drain iteration, add_wait_queue adds the entry to a new queue while still linked on the old one, corrupting both lists. A subsequent wake_up dereferences NULL at the func pointer (mapped from the spinlock at offset 0 of the misinterpreted wait_queue_head_t), causing a kernel panic. Replace init_waitqueue_entry/add_wait_queue/conditional remove_wait_queue with init_wait_entry/prepare_to_wait/ finish_wait. init_wait_entry clears prev/next via INIT_LIST_HEAD on each iteration and sets autoremove_wake_function which auto-removes the entry on wake-up. finish_wait safely handles both the already-removed and still-queued cases.",
+      "published": "2026-06-25T09:16:42.140Z",
+      "lastModified": "2026-07-07T22:22:16.113Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
       "cvssBreakdown": {
-        "attackVector": "Network",
+        "attackVector": "Local",
         "attackComplexity": "Low",
         "privilegesRequired": "Low",
         "userInteraction": "None",
         "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
+        "confidentiality": "High",
+        "integrity": "High",
         "availability": "High"
       },
-      "epssScore": 0.00249,
-      "epssPercentile": 0.16313,
+      "epssScore": 0.00138,
+      "epssPercentile": 0.03668,
       "isKev": false,
       "kev": null,
-      "vendor": null,
+      "vendor": "Linux",
       "product": null,
       "cwe": [
         {
-          "id": "CWE-770",
-          "name": "CWE-770",
+          "id": "CWE-476",
+          "name": "CWE-476",
           "description": "CWE mapping from source data."
         }
       ],
@@ -23568,13 +23506,14 @@
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
-      "workaroundAvailable": true,
+      "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 2.85,
+      "priorityScore": 2.86,
       "tags": [
-        "CWE-770"
+        "Linux",
+        "CWE-476"
       ]
     },
     {
@@ -24090,6 +24029,51 @@
       "priorityScore": 2.85,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53239",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfrm: policy: fix use-after-free on inexact bin in xfrm_policy_bysel_ctx() Fix the race by pruning the bin while still holding xfrm_policy_lock, before dropping it. Use __xfrm_policy_inexact_prune_bin() directly since the lock is already held. The wrapper xfrm_policy_inexact_prune_bin() becomes unused and is removed. Race: CPU0 (XFRM_MSG_DELPOLICY) CPU1 (XFRM_MSG_NEWSPDINFO) ========================== ========================== xfrm_policy_bysel_ctx(): spin_lock_bh(xfrm_policy_lock) bin = xfrm_policy_inexact_lookup() __xfrm_policy_unlink(pol) spin_unlock_bh(xfrm_policy_lock) xfrm_policy_kill(ret) // wide window, lock not held xfrm_hash_rebuild(): spin_lock_bh(xfrm_policy_lock) __xfrm_policy_inexact_flush(): kfree_rcu(bin) // bin freed spin_unlock_bh(xfrm_policy_lock) xfrm_policy_inexact_prune_bin(bin) // UAF: bin is freed",
+      "published": "2026-06-25T09:16:41.840Z",
+      "lastModified": "2026-07-08T13:06:06.280Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00135,
+      "epssPercentile": 0.03348,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "Linux",
+        "CWE-416"
       ]
     },
     {
@@ -25830,6 +25814,51 @@
         "Chrome",
         "Windows",
         "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-53250",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata() The TX metadata area resides in the UMEM buffer which is memory-mapped and concurrently writable by userspace. In xsk_skb_metadata(), csum_start and csum_offset are read from shared memory for bounds validation, then read again for skb assignment. A malicious userspace application can race to overwrite these values between the two reads, bypassing the bounds check and causing out-of-bounds memory access during checksum computation in the transmit path. Fix this by reading csum_start and csum_offset into local variables once, then using the local copies for both validation and assignment. Note that other metadata fields (flags, launch_time) and the cached csum fields may be mutually inconsistent due to concurrent userspace writes, but this is benign: the only security-critical invariant is that each field's validated value is the same one used, which local caching guarantees.",
+      "published": "2026-06-25T09:16:42.960Z",
+      "lastModified": "2026-07-08T13:04:07.603Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00112,
+      "epssPercentile": 0.01616,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-367",
+          "name": "CWE-367",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.79,
+      "tags": [
+        "Linux",
+        "CWE-367"
       ]
     },
     {
@@ -29500,56 +29529,6 @@
       ]
     },
     {
-      "id": "CVE-2026-47240",
-      "summary": "Net::IMAP implements Internet Message Access Protocol (IMAP) client functionality in Ruby. Prior to 0.6.5 and 0.5.15, several Net::IMAP commands accept a \"raw data\" argument that is sent verbatim after validation to prevent command injection. However, if a server does not support non-synchronizing literals, it may still be possible to inject arbitrary IMAP commands inside non-synchronizing literals. A server without support for non-synchronizing literals may interpret the \"+}\\r\\n\" as the end of a malformed command line and respond with a tagged BAD. In that case, the contents of the literal will be interpreted as one or more new pipelined commands, allowing a CRLF command injection attack to succeed. This affects criteria for #search and #uid_search; search_keys for #sort, #thread, #uid_sort, and #uid_thread; and attr for #fetch and #uid_fetch. This vulnerability is fixed in 0.6.5 and 0.5.15.",
-      "published": "2026-06-22T21:16:24.543Z",
-      "lastModified": "2026-06-23T16:16:59.780Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00491,
-      "epssPercentile": 0.39264,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-77",
-          "name": "CWE-77",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-93",
-          "name": "CWE-93",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.37,
-      "tags": [
-        "CWE-77",
-        "CWE-93"
-      ]
-    },
-    {
       "id": "CVE-2026-54517",
       "summary": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.21.0 until 2.21.4 and 3.1.4, in BeanDeserializer._deserializeUsingPropertyBased, the active-view (@JsonView) filter was applied only to creator properties; the regular property-buffering branch performed no prop.visibleInView(activeView) check. A change making SetterlessProperty.isMerging() return true routed setterless Collection/Map properties through this unguarded path, so a setterless collection annotated with a restricted @JsonView is populated from attacker JSON even when the active view excludes it. This vulnerability is fixed in 2.21.4 and 3.1.4.",
       "published": "2026-06-23T21:17:02.853Z",
@@ -30322,50 +30301,6 @@
       "tags": [
         "F5",
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-49460",
-      "summary": "pypdf is a free and open-source pure-python PDF library. Prior to 6.12.2, an attacker who uses this vulnerability can craft a PDF which leads to long runtimes. This requires accessing a stream which uses the /FlateDecode filter with a PNG predictor. This vulnerability is fixed in 6.12.2.",
-      "published": "2026-06-22T21:16:24.940Z",
-      "lastModified": "2026-06-25T16:51:17.700Z",
-      "severity": "Low",
-      "cvssScore": 3.3,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00117,
-      "epssPercentile": 0.01958,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-407",
-          "name": "CWE-407",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.22,
-      "tags": [
-        "CWE-407"
       ]
     },
     {
@@ -31766,6 +31701,52 @@
       "knownRansomwareUse": false,
       "priorityScore": 2.05,
       "tags": [
+        "Linux",
+        "CWE-401"
+      ]
+    },
+    {
+      "id": "CVE-2026-53252",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: fix memory leak in error path of hci_alloc_dev() Early failures in Bluetooth HCI UART configuration leak SRCU percpu memory. When device initialization fails before hci_register_dev() completes, the HCI_UNREGISTER flag is never set. As a result, when the device reference count reaches zero, bt_host_release() evaluates this flag as false and falls back to a direct kfree(hdev). Because hci_release_dev() is bypassed, the SRCU struct initialized early in hci_alloc_dev() is never cleaned up, resulting in a leak of percpu memory. Fix the leak by explicitly calling cleanup_srcu_struct() in the fallback (unregistered) branch of bt_host_release() before freeing the device.",
+      "published": "2026-06-25T09:16:43.137Z",
+      "lastModified": "2026-07-08T16:48:59.550Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00136,
+      "epssPercentile": 0.03468,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.05,
+      "tags": [
+        "F5",
         "Linux",
         "CWE-401"
       ]
@@ -33471,6 +33452,91 @@
       "priorityScore": 2.02,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53245",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net/802/mrp: fix vector attribute parsing in mrp_pdu_parse_vecattr In mrp_pdu_parse_vecattr(), vector attribute events are encoded three per byte and valen tracks the number of events left to process. The parser decrements valen after processing the first and second events from each event byte, but not after processing the third one. When valen is exactly a multiple of three, the loop continues after the last valid event and consumes the next byte as a new event byte, applying a spurious event to the MRP applicant state. Additionally, when valen is zero the parser unconditionally consumes attrlen bytes as FirstValue and advances the offset, even though per IEEE 802.1ak a VectorAttribute with only a LeaveAllEvent has valen of zero and no FirstValue or Vector fields. This corrupts the offset for subsequent PDU parsing. Also, when valen exceeds three the loop crosses byte boundaries but the attribute value is not incremented between the last event of one byte and the first event of the next. This causes the first event of the next byte to use the same attribute value as the third event rather than the next consecutive value. Decrement valen after processing the third event, skip FirstValue consumption when valen is zero, and increment the attribute value at the end of each loop iteration.",
+      "published": "2026-06-25T09:16:42.443Z",
+      "lastModified": "2026-07-07T22:17:38.710Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00128,
+      "epssPercentile": 0.02836,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.02,
+      "tags": [
+        "F5",
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53251",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: ISO: Fix not releasing hdev reference on iso_conn_big_sync hci_get_route() returns a reference-counted hci_dev pointer via hci_dev_hold(). The function exits normally or with an error without ever releasing it.",
+      "published": "2026-06-25T09:16:43.047Z",
+      "lastModified": "2026-07-08T16:51:26.347Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00127,
+      "epssPercentile": 0.02779,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-772",
+          "name": "CWE-772",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.02,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-772"
       ]
     },
     {
@@ -36157,34 +36223,34 @@
       ]
     },
     {
-      "id": "CVE-2026-45034",
-      "summary": "PhpSpreadsheet is a pure PHP library for reading and writing spreadsheet files. Prior to 1.30.5, CVE-2026-34084 was patched by the helper File::prohibitWrappers. The helper calls parse_url($filename, PHP_URL_SCHEME) and then checks is_string($scheme) && strlen($scheme) > 1 to reject stream wrappers such as phar://, php://, data:// or expect://. The check is not equivalent to \"does the path contain a wrapper\". When the input has the form phar:///path/file.phar/inner with three or more slashes after the scheme, parse_url returns boolean false instead of returning the scheme string. The is_string($scheme) branch is therefore skipped, the helper returns without throwing, and the caller proceeds. PHP's stream layer, however, still treats phar:///... as a valid phar wrapper and opens the underlying phar file. The result is that IOFactory::load($attackerPath) walks past the patch and still touches the phar wrapper. On PHP 7.x, simply reaching the phar wrapper via is_file is enough for PHP to automatically deserialize the phar metadata, which in turn invokes the magic methods __wakeup and __destruct of an attacker controlled object and gives full RCE. On PHP 8.x, automatic metadata deserialization for plain file ops was removed, so the chain at the PhpSpreadsheet layer reduces to a phar wrapper file read primitive, and RCE only resurfaces if the downstream consumer ever calls Phar::getMetadata. This vulnerability is fixed in 1.30.5.",
-      "published": "2026-06-22T21:16:24.403Z",
-      "lastModified": "2026-06-23T16:16:59.677Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
+      "id": "CVE-2026-53243",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: rseq: Fix using an uninitialized stack variable in rseq_exit_user_update() There is an bug in which an uninitialized stack variable is used in rseq_exit_user_update() as reported by syzbot: BUG: KMSAN: kernel-infoleak in rseq_set_ids_get_csaddr include/linux/rseq_entry.h:502 [inline] The local variable: struct rseq_ids ids = { .cpu_id = task_cpu(t), .mm_cid = task_mm_cid(t), .node_id = cpu_to_node(ids.cpu_id), }; According to the C standard, the evaluation order of expressions in an initializer list is indeterminately sequenced. The compiler (Clang, in this KMSAN build) evaluates `cpu_to_node(ids.cpu_id)` *before* `ids.cpu_id` is initialized with `task_cpu(t)`. This is fixed by moving the assignment of ids.node_id outside the structure initialization.",
+      "published": "2026-06-25T09:16:42.260Z",
+      "lastModified": "2026-07-07T22:21:55.840Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
       "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
       },
-      "epssScore": 0.00351,
-      "epssPercentile": 0.2762,
+      "epssScore": 0.00112,
+      "epssPercentile": 0.01631,
       "isKev": false,
       "kev": null,
-      "vendor": null,
+      "vendor": "Linux",
       "product": null,
       "cwe": [
         {
-          "id": "CWE-502",
-          "name": "Deserialization of Untrusted Data",
-          "description": "Untrusted serialized data can alter control flow or objects."
+          "id": "CWE-908",
+          "name": "CWE-908",
+          "description": "CWE mapping from source data."
         }
       ],
       "references": [],
@@ -36195,9 +36261,10 @@
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 1.97,
+      "priorityScore": 1.98,
       "tags": [
-        "CWE-502"
+        "Linux",
+        "CWE-908"
       ]
     },
     {
@@ -39775,62 +39842,6 @@
       "priorityScore": 1.55,
       "tags": [
         "CWE-427"
-      ]
-    },
-    {
-      "id": "CVE-2026-47241",
-      "summary": "Net::IMAP implements Internet Message Access Protocol (IMAP) client functionality in Ruby. Prior to 0.6.5 and 0.5.15, several Net::IMAP commands accept a raw string argument which is only validated to prevent CRLF injection and then sent verbatim. If this string is derived from user-controlled input, an attacker can force the next command to be absorbed as a continuation of the first command. This will cause the first command to eventually fail, but also prevents it from returning until another command is sent (from another thread). That other command will not return until the connection is closed. This vulnerability is fixed in 0.6.5 and 0.5.15.",
-      "published": "2026-06-22T21:16:24.677Z",
-      "lastModified": "2026-06-23T15:16:34.757Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00239,
-      "epssPercentile": 0.1505,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-162",
-          "name": "CWE-162",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-182",
-          "name": "CWE-182",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-186",
-          "name": "CWE-186",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.53,
-      "tags": [
-        "CWE-162",
-        "CWE-182",
-        "CWE-186"
       ]
     },
     {
@@ -44123,56 +44134,6 @@
       "tags": [
         "Linux",
         "iOS"
-      ]
-    },
-    {
-      "id": "CVE-2026-47242",
-      "summary": "Net::IMAP implements Internet Message Access Protocol (IMAP) client functionality in Ruby. Prior to 0.6.5 and 0.5.15, when Net::IMAP#id is called with a hash argument, although the ID field value strings are correctly quoted (escaping quoted specials), they were not validated to prohibit CRLF sequences. While Net::IMAP#enable does process its arguments for aliases, it does not validate them as valid atoms (or as a list of valid atoms). The #to_s value is sent verbatim. Arguments to either command could be used by an attacker to inject arbitrary IMAP commands. This vulnerability is fixed in 0.6.5 and 0.5.15.",
-      "published": "2026-06-22T21:16:24.807Z",
-      "lastModified": "2026-06-23T15:03:56.637Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00131,
-      "epssPercentile": 0.0313,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-77",
-          "name": "CWE-77",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-93",
-          "name": "CWE-93",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.11,
-      "tags": [
-        "CWE-77",
-        "CWE-93"
       ]
     },
     {
