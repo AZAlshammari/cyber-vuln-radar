@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-23T01:02:42.193Z",
+  "generatedAt": "2026-07-23T04:36:09.248Z",
   "count": 1000,
   "items": [
     {
@@ -13417,57 +13417,6 @@
       ]
     },
     {
-      "id": "CVE-2026-10658",
-      "summary": "bt_iso_recv() in subsys/bluetooth/host/iso.c pulled the ISO SDU header (4 bytes) or, when the timestamp flag is set, the timestamped SDU header (8 bytes) from the inbound HCI ISO Data buffer via net_buf_pull_mem() without first checking buf->len. The upstream hci_iso() handler enforces buf->len == the controller-declared ISO Data_Load length, so a malicious or buggy controller / adjacent BLE peer on an established CIS/BIS can present a first-fragment (BT_ISO_START) or single (BT_ISO_SINGLE) PDU shorter than the SDU header. Because net_buf_simple_pull_mem only guards length with __ASSERT_NO_MSG (compiled out when CONFIG_ASSERT is disabled, the production default), the pull underflows buf->len (uint16_t, e.g. 0 - 8 = 0xFFF8) and advances buf->data past valid data: the subsequent reads of hdr->slen and hdr->sn are out-of-bounds reads of adjacent pool memory. For the multi-fragment (START) case the corrupted buffer is retained as iso->rx, and a following CONT/END fragment's net_buf_tailroom() guard underflows to a near-SIZE_MAX value, defeating the bounds check and causing net_buf_add_mem() to memcpy attacker-supplied fragment data far past the RX pool buffer (out-of-bounds write). The flaw affects ISO receive builds (CONFIG_BT_ISO_RX, selected by the default-off LE Audio options BT_ISO_PERIPHERAL/BT_ISO_CENTRAL/BT_ISO_SYNC_RECEIVER) and has existed since the ISO subsystem was introduced (v2.6.0) through v4.4.0. The fix adds explicit buf->len len < sizeof(hdr) checks that drop the buffer before pulling.",
-      "published": "2026-06-23T01:16:26.867Z",
-      "lastModified": "2026-07-14T19:16:49.380Z",
-      "severity": "High",
-      "cvssScore": 7.1,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00173,
-      "epssPercentile": 0.06984,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        },
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.73,
-      "tags": [
-        "F5",
-        "CWE-787",
-        "CWE-125"
-      ]
-    },
-    {
       "id": "CVE-2026-54297",
       "summary": "Faraday is an HTTP client library abstraction layer that provides a common interface over many adapters. From 1.0.0 until 1.10.6 and 2.14.3, Faraday::NestedParamsEncoder, the default nested query parameter encoder/decoder in Faraday, decodes nested query strings without enforcing a maximum nesting depth. A crafted query string causes Faraday to build a deeply nested Ruby Hash structure. The internal dehash routine then recursively walks this attacker-controlled structure without a depth limit. At sufficient depth, Ruby raises an uncaught SystemStackError (stack level too deep), crashing the calling thread or worker. This can lead to denial of service in applications that pass attacker-controlled query strings to Faraday's nested query parsing or URL-building paths. This vulnerability is fixed in 1.10.6 and 2.14.3.",
       "published": "2026-06-24T17:17:29.030Z",
@@ -20875,6 +20824,50 @@
       ]
     },
     {
+      "id": "CVE-2026-47147",
+      "summary": "In EmberZNet v9.0.2 and earlier, malformed OTA requests can drive the OTA server parser into out-of-bounds reads. A limited amount of data from RAM is read back to the requester. The size and location of this data is limited. These requests must come from a device that has already joined the network. Only devices supporting the OTA Server cluster may be impacted.",
+      "published": "2026-06-25T14:16:40.810Z",
+      "lastModified": "2026-06-25T18:47:57.273Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00231,
+      "epssPercentile": 0.13973,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.97,
+      "tags": [
+        "CWE-125"
+      ]
+    },
+    {
       "id": "CVE-2026-54324",
       "summary": "Daytona is a secure and elastic infrastructure runtime for AI-generated code execution and agent workflows. Prior to 0.185.0, a cross-tenant authorization flaw in Daytona's notification WebSocket gateway allowed any authenticated user to subscribe to another organization's realtime notification channel and passively receive that organization's events. This vulnerability is fixed in 0.185.0.",
       "published": "2026-06-23T18:18:09.143Z",
@@ -21376,6 +21369,94 @@
         "CWE-79",
         "CWE-116",
         "CWE-693"
+      ]
+    },
+    {
+      "id": "CVE-2026-47150",
+      "summary": "In EmberZNet v9.0.2 and earlier, malformed IAS Zone enrollment messages can trigger an out-of-bounds state-table write and terminate the process. The size and location of this write is limited. These messages must come from a device that has already joined the network. Only devices supporting the IAS Zone cluster may be impacted.",
+      "published": "2026-06-25T14:16:41.137Z",
+      "lastModified": "2026-06-25T18:49:11.183Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "High"
+      },
+      "epssScore": 0.00217,
+      "epssPercentile": 0.12218,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.91,
+      "tags": [
+        "CWE-787"
+      ]
+    },
+    {
+      "id": "CVE-2026-47151",
+      "summary": "In EmberZNet v9.0.2 and earlier, malformed ClearWeekdaySchedule messages can trigger out-of-bounds writes into Door Lock schedule state. The size and location of this data is limited. These messages must come from a device that has already joined the network. Only devices supporting the Door Lock cluster may be impacted.",
+      "published": "2026-06-25T14:16:41.243Z",
+      "lastModified": "2026-06-25T18:51:37.440Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "High"
+      },
+      "epssScore": 0.00217,
+      "epssPercentile": 0.12218,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.91,
+      "tags": [
+        "CWE-787"
       ]
     },
     {
@@ -23157,6 +23238,182 @@
       "priorityScore": 2.85,
       "tags": [
         "CWE-617"
+      ]
+    },
+    {
+      "id": "CVE-2026-47148",
+      "summary": "In EmberZNet v9.0.2 and earlier, malformed GetGroupMembership commands can trigger repeated reads past the end of the message payload and terminate the process. These messages must come from a device that has already joined the network, and no information leakage back to the sender was observed. Only devices supporting the Groups cluster may be impacted.",
+      "published": "2026-06-25T14:16:40.920Z",
+      "lastModified": "2026-06-25T18:48:20.140Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00249,
+      "epssPercentile": 0.16312,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-47149",
+      "summary": "In EmberZNet v9.0.2 and earlier, malformed or out-of-range Door Lock user identifiers can trigger out-of-bounds table reads and terminate the process. These messages must come from a device that has already joined the network, and no information leakage back to the sender was observed. Only devices supporting the Door Lock cluster may be impacted.",
+      "published": "2026-06-25T14:16:41.027Z",
+      "lastModified": "2026-06-25T18:48:40.030Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00249,
+      "epssPercentile": 0.16313,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-47152",
+      "summary": "In EmberZNet v9.0.2 and earlier, a malformed Level Control Move command can terminate the process through a divide-by-zero fault. This command must come from a device that has already joined the network. Only devices supporting the Level Control cluster may be impacted.",
+      "published": "2026-06-25T14:16:41.360Z",
+      "lastModified": "2026-06-25T18:38:11.003Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00249,
+      "epssPercentile": 0.16309,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-369",
+          "name": "CWE-369",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "CWE-369"
+      ]
+    },
+    {
+      "id": "CVE-2026-47153",
+      "summary": "In EmberZNet v9.0.2 and earlier, a malformed Level Control Step command can terminate the process through a divide-by-zero fault. This command must come from a device that has already joined the network. Only devices supporting the Level Control cluster may be impacted.",
+      "published": "2026-06-25T14:16:41.500Z",
+      "lastModified": "2026-06-25T18:37:51.450Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00249,
+      "epssPercentile": 0.16311,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-369",
+          "name": "CWE-369",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "CWE-369"
       ]
     },
     {
@@ -25518,102 +25775,6 @@
       "tags": [
         "Linux",
         "CWE-820"
-      ]
-    },
-    {
-      "id": "CVE-2026-10645",
-      "summary": "The Zephyr ext2 filesystem driver (subsys/fs/ext2) trusted the on-disk directory entry fields de_rec_len and de_name_len when walking a directory block. ext2_fetch_direntry() guarded only with de_name_len > EXT2_MAX_FILE_NAME, but de_name_len is a uint8_t and EXT2_MAX_FILE_NAME is 255, so the check is always false; the function then memcpy'd up to 255 name bytes and the lookup/readdir paths advanced traversal by an unvalidated de_rec_len. Each directory block is read into a block_size-sized slab buffer, and block_off can be driven near the block end by preceding entries' rec_len, so the 8-byte header read and the subsequent name memcpy can read up to ~263 bytes past the end of the block buffer into adjacent heap/slab memory. On the readdir path those bytes are returned to the caller in fs_dirent.name, leaking adjacent kernel heap memory; a de_rec_len of 0 also causes a zero-progress infinite loop (denial of service), and the unlink path's memmove(de, next, next_reclen) over unvalidated records is an additional OOB read/write source. The defect is reached by any path-based operation (open, stat, unlink, rename, mkdir) or directory listing on a mounted ext2 volume, so a crafted or corrupted ext2 image on attacker-supplied storage (SD card, USB mass storage, or otherwise mounted image) triggers it. Affected: Zephyr ext2 from its introduction in v3.5.0 through v4.4.0. The fix validates rec_len and name_len in the parser and rejects entries whose header does not fit the remaining block or whose rec_len crosses the block boundary in every traversal caller.",
-      "published": "2026-06-23T01:16:26.607Z",
-      "lastModified": "2026-07-14T19:16:48.103Z",
-      "severity": "Medium",
-      "cvssScore": 4.9,
-      "cvssVector": "CVSS:3.1/AV:P/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Physical",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.0011,
-      "epssPercentile": 0.01525,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.77,
-      "tags": [
-        "F5",
-        "CWE-125"
-      ]
-    },
-    {
-      "id": "CVE-2026-10651",
-      "summary": "bt_sdp_parse_attribute() in subsys/bluetooth/host/classic/sdp.c validated only that the SDP record buffer held the type-marker byte plus the 2-byte attribute ID (a check of buf->len data[0] before its only bounds guard (an __ASSERT_NO_MSG that compiles out when CONFIG_ASSERT is disabled, the production default), a record of exactly three bytes (0x09 followed by a 2-byte attribute ID) causes a one-byte read past the end of the logical buffer. The parser is reachable from inbound, remote-controlled data: a Bluetooth BR/EDR peer acting as an SDP server returns discovery-response records that are stored verbatim in the client receive buffer and parsed via the public bt_sdp_get_attr()/bt_sdp_has_attr()/bt_sdp_record_parse() helpers. The over-read is bounded to a single byte that is used only as an internal length selector and is never leaked to the attacker; subsequent length checks then reject the malformed record. Realistic impact is therefore limited to an edge-case denial of service (a fault only if the record ends exactly at a mapped-memory boundary, or a deterministic assert panic when CONFIG_ASSERT=y). Affects Zephyr v4.3.0 and v4.4.0; fixed by adding sizeof(type) to the length check.",
-      "published": "2026-06-23T01:16:26.747Z",
-      "lastModified": "2026-07-17T16:17:12.760Z",
-      "severity": "High",
-      "cvssScore": 7.1,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00183,
-      "epssPercentile": 0.08141,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-20",
-          "name": "CWE-20",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-617",
-          "name": "CWE-617",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.77,
-      "tags": [
-        "F5",
-        "CWE-20",
-        "CWE-617"
       ]
     },
     {
@@ -29286,53 +29447,6 @@
       ]
     },
     {
-      "id": "CVE-2026-55654",
-      "summary": "A flaw was found in OpenSSH. This vulnerability, a heap out-of-bounds read, occurs during the cleanup of GSSAPI (Generic Security Service Application Programming Interface) indicators when a trailing NULL termination is missing in the auth-indicators array. A remote attacker, under specific configurations involving GSSAPI authentication and a Kerberos environment, could exploit this to cause the SSH authentication path to crash or abort. This leads to a denial of service (DoS), impacting the availability of the SSH service.",
-      "published": "2026-06-23T04:17:40.587Z",
-      "lastModified": "2026-07-08T14:17:14.710Z",
-      "severity": "Low",
-      "cvssScore": 3.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00367,
-      "epssPercentile": 0.29175,
-      "isKev": false,
-      "kev": null,
-      "vendor": "SAP",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.32,
-      "tags": [
-        "SAP",
-        "F5",
-        "Linux",
-        "CWE-125"
-      ]
-    },
-    {
       "id": "CVE-2026-34917",
       "summary": "Low‑privileged session IDs generated for the web admin console could be reused in the XML‑RPC API, whose authentication is normally restricted to admin users. An attacker could leverage this to gain unauthorised access and exploit API‑level vulnerabilities. The session context (web/API) is now recorded along with other session data, preventing session IDs from being used interchangeably.",
       "published": "2026-06-23T17:16:54.013Z",
@@ -31080,53 +31194,6 @@
       "priorityScore": 2.06,
       "tags": [
         "CWE-476"
-      ]
-    },
-    {
-      "id": "CVE-2026-55653",
-      "summary": "A flaw was found in OpenSSH. A malicious SSH server can exploit a double free vulnerability in the Diffie-Hellman Group Exchange (DH-GEX) client path. This occurs during FIPS (Federal Information Processing Standards) mode known-group validation when the client processes attacker-controlled DH-GEX group parameters. Successful exploitation leads to client-side process termination, resulting in a Denial of Service (DoS).",
-      "published": "2026-06-23T04:17:36.600Z",
-      "lastModified": "2026-07-08T14:17:14.560Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00242,
-      "epssPercentile": 0.15513,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": "Exchange",
-      "cwe": [
-        {
-          "id": "CWE-415",
-          "name": "CWE-415",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.05,
-      "tags": [
-        "F5",
-        "Linux",
-        "Exchange",
-        "CWE-415"
       ]
     },
     {
@@ -37968,52 +38035,6 @@
       ]
     },
     {
-      "id": "CVE-2026-55655",
-      "summary": "A flaw was found in OpenSSH. A local unprivileged attacker on a Linux client host can hijack client-side X11 forwarding connections. This is possible by pre-binding the preferred abstract X socket name when X11 forwarding is enabled and a local UNIX-domain X socket is used. A successful attack can compromise the confidentiality of forwarded X11 traffic, including sensitive window contents and input, and may allow some manipulation of the forwarded session.",
-      "published": "2026-06-23T04:17:40.787Z",
-      "lastModified": "2026-07-08T14:17:14.837Z",
-      "severity": "Medium",
-      "cvssScore": 5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.0009,
-      "epssPercentile": 0.00563,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-923",
-          "name": "CWE-923",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.77,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-923"
-      ]
-    },
-    {
       "id": "CVE-2026-54006",
       "summary": "Open WebUI is a self-hosted artificial intelligence platform designed to operate entirely offline. Prior to 0.9.6, POST /api/v1/calendars/events/{event_id}/update validates that the caller has write access to the calendar the event currently belongs to, but does not validate the destination calendar_id supplied in the request body. The model layer then persists the new calendar_id unconditionally. A regular user-role account can therefore create an event in their own calendar and immediately move it into any other user's calendar whose ID they know — bypassing the authorization check that create_event correctly performs. This vulnerability is fixed in 0.9.6.",
       "published": "2026-06-23T18:18:05.663Z",
@@ -42501,50 +42522,6 @@
       "priorityScore": 0.49,
       "tags": [
         "CWE-121"
-      ]
-    },
-    {
-      "id": "CVE-2026-11833",
-      "summary": "Overview: A vulnerability has been found in FAST/TOOLS and CI Server. The web server may return a response containing the CI Server setting information. This information could be exploited by an attacker for other attacks. The affected products and versions are as follows: FAST/TOOLS (Packages: RVSVRN, UNSVRN, HMIWEB, FTEES, HMIMOB) R9.01 to R10.04 CI Server (All packages) R1.01 to R1.04",
-      "published": "2026-06-23T02:16:30.917Z",
-      "lastModified": "2026-06-23T15:06:20.217Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00217,
-      "epssPercentile": 0.1226,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-319",
-          "name": "CWE-319",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.43,
-      "tags": [
-        "CWE-319"
       ]
     },
     {
