@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T07:20:16.563Z",
+  "generatedAt": "2026-07-24T09:56:50.050Z",
   "count": 1000,
   "items": [
     {
@@ -2781,57 +2781,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52924",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: sctp: purge outqueue on stale COOKIE-ECHO handling sctp_stream_update() is only invoked when the association is moved into COOKIE_WAIT during association setup/reconfiguration. In this path, the outbound stream scheduler state (stream->out_curr) is expected to be clean, since no user data should have been transmitted yet unless the state machine has already partially progressed. However, a corner case exists in sctp_sf_do_5_2_6_stale(): when a Stale Cookie ERROR is received, the association is rolled back from COOKIE_ECHOED to COOKIE_WAIT. In this scenario, user data may already have been queued and even bundled with the COOKIE-ECHO chunk. During the rollback, sctp_stream_update() frees the old stream table and installs a new one, but it does not invalidate stream->out_curr. As a result, out_curr may still point to a freed sctp_stream_out entry from the previous stream state. Later, SCTP scheduler dequeue paths (FCFS, RR, PRIO, etc.) rely on stream->out_curr->ext, which can lead to use-after-free once the old stream state has been released via sctp_stream_free(). This results in crashes such as (reported by Yuqi): BUG: KASAN: slab-use-after-free in sctp_sched_fcfs_dequeue+0x13a/0x140 Read of size 8 at addr ff1100004d4d3208 by task mini_poc/9312 CPU: 1 UID: 1001 PID: 9312 Comm: mini_poc Not tainted 7.1.0-rc1-00305-gbd3a4795d574 #5 PREEMPT(full) sctp_sched_fcfs_dequeue+0x13a/0x140 sctp_outq_flush+0x1603/0x33e0 sctp_do_sm+0x31c9/0x5d30 sctp_assoc_bh_rcv+0x392/0x6f0 sctp_inq_push+0x1db/0x270 sctp_rcv+0x138d/0x3c10 Fix this by fully purging the association outqueue when handling the Stale Cookie case. This ensures all pending transmit and retransmit state is dropped, and any scheduler cached pointers are invalidated, making it safe to rebuild stream state during COOKIE_WAIT restart. Updating only stream->out_curr would be insufficient, since queued and retransmittable data would still reference the old stream state and trigger later use-after-free in dequeue paths.",
-      "published": "2026-06-24T08:16:22.430Z",
-      "lastModified": "2026-07-15T01:16:23.187Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00335,
-      "epssPercentile": 0.25913,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        },
-        {
-          "id": "CWE-825",
-          "name": "CWE-825",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.34,
-      "tags": [
-        "Linux",
-        "CWE-416",
-        "CWE-825"
-      ]
-    },
-    {
       "id": "CVE-2026-52798",
       "summary": "Gogs is an open source self-hosted Git service. Prior to 0.14.3, although .ipynb previews are sanitized on the server side via /-/api/sanitize_ipynb, the inserted content is re-rendered on the client side without sanitization using marked() on elements with the .nb-markdown-cell class. During this process, links containing schemes such as javascript: can be regenerated. As a result, when a victim views an attacker-crafted .ipynb file and clicks the link, arbitrary JavaScript is executed in the Gogs origin, leading to a click-based Stored XSS. This vulnerability is fixed in 0.14.3.",
       "published": "2026-06-24T21:16:55.533Z",
@@ -3206,6 +3155,50 @@
       "priorityScore": 5.15,
       "tags": [
         "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-56010",
+      "summary": "Subscriber Privilege Escalation in Abandoned Cart Pro for WooCommerce <= 10.4.0 versions.",
+      "published": "2026-06-26T15:16:42.057Z",
+      "lastModified": "2026-06-26T21:16:35.730Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00378,
+      "epssPercentile": 0.30277,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-266",
+          "name": "CWE-266",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.14,
+      "tags": [
+        "CWE-266"
       ]
     },
     {
@@ -4067,6 +4060,182 @@
       ]
     },
     {
+      "id": "CVE-2026-54820",
+      "summary": "Unauthenticated SQL Injection in JetBooking <= 4.0.4.1 versions.",
+      "published": "2026-06-26T15:16:39.977Z",
+      "lastModified": "2026-06-26T18:17:00.700Z",
+      "severity": "Critical",
+      "cvssScore": 9.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00283,
+      "epssPercentile": 0.20449,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.97,
+      "tags": [
+        "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-54825",
+      "summary": "Unauthenticated SQL Injection in wpDataTables <= 7.4 versions.",
+      "published": "2026-06-26T15:16:40.230Z",
+      "lastModified": "2026-06-26T16:16:32.443Z",
+      "severity": "Critical",
+      "cvssScore": 9.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00283,
+      "epssPercentile": 0.20445,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.97,
+      "tags": [
+        "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-54827",
+      "summary": "Unauthenticated SQL Injection in Real Estate 7 <= 3.5.9 versions.",
+      "published": "2026-06-26T15:16:40.467Z",
+      "lastModified": "2026-06-26T21:16:35.543Z",
+      "severity": "Critical",
+      "cvssScore": 9.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00283,
+      "epssPercentile": 0.20446,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.97,
+      "tags": [
+        "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-54831",
+      "summary": "Unauthenticated SQL Injection in GeoDirectory <= 2.8.162 versions.",
+      "published": "2026-06-26T15:16:40.587Z",
+      "lastModified": "2026-06-26T18:17:00.800Z",
+      "severity": "Critical",
+      "cvssScore": 9.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00283,
+      "epssPercentile": 0.20449,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.97,
+      "tags": [
+        "CWE-89"
+      ]
+    },
+    {
       "id": "CVE-2026-54091",
       "summary": "File Browser is a file managing interface for uploading, deleting, previewing, renaming, and editing files within a specified directory. Prior to 2.63.6, File Browser's public share handlers rebase the share owner's filesystem root to the shared directory and then evaluate descendant paths against the owner's global and per-user rules using the rebased relative path instead of the original path relative to the owner's scope. As a result, an attacker who knows a public directory share URL can access files and subdirectories that the owner explicitly blocked with rules, as long as those blocked paths are located underneath the shared directory. In the simplest case this is an unauthenticated information disclosure through `GET /api/public/share/*` and `GET /api/public/dl/*`. This vulnerability is fixed in 2.63.6.",
       "published": "2026-06-25T19:16:41.103Z",
@@ -4726,51 +4895,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52914",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: batman-adv: fix fragment reassembly length accounting batman-adv keeps a running payload length for queued fragments and uses it to validate a fragment chain before reassembly. That accounting currently allows the accumulated fragment length to be truncated during updates. As a result, malformed fragment chains can bypass the intended validation and drive reassembly with inconsistent length state, leading to a local denial of service. Fix the accounting by storing the accumulated length in a length-typed field and rejecting update overflows before the existing validation logic runs. The fix was verified against the original reproducer and against valid fragment reassembly paths.",
-      "published": "2026-06-24T08:16:21.213Z",
-      "lastModified": "2026-07-08T15:12:54.603Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00519,
-      "epssPercentile": 0.41017,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.87,
-      "tags": [
-        "Linux",
-        "CWE-787"
-      ]
-    },
-    {
       "id": "CVE-2026-53045",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: memory: tegra124-emc: Fix dll_change check The code checking whether the specified memory timing enables DLL in the EMRS register was reversed. DLL is enabled if bit A0 is low. Fix the check.",
       "published": "2026-06-24T17:17:16.290Z",
@@ -5217,6 +5341,50 @@
       "priorityScore": 4.78,
       "tags": [
         "CWE-620"
+      ]
+    },
+    {
+      "id": "CVE-2026-56008",
+      "summary": "Contributor Privilege Escalation in Fusion Builder <= 3.15.4 versions.",
+      "published": "2026-06-26T15:16:41.927Z",
+      "lastModified": "2026-06-29T16:16:41.930Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00278,
+      "epssPercentile": 0.19904,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-266",
+          "name": "CWE-266",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.78,
+      "tags": [
+        "CWE-266"
       ]
     },
     {
@@ -6577,44 +6745,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52931",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: batman-adv: tp_meter: avoid use of uninit sender vars batadv_tp_recv_ack() and batadv_tp_stop() are only valid for tp_vars in the BATADV_TP_SENDER role. When called with a BATADV_TP_RECEIVER role, it proceeds to read sender-only members that were never initialized, leading to undefined behavior. This can be triggered when a node that is currently acting as a receiver in an ongoing tp_meter session receives a malicious ACK packet. Guard against this by checking tp_vars->role immediately after the lookup and bailing out if it is not BATADV_TP_SENDER, before any of those members are accessed.",
-      "published": "2026-06-24T08:16:23.273Z",
-      "lastModified": "2026-07-08T15:28:16.203Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00404,
-      "epssPercentile": 0.32986,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.58,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-53088",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net: bcmgenet: fix off-by-one in bcmgenet_put_txcb The write_ptr points to the next open tx_cb. We want to return the tx_cb that gets rewinded, so we must rewind the pointer first then return the tx_cb that it points to. That way the txcb can be correctly cleaned up.",
       "published": "2026-06-24T17:17:22.980Z",
@@ -7483,51 +7613,6 @@
       ]
     },
     {
-      "id": "CVE-2026-7761",
-      "summary": "The Ultimate Member plugin for WordPress is vulnerable to Account Takeover via Password Reset Link Disclosure in all versions up to and including 2.11.4. This is due to a chain of three logic bugs: (1) an MD5 hash fallback in get_directory_by_hash() that allows any post to be used as a member directory by computing SUBSTRING(MD5(post_id), 11, 5), (2) a strstr() parsing logic flaw in post_data() that allows bypassing WordPress's protected meta key restrictions by placing '_um_' anywhere in the meta key name rather than at the start, and (3) missing field name validation in build_user_card_data() that allows arbitrary field names including 'password_reset_link' to be passed to um_filtered_value(). This makes it possible for authenticated attackers with Contributor-level access and above to create a malicious post via XMLRPC with crafted meta fields, use the MD5 fallback to point the member directory AJAX handler to their post, inject 'password_reset_link' into the tagline_fields configuration, and leak live password reset URLs for all users in the member directory response, including administrators.",
-      "published": "2026-06-24T08:16:24.830Z",
-      "lastModified": "2026-06-25T13:26:11.740Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00499,
-      "epssPercentile": 0.39787,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.47,
-      "tags": [
-        "WordPress",
-        "CWE-862"
-      ]
-    },
-    {
       "id": "CVE-2026-56262",
       "summary": "Crawl4AI before 0.8.7 contains an authentication bypass vulnerability in the monitor router endpoints that allows unauthenticated attackers to access destructive operations. Remote attackers can invoke the /monitor/actions/cleanup endpoint and manipulate monitoring state without authentication, causing service disruption.",
       "published": "2026-06-24T13:16:35.263Z",
@@ -8344,6 +8429,94 @@
       ]
     },
     {
+      "id": "CVE-2026-54824",
+      "summary": "Unauthenticated Sensitive Data Exposure in Ads by WPQuads <= 3.0.3 versions.",
+      "published": "2026-06-26T15:16:40.110Z",
+      "lastModified": "2026-06-26T16:16:32.353Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00294,
+      "epssPercentile": 0.21504,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-497",
+          "name": "CWE-497",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.38,
+      "tags": [
+        "CWE-497"
+      ]
+    },
+    {
+      "id": "CVE-2026-54834",
+      "summary": "Unauthenticated Sensitive Data Exposure in Object Cache 4 everyone <= 2.3.2 versions.",
+      "published": "2026-06-26T15:16:40.947Z",
+      "lastModified": "2026-06-26T16:16:32.620Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00294,
+      "epssPercentile": 0.21503,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-201",
+          "name": "CWE-201",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.38,
+      "tags": [
+        "CWE-201"
+      ]
+    },
+    {
       "id": "CVE-2026-12473",
       "summary": "Two data sources (DICOMWebProxy and DICOMJSON) shipped in the default configuration fetch an arbitrary URL parameter without validation. A global authentication service in OHIF automatically injects the authenticated user's OIDC Bearer token into the resulting requests, sending it to the attacker-controlled server. DICOMweb data sources are not impacted.",
       "published": "2026-06-25T21:16:26.530Z",
@@ -8572,6 +8745,182 @@
         "Docker",
         "CWE-749",
         "CWE-1188"
+      ]
+    },
+    {
+      "id": "CVE-2026-54837",
+      "summary": "Unauthenticated Broken Access Control in Intranet & Private Site &#8211; All-In-One Intranet <= 1.8.1 versions.",
+      "published": "2026-06-26T15:16:41.240Z",
+      "lastModified": "2026-06-26T21:16:35.633Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00278,
+      "epssPercentile": 0.19986,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.32,
+      "tags": [
+        "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-54839",
+      "summary": "Unauthenticated Sensitive Data Exposure in Trinity Backup &#8211; Backup, Migrate, Restore, Clone & Schedule Backups <= 2.0.9 versions.",
+      "published": "2026-06-26T15:16:41.373Z",
+      "lastModified": "2026-06-26T18:17:00.993Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00278,
+      "epssPercentile": 0.19987,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-639",
+          "name": "CWE-639",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.32,
+      "tags": [
+        "CWE-639"
+      ]
+    },
+    {
+      "id": "CVE-2026-54846",
+      "summary": "Unauthenticated Broken Access Control in Syncee Premium Dropshipping & Wholesale <= 1.0.27 versions.",
+      "published": "2026-06-26T15:16:41.650Z",
+      "lastModified": "2026-06-26T16:16:32.713Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00278,
+      "epssPercentile": 0.19987,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.32,
+      "tags": [
+        "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-54847",
+      "summary": "Unauthenticated Broken Access Control in Stylish Cost Calculator <= 8.3.9 versions.",
+      "published": "2026-06-26T15:16:41.790Z",
+      "lastModified": "2026-06-26T16:16:32.800Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00278,
+      "epssPercentile": 0.19988,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.32,
+      "tags": [
+        "CWE-862"
       ]
     },
     {
@@ -9207,6 +9556,50 @@
       ]
     },
     {
+      "id": "CVE-2025-68052",
+      "summary": "Unauthenticated Cross Site Request Forgery (CSRF) in Eagle Booking <= 1.3.4.3 versions.",
+      "published": "2026-06-26T15:16:35.363Z",
+      "lastModified": "2026-06-26T18:16:57.700Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00143,
+      "epssPercentile": 0.04001,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-352",
+          "name": "Cross-Site Request Forgery",
+          "description": "A web request may execute without user intent."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.22,
+      "tags": [
+        "CWE-352"
+      ]
+    },
+    {
       "id": "CVE-2026-8380",
       "summary": "The Frontend File Manager Plugin WordPress plugin through 23.6 does not properly verify ownership of every targeted post before permanent deletion, allowing authenticated users with author-level access and above to permanently delete arbitrary posts and pages. When the Frontend File Manager Plugin WordPress plugin through 23.6's \"Allow guest uploads\" setting is enabled by an administrator, the same deletion primitive becomes reachable by unauthenticated users.",
       "published": "2026-06-26T07:16:22.383Z",
@@ -9646,6 +10039,50 @@
       ]
     },
     {
+      "id": "CVE-2026-30041",
+      "summary": "An integer overflow in the PSD parser compnent of FastStone Image Viewer v8.3 allows attackers to execute arbitrary code or cause a Denial of Service (DoS) via supplying a crafted PSD file.",
+      "published": "2026-06-26T15:16:37.683Z",
+      "lastModified": "2026-06-26T20:24:25.730Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00571,
+      "epssPercentile": 0.43751,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-400",
+          "name": "CWE-400",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.16,
+      "tags": [
+        "CWE-400"
+      ]
+    },
+    {
       "id": "CVE-2026-53217",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net: mvpp2: sync RX data at the hardware packet offset mvpp2 programs the RX queue packet offset, so hardware writes received data at dma_addr + MVPP2_SKB_HEADROOM. The current CPU sync starts at dma_addr and only covers rx_bytes + MVPP2_MH_SIZE bytes, which syncs the unused headroom and misses the same number of bytes at the packet tail. On non-coherent DMA systems this can leave the CPU reading stale cache contents for the end of the received frame. Use dma_sync_single_range_for_cpu() with MVPP2_SKB_HEADROOM as the range offset so the sync covers the Marvell header and packet data actually written by hardware.",
       "published": "2026-06-25T09:16:39.387Z",
@@ -9816,6 +10253,94 @@
       ]
     },
     {
+      "id": "CVE-2026-54832",
+      "summary": "Unauthenticated Broken Access Control in Gutenverse Companion <= 2.5.0 versions.",
+      "published": "2026-06-26T15:16:40.703Z",
+      "lastModified": "2026-06-26T18:17:00.893Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00238,
+      "epssPercentile": 0.14978,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.15,
+      "tags": [
+        "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-54835",
+      "summary": "Unauthenticated Broken Access Control in Five Star Restaurant Menu <= 2.5.2 versions.",
+      "published": "2026-06-26T15:16:41.093Z",
+      "lastModified": "2026-06-29T18:16:37.903Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00238,
+      "epssPercentile": 0.14978,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.15,
+      "tags": [
+        "CWE-862"
+      ]
+    },
+    {
       "id": "CVE-2026-55759",
       "summary": "Rocket.Chat is an open-source, secure, fully customizable communications platform. Prior to 8.5.1, 8.4.4, 8.3.6, 8.2.6, 8.1.6, 8.0.7, and 7.10.13, Rocket.Chat's Apple Sign-In handler verifies JWT signatures but skips claims validation. Any Apple-signed JWT with a non-empty iss is accepted regardless of aud, exp, nbf, or nonce. An attacker who obtains a target user's Apple identity token (from server logs, an intercepted sign-in flow, or another application sharing the same Apple developer team) can replay it to authenticate as that user, with no expiration on the replay window. This vulnerability is fixed in 8.5.1, 8.4.4, 8.3.6, 8.2.6, 8.1.6, 8.0.7, and 7.10.13.",
       "published": "2026-06-24T22:16:49.527Z",
@@ -9952,50 +10477,6 @@
       "priorityScore": 4.14,
       "tags": [
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-56052",
-      "summary": "Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection') vulnerability in FunnelKit Funnel Builder by FunnelKit allows Blind SQL Injection. This issue affects Funnel Builder by FunnelKit: from n/a through 3.15.0.5.",
-      "published": "2026-06-24T08:16:24.623Z",
-      "lastModified": "2026-06-25T13:26:11.740Z",
-      "severity": "High",
-      "cvssScore": 7.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00226,
-      "epssPercentile": 0.1341,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.13,
-      "tags": [
-        "CWE-89"
       ]
     },
     {
@@ -10211,6 +10692,50 @@
       "priorityScore": 4.1,
       "tags": [
         "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-54833",
+      "summary": "Unauthenticated Backdoor in Enable CORS <= 2.0.3 versions.",
+      "published": "2026-06-26T15:16:40.823Z",
+      "lastModified": "2026-06-26T16:16:32.533Z",
+      "severity": "High",
+      "cvssScore": 7.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00236,
+      "epssPercentile": 0.14692,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-321",
+          "name": "CWE-321",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.1,
+      "tags": [
+        "CWE-321"
       ]
     },
     {
@@ -10548,6 +11073,51 @@
       "tags": [
         "F5",
         "CWE-22"
+      ]
+    },
+    {
+      "id": "CVE-2026-56011",
+      "summary": "Unauthenticated Cross Site Scripting (XSS) in MapPress Maps for WordPress <= 2.97.3 versions.",
+      "published": "2026-06-26T15:16:42.180Z",
+      "lastModified": "2026-06-26T18:17:01.550Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00244,
+      "epssPercentile": 0.15687,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.03,
+      "tags": [
+        "WordPress",
+        "CWE-79"
       ]
     },
     {
@@ -11118,6 +11688,50 @@
       "priorityScore": 3.96,
       "tags": [
         "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-54840",
+      "summary": "Unauthenticated Broken Access Control in Newsletters <= 4.13 versions.",
+      "published": "2026-06-26T15:16:41.507Z",
+      "lastModified": "2026-06-26T18:17:01.093Z",
+      "severity": "High",
+      "cvssScore": 7.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00213,
+      "epssPercentile": 0.11667,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.96,
+      "tags": [
+        "CWE-862"
       ]
     },
     {
@@ -13117,96 +13731,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52922",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: batman-adv: dat: handle forward allocation error batadv_dat_forward_data() calls pskb_copy_for_clone() to duplicate an skb for each DHT candidate, but does not check the return value before passing it to batadv_send_skb_prepare_unicast_4addr(). That function dereferences the skb unconditionally, so a failed allocation triggers a NULL pointer dereference. Skip forwarding to the current DHT candidate on allocation failure.",
-      "published": "2026-06-24T08:16:22.187Z",
-      "lastModified": "2026-07-08T17:50:16.050Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00394,
-      "epssPercentile": 0.31912,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.74,
-      "tags": [
-        "Linux",
-        "CWE-476"
-      ]
-    },
-    {
-      "id": "CVE-2026-52929",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: sctp: stream: fully roll back denied add-stream state When ADD_OUT_STREAMS is denied, SCTP only shrinks the queued chunks and then lowers outcnt. That leaves removed stream metadata behind, so a later re-add can reuse a stale ext and hit a null-pointer dereference in the scheduler get path. Fix the rollback by tearing down the removed stream state the same way other stream resizes do. Unschedule the current scheduler state, drop the removed stream ext state with sctp_stream_outq_migrate(), and then reschedule the remaining streams. This keeps scheduler-private RR/FC/PRIO lists consistent while fully rolling back denied outgoing stream additions.",
-      "published": "2026-06-24T08:16:23.040Z",
-      "lastModified": "2026-07-08T15:28:40.107Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00394,
-      "epssPercentile": 0.31912,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.74,
-      "tags": [
-        "Linux",
-        "CWE-476"
-      ]
-    },
-    {
       "id": "CVE-2026-52809",
       "summary": "Gogs is an open source self-hosted Git service. Prior to 0.14.3, password-reset tokens are generated using conf.Auth.ActivateCodeLives (the account-activation lifetime), not conf.Auth.ResetPasswordCodeLives. The token lifetime is baked into the token itself at generation time and is re-extracted from the token at verification time, making RESET_PASSWORD_CODE_LIVES irrelevant to actual enforcement. When an administrator configures a shorter reset window (e.g., 10 minutes) for compliance or security reasons, reset tokens remain exploitable for the full activation lifetime instead, while the reset email falsely advertises the shorter expiry. This vulnerability is fixed in 0.14.3.",
       "published": "2026-06-24T21:16:56.827Z",
@@ -13482,44 +14006,6 @@
       "tags": [
         "WordPress",
         "CWE-89"
-      ]
-    },
-    {
-      "id": "CVE-2026-52918",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: serialize accept_q access bt_sock_poll() walks the accept queue without synchronization, while child teardown can unlink the same socket and drop its last reference. The unsynchronized accept queue walk has existed since the initial Bluetooth import. Protect accept_q with a dedicated lock for queue updates and polling. Also rework bt_accept_dequeue() to take temporary child references under the queue lock before dropping it and locking the child socket.",
-      "published": "2026-06-24T08:16:21.713Z",
-      "lastModified": "2026-07-08T15:12:36.543Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00266,
-      "epssPercentile": 0.18257,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.72,
-      "tags": [
-        "Linux"
       ]
     },
     {
@@ -13876,44 +14362,6 @@
       "priorityScore": 3.69,
       "tags": [
         "CWE-129"
-      ]
-    },
-    {
-      "id": "CVE-2026-52920",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: xt_policy: fix strict mode inbound policy matching match_policy_in() walks sec_path entries from the last transform to the first one, but strict policy matching needs to consume info->pol[] in the same forward order as the rule layout. Derive the strict-match policy position from the number of transforms already consumed so that multi-element inbound rules are matched consistently.",
-      "published": "2026-06-24T08:16:21.950Z",
-      "lastModified": "2026-07-08T17:58:21.763Z",
-      "severity": "High",
-      "cvssScore": 8.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "High"
-      },
-      "epssScore": 0.00299,
-      "epssPercentile": 0.22026,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.68,
-      "tags": [
-        "Linux"
       ]
     },
     {
@@ -14357,44 +14805,6 @@
       "tags": [
         "OpenSSL",
         "CWE-347"
-      ]
-    },
-    {
-      "id": "CVE-2026-52934",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: batman-adv: tvlv: reject oversized TVLV packets batadv_tvlv_container_ogm_append() builds a TVLV packet section from the tvlv.container_list. The total size of this section is computed by batadv_tvlv_container_list_size(), which sums the sizes of all registered containers. The return type and accumulator in batadv_tvlv_container_list_size() were u16. If the accumulated size exceeds U16_MAX, the value wraps around, causing the subsequent allocation in batadv_tvlv_container_ogm_append() to be undersized. The memcpy-style copy that follows would then write beyond the end of the allocated buffer, corrupting kernel memory. Fix this by widening the return type of batadv_tvlv_container_list_size() to size_t. In batadv_tvlv_container_ogm_append(), check the computed length against U16_MAX before proceeding, and bail out as if the allocation had failed when the limit is exceeded.",
-      "published": "2026-06-24T08:16:23.620Z",
-      "lastModified": "2026-07-08T17:48:48.370Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00247,
-      "epssPercentile": 0.16127,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.64,
-      "tags": [
-        "Linux"
       ]
     },
     {
@@ -14926,6 +15336,50 @@
       ]
     },
     {
+      "id": "CVE-2026-52701",
+      "summary": "Unauthenticated Broken Access Control in User Registration <= 5.2.2 versions.",
+      "published": "2026-06-26T15:16:39.720Z",
+      "lastModified": "2026-06-26T18:17:00.317Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00194,
+      "epssPercentile": 0.09346,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.6,
+      "tags": [
+        "CWE-862"
+      ]
+    },
+    {
       "id": "CVE-2026-56223",
       "summary": "Capgo before 12.128.2 contains a cross-domain SSO account takeover vulnerability in the provision-user endpoint that allows attackers to merge arbitrary victim accounts based on email match without validating SSO provider domain authorization. An attacker with enterprise org admin access and a malicious IdP can forge SAML assertions containing victim email addresses to trigger account merge and gain full access to victim accounts, organizations, and data.",
       "published": "2026-06-24T13:16:33.067Z",
@@ -15114,6 +15568,50 @@
       ]
     },
     {
+      "id": "CVE-2026-30040",
+      "summary": "A heap overflow in the FSViewer.exe process of FastStone Image Viewer v8.3 allows attackers to cause a execute arbitrary code in the context of the current process via supplying a crafted JPEG 2000 (JP2) file.",
+      "published": "2026-06-26T15:16:37.557Z",
+      "lastModified": "2026-06-26T20:24:25.730Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00465,
+      "epssPercentile": 0.37704,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-122",
+          "name": "CWE-122",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.59,
+      "tags": [
+        "CWE-122"
+      ]
+    },
+    {
       "id": "CVE-2026-13031",
       "summary": "Use after free in Blink in Google Chrome prior to 149.0.7827.197 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: High)",
       "published": "2026-06-24T19:17:09.390Z",
@@ -15255,44 +15753,6 @@
       "priorityScore": 3.58,
       "tags": [
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-52932",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfrm: ipcomp: Free destination pages on acomp errors Move the out_free_req label up by a couple of lines so that the allocated dst SG list gets freed on error as well as success.",
-      "published": "2026-06-24T08:16:23.390Z",
-      "lastModified": "2026-07-08T15:28:06.697Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00339,
-      "epssPercentile": 0.26293,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.55,
-      "tags": [
-        "Linux"
       ]
     },
     {
@@ -16359,6 +16819,95 @@
       ]
     },
     {
+      "id": "CVE-2025-68063",
+      "summary": "Contributor Local File Inclusion in Splash - Sport Club WordPress Theme for Basketball, Football, Hockey <= 4.4.3 versions.",
+      "published": "2026-06-26T15:16:35.490Z",
+      "lastModified": "2026-06-26T18:16:57.800Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0032,
+      "epssPercentile": 0.24227,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-98",
+          "name": "CWE-98",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.47,
+      "tags": [
+        "WordPress",
+        "CWE-98"
+      ]
+    },
+    {
+      "id": "CVE-2025-68064",
+      "summary": "Contributor Local File Inclusion in Goya Core < 1.0.9.4 versions.",
+      "published": "2026-06-26T15:16:35.617Z",
+      "lastModified": "2026-06-26T16:16:29.537Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0032,
+      "epssPercentile": 0.24228,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-98",
+          "name": "CWE-98",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.47,
+      "tags": [
+        "CWE-98"
+      ]
+    },
+    {
       "id": "CVE-2026-55477",
       "summary": "3X-UI is a web control panel for managing Xray-core servers. Prior to 3.3.1, an authenticated administrator can abuse the database import functionality to achieve arbitrary file write on the host by modifying Xray configuration values stored in the database. This can be leveraged to obtain code execution and persistent access as the user running Xray (including root when Xray is running as root). This vulnerability is fixed in 3.3.1.",
       "published": "2026-06-25T16:16:40.033Z",
@@ -16911,6 +17460,94 @@
       ]
     },
     {
+      "id": "CVE-2025-64637",
+      "summary": "Unauthenticated Content Injection in Auros Core <= 5.3.1 versions.",
+      "published": "2026-06-26T15:16:35.113Z",
+      "lastModified": "2026-06-29T16:16:35.113Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.0024,
+      "epssPercentile": 0.15216,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-80",
+          "name": "CWE-80",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.39,
+      "tags": [
+        "CWE-80"
+      ]
+    },
+    {
+      "id": "CVE-2026-54826",
+      "summary": "Subscriber Insecure Direct Object References (IDOR) in SupportCandy <= 3.4.6 versions.",
+      "published": "2026-06-26T15:16:40.350Z",
+      "lastModified": "2026-06-29T18:16:37.700Z",
+      "severity": "High",
+      "cvssScore": 7.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00288,
+      "epssPercentile": 0.20942,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-639",
+          "name": "CWE-639",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.39,
+      "tags": [
+        "CWE-639"
+      ]
+    },
+    {
       "id": "CVE-2026-9222",
       "summary": "Setracker2 Android Companion App com.tgelec.setracker versions 3.1.5 and prior only require the password hash when authenticating with backend services from the client. This could allow an attacker, who knows the hash, to authenticate and gain full access.",
       "published": "2026-06-26T00:16:55.647Z",
@@ -17217,6 +17854,50 @@
       "priorityScore": 3.34,
       "tags": [
         "CWE-918"
+      ]
+    },
+    {
+      "id": "CVE-2025-66123",
+      "summary": "Unauthenticated Insecure Direct Object References (IDOR) in BookPro <= 1.1.0 versions.",
+      "published": "2026-06-26T15:16:35.237Z",
+      "lastModified": "2026-06-26T21:16:33.170Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00228,
+      "epssPercentile": 0.13599,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-639",
+          "name": "CWE-639",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.33,
+      "tags": [
+        "CWE-639"
       ]
     },
     {
@@ -17722,6 +18403,94 @@
         "Linux",
         "CWE-79",
         "CWE-918"
+      ]
+    },
+    {
+      "id": "CVE-2025-64636",
+      "summary": "Unauthenticated Broken Access Control in Donation Thermometer <= 2.2.7 versions.",
+      "published": "2026-06-26T15:16:34.983Z",
+      "lastModified": "2026-06-26T16:16:29.443Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00214,
+      "epssPercentile": 0.11871,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.27,
+      "tags": [
+        "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-24547",
+      "summary": "Unauthenticated Broken Access Control in SiteGround Email Marketing <= 1.7.5 versions.",
+      "published": "2026-06-26T15:16:37.430Z",
+      "lastModified": "2026-06-26T21:16:33.290Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00214,
+      "epssPercentile": 0.11859,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.27,
+      "tags": [
+        "CWE-862"
       ]
     },
     {
@@ -21756,6 +22525,51 @@
       ]
     },
     {
+      "id": "CVE-2026-45256",
+      "summary": "When used to deliver a signal to a specific thread, thr_kill2(2) called p_cansignal() to determine whether the operation was permitted but did not check the result before delivering the signal. The signal was sent even when the permission check failed. The system call returned the resulting error to the caller, but by then the signal had already been delivered. The missing check allows an unprivileged local user who knows or can guess a target's process and thread IDs to send any signal to a process they would not normally be permitted to signal, including processes owned by other users or by root. The same check enforces jail boundaries, so a jailed process can signal processes on the host or in other jails. Thread IDs are allocated globally and sequentially, and so can be discovered by brute force with no visibility into the target. An attacker can stop or terminate arbitrary processes, including critical system daemons, resulting in a Denial of Service (DoS).",
+      "published": "2026-06-26T15:16:39.170Z",
+      "lastModified": "2026-06-26T18:58:48.590Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00092,
+      "epssPercentile": 0.00639,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-269",
+          "name": "Improper Privilege Management",
+          "description": "Privileges are assigned, modified, or checked incorrectly."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.95,
+      "tags": [
+        "F5",
+        "CWE-269"
+      ]
+    },
+    {
       "id": "CVE-2026-57303",
       "summary": "Jenkins Assembla Plugin 1.4 and earlier does not configure its XML parser to prevent XML external entity (XXE) attacks, allowing attackers able to control the responses of the configured Assembla server to extract secrets from the Jenkins controller or perform server-side request forgery.",
       "published": "2026-06-24T14:17:36.407Z",
@@ -22613,6 +23427,51 @@
       ]
     },
     {
+      "id": "CVE-2026-45257",
+      "summary": "The KTLS receive path decrypted each record in place, assuming that the mbufs holding received data were anonymous and safe to modify. This assumption does not hold for data placed on a socket by sendfile(2), which can reference file-backed memory directly through non-anonymous M_EXTPG pages or EXT_SFBUF mbufs. When the sender transmits such data over a loopback connection without enabling KTLS on the transmit side, the file-backed mbufs reach the receiver's decryption path unchanged. Decrypting a record in place then overwrites the backing file's page cache instead of a private copy of the data. An unprivileged local user who can read a file can overwrite its contents with data of their choosing by sending the file over a loopback connection on which they have enabled KTLS receive. The write modifies the page cache directly, so it bypasses file flags such as schg and is written back to disk. By overwriting a setuid binary or other trusted file, a local user can escalate privileges, potentially gaining full control of the affected system.",
+      "published": "2026-06-26T15:16:39.280Z",
+      "lastModified": "2026-06-27T05:16:45.920Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00154,
+      "epssPercentile": 0.04976,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-123",
+          "name": "CWE-123",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.9,
+      "tags": [
+        "F5",
+        "CWE-123"
+      ]
+    },
+    {
       "id": "CVE-2026-11877",
       "summary": "An unauthorized user can modify configuration through API calls that affects the OpenText Access Manager. This issue affects Access Manager before 5.1.3.",
       "published": "2026-06-24T15:16:38.287Z",
@@ -22923,52 +23782,6 @@
       "priorityScore": 2.88,
       "tags": [
         "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-52912",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: nf_queue: hold bridge skb->dev while queued br_pass_frame_up() rewrites skb->dev from the ingress port to the bridge master before queueing bridge LOCAL_IN packets. NFQUEUE only holds references on state.in/out and bridge physdevs, so a queued bridge packet can retain a freed bridge master in skb->dev until reinjection. When the verdict is reinjected later, br_netif_receive_skb() re-enters the receive path with skb->dev still pointing at the freed bridge master, triggering a use-after-free. Store skb->dev in the queue entry, hold a reference on it for the queue lifetime, and use the saved device when dropping queued packets during NETDEV_DOWN handling.",
-      "published": "2026-06-24T08:16:20.640Z",
-      "lastModified": "2026-07-08T15:13:08.090Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00142,
-      "epssPercentile": 0.03908,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.87,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-416"
       ]
     },
     {
@@ -24971,58 +25784,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52923",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: ipc: limit next_id allocation to the valid ID range The checkpoint/restore sysctl path can request the next SysV IPC id through ids->next_id. ipc_idr_alloc() currently forwards that request to idr_alloc() with an open-ended upper bound. If the valid tail of the SysV IPC id space is full, the allocation can spill beyond ipc_mni. The returned SysV IPC id still uses the normal index encoding, so later lookup and removal can target the wrong slot. This leaves the real IDR entry behind and breaks the IDR state for the object. The bug is in ipc_idr_alloc() in the checkpoint/restore path. 1. ids->next_id is passed to: idr_alloc(&ids->ipcs_idr, new, ipcid_to_idx(next_id), 0, ...) 2. The zero upper bound makes the allocation effectively open-ended. Once the valid SysV IPC tail is occupied, idr_alloc() can spill past ipc_mni and allocate an entry beyond the valid IPC id range. 3. The new object id is still encoded with the narrower SysV IPC index width: new->id = (new->seq id) That truncates the real IDR index. An object actually stored at a high index can then be removed as if it lived at a low in-range index. 5. For shared memory, shm_destroy() frees the current object anyway, but the real high IDR slot is left behind as a dangling pointer. 6. A subsequent walk of /proc/sysvipc/shm reaches the stale IDR entry and dereferences freed memory. Prevent this by bounding the requested allocation to ipc_mni so the checkpoint/restore path fails once the valid range is exhausted.",
-      "published": "2026-06-24T08:16:22.300Z",
-      "lastModified": "2026-07-15T01:16:22.933Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00127,
-      "epssPercentile": 0.0273,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-401",
-          "name": "CWE-401",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-825",
-          "name": "CWE-825",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.83,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-401",
-        "CWE-825"
-      ]
-    },
-    {
       "id": "CVE-2026-53000",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: nat: use kfree_rcu to release ops Florian Westphal says: \"Historically this is not an issue, even for normal base hooks: the data path doesn't use the original nf_hook_ops that are used to register the callbacks. However, in v5.14 I added the ability to dump the active netfilter hooks from userspace. This code will peek back into the nf_hook_ops that are available at the tail of the pointer-array blob used by the datapath. The nat hooks are special, because they are called indirectly from the central nat dispatcher hook. They are currently invisible to the nfnl hook dump subsystem though. But once that changes the nat ops structures have to be deferred too.\" Update nf_nat_register_fn() to deal with partial exposition of the hooks from error path which can be also an issue for nfnetlink_hook.",
       "published": "2026-06-24T17:17:11.047Z",
@@ -26477,142 +27238,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52927",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: ebtables: fix OOB read in compat_mtw_from_user Luxiao Xu says: The function compat_mtw_from_user() converts ebtables extensions from 32-bit user structures to kernel native structures. However, it lacks proper validation of the user-supplied match_size/target_size. When certain extensions are processed, the kernel-side translation logic may perform memory accesses based on the extension's expected size. If the user provides a size smaller than what the extension requires, it results in an out-of-bounds read as reported by KASAN. This fix introduces a check to ensure match_size is at least as large as the extension's required compatsize. This covers matches, watchers, and targets, while maintaining compatibility with standard targets. AFAIU this is relevant for matches that need to go though match->compat_from_user() call. Those that use plain memcpy with the user-provided size are ok because the caller checks that size vs the start of the next rule entry offset (which itself is checked vs. total size copied from userspace). The ->compat_from_user() callbacks assume they can read compatsize bytes, so they need this extra check. Based on an earlier patch from Luxiao Xu.",
-      "published": "2026-06-24T08:16:22.810Z",
-      "lastModified": "2026-07-08T15:28:53.080Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0012,
-      "epssPercentile": 0.02192,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-125"
-      ]
-    },
-    {
-      "id": "CVE-2026-52933",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: io_uring/poll: fix signed comparison in io_poll_get_ownership() io_poll_get_ownership() uses a signed comparison to check whether poll_refs has reached the threshold for the slowpath: if (unlikely(atomic_read(&req->poll_refs) >= IO_POLL_REF_BIAS)) atomic_read() returns int (signed). When IO_POLL_CANCEL_FLAG (BIT(31)) is set in poll_refs, the value becomes negative in signed arithmetic, so the >= 128 comparison always evaluates to false and the slowpath is never taken. Fix this by casting the atomic_read() result to unsigned int before the comparison, so that the cancel flag is treated as a large positive value and correctly triggers the slowpath.",
-      "published": "2026-06-24T08:16:23.480Z",
-      "lastModified": "2026-07-08T15:28:00.520Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0012,
-      "epssPercentile": 0.02191,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-835",
-          "name": "CWE-835",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "Linux",
-        "CWE-835"
-      ]
-    },
-    {
-      "id": "CVE-2026-52935",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfrm: espintcp: do not reuse an in-progress partial send espintcp keeps a single in-flight transmit in ctx->partial. Before building a new sk_msg, espintcp_sendmsg() first tries to flush that state through espintcp_push_msgs(). For blocking callers, espintcp_push_msgs() may return success even when the previous partial send is still pending. espintcp_sendmsg() would then reinitialize emsg->skmsg and reuse ctx->partial while the old transfer still owns that state. Do not rebuild the send message when ctx->partial is still in progress. If espintcp_push_msgs() returns with emsg->len still set, fail the new send instead of overwriting the live partial state. This is a memory-safety fix: reusing the live partial-send state can leave a stale offset attached to a new sk_msg and lead to an out-of- bounds read in the send path. tcp_sendmsg_locked() already handles waiting for send buffer memory, so the fix here is just to preserve espintcp's one-message-at-a-time transmit state.",
-      "published": "2026-06-24T08:16:23.760Z",
-      "lastModified": "2026-07-08T20:35:16.957Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0012,
-      "epssPercentile": 0.02191,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "Linux",
-        "CWE-787"
-      ]
-    },
-    {
       "id": "CVE-2026-56244",
       "summary": "Capgo before 12.128.2 allows non-admin API keys to read webhook signing secrets via Supabase REST due to insufficient row-level security policies on the webhooks table. Attackers can retrieve the webhook secret and forge valid X-Capgo-Signature headers to send authenticated webhook events to configured receivers, breaking webhook authenticity and integrity.",
       "published": "2026-06-24T13:16:33.597Z",
@@ -26819,51 +27444,6 @@
       "priorityScore": 2.81,
       "tags": [
         "CWE-294"
-      ]
-    },
-    {
-      "id": "CVE-2026-52919",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: batman-adv: fix tp_meter counter underflow during shutdown batadv_tp_sender_shutdown() unconditionally decrements the \"sending\" atomic counter. If multiple paths (e.g. timeout, user cancel, and normal finish) call this function, the counter can underflow to -1. Since the sender logic treats any non-zero value as \"still sending\", a negative value causes the sender kthread to loop indefinitely. This leads to a use-after-free when the interface is removed while the zombie thread is still active. Fix this by using atomic_xchg() to ensure the counter only transitions from 1 to 0 once. [sven: added missing change in batadv_tp_send]",
-      "published": "2026-06-24T08:16:21.833Z",
-      "lastModified": "2026-07-08T18:02:43.953Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00117,
-      "epssPercentile": 0.01958,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-191",
-          "name": "CWE-191",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.8,
-      "tags": [
-        "Linux",
-        "CWE-191"
       ]
     },
     {
@@ -29287,97 +29867,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52915",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: ip6t_hbh: reject oversized option lists struct ip6t_opts stores at most IP6T_OPTS_OPTSNR option descriptors, but hbh_mt6_check() does not reject larger optsnr values supplied from userspace. Validate optsnr in the rule setup path so only match data that fits the fixed-size opts array can be installed. This follows the existing xtables pattern of rejecting invalid user-provided counts in checkentry() and keeps the packet matching path unchanged. `struct ip6t_opts` has a fixed `opts[IP6T_OPTS_OPTSNR]` array, where `IP6T_OPTS_OPTSNR` is 16, then off-by-one array access is possible: [ 137.924693][ T8692] UBSAN: array-index-out-of-bounds in ../net/ipv6/netfilter/ip6t_hbh.c:110:29 [ 137.926167][ T8692] index 16 is out of range for type '__u16 [16]'",
-      "published": "2026-06-24T08:16:21.340Z",
-      "lastModified": "2026-07-08T15:12:50.290Z",
-      "severity": "High",
-      "cvssScore": 7.1,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00126,
-      "epssPercentile": 0.02641,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-129",
-          "name": "CWE-129",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.58,
-      "tags": [
-        "Linux",
-        "CWE-129"
-      ]
-    },
-    {
-      "id": "CVE-2026-52917",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: sctp: diag: reject stale associations in dump_one path The SCTP exact sock_diag lookup can hold a transport reference, block on lock_sock(sk), and then resume after sctp_association_free() has marked the association dead and freed its bind address list. When that happens, inet_assoc_attr_size() and inet_diag_msg_sctpasoc_fill() can still dereference association state that is no longer valid for reporting. In particular, inet_diag_msg_sctpasoc_fill() may read an empty bind-address list as a real sctp_sockaddr_entry and trigger an out-of-bounds read from unrelated association memory. Reject the association after taking the socket lock if it has been reaped or detached from the endpoint, and report the lookup as stale. This keeps the exact dump-one path from formatting torn association state.",
-      "published": "2026-06-24T08:16:21.587Z",
-      "lastModified": "2026-07-08T15:12:41.437Z",
-      "severity": "High",
-      "cvssScore": 7.1,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00126,
-      "epssPercentile": 0.02641,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.58,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-125"
-      ]
-    },
-    {
       "id": "CVE-2026-53041",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ocfs2: fix listxattr handling when the buffer is full [BUG] If an OCFS2 inode has both inline and block-based xattrs, listxattr() can return a size larger than the caller's buffer when the inline names consume that buffer exactly. kernel BUG at mm/usercopy.c:102! Oops: invalid opcode: 0000 [#1] SMP KASAN NOPTI RIP: 0010:usercopy_abort+0xb7/0xd0 mm/usercopy.c:102 Call Trace: __check_heap_object+0xe3/0x120 mm/slub.c:8243 check_heap_object mm/usercopy.c:196 [inline] __check_object_size mm/usercopy.c:250 [inline] __check_object_size+0x5c5/0x780 mm/usercopy.c:215 check_object_size include/linux/ucopysize.h:22 [inline] check_copy_size include/linux/ucopysize.h:59 [inline] copy_to_user include/linux/uaccess.h:219 [inline] listxattr+0xb0/0x170 fs/xattr.c:926 filename_listxattr fs/xattr.c:958 [inline] path_listxattrat+0x137/0x320 fs/xattr.c:988 __do_sys_listxattr fs/xattr.c:1001 [inline] __se_sys_listxattr fs/xattr.c:998 [inline] __x64_sys_listxattr+0x7f/0xd0 fs/xattr.c:998 ... [CAUSE] Commit 936b8834366e (\"ocfs2: Refactor xattr list and remove ocfs2_xattr_handler().\") replaced the old per-handler list accounting with ocfs2_xattr_list_entry(), but it kept using size == 0 to detect probe mode. That assumption stops being true once ocfs2_listxattr() finishes the inline-xattr pass. If the inline names fill the caller buffer exactly, the block-xattr pass runs with a non-NULL buffer and a remaining size of zero. ocfs2_xattr_list_entry() then skips the bounds check, keeps counting block names, and returns a positive size larger than the supplied buffer. [FIX] Detect probe mode by testing whether the destination buffer pointer is NULL instead of whether the remaining size is zero. That restores the pre-refactor behavior and matches the OCFS2 getxattr helpers. Once the remaining buffer reaches zero while more names are left, the block-xattr pass now returns -ERANGE instead of reporting a size larger than the allocated list buffer.",
       "published": "2026-06-24T17:17:15.830Z",
@@ -29510,52 +29999,6 @@
       "knownRansomwareUse": false,
       "priorityScore": 2.58,
       "tags": [
-        "Linux",
-        "CWE-125"
-      ]
-    },
-    {
-      "id": "CVE-2026-52942",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: nf_log: validate MAC header was set before dumping it The fallback path of dump_mac_header() guards the MAC header access only with \"skb->mac_header != skb->network_header\", without checking skb_mac_header_was_set(). When the MAC header is unset, mac_header is 0xffff, so the test passes and skb_mac_header(skb) returns skb->head + 0xffff, ~64 KiB past the buffer; the loop then reads dev->hard_header_len bytes out of bounds into the kernel log. This is reachable via the netdev logger: nf_log_unknown_packet() calls dump_mac_header() unconditionally, and an skb sent through AF_PACKET with PACKET_QDISC_BYPASS reaches the egress hook with mac_header still unset (__dev_queue_xmit(), which would reset it, is bypassed). Add the skb_mac_header_was_set() check the ARPHRD_ETHER path already uses, and replace the open-coded MAC header length test with skb_mac_header_len(). Only skbs with an unset MAC header are affected; valid ones are dumped as before. BUG: KASAN: slab-out-of-bounds in dump_mac_header (net/netfilter/nf_log_syslog.c:831) Read of size 1 at addr ffff88800ea49d3f by task exploit/148 Call Trace: kasan_report (mm/kasan/report.c:595) dump_mac_header (net/netfilter/nf_log_syslog.c:831) nf_log_netdev_packet (net/netfilter/nf_log_syslog.c:938 net/netfilter/nf_log_syslog.c:963) nf_log_packet (net/netfilter/nf_log.c:260) nft_log_eval (net/netfilter/nft_log.c:60) nft_do_chain (net/netfilter/nf_tables_core.c:285) nft_do_chain_netdev (net/netfilter/nft_chain_filter.c:307) nf_hook_slow (net/netfilter/core.c:619) nf_hook_direct_egress (net/packet/af_packet.c:257) packet_xmit (net/packet/af_packet.c:280) packet_sendmsg (net/packet/af_packet.c:3114) __sys_sendto (net/socket.c:2265)",
-      "published": "2026-06-24T08:16:24.490Z",
-      "lastModified": "2026-07-08T19:08:21.873Z",
-      "severity": "High",
-      "cvssScore": 7.1,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00123,
-      "epssPercentile": 0.02471,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.57,
-      "tags": [
-        "F5",
         "Linux",
         "CWE-125"
       ]
@@ -30313,6 +30756,94 @@
       "priorityScore": 2.47,
       "tags": [
         "CWE-347"
+      ]
+    },
+    {
+      "id": "CVE-2025-68074",
+      "summary": "Contributor Cross Site Scripting (XSS) in Image Carousel <= 1.0.0.41 versions.",
+      "published": "2026-06-26T15:16:35.733Z",
+      "lastModified": "2026-06-26T16:16:29.653Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00161,
+      "epssPercentile": 0.05669,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.47,
+      "tags": [
+        "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2025-68075",
+      "summary": "Contributor Cross Site Scripting (XSS) in BNE Testimonials <= 2.0.8 versions.",
+      "published": "2026-06-26T15:16:35.860Z",
+      "lastModified": "2026-06-29T16:16:35.227Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00161,
+      "epssPercentile": 0.05669,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.47,
+      "tags": [
+        "CWE-79"
       ]
     },
     {
@@ -31157,6 +31688,50 @@
       "priorityScore": 2.34,
       "tags": [
         "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-4339",
+      "summary": "Mattermost versions 10.11.x <= 10.11.18, 11.6.x <= 11.6.3, 11.5.x <= 11.5.6 fail to validate attachment URLs against internal or private IP ranges in the Mattermost Agents plugin MCP server which allows an attacker with access to the MCP server in stdio mode to perform server-side request forgery (SSRF) and exfiltrate data from internal network services via supplying internal URLs as file attachments in post creation requests.. Mattermost Advisory ID: MMSA-2026-00635",
+      "published": "2026-06-26T15:16:39.600Z",
+      "lastModified": "2026-06-29T19:26:34.283Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00104,
+      "epssPercentile": 0.01213,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-918",
+          "name": "CWE-918",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.32,
+      "tags": [
+        "CWE-918"
       ]
     },
     {
@@ -35429,89 +36004,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52913",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: batman-adv: v: stop OGMv2 on disabled interface When a batadv_hard_iface is disabled, its mesh_iface pointer is set to NULL. However, batadv_v_ogm_send_meshif() may still dispatch OGMs via batadv_v_ogm_queue_on_if() for interfaces that have since lost their mesh_iface association. This results in a NULL pointer dereference when batadv_v_ogm_queue_on_if() unconditionally calls netdev_priv() on the now NULL hard_iface->mesh_iface to retrieve the batadv_priv. It is necessary to ensure that the batadv_v_ogm_queue_on_if() checks that it is using the same mesh_iface for which batadv_v_ogm_send_meshif() was called.",
-      "published": "2026-06-24T08:16:21.080Z",
-      "lastModified": "2026-07-08T15:13:03.247Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00122,
-      "epssPercentile": 0.02399,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.01,
-      "tags": [
-        "Linux",
-        "CWE-476"
-      ]
-    },
-    {
-      "id": "CVE-2026-52916",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: batman-adv: frag: disallow unicast fragment in fragment batadv_frag_skb_buffer() is called by batadv_batman_skb_recv() when a BATADV_UNICAST_FRAG packet is received. Once all fragments are collected and the packet is reassembled, batadv_recv_frag_packet() calls batadv_batman_skb_recv() again to process the defragmented payload. A malicious sender can craft a BATADV_UNICAST_FRAG packet whose reassembled payload is itself a BATADV_UNICAST_FRAG packet (matryoshka-style nesting). Each nesting level recurses through batadv_batman_skb_recv() without bound, growing the kernel stack until it is exhausted. Since refragmentation or fragments in fragments are not actually allowed, discard all packets which are still BATADV_UNICAST_FRAG packets after the defragmentation process.",
-      "published": "2026-06-24T08:16:21.463Z",
-      "lastModified": "2026-07-08T15:12:46.487Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00123,
-      "epssPercentile": 0.02477,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.01,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-52944",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: fix FSCTL permission bypass by adding a permission check for FSCTL_SET_SPARSE FSCTL_SET_SPARSE in fsctl_set_sparse() modifies the file's sparse attribute and saves it through xattr without any permission checks. This exposes two issues: 1) A client on a read-only share can change the sparse attribute on files it opened, even though the share is read-only. Other FSCTL write operations already check test_tree_conn_flag(work->tcon, KSMBD_TREE_CONN_FLAG_WRITABLE), but FSCTL_SET_SPARSE does not. 2) Even on writable shares, clients without FILE_WRITE_DATA or FILE_WRITE_ATTRIBUTES access should not modify the sparse attribute. Similar handle-level checks exist in other functions but are missing here. Add both share-level writable check and per-handle access check. Use goto out on error to avoid leaking file references.",
       "published": "2026-06-24T10:17:19.447Z",
@@ -37460,340 +37952,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52921",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: ipset: stop hash:* range iteration at end The following hash set variants: hash:ip,mark hash:ip,port hash:ip,port,ip hash:ip,port,net iterate IPv4 ranges with a 32-bit iterator. The iterator must stop once the last address in the requested range has been processed. Advancing it once more can move the traversal state past the end of the request, so a later retry may continue from an unintended position. Handle the iterator increment explicitly at the end of the loop and stop once the upper bound has been processed. This keeps the existing retry behaviour intact for valid ranges while preventing traversal from continuing past the original boundary.",
-      "published": "2026-06-24T08:16:22.067Z",
-      "lastModified": "2026-07-08T17:52:39.550Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00114,
-      "epssPercentile": 0.01754,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-835",
-          "name": "CWE-835",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.99,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-835"
-      ]
-    },
-    {
-      "id": "CVE-2026-52925",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: vrf: Fix a potential NPD when removing a port from a VRF RCU readers that identified a net device as a VRF port using netif_is_l3_slave() assume that a subsequent call to netdev_master_upper_dev_get_rcu() will return a VRF device. They then continue to dereference its l3mdev operations. This assumption is not always correct and can result in a NPD [1]. There is no RCU synchronization when removing a port from a VRF, so it is possible for an RCU reader to see a new master device (e.g., a bridge) that does not have l3mdev operations. Fix by adding RCU synchronization after clearing the IFF_L3MDEV_SLAVE flag. Skip this synchronization when a net device is removed from a VRF as part of its deletion and when the VRF device itself is deleted. In the latter case an RCU grace period will pass by the time RTNL is released. [1] BUG: kernel NULL pointer dereference, address: 0000000000000000 [...] RIP: 0010:l3mdev_fib_table_rcu (net/l3mdev/l3mdev.c:181) [...] Call Trace: l3mdev_fib_table_by_index (net/l3mdev/l3mdev.c:201 net/l3mdev/l3mdev.c:189) __inet_bind (net/ipv4/af_inet.c:499 (discriminator 3)) inet_bind_sk (net/ipv4/af_inet.c:469) __sys_bind (./include/linux/file.h:62 (discriminator 1) ./include/linux/file.h:83 (discriminator 1) net/socket.c:1951 (discriminator 1)) __x64_sys_bind (net/socket.c:1969 (discriminator 1) net/socket.c:1967 (discriminator 1) net/socket.c:1967 (discriminator 1)) do_syscall_64 (arch/x86/entry/syscall_64.c:63 (discriminator 1) arch/x86/entry/syscall_64.c:94 (discriminator 1)) entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)",
-      "published": "2026-06-24T08:16:22.563Z",
-      "lastModified": "2026-07-08T15:29:07.590Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00114,
-      "epssPercentile": 0.01755,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.99,
-      "tags": [
-        "Linux",
-        "CWE-476"
-      ]
-    },
-    {
-      "id": "CVE-2026-52926",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: batman-adv: clear current gateway during teardown batadv_gw_node_free() removes the gateway list entries during mesh teardown, but it does not clear the currently selected gateway. This leaves stale gateway state behind across cleanup and can break a later mesh recreation. Clear bat_priv->gw.curr_gw before walking the gateway list so the selected gateway reference is dropped as part of teardown.",
-      "published": "2026-06-24T08:16:22.697Z",
-      "lastModified": "2026-07-08T15:28:58.480Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00114,
-      "epssPercentile": 0.01755,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.99,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-52928",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: af_unix: Reject SIOCATMARK on non-stream sockets SIOCATMARK reports whether the receive queue is at the urgent mark for MSG_OOB. In AF_UNIX, MSG_OOB is supported only for SOCK_STREAM sockets. SOCK_DGRAM and SOCK_SEQPACKET reject MSG_OOB in sendmsg() and recvmsg(), so they should not support SIOCATMARK either. Return -EOPNOTSUPP for non-stream sockets before checking the receive queue.",
-      "published": "2026-06-24T08:16:22.937Z",
-      "lastModified": "2026-07-08T15:28:47.317Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00114,
-      "epssPercentile": 0.01754,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.99,
-      "tags": [
-        "F5",
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-52930",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: ipc/shm: serialize orphan cleanup with shm_nattch updates shm_destroy_orphaned() walks the shm idr under shm_ids(ns).rwsem, but that does not serialize all fields tested by shm_may_destroy(). In particular, shm_nattch is updated while holding shm_perm.lock, and attach paths can do that without holding the rwsem. Do not decide that an orphaned segment is unused before taking the object lock. Move the shm_may_destroy() check under shm_perm.lock, matching the other destroy paths, and unlock the segment when it no longer qualifies for removal.",
-      "published": "2026-06-24T08:16:23.157Z",
-      "lastModified": "2026-07-08T15:28:26.693Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00114,
-      "epssPercentile": 0.01797,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.99,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-52936",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: crypto: jitterentropy - replace long-held spinlock with mutex jent_kcapi_random() serializes the shared jitterentropy state, but it currently holds a spinlock across the jent_read_entropy() call. That path performs expensive jitter collection and SHA3 conditioning, so parallel readers can trigger stalls as contending waiters spin for the same lock. To prevent non-preemptible lock hold, replace rng->jent_lock with a mutex so contended readers sleep instead of spinning on a shared lock held across expensive entropy generation.",
-      "published": "2026-06-24T08:16:23.883Z",
-      "lastModified": "2026-07-08T20:31:02.290Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00114,
-      "epssPercentile": 0.01724,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.99,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-52939",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: net/rds: fix NULL deref in rds_ib_send_cqe_handler() on masked atomic completion rds_ib_xmit_atomic() always programs a masked atomic opcode (IB_WR_MASKED_ATOMIC_CMP_AND_SWP or IB_WR_MASKED_ATOMIC_FETCH_AND_ADD) for every RDS atomic cmsg. But the completion-side switch in rds_ib_send_unmap_op() only handles the non-masked opcodes, so a masked atomic completion falls through to default and returns rm == NULL while send->s_op is left set. rds_ib_send_cqe_handler() then dereferences the NULL rm via rm->m_final_op, oopsing in softirq context. An unprivileged AF_RDS sendmsg() of an atomic cmsg over an active RDS/IB connection triggers it; on hardware that natively accepts masked atomics (mlx4, mlx5) no extra setup is needed. RDS/IB: rds_ib_send_unmap_op: unexpected opcode 0xd in WR! Oops: general protection fault [#1] SMP KASAN KASAN: null-ptr-deref in range [0x0000000000000190-0x0000000000000197] RIP: rds_ib_send_cqe_handler+0x25c/0xb10 (net/rds/ib_send.c:282) Call Trace: rds_ib_send_cqe_handler (net/rds/ib_send.c:282) poll_scq (net/rds/ib_cm.c:274) rds_ib_tasklet_fn_send (net/rds/ib_cm.c:294) tasklet_action_common (kernel/softirq.c:943) handle_softirqs (kernel/softirq.c:573) run_ksoftirqd (kernel/softirq.c:479) Kernel panic - not syncing: Fatal exception in interrupt Handle the masked atomic opcodes in the same case as the non-masked ones: they map to the same struct rds_message.atomic union member, so the existing container_of()/rds_ib_send_unmap_atomic() body is correct for them.",
-      "published": "2026-06-24T08:16:24.160Z",
-      "lastModified": "2026-07-08T19:14:19.547Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00114,
-      "epssPercentile": 0.01755,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.99,
-      "tags": [
-        "Linux",
-        "CWE-476"
-      ]
-    },
-    {
-      "id": "CVE-2026-52941",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: net/smc: avoid NULL deref of conn->lnk in smc_msg_event tracepoint The smc_msg_event tracepoint class, shared by smc_tx_sendmsg and smc_rx_recvmsg, unconditionally dereferences smc->conn.lnk: __string(name, smc->conn.lnk->ibname) conn->lnk is only set for SMC-R; for SMC-D it is NULL. Other code on these paths already handles this (e.g. !conn->lnk in SMC_STAT_RMB_TX_SIZE_SMALL()). With the tracepoint enabled, the first sendmsg()/recvmsg() on an SMC-D socket crashes: Oops: general protection fault, probably for non-canonical address KASAN: null-ptr-deref in range [...] RIP: 0010:strlen+0x1e/0xa0 Call Trace: trace_event_raw_event_smc_msg_event (net/smc/smc_tracepoint.h:44) smc_rx_recvmsg (net/smc/smc_rx.c:515) smc_recvmsg (net/smc/af_smc.c:2859) __sys_recvfrom (net/socket.c:2315) __x64_sys_recvfrom (net/socket.c:2326) do_syscall_64 The faulting address 0x3e0 is offsetof(struct smc_link, ibname), confirming the NULL ->lnk deref. Enabling the tracepoint requires root, but the trigger itself is unprivileged: socket(AF_SMC, ...) has no capability check, and SMC-D negotiation needs no admin step on s390 or on x86 with the loopback ISM device loaded. Log an empty device name for SMC-D instead of dereferencing NULL.",
-      "published": "2026-06-24T08:16:24.380Z",
-      "lastModified": "2026-07-08T19:10:24.267Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00116,
-      "epssPercentile": 0.01929,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.99,
-      "tags": [
-        "Linux",
-        "CWE-476"
-      ]
-    },
-    {
       "id": "CVE-2026-57295",
       "summary": "A cross-site request forgery (CSRF) vulnerability in Jenkins EC2 Fleet Plugin 4.2.3.539.v8fedff2a_81c3 and earlier allows attackers to connect to an attacker-specified URL using attacker-specified credentials IDs obtained through another method, capturing AWS credentials stored in Jenkins.",
       "published": "2026-06-24T14:17:35.703Z",
@@ -38045,90 +38203,6 @@
       "tags": [
         "Linux",
         "CWE-401"
-      ]
-    },
-    {
-      "id": "CVE-2026-52937",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: tap: fix stack info leak in tap_ioctl() SIOCGIFHWADDR In the SIOCGIFHWADDR path, tap_ioctl() copies 16 bytes of an uninitialised on-stack struct sockaddr_storage to userspace via ifr_hwaddr, but netif_get_mac_address() only writes sa_family and dev->addr_len (6 for Ethernet) bytes, leaving sa_data[6..13] uninitialised. Those 8 trailing bytes leak kernel stack contents; SIOCGIFHWADDR on a macvtap chardev returns kernel .text and direct-map pointers, defeating KASLR. Initialise ss at declaration.",
-      "published": "2026-06-24T08:16:23.980Z",
-      "lastModified": "2026-07-08T19:22:42.793Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00112,
-      "epssPercentile": 0.01646,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-401",
-          "name": "CWE-401",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.98,
-      "tags": [
-        "Linux",
-        "CWE-401"
-      ]
-    },
-    {
-      "id": "CVE-2026-52940",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: tun: zero the whole vnet header in tun_put_user() tun_put_user() declares an on-stack struct virtio_net_hdr_v1_hash_tunnel without zeroing it. For a non-tunnel skb, virtio_net_hdr_tnl_from_skb() only initializes the first 10 bytes (sizeof(struct virtio_net_hdr)), leaving bytes 10..23 (num_buffers and the hash/tunnel fields) as stack garbage. An unprivileged user can set the vnet header size to 24 with TUNSETVNETHDRSZ, so __tun_vnet_hdr_put() copies all 24 bytes of the partially-initialized struct to userspace, leaking 14 bytes of kernel stack on every read of a non-tunnel packet. Fix it the same way tun_get_user() already does by zeroing the whole header right after declaration.",
-      "published": "2026-06-24T08:16:24.287Z",
-      "lastModified": "2026-07-08T19:12:57.360Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00112,
-      "epssPercentile": 0.01646,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.98,
-      "tags": [
-        "F5",
-        "Linux"
       ]
     },
     {
@@ -38683,51 +38757,6 @@
       "priorityScore": 1.97,
       "tags": [
         "CWE-190"
-      ]
-    },
-    {
-      "id": "CVE-2026-52938",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: bpf: Fix NULL pointer dereference in bpf_sk_storage_clone and diag paths bpf_selem_unlink_nofail() sets SDATA(selem)->smap to NULL before removing the selem from the storage hlist. A concurrent RCU reader in bpf_sk_storage_clone() can observe the selem still on the list with smap already NULL, causing a NULL pointer dereference. general protection fault, probably for non-canonical address 0xdffffc000000000a: KASAN: null-ptr-deref in range [0x0000000000000050-0x0000000000000057] RIP: 0010:bpf_sk_storage_clone+0x1cd/0xaa0 net/core/bpf_sk_storage.c:174 Call Trace: sk_clone+0xfed/0x1980 net/core/sock.c:2591 inet_csk_clone_lock+0x30/0x760 net/ipv4/inet_connection_sock.c:1222 tcp_create_openreq_child+0x35/0x2680 net/ipv4/tcp_minisocks.c:571 tcp_v4_syn_recv_sock+0x123/0xf90 net/ipv4/tcp_ipv4.c:1729 tcp_check_req+0x8e1/0x2580 include/net/tcp.h:855 tcp_v4_rcv+0x1845/0x3b80 net/ipv4/tcp_ipv4.c:2347 Add a NULL check for smap in bpf_sk_storage_clone(). bpf_sk_storage_diag_put_all() has the same issue. Add a NULL check and pass the validated smap directly to diag_get(), which is refactored to take smap as a parameter instead of reading it internally. bpf_sk_storage_diag_put() uses diag->maps[i] which is always valid under its refcount, so diag->maps[i] is passed directly to diag_get().",
-      "published": "2026-06-24T08:16:24.073Z",
-      "lastModified": "2026-07-08T19:19:19.627Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.001,
-      "epssPercentile": 0.01025,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.96,
-      "tags": [
-        "Linux",
-        "CWE-476"
       ]
     },
     {
@@ -41260,6 +41289,50 @@
       ]
     },
     {
+      "id": "CVE-2026-3472",
+      "summary": "Mattermost versions 10.11.x <= 10.11.18, 11.6.x <= 11.6.3, 11.5.x <= 11.5.6 fail to properly apply markdown image rendering restrictions to AI bot tool result posts, which allows an authenticated attacker to exfiltrate data to an attacker-controlled server via injecting markdown image syntax into tool result content rendered by a victim's client.. Mattermost Advisory ID: MMSA-2026-00619",
+      "published": "2026-06-26T15:16:38.770Z",
+      "lastModified": "2026-06-29T19:27:20.823Z",
+      "severity": "Low",
+      "cvssScore": 3.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00194,
+      "epssPercentile": 0.09371,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-693",
+          "name": "CWE-693",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.55,
+      "tags": [
+        "CWE-693"
+      ]
+    },
+    {
       "id": "CVE-2026-2299",
       "summary": "The Mattermost Google Drive plugin before version 1.1.0 fails to validate channel membership in the file creation endpoint, allowing authenticated users with a connected Google account to share Google Drive files to unauthorized private channels and disclose private channel membership.",
       "published": "2026-06-25T20:17:10.763Z",
@@ -43102,51 +43175,6 @@
       "priorityScore": 0.65,
       "tags": [
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-10745",
-      "summary": "Improper output neutralization for logs vulnerability in upKeeper Solutions upKeeper Instant Privilege Access on Windows allows Log Injection-Tampering-Forging. This issue affects upKeeper Instant Privilege Access: through 1.6.1.",
-      "published": "2026-06-24T09:16:30.147Z",
-      "lastModified": "2026-06-25T20:11:34.393Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00264,
-      "epssPercentile": 0.18087,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-117",
-          "name": "CWE-117",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.63,
-      "tags": [
-        "Windows",
-        "CWE-117"
       ]
     },
     {
