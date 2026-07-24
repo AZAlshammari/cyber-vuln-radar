@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-24T09:56:50.050Z",
+  "generatedAt": "2026-07-24T11:46:04.998Z",
   "count": 1000,
   "items": [
     {
@@ -2469,6 +2469,50 @@
       ]
     },
     {
+      "id": "CVE-2026-56028",
+      "summary": "Unauthenticated Privilege Escalation in Easy Elements for Elementor &#8211; Addons & Website Templates <= 1.4.9 versions.",
+      "published": "2026-06-26T15:16:42.660Z",
+      "lastModified": "2026-06-29T18:16:38.210Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0036,
+      "epssPercentile": 0.28484,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-266",
+          "name": "CWE-266",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.43,
+      "tags": [
+        "CWE-266"
+      ]
+    },
+    {
       "id": "CVE-2026-8592",
       "summary": "OS Command Injection vulnerability in the process_string action of Rapid7 InsightConnect AWK Plugin on Linux allows remote attackers to execute arbitrary OS commands via the text or expression parameters due to unsafe shell command construction in the processing pipeline.",
       "published": "2026-06-25T02:16:34.990Z",
@@ -2778,6 +2822,50 @@
       "priorityScore": 5.35,
       "tags": [
         "CWE-306"
+      ]
+    },
+    {
+      "id": "CVE-2026-56027",
+      "summary": "Customer Arbitrary File Upload in Booster for WooCommerce <= 8.0.1 versions.",
+      "published": "2026-06-26T15:16:42.540Z",
+      "lastModified": "2026-06-26T16:16:33.000Z",
+      "severity": "Critical",
+      "cvssScore": 9.9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00328,
+      "epssPercentile": 0.25173,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-434",
+          "name": "CWE-434",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.35,
+      "tags": [
+        "CWE-434"
       ]
     },
     {
@@ -9237,58 +9325,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52943",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: skbuff: fix missing zerocopy reference in pskb_carve helpers pskb_carve_inside_header() and pskb_carve_inside_nonlinear() both copy the old skb_shared_info header into a new buffer via memcpy(), which includes the destructor_arg pointer (uarg) for MSG_ZEROCOPY skbs. Neither function calls net_zcopy_get() for the new shinfo, creating an unaccounted holder: every skb_shared_info with destructor_arg set will call skb_zcopy_clear() once when freed, but the corresponding net_zcopy_get() was never called for the new copy. Repeated calls drive uarg->refcnt to zero prematurely, freeing ubuf_info_msgzc while TX skbs still hold live destructor_arg pointers. KASAN reports use-after-free on a freed ubuf_info_msgzc: BUG: KASAN: slab-use-after-free in skb_release_data+0x77b/0x810 Read of size 8 at addr ffff88801574d3e8 by task poc/220 Call Trace: skb_release_data+0x77b/0x810 kfree_skb_list_reason+0x13e/0x610 skb_release_data+0x4cd/0x810 sk_skb_reason_drop+0xf3/0x340 skb_queue_purge_reason+0x282/0x440 rds_tcp_inc_free+0x1e/0x30 rds_recvmsg+0x354/0x1780 __sys_recvmsg+0xdf/0x180 Allocated by task 219: msg_zerocopy_realloc+0x157/0x7b0 tcp_sendmsg_locked+0x2892/0x3ba0 Freed by task 219: ip_recv_error+0x74a/0xb10 tcp_recvmsg+0x475/0x530 The skb consuming the late access still referenced the same uarg via shinfo->destructor_arg copied by pskb_carve_inside_nonlinear() without a refcount bump. This has been verified to be reliably exploitable: a working proof-of-concept achieves full root privilege escalation from an unprivileged local user on a default kernel configuration. The fix follows the pattern of pskb_expand_head() which has the same memcpy/cloned structure. For pskb_carve_inside_header(), net_zcopy_get() is placed after skb_orphan_frags() succeeds, so the orphan error path needs no cleanup. For pskb_carve_inside_nonlinear(), net_zcopy_get() is placed after all failure points and just before skb_release_data(), so no error path needs cleanup at all -- matching pskb_expand_head() more closely and avoiding the need for a balancing net_zcopy_put().",
-      "published": "2026-06-24T10:17:19.293Z",
-      "lastModified": "2026-07-15T01:16:23.457Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00238,
-      "epssPercentile": 0.14948,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        },
-        {
-          "id": "CWE-911",
-          "name": "CWE-911",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.25,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-416",
-        "CWE-911"
-      ]
-    },
-    {
       "id": "CVE-2026-48725",
       "summary": "Warp is an agentic development environment. From 0.2021.04.25.23.05.stable_00 until 0.2026.05.06.15.42.stable_01, Warp allows terminal output to request access to the local system clipboard. A malicious remote host, remote program, or other attacker-controlled terminal output source can trigger clipboard reads or writes without a separate confirmation step. This crosses the trust boundary between untrusted terminal output and the user's local desktop clipboard. This vulnerability is fixed in 0.2026.05.06.15.42.stable_01.",
       "published": "2026-06-24T18:17:18.413Z",
@@ -10316,6 +10352,50 @@
       },
       "epssScore": 0.00238,
       "epssPercentile": 0.14978,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.15,
+      "tags": [
+        "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-56025",
+      "summary": "Unauthenticated Broken Access Control in Paymob for WooCommerce <= 4.1.2 versions.",
+      "published": "2026-06-26T15:16:42.300Z",
+      "lastModified": "2026-06-26T18:17:01.647Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00238,
+      "epssPercentile": 0.14976,
       "isKev": false,
       "kev": null,
       "vendor": null,
@@ -29149,6 +29229,50 @@
       ]
     },
     {
+      "id": "CVE-2026-56026",
+      "summary": "Subscriber Server Side Request Forgery (SSRF) in utm.codes <= 1.9.0 versions.",
+      "published": "2026-06-26T15:16:42.420Z",
+      "lastModified": "2026-06-26T16:16:32.890Z",
+      "severity": "Medium",
+      "cvssScore": 6.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.0022,
+      "epssPercentile": 0.1265,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-918",
+          "name": "CWE-918",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.68,
+      "tags": [
+        "CWE-918"
+      ]
+    },
+    {
       "id": "CVE-2026-53203",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: accel/ivpu: Add buffer overflow check in MS get_info_ioctl Add validation that the info size returned from the metric stream info query is not exceeded when checked against the allocated buffer size. If the firmware returns a size larger than the buffer, reject the operation with -EOVERFLOW instead of proceeding with an incorrect buffer copy.",
       "published": "2026-06-25T09:16:37.873Z",
@@ -34752,50 +34876,6 @@
       ]
     },
     {
-      "id": "CVE-2026-11968",
-      "summary": "Argument Injection in TortoiseGitBlame via Malicious Git History Filenames Leads to Arbitrary File Write in TortoiseGit",
-      "published": "2026-06-24T10:17:19.063Z",
-      "lastModified": "2026-06-25T20:21:19.853Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00124,
-      "epssPercentile": 0.02577,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-88",
-          "name": "CWE-88",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.02,
-      "tags": [
-        "CWE-88"
-      ]
-    },
-    {
       "id": "CVE-2026-52963",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ALSA: usb-audio: Bound MIDI endpoint descriptor scans snd_usbmidi_get_ms_info() validates the internal MIDIStreaming endpoint descriptor size before using baAssocJackID[], but the descriptor walker can still return a class-specific endpoint descriptor whose bLength exceeds the remaining bytes in the endpoint-extra scan. That leaves later flexible-array reads bounded by bLength, but not by the remaining bytes in the endpoint-extra scan. Stop walking when bLength is zero or extends past the remaining endpoint-extra scan.",
       "published": "2026-06-24T17:17:06.650Z",
@@ -36001,44 +36081,6 @@
       "priorityScore": 2.02,
       "tags": [
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-52944",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: fix FSCTL permission bypass by adding a permission check for FSCTL_SET_SPARSE FSCTL_SET_SPARSE in fsctl_set_sparse() modifies the file's sparse attribute and saves it through xattr without any permission checks. This exposes two issues: 1) A client on a read-only share can change the sparse attribute on files it opened, even though the share is read-only. Other FSCTL write operations already check test_tree_conn_flag(work->tcon, KSMBD_TREE_CONN_FLAG_WRITABLE), but FSCTL_SET_SPARSE does not. 2) Even on writable shares, clients without FILE_WRITE_DATA or FILE_WRITE_ATTRIBUTES access should not modify the sparse attribute. Similar handle-level checks exist in other functions but are missing here. Add both share-level writable check and per-handle access check. Use goto out on error to avoid leaking file references.",
-      "published": "2026-06-24T10:17:19.447Z",
-      "lastModified": "2026-07-08T19:03:29.597Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00121,
-      "epssPercentile": 0.02303,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.01,
-      "tags": [
-        "Linux"
       ]
     },
     {
@@ -43087,50 +43129,6 @@
       "tags": [
         "Apache",
         "CWE-280"
-      ]
-    },
-    {
-      "id": "CVE-2026-13150",
-      "summary": "Server-Side Request Forgery (SSRF) (CWE-918) in the PDF generation endpoint GET /api/reports/{id}/pdf (backend/main.py) in ccyl13 Pentestify 1.0.0 and lower allows remote attackers to make the server issue requests to arbitrary internal or external URLs, including cloud metadata services, and return the rendered content in the resulting PDF via a crafted Host header, because the target URL is built from request.base_url without validation.",
-      "published": "2026-06-24T11:16:33.557Z",
-      "lastModified": "2026-06-25T19:58:30.847Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00292,
-      "epssPercentile": 0.21282,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.74,
-      "tags": [
-        "CWE-918"
       ]
     },
     {
