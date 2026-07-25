@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-25T06:58:22.944Z",
+  "generatedAt": "2026-07-25T09:06:24.844Z",
   "count": 1000,
   "items": [
     {
@@ -2459,6 +2459,52 @@
       ]
     },
     {
+      "id": "CVE-2026-11720",
+      "summary": "A path traversal vulnerability exists in the HTTP tool URL builder of googleapis/mcp-toolbox. When constructing downstream API requests, the URL builder substitutes user-controlled pathParams into the configured tool path and parses the resulting string as a relative URL. While it checks that the input does not alter the scheme, host, or user info, it relies on ResolveReference for the final URL resolution. Because dot segments (../) are normalized during this resolution step, an attacker can supply path parameters containing directory traversal sequences to escape the operator-configured path scope. This allows the client to coerce the toolbox into making requests to unintended endpoints on the same target host while forwarding the toolbox's configured credentials (e.g., bypassing a restricted path like /api/v1/users/{{.id}} to reach /admin/secrets).",
+      "published": "2026-06-29T18:16:36.173Z",
+      "lastModified": "2026-07-01T19:55:36.743Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00381,
+      "epssPercentile": 0.30685,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.26,
+      "tags": [
+        "Google",
+        "F5",
+        "CWE-22"
+      ]
+    },
+    {
       "id": "CVE-2026-53176",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: IB/isert: Reject login PDUs shorter than ISER_HEADERS_LEN In drivers/infiniband/ulp/isert/ib_isert.c, isert_login_recv_done() computes the login request payload length as wc->byte_len minus ISER_HEADERS_LEN with no lower bound, and login_req_len is a signed int. A remote iSER initiator can post a login Send work request carrying fewer than ISER_HEADERS_LEN (76) bytes, so the subtraction underflows and login_req_len becomes negative. isert_rx_login_req() then reads that negative length back into a signed int, takes size = min(rx_buflen, MAX_KEY_VALUE_PAIRS), and because the min() is signed it keeps the negative value; the value is then passed as the memcpy() length and sign-extended to a multi-gigabyte size_t. The copy into the 8192-byte login->req_buf runs far out of bounds and faults, crashing the target node. The login phase precedes iSCSI authentication, so no credentials are required to reach this path. Reject any login PDU shorter than ISER_HEADERS_LEN before the subtraction, mirroring the existing early return on a failed work completion, so login_req_len can never go negative. The upper bound was already safe: a posted login buffer cannot deliver more than ISER_RX_PAYLOAD_SIZE, so the difference stays at or below MAX_KEY_VALUE_PAIRS and the existing min() clamps it; only the missing lower bound needs to be added.",
       "published": "2026-06-25T09:16:34.953Z",
@@ -2708,44 +2754,6 @@
         "CWE-798",
         "CWE-1188",
         "CWE-1392"
-      ]
-    },
-    {
-      "id": "CVE-2026-5305",
-      "summary": "The Email Address Encoder WordPress plugin before 1.0.25, email-encoder-premium WordPress plugin before 0.3.12 does not properly handle email replacement, which could allow unauthenticated users to perform Stored XSS attacks",
-      "published": "2026-06-25T07:16:45.737Z",
-      "lastModified": "2026-06-25T13:28:35.737Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00372,
-      "epssPercentile": 0.29749,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.12,
-      "tags": [
-        "WordPress"
       ]
     },
     {
@@ -3371,56 +3379,6 @@
       "priorityScore": 4.96,
       "tags": [
         "CWE-863"
-      ]
-    },
-    {
-      "id": "CVE-2026-12244",
-      "summary": "If NSD is configured as secondary for a zone, the primary of that zone can crash NSD with an AXFR containing a DNS message with a special crafted SVCB RR with an rdata size of 65512, that let's an (uint16_t) variable that is used to allocate space needed for the RR wrap (because total size > 65535), causing a heap overflow. The attacker can perform a controlled (RCE class) head write of up to 65509 bytes",
-      "published": "2026-06-25T07:16:44.900Z",
-      "lastModified": "2026-06-26T02:07:23.190Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00325,
-      "epssPercentile": 0.24885,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-122",
-          "name": "CWE-122",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-190",
-          "name": "CWE-190",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.95,
-      "tags": [
-        "CWE-122",
-        "CWE-190"
       ]
     },
     {
@@ -6656,51 +6614,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12937",
-      "summary": "The Tourfic – AI Powered Travel Booking, Hotel Booking & Car Rental WordPress Plugin plugin for WordPress is vulnerable to generic SQL Injection via the 'post_id' parameter in all versions up to, and including, 2.22.7 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. The AJAX handler is registered for unauthenticated users via wp_ajax_nopriv_tf_room_availability, and the required nonce is emitted on the public single-hotel page template, allowing unauthenticated attackers to freely obtain a valid nonce and reach the vulnerable code path.",
-      "published": "2026-06-25T08:16:29.787Z",
-      "lastModified": "2026-06-25T17:16:38.240Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00304,
-      "epssPercentile": 0.22628,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.42,
-      "tags": [
-        "WordPress",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-50016",
       "summary": "pnpm is a package manager. Prior to 10.34.0 and 11.4.0, pnpm allows a transitive dependency alias from registry package metadata to contain path traversal segments. During install, pnpm later uses that alias as a filesystem path when linking dependency nodes. As a result, a registry package can cause `pnpm install --ignore-scripts` to replace paths in the current project with symlinks to attacker-controlled dependency package directories. This vulnerability is fixed in 10.34.0 and 11.4.0.",
       "published": "2026-06-25T18:16:39.303Z",
@@ -8395,6 +8308,50 @@
       "tags": [
         "CWE-119",
         "CWE-120"
+      ]
+    },
+    {
+      "id": "CVE-2026-36848",
+      "summary": "Gigamon GVOS v5.16.1 and below is vulnerable to Directory Traversal in the GVOS H-VUE subsystem.",
+      "published": "2026-06-29T18:16:37.583Z",
+      "lastModified": "2026-06-30T15:56:56.470Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00695,
+      "epssPercentile": 0.49174,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.35,
+      "tags": [
+        "CWE-22"
       ]
     },
     {
@@ -12193,44 +12150,6 @@
       "tags": [
         "F5",
         "CWE-798"
-      ]
-    },
-    {
-      "id": "CVE-2026-9702",
-      "summary": "The InPost PL WordPress plugin before 1.9.1 does not verify that the request originates from the legitimate buyer before allowing the WooCommerce order parcel-locker destination to be updated, allowing unauthenticated attackers to silently redirect the shipping destination of any pending or processing order on the site.",
-      "published": "2026-06-25T07:16:45.830Z",
-      "lastModified": "2026-06-25T13:28:35.737Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00208,
-      "epssPercentile": 0.11087,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.01,
-      "tags": [
-        "WordPress"
       ]
     },
     {
@@ -17686,56 +17605,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12246",
-      "summary": "NSD version 4.14.0 introduced a bug where a specially crafted APL RR, with an adflength larger than permitted for the address family will overwrite the stack when the zone is written to disk, with a maximum of 111 attacker controlled bytes.",
-      "published": "2026-06-25T07:16:45.197Z",
-      "lastModified": "2026-06-26T02:07:47.920Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.003,
-      "epssPercentile": 0.22116,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-20",
-          "name": "CWE-20",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-120",
-          "name": "CWE-120",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.61,
-      "tags": [
-        "CWE-20",
-        "CWE-120"
-      ]
-    },
-    {
       "id": "CVE-2025-71340",
       "summary": "picklescan through 0.0.26 fails to detect malicious pickle files that invoke idlelib.pyshell.ModifiedInterpreter.runcode in __reduce__ methods. Attackers can embed undetected code in pickle files that executes arbitrary commands when the file is loaded via pickle.load(), enabling supply chain attacks on PyTorch models and saved Python objects. This is fixed in version 0.0.30.",
       "published": "2026-06-25T22:16:59.647Z",
@@ -18050,6 +17919,57 @@
       "priorityScore": 3.59,
       "tags": [
         "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-13592",
+      "summary": "A vulnerability was detected in liftoff-sr CIPster up to e8e9dba09bf56962807d3504b783ccdb6287f3e4. Affected by this issue is the function BufWriter::append of the component EtherNet IP Message Handler. Performing a manipulation results in out-of-bounds write. Remote exploitation of the attack is possible. The exploit is now public and may be used. This product follows a rolling release approach for continuous delivery, so version details for affected or updated releases are not provided. The patch is named 3a0159ed43125dcd024a1965f0289cb186bae9ff. To fix this issue, it is recommended to deploy a patch.",
+      "published": "2026-06-29T18:16:37.103Z",
+      "lastModified": "2026-07-01T15:16:29.197Z",
+      "severity": "High",
+      "cvssScore": 7.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00371,
+      "epssPercentile": 0.29697,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-119",
+          "name": "CWE-119",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.59,
+      "tags": [
+        "F5",
+        "CWE-119",
+        "CWE-787"
       ]
     },
     {
@@ -19397,44 +19317,6 @@
       ]
     },
     {
-      "id": "CVE-2026-10824",
-      "summary": "The Masteriyo LMS WordPress plugin before 2.2.1 does not perform authorization checks in a course-progress REST API controller, allowing unauthenticated users to read and permanently delete any user's course-progress records.",
-      "published": "2026-06-25T07:16:44.767Z",
-      "lastModified": "2026-06-25T14:16:35.570Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00164,
-      "epssPercentile": 0.06045,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.49,
-      "tags": [
-        "WordPress"
-      ]
-    },
-    {
       "id": "CVE-2026-53147",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: thunderbolt: Validate XDomain request packet size before type cast tb_xdp_handle_request() casts the received packet buffer to protocol-specific structs without verifying that the allocation is large enough for the target type. A peer can send a minimal XDomain packet that passes the generic header length check but is shorter than the struct accessed after the cast, causing out-of- bounds reads from the kmemdup allocation. Plumb the packet length through xdomain_request_work and validate it against the expected struct size before each cast.",
       "published": "2026-06-25T09:16:32.037Z",
@@ -19794,51 +19676,6 @@
       "priorityScore": 3.48,
       "tags": [
         "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-12245",
-      "summary": "NSD from version 4.13.0 has a heap use-after-free bug in logging errors on TLS connections, causing a crash of the server process, which can be triggered trivially by sending a DNS query over a DoT connection, and closing the connection without reading the response.",
-      "published": "2026-06-25T07:16:45.080Z",
-      "lastModified": "2026-06-26T02:07:41.173Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00319,
-      "epssPercentile": 0.24207,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.47,
-      "tags": [
-        "F5",
-        "CWE-416"
       ]
     },
     {
@@ -24422,6 +24259,106 @@
       ]
     },
     {
+      "id": "CVE-2026-13589",
+      "summary": "A vulnerability was identified in seladb PcapPlusPlus 25.05. This affects the function pcpp::TelnetLayer::getSubCommand of the file Packet++/src/TelnetLayer.cpp of the component Telnet Subnegotiation Packet Handler. The manipulation leads to heap-based buffer overflow. The attack can be initiated remotely. The complexity of an attack is rather high. The exploitability is reported as difficult. The exploit is publicly available and might be used. The identifier of the patch is 98e671010bc7c87b95898c22ae289220ae92542b. It is recommended to apply a patch to fix this issue.",
+      "published": "2026-06-29T17:16:28.907Z",
+      "lastModified": "2026-06-29T18:47:21.983Z",
+      "severity": "Medium",
+      "cvssScore": 5.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00394,
+      "epssPercentile": 0.31964,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-119",
+          "name": "CWE-119",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-122",
+          "name": "CWE-122",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.08,
+      "tags": [
+        "CWE-119",
+        "CWE-122"
+      ]
+    },
+    {
+      "id": "CVE-2026-13590",
+      "summary": "A security flaw has been discovered in seladb PcapPlusPlus 25.05. This impacts the function pcpp::ModbusLayer::getLength in the library Packet++/header/ModbusLayer.h of the component Modbus Protocol Handler. The manipulation of the argument length results in heap-based buffer overflow. The attack can be launched remotely. A high complexity level is associated with this attack. The exploitability is said to be difficult. The exploit has been released to the public and may be used for attacks. The patch is identified as 4c90c3e3418a2b09dc82b7ca5775e9c1e22fe454. Applying a patch is advised to resolve this issue.",
+      "published": "2026-06-29T17:16:29.057Z",
+      "lastModified": "2026-06-30T16:16:47.357Z",
+      "severity": "Medium",
+      "cvssScore": 5.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00394,
+      "epssPercentile": 0.31964,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-119",
+          "name": "CWE-119",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-122",
+          "name": "CWE-122",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.08,
+      "tags": [
+        "CWE-119",
+        "CWE-122"
+      ]
+    },
+    {
       "id": "CVE-2026-11999",
       "summary": "X.509 trust-chain bypass (path-depth exhaustion) in the OpenSSL compatibility certificate verifier (wolfSSL_X509_verify_cert()). This affects only builds with --enable-opensslextra whose application calls X509_verify_cert() with caller-supplied untrusted intermediates; for those users it is critical, otherwise the library is unaffected. Native wolfSSL TLS/DTLS usage is not impacted. X509_verify_cert() returned success based only on the last verified link rather than on reaching a trust anchor: when the supplied chain is deeper than the verifier's maximum path depth (default 100), path building runs out of depth while still walking untrusted intermediates and the chain is accepted even though it never reaches a configured trust anchor, allowing acceptance of an attacker-controlled certificate. The default TLS handshake (WOLFSSL_VERIFY_PEER) is not affected; only applications doing manual or deferred verification through this API are.",
       "published": "2026-06-25T18:16:37.613Z",
@@ -24962,6 +24899,56 @@
       "tags": [
         "Apache",
         "CWE-400"
+      ]
+    },
+    {
+      "id": "CVE-2026-13588",
+      "summary": "A vulnerability was determined in seladb PcapPlusPlus 25.05. The impacted element is the function pcpp::SSLClientHelloMessage::getHandshakeVersion of the file Packet++/src/SSLHandshake.cpp of the component TLS Hello Handler. Executing a manipulation of the argument handshakeVersion can lead to heap-based buffer overflow. It is possible to launch the attack remotely. This attack is characterized by high complexity. The exploitability is regarded as difficult. The exploit has been publicly disclosed and may be utilized. This patch is called 98e671010bc7c87b95898c22ae289220ae92542b. It is best practice to apply a patch to resolve this issue.",
+      "published": "2026-06-29T17:16:28.753Z",
+      "lastModified": "2026-06-29T18:47:21.983Z",
+      "severity": "Medium",
+      "cvssScore": 5.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.0038,
+      "epssPercentile": 0.30538,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-119",
+          "name": "CWE-119",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-122",
+          "name": "CWE-122",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.03,
+      "tags": [
+        "CWE-119",
+        "CWE-122"
       ]
     },
     {
@@ -29341,56 +29328,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12490",
-      "summary": "When a provide-xfr is given with a tls-auth-name, a secondary requesting a transfer should provide a client certificate with that name. However, no client certificate is needed when the request comes in over TLS over the regular tls-port (and not the tls-auth-port) or over over TCP over the regular port, when the other conditions of the provide-xfr rule match.",
-      "published": "2026-06-25T07:16:45.330Z",
-      "lastModified": "2026-06-26T02:08:03.443Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00156,
-      "epssPercentile": 0.0521,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "CWE-284",
-        "CWE-306"
-      ]
-    },
-    {
       "id": "CVE-2026-53172",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: accel/ethosu: fix IFM region index out-of-bounds in command stream parser NPU_SET_IFM_REGION extracts the region index with param & 0x7f, giving a maximum value of 127. However region_size[] and output_region[] in struct ethosu_validated_cmdstream_info are both sized to NPU_BASEP_REGION_MAX (8), giving valid indices [0..7]. Every other region assignment in the same switch uses param & 0x7: NPU_SET_OFM_REGION: st.ofm.region = param & 0x7; NPU_SET_IFM2_REGION: st.ifm2.region = param & 0x7; NPU_SET_WEIGHT_REGION: st.weight[0].region = param & 0x7; NPU_SET_SCALE_REGION: st.scale[0].region = param & 0x7; The 0x7f mask on IFM is inconsistent and appears to be a typo. feat_matrix_length() and calc_sizes() use the region index directly as an array subscript into the kzalloc'd info struct: info->region_size[fm->region] = max(...); A userspace caller supplying NPU_SET_IFM_REGION with param > 7 causes a write up to 127*8 = 1016 bytes past the start of region_size[], corrupting adjacent kernel heap data. Fix by applying the same & 0x7 mask used by all other region assignments.",
       "published": "2026-06-25T09:16:34.550Z",
@@ -33540,6 +33477,56 @@
       ]
     },
     {
+      "id": "CVE-2026-13751",
+      "summary": "Improper handling of untrusted remote references in Snowflake CLI versions prior to 3.19 allowed server-side request forgery. The SQL statement reader's !source/!load directives could reference remote URLs that were retrieved at runtime without sufficient restriction on the request destination. By supplying crafted SQL content processed through a vulnerable command path, an attacker could cause the victim's environment to issue unintended outbound requests to internal or otherwise non-public network locations, and could cause remote SQL content to be retrieved and executed in the context of the victim user's session. Successful exploitation requires the victim to process attacker-controlled content through a vulnerable command path and is limited by the privileges available to that session and environment. The fix is available in Snowflake CLI version 3.19, which adds an option to disable remote URL retrieval.",
+      "published": "2026-06-29T17:16:30.050Z",
+      "lastModified": "2026-06-30T16:08:08.723Z",
+      "severity": "Medium",
+      "cvssScore": 4.1,
+      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00118,
+      "epssPercentile": 0.01987,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-829",
+          "name": "CWE-829",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-918",
+          "name": "CWE-918",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.5,
+      "tags": [
+        "CWE-829",
+        "CWE-918"
+      ]
+    },
+    {
       "id": "CVE-2026-57330",
       "summary": "Subscriber Cross Site Scripting (XSS) in MasterStudy LMS <= 3.7.27 versions.",
       "published": "2026-06-29T15:16:43.257Z",
@@ -34430,6 +34417,50 @@
       "tags": [
         "Kubernetes",
         "CWE-918"
+      ]
+    },
+    {
+      "id": "CVE-2026-13752",
+      "summary": "Improper neutralization of parameters in Snowflake CLI versions prior to 3.19 allowed unintended SQL execution. An attacker could exploit this by supplying crafted values to vulnerable command paths, causing Snowflake CLI to execute unintended SQL in the context of the user’s Snowflake session. Successful exploitation required crafted values to reach vulnerable parameters, including through socially engineered input, malicious repository configuration, or compromised automation feeding external values into the CLI, and impact is limited by the privileges assigned to the active session. The fix is available in Snowflake CLI version 3.19, and users must manually upgrade.",
+      "published": "2026-06-29T17:16:30.160Z",
+      "lastModified": "2026-06-30T15:59:30.530Z",
+      "severity": "Medium",
+      "cvssScore": 6,
+      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00188,
+      "epssPercentile": 0.08672,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.4,
+      "tags": [
+        "CWE-89"
       ]
     },
     {
@@ -36539,6 +36570,56 @@
       "tags": [
         "CWE-285",
         "CWE-639"
+      ]
+    },
+    {
+      "id": "CVE-2026-13591",
+      "summary": "A weakness has been identified in DeepMyst Mysti 0.4.0. Affected is the function _isTrackedConversation of the file src/managers/ChannelBridge.ts of the component Contact Tracking. This manipulation of the argument _channelType causes improper authorization. The attack may be initiated remotely. A high degree of complexity is needed for the attack. The exploitability is told to be difficult. The exploit has been made available to the public and could be used for attacks. Patch name: 9b4aff0f106db424aa45a35aa89dd0b8f2eb9a48. It is suggested to install a patch to address this issue.",
+      "published": "2026-06-29T17:16:29.210Z",
+      "lastModified": "2026-06-29T18:47:21.983Z",
+      "severity": "Medium",
+      "cvssScore": 5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00199,
+      "epssPercentile": 0.0988,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-266",
+          "name": "CWE-266",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-285",
+          "name": "CWE-285",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.1,
+      "tags": [
+        "CWE-266",
+        "CWE-285"
       ]
     },
     {
@@ -39410,50 +39491,6 @@
       "tags": [
         "Linux",
         "CWE-476"
-      ]
-    },
-    {
-      "id": "CVE-2026-56129",
-      "summary": "Generic IO & Memory Access driver for PCs provided by TOSHIBA CORPORATION and Dynabook Inc. exposes its IOCTL with insufficient access control. A logged-in user with no administrative privilege may access physical memory.",
-      "published": "2026-06-25T08:16:29.960Z",
-      "lastModified": "2026-06-25T13:28:35.737Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00113,
-      "epssPercentile": 0.01676,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-782",
-          "name": "CWE-782",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.98,
-      "tags": [
-        "CWE-782"
       ]
     },
     {
