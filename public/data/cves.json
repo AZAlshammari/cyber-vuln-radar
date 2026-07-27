@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-27T00:14:18.657Z",
+  "generatedAt": "2026-07-27T04:07:36.180Z",
   "count": 1000,
   "items": [
     {
@@ -388,6 +388,50 @@
       ]
     },
     {
+      "id": "CVE-2026-7840",
+      "summary": "UltraVNC repeater through 1.8.2.2 contains a global buffer overflow in its embedded HTTP administration server. The functions wi_senderr() and wi_replyhdr() in repeater/webgui/webutils.c write the caller-supplied HTTP request URI into a fixed 1000-byte global buffer (hdrbuf) via unchecked sprintf calls. The HTTP receive buffer accepts URIs up to approximately 150 KB (WI_RXBUFSIZE = 153600), so an unauthenticated attacker who can reach the repeater HTTP port (default TCP 80) can overflow hdrbuf by at least 500 bytes with a single HTTP request containing a URI of 1500 bytes or longer, corrupting adjacent .bss-segment globals. The overflow occurs before any authentication check, making it reachable without credentials. A remote, unauthenticated attacker can achieve arbitrary code execution on the host running the repeater.",
+      "published": "2026-07-01T05:16:24.820Z",
+      "lastModified": "2026-07-09T06:16:22.340Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.01579,
+      "epssPercentile": 0.72944,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.98,
+      "tags": [
+        "CWE-787"
+      ]
+    },
+    {
       "id": "CVE-2026-48276",
       "summary": "ColdFusion versions 2025.9, 2023.20 and earlier are affected by an Unrestricted Upload of File with Dangerous Type vulnerability that could result in arbitrary code execution in the context of the current user. Exploitation of this issue does not require user interaction. Scope is changed.",
       "published": "2026-06-30T16:16:54.193Z",
@@ -519,6 +563,56 @@
       "priorityScore": 6.52,
       "tags": [
         "CWE-78"
+      ]
+    },
+    {
+      "id": "CVE-2026-7838",
+      "summary": "UltraVNC viewer through 1.8.2.2 contains an integer overflow leading to a heap buffer overflow in the RFB protocol failure-response parsing path. In vncviewer/ClientConnection.cpp, the 4-byte network-supplied reasonLen field (type CARD32) is passed as reasonLen+1 to CheckBufferSize(). Because both operands are unsigned 32-bit, a reasonLen of 0xFFFFFFFF overflows to 0, causing CheckBufferSize to allocate only 256 bytes. The subsequent ReadString(m_netbuf, reasonLen) call then performs ReadExact for the original 4 GiB length into that 256-byte heap buffer. This overflow is reachable via rfbConnFailed (auth-scheme negotiation) and rfbVncAuthFailed (post-handshake) message types without successful authentication. A malicious VNC server, or any man-in-the-middle on the RFB stream, can trigger this condition when the victim viewer connects, potentially resulting in remote code execution as the user running the viewer. The crash was confirmed with AddressSanitizer on a portable reproduction harness (heap-buffer-overflow WRITE at offset 256).",
+      "published": "2026-07-01T05:16:24.540Z",
+      "lastModified": "2026-07-09T06:16:22.033Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.01403,
+      "epssPercentile": 0.6975,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-190",
+          "name": "CWE-190",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.52,
+      "tags": [
+        "CWE-190",
+        "CWE-787"
       ]
     },
     {
@@ -6519,6 +6613,50 @@
       ]
     },
     {
+      "id": "CVE-2026-7839",
+      "summary": "UltraVNC repeater through 1.8.2.2 initializes the HTTP administration server with a hardcoded default password. In repeater/webgui/settings.c:197, when settings2.txt is absent on first run the repeater writes the literal string \"adminadmi2\" as the admin password via strcpy_s(saved_password, 64, \"adminadmi2\"). The HTTP Basic-auth handler wi_decode_auth() checks this password without rate-limiting or lockout. Any remote attacker who can reach the repeater HTTP port (default TCP 80) can authenticate as administrator using the well-known default credential on a fresh or unmodified installation, gaining full control of the repeater configuration including allow/deny rules and session visibility.",
+      "published": "2026-07-01T05:16:24.680Z",
+      "lastModified": "2026-07-09T06:16:22.213Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00425,
+      "epssPercentile": 0.3489,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-798",
+          "name": "CWE-798",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.41,
+      "tags": [
+        "CWE-798"
+      ]
+    },
+    {
       "id": "CVE-2026-13516",
       "summary": "A vulnerability was detected in Tenda JD12L 16.03.53.23. The affected element is the function fromSetWifiGusetBasic of the file /goform/WifiGuestSet. Performing a manipulation of the argument shareSpeed results in stack-based buffer overflow. The attack may be initiated remotely. The exploit is now public and may be used.",
       "published": "2026-06-29T00:16:47.633Z",
@@ -10153,51 +10291,6 @@
       ]
     },
     {
-      "id": "CVE-2026-13333",
-      "summary": "The Groundhogg — CRM, Newsletters, and Marketing Automation plugin for WordPress is vulnerable to generic SQL Injection via 'query[select]' Parameter in all versions up to, and including, 4.5.5 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers, with Sales Representative-level access and above, to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. The sanitized Contact_Query code path can be bypassed by supplying an invalid filter type (e.g., query[filters][0][0][type]=invalid_filter_nonexistent), causing a FilterException to be caught and execution to fall through to the unsanitized Legacy_Contact_Query path.",
-      "published": "2026-06-27T02:16:28.990Z",
-      "lastModified": "2026-06-29T18:40:23.203Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00334,
-      "epssPercentile": 0.25856,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.18,
-      "tags": [
-        "WordPress",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-13295",
       "summary": "The Page Builder by SiteOrigin plugin for WordPress is vulnerable to Stored Cross-Site Scripting via panels_data Parameter in all versions up to, and including, 2.34.3 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with Contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This is possible because the nonce and edit_post capability checks enforced during save are both satisfied by Contributor-level users for their own posts, and the panels_data value is stored as post meta — outside the scope of WordPress's unfiltered_html carve-out — meaning no wp_kses fallback prevents the unsanitized WP_Widget_Custom_HTML content from being persisted and later rendered verbatim on the frontend.",
       "published": "2026-06-27T08:16:44.800Z",
@@ -10891,6 +10984,56 @@
       "priorityScore": 4.11,
       "tags": [
         "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-7831",
+      "summary": "UltraVNC viewer through 1.8.2.2 contains an off-by-one stack buffer overflow in the RFB ServerInit message handler. In vncviewer/ClientConnection.cpp, when the server-supplied nameLength equals exactly 2024 the code declares a 2024-byte stack buffer _dn[2024] and calls ReadString(_dn, 2024). ReadString writes the NUL terminator at buf[length], i.e., _dn[2024], one byte past the end of the stack buffer. A malicious VNC server can trigger this condition by advertising a desktop name of length 2024 in its ServerInit message. On release builds without stack canaries the single-byte NUL overwrite adjacent stack data. On builds with /GS stack protection the canary is corrupted and the process terminates, resulting in denial of service. User interaction (connecting the viewer to the malicious server) is required.",
+      "published": "2026-07-01T05:16:24.380Z",
+      "lastModified": "2026-07-09T06:16:21.900Z",
+      "severity": "High",
+      "cvssScore": 7.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "High"
+      },
+      "epssScore": 0.00525,
+      "epssPercentile": 0.41391,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-193",
+          "name": "CWE-193",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.11,
+      "tags": [
+        "CWE-193",
+        "CWE-787"
       ]
     },
     {
@@ -11883,6 +12026,50 @@
         "Chrome",
         "Windows",
         "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-7829",
+      "summary": "UltraVNC repeater through 1.8.2.2 contains a post-authentication out-of-bounds write in the allow/deny rule parser. In repeater/webgui/settings.c:225-272, after strncpy_s copies a rule token into temp1[rule1] (25-byte destination) or temp2/temp3 (16-byte destination), the code unconditionally writes a NUL terminator at temp1[rule1][len] = 0 without clamping len to the destination size. When an authenticated administrator saves a rule with a token length equal to or greater than the destination size, the NUL byte is written one or more bytes past the end of the stack-allocated array, corrupting adjacent stack data. An attacker who has obtained admin credentials (including via CVE-2026-7839 default password) can trigger this to gain code execution on the repeater host.",
+      "published": "2026-07-01T05:16:24.087Z",
+      "lastModified": "2026-07-09T06:16:21.617Z",
+      "severity": "High",
+      "cvssScore": 7.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "High",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00571,
+      "epssPercentile": 0.43842,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.05,
+      "tags": [
+        "CWE-787"
       ]
     },
     {
@@ -13263,51 +13450,6 @@
         "Chrome",
         "Windows",
         "CWE-602"
-      ]
-    },
-    {
-      "id": "CVE-2026-13331",
-      "summary": "The Groundhogg — CRM, Newsletters, and Marketing Automation plugin for WordPress is vulnerable to generic SQL Injection via the 'search' parameter in all versions up to, and including, 4.5.5 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers, with marketer-level access and above, to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.",
-      "published": "2026-06-27T02:16:28.870Z",
-      "lastModified": "2026-06-29T18:40:23.203Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00272,
-      "epssPercentile": 0.19383,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.95,
-      "tags": [
-        "WordPress",
-        "CWE-89"
       ]
     },
     {
@@ -26038,6 +26180,57 @@
       ]
     },
     {
+      "id": "CVE-2026-7830",
+      "summary": "UltraVNC through 1.8.2.2 uses inadequate cryptography in the MS-Logon II authentication scheme (rfbUltraVNC_MsLogonIIAuth). In rfb/dh.cpp the Diffie-Hellman key exchange is performed with parameters that fit in an unsigned 64-bit integer (DH_MAX_BITS controls the prime size). A 64-bit DH key can be broken by Pollard's rho algorithm in under one second on current hardware. Additionally, the private exponent is generated by the rng() function, which multiplies three libc rand() values seeded from time(NULL). With approximately 31 bits of internal state and a time-based seed, the private exponent is recoverable in under a minute by a passive observer. A network attacker who can observe the MS-Logon II handshake (via sniffing, recording, or man-in-the-middle) can derive the shared DH key and decrypt the encapsulated username and password, resulting in full credential disclosure. This affects legacy MS-Logon II connections; MS-Logon III (X25519 + AES-256-GCM) is unaffected.",
+      "published": "2026-07-01T05:16:24.210Z",
+      "lastModified": "2026-07-09T06:16:21.760Z",
+      "severity": "High",
+      "cvssScore": 7.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.0022,
+      "epssPercentile": 0.12613,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": "Exchange",
+      "cwe": [
+        {
+          "id": "CWE-326",
+          "name": "CWE-326",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-338",
+          "name": "CWE-338",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.03,
+      "tags": [
+        "Exchange",
+        "CWE-326",
+        "CWE-338"
+      ]
+    },
+    {
       "id": "CVE-2026-53325",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: agp/amd64: Fix broken error propagation in agp_amd64_probe() A NULL pointer dereference was observed in the AMD64 AGP driver when running in a virtualized environment (e.g. qemu/kvm) without a physical AMD northbridge. The crash occurs in amd64_fetch_size() when attempting to dereference the pointer returned by node_to_amd_nb(0). The root cause of this crash is broken error propagation in agp_amd64_probe(): When no AMD northbridges are found, cache_nbs() correctly returns -ENODEV. However, the probe function erroneously checks the return value against exactly -1, rather than misc member. Fix the issue by correcting the error check in agp_amd64_probe() to abort properly when cache_nbs() returns any negative error code. This prevents the driver from erroneously proceeding without hardware, thereby avoiding the subsequent NULL pointer dereference at its source.",
       "published": "2026-06-29T06:16:33.167Z",
@@ -29593,51 +29786,6 @@
       ]
     },
     {
-      "id": "CVE-2026-13422",
-      "summary": "The HD Quiz plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions 2.2.0 to 2.2.1. This is due to missing or incorrect nonce validation on the hdq_validate_nonce function. This makes it possible for unauthenticated attackers to delete or modify quizzes and questions, create new quizzes, and change plugin settings via a forged request granted they can trick a site administrator into performing an action such as clicking on a link.",
-      "published": "2026-06-27T02:16:29.237Z",
-      "lastModified": "2026-06-29T18:40:23.203Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00179,
-      "epssPercentile": 0.07721,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-352",
-          "name": "Cross-Site Request Forgery",
-          "description": "A web request may execute without user intent."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.78,
-      "tags": [
-        "WordPress",
-        "CWE-352"
-      ]
-    },
-    {
       "id": "CVE-2026-49414",
       "summary": "The ELF image activator cleared per-process ASLR preference flags for setuid binaries after the code that computes the PIE base address, rather than before. As a result, a user-requested ASLR disable was still in effect at the point where the base address was chosen. An unprivileged local user can disable ASLR for a setuid PIE binary by calling procctl(2) before execve(2). This makes exploitation of any separate memory corruption vulnerability in that binary significantly easier.",
       "published": "2026-06-27T10:16:37.007Z",
@@ -30602,6 +30750,51 @@
       ]
     },
     {
+      "id": "CVE-2026-9107",
+      "summary": "The Kali Forms — Contact Form & Drag-and-Drop Builder plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'meta[kaliforms_field_components]' parameter in all versions up to, and including, 2.4.13 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
+      "published": "2026-07-01T05:16:25.510Z",
+      "lastModified": "2026-07-01T13:56:17.493Z",
+      "severity": "Medium",
+      "cvssScore": 6.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00234,
+      "epssPercentile": 0.14465,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.75,
+      "tags": [
+        "WordPress",
+        "CWE-79"
+      ]
+    },
+    {
       "id": "CVE-2025-36333",
       "summary": "IBM watsonx.data intelligence 5.2.0, 5.2.1, 5.2.2, 5.3.0 could allow an authenticated user to perform unauthorized actions due to the improper enforcement of behavioral workflow.",
       "published": "2026-06-30T21:16:29.903Z",
@@ -30825,51 +31018,6 @@
         "Google",
         "Chrome",
         "CWE-346"
-      ]
-    },
-    {
-      "id": "CVE-2023-37524",
-      "summary": "HCL Traveler for Microsoft Outlook (HTMO) is susceptible to vulnerabilities due to .NET Framework 4.5 being out of service. Since .NET Framework 4.5 has reached end-of-life and no longer receives security updates, it may expose the application to publicly known security weaknesses through vulnerable third-party components.",
-      "published": "2026-06-27T02:16:27.603Z",
-      "lastModified": "2026-07-06T17:47:19.513Z",
-      "severity": "High",
-      "cvssScore": 7.7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.001,
-      "epssPercentile": 0.01009,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Microsoft",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-1104",
-          "name": "CWE-1104",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.73,
-      "tags": [
-        "Microsoft",
-        "CWE-1104"
       ]
     },
     {
@@ -32474,52 +32622,6 @@
       ]
     },
     {
-      "id": "CVE-2026-13335",
-      "summary": "The CodePeople Post Map for Google Maps plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'cpm_point' Post Meta in all versions up to, and including, 1.2.6 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with Contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
-      "published": "2026-06-27T02:16:29.110Z",
-      "lastModified": "2026-06-29T18:40:23.203Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00204,
-      "epssPercentile": 0.1058,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.61,
-      "tags": [
-        "Google",
-        "WordPress",
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-13875",
       "summary": "Insufficient validation of untrusted input in GPU in Google Chrome on Windows prior to 150.0.7871.47 allowed a remote attacker who had compromised the renderer process to obtain potentially sensitive information from process memory via a crafted HTML page. (Chromium security severity: Medium)",
       "published": "2026-06-30T23:17:01.810Z",
@@ -34058,51 +34160,6 @@
         "Chrome",
         "Android",
         "CWE-346"
-      ]
-    },
-    {
-      "id": "CVE-2026-11356",
-      "summary": "The Ivory Search – WordPress Search Plugin plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'menu_title' and 'menu_magnifier_color' Settings in all versions up to, and including, 5.5.15 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with administrator-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
-      "published": "2026-06-27T02:16:28.713Z",
-      "lastModified": "2026-06-29T20:17:32.243Z",
-      "severity": "Medium",
-      "cvssScore": 4.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00344,
-      "epssPercentile": 0.26908,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.48,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -39521,51 +39578,6 @@
       "tags": [
         "WordPress",
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2025-59868",
-      "summary": "HCL Traveler for Microsoft Outlook (HTMO) is susceptible to a sensitive data exposure vulnerability which could allow an attacker to exploit application information to then attempt additional attacks and cause unknown behavior in the application.",
-      "published": "2026-06-27T02:16:28.593Z",
-      "lastModified": "2026-07-06T17:45:28.027Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00108,
-      "epssPercentile": 0.01399,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Microsoft",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-532",
-          "name": "CWE-532",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.97,
-      "tags": [
-        "Microsoft",
-        "CWE-532"
       ]
     },
     {
