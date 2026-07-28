@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-28T04:31:01.493Z",
+  "generatedAt": "2026-07-28T07:19:57.189Z",
   "count": 1000,
   "items": [
     {
@@ -3272,6 +3272,50 @@
       "priorityScore": 4.99,
       "tags": [
         "CWE-190"
+      ]
+    },
+    {
+      "id": "CVE-2026-14198",
+      "summary": "@fastify/middie versions 9.1.0 through 9.3.2 decode the encoded slash %2F inside path parameter values before matching middleware paths, while Fastify's underlying router preserves the encoding during route lookup. The two layers disagree on the canonical request path, so the middleware fails to match a URL that the route handler does match. When middleware is used for authentication, authorization, rate limiting, or auditing on parameterized paths, an attacker can reach the protected handler by sending a single crafted URL with an encoded slash in the parameter position. The bypass is HTTP method agnostic and requires no authentication or special preconditions. Patches: upgrade to @fastify/middie 9.3.3. Workarounds: avoid parameterized middleware paths for security decisions, or enforce authentication at the route handler or via a Fastify hook that runs after the router has resolved the request.",
+      "published": "2026-07-01T12:16:38.463Z",
+      "lastModified": "2026-07-02T13:50:22.723Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00299,
+      "epssPercentile": 0.22082,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-436",
+          "name": "CWE-436",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.96,
+      "tags": [
+        "CWE-436"
       ]
     },
     {
@@ -7503,6 +7547,50 @@
       "priorityScore": 4.37,
       "tags": [
         "CWE-94"
+      ]
+    },
+    {
+      "id": "CVE-2026-14181",
+      "summary": "@fastify/middie versions 9.1.0 through 9.3.2 fail to guard the URL normalization step used by the standalone engine when incoming request paths contain malformed percent-encoded sequences. Inputs such as an incomplete percent escape or a truncated multibyte sequence cause the underlying decoder to throw synchronously, and the exception escapes the middie normalize step and terminates the Node.js process. The bypass affects applications that call middie.run directly on the standalone engine API, causing an immediate denial of service for all connected clients until restart. Applications using the Fastify plugin path are not affected because Fastifys error handler catches the exception. Patches: upgrade to @fastify/middie 9.3.3. Workarounds: migrate from the standalone engine API to the Fastify plugin path, where the framework error handler catches the exception.",
+      "published": "2026-07-01T12:16:38.343Z",
+      "lastModified": "2026-07-02T13:50:58.743Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00291,
+      "epssPercentile": 0.21303,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-248",
+          "name": "CWE-248",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.37,
+      "tags": [
+        "CWE-248"
       ]
     },
     {
@@ -18789,6 +18877,56 @@
       ]
     },
     {
+      "id": "CVE-2026-53902",
+      "summary": "MCO does not properly enforce authorization checks in the /customer/servlet/mco/webapi/profile-sections/group-membership endpoint. An authenticated user can modify their group membership without proper authorization checks, allowing privilege escalation. An attacker can add themselves to arbitrary groups by supplying a valid group ID, which can be obtained via other application functionalities (e.g. /customer/servlet/mco/webapi/group/picker/groups), provided he has necessary permissions, or potentially inferred through brute-force techniques. Because vendor contact attempts were unsuccessful, the vulnerability has only been confirmed in version 25.3.3.1 but may also affect other versions.",
+      "published": "2026-07-01T13:17:45.237Z",
+      "lastModified": "2026-07-06T17:39:04.233Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00208,
+      "epssPercentile": 0.1114,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-266",
+          "name": "CWE-266",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-863",
+          "name": "CWE-863",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.66,
+      "tags": [
+        "CWE-266",
+        "CWE-863"
+      ]
+    },
+    {
       "id": "CVE-2026-57329",
       "summary": "Subscriber Cross Site Scripting (XSS) in WooCommerce Designer Pro <= 1.9.34 versions.",
       "published": "2026-06-29T15:16:43.150Z",
@@ -21692,50 +21830,6 @@
       ]
     },
     {
-      "id": "CVE-2026-10646",
-      "summary": "Zephyr's BSD-sockets getaddrinfo() implementation (subsys/net/lib/sockets/getaddrinfo.c) passes a pointer to a stack-allocated state object (struct getaddrinfo_state ai_state) as the user_data of an asynchronous DNS resolver query. The socket layer waits on a semaphore with a timeout deliberately set slightly longer than the resolver's own per-query timeout. When that semaphore wait nonetheless times out (-EAGAIN) - which can occur when the resolver's timeout work is delayed by workqueue contention, or in the documented multi-retry configuration where CONFIG_NET_SOCKETS_DNS_TIMEOUT exceeds CONFIG_NET_SOCKETS_DNS_BACKOFF_INTERVAL - the pre-fix code retries the query (goto again) without cancelling the previous one and without resetting the semaphore. The previous query slot remains active in the resolver with its callback and the stack pointer as user_data, and ai_state->dns_id is overwritten so the stale query can no longer be cancelled. A subsequent DNS response delivered over UDP and matched by its 16-bit transaction id (in dispatcher_cb()/dns_read()), or the resolver's own delayed query-timeout work, then invokes dns_resolve_cb() against the now out-of-scope stack frame, writing through the stale pointer (state->status, state->idx, state->ai_arr[], and k_sem_give()). Because the triggering response is network-delivered and its 16-bit id is spoofable/replayable by an on- or off-path attacker, this is a network-influenceable use-after-return that can corrupt reused stack memory, leading to crashes/denial of service or memory corruption. The fix cancels the timed-out query by name and type before retrying and resets the local semaphore, eliminating the stale callback path. Affected: Zephyr v4.0.0 through v4.4.0.",
-      "published": "2026-06-28T05:16:21.083Z",
-      "lastModified": "2026-07-14T19:16:48.220Z",
-      "severity": "High",
-      "cvssScore": 7.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0032,
-      "epssPercentile": 0.24316,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.44,
-      "tags": [
-        "CWE-416"
-      ]
-    },
-    {
       "id": "CVE-2026-12923",
       "summary": "The Youtube Showcase plugin for WordPress is vulnerable to Arbitrary Function Call in versions up to and including 4.0.3. This is due to insufficient validation of the 'path' parameter in the emd_delete_file() AJAX handler in includes/common-functions.php. The user-supplied value is passed through sanitize_text_field(), has its trailing '_PLUGIN_DIR' substring stripped, and is then invoked as a PHP function name with no arguments via `$sess_name()`. The handler is gated only by a nonce — no current_user_can() check is present — and the nonce is emitted on any front-end page that renders a form shortcode containing file fields. This makes it possible for authenticated attackers, with Subscriber-level access and above, to invoke arbitrary zero-argument PHP functions (such as phpinfo, phpversion, get_defined_vars, error_get_last), resulting in sensitive information disclosure and potential further compromise depending on the functions available in the environment.",
       "published": "2026-07-01T05:16:18.040Z",
@@ -22238,6 +22332,50 @@
         "Google",
         "Chrome",
         "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-53903",
+      "summary": "MCO is vulnerable to an Insecure Direct Object Reference (IDOR) vulnerability in the /customer/servlet/mco/webapi/trading-document/fetchPdfStatement endpoint. The application does not properly validate whether an authenticated user is authorized to access a requested document, allowing direct retrieval based on a user-supplied identifier. An attacker can access trading documents belonging to other users by providing a valid document ID. Although exploitation requires guessing the identifier, predictable ID patterns enable feasible enumeration, leading to unauthorized disclosure of sensitive information. Because vendor contact attempts were unsuccessful, the vulnerability has only been confirmed in version 25.3.3.1 but may also affect other versions.",
+      "published": "2026-07-01T13:17:45.373Z",
+      "lastModified": "2026-07-06T17:33:20.423Z",
+      "severity": "High",
+      "cvssScore": 8.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00244,
+      "epssPercentile": 0.15672,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-639",
+          "name": "CWE-639",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.38,
+      "tags": [
+        "CWE-639"
       ]
     },
     {
@@ -26855,50 +26993,6 @@
       ]
     },
     {
-      "id": "CVE-2026-10593",
-      "summary": "The Zephyr Bluetooth LE Audio Basic Audio Profile (BAP) unicast client mishandles peer-supplied ASE state notifications. In unicast_client_ep_qos_state() (subsys/bluetooth/audio/bap_unicast_client.c), the handler writes attacker-controlled QoS fields (interval, framing, phy, sdu, rtn, latency, pd) through the stream->qos pointer with only a stream != NULL guard. stream->qos is NULL for any stream that has been codec-configured via bt_bap_stream_config() but not yet added to a unicast group (it is set only by unicast_group_add_stream()). A malicious or buggy remote ASCS server, to which the local device is connected as a BAP unicast client, can send a GATT notification announcing the ASE has entered the QoS Configured state while the local endpoint is still in the Codec Configured state — a transition the dispatcher explicitly permits — during that window, causing a write through a NULL pointer and a crash (denial of service). The data written is itself remote-controlled. The defect shipped in v4.3.0 and v4.4.0 (and earlier). The fix re-points all BAP QoS storage to the always-valid embedded ep->qos struct, eliminating the NULL dereference.",
-      "published": "2026-06-28T05:16:20.097Z",
-      "lastModified": "2026-07-14T19:16:46.663Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00282,
-      "epssPercentile": 0.20417,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.99,
-      "tags": [
-        "CWE-476"
-      ]
-    },
-    {
       "id": "CVE-2026-43706",
       "summary": "A double free issue was addressed with improved memory management. This issue is fixed in iOS 26.5.2 and iPadOS 26.5.2, macOS Sequoia 15.7.8, macOS Sonoma 14.8.8, macOS Tahoe 26.5.2, tvOS 26.6, visionOS 26.6, watchOS 26.6. Processing maliciously crafted web content may lead to an unexpected process crash.",
       "published": "2026-06-29T20:17:35.570Z",
@@ -29130,6 +29224,50 @@
       "priorityScore": 2.84,
       "tags": [
         "CWE-670"
+      ]
+    },
+    {
+      "id": "CVE-2026-13323",
+      "summary": "In Open VSX Registry before 1.0.2, the /vscode/unpkg/ endpoint serves user-supplied HTML files with Content-Type: text/html and without a Content-Security-Policy or Content-Disposition: attachment response header. An unauthenticated attacker can register a publisher account, upload a VSIX containing a crafted HTML payload, and induce an authenticated user to visit the resulting URL. The browser renders the file inline in the open-vsx.org origin context, enabling session token exfiltration, persistent Personal Access Token (PAT) generation, and unauthorized publication of malicious extension versions. Because Open VSX extensions are distributed to VS Code, VSCodium, Cursor, Windsurf, and compatible editors, a compromised extension update constitutes a supply chain attack against all downstream users.",
+      "published": "2026-07-01T12:16:38.117Z",
+      "lastModified": "2026-07-06T20:33:10.970Z",
+      "severity": "Medium",
+      "cvssScore": 4.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00212,
+      "epssPercentile": 0.11613,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.84,
+      "tags": [
+        "CWE-79"
       ]
     },
     {
@@ -39628,50 +39766,6 @@
       ]
     },
     {
-      "id": "CVE-2026-10644",
-      "summary": "The Microchip SERCOM-G1 UART driver (drivers/serial/uart_mchp_sercom_g1.c), used by the PIC32CM-JH SoC family, contains an out-of-bounds write in its asynchronous (DMA) receive path. When uart_rx_enable() is invoked with a one-byte receive buffer (len == 1) and CONFIG_UART_MCHP_ASYNC is enabled, the RX-complete ISR starts a single-beat DMA transfer while a received byte is already pending in the SERCOM DATA register. On this SoC the peripheral-triggered DMA start sequencing then writes one byte past the end of the caller-supplied buffer (CWE-787). The overflowed byte's value is the UART RX data supplied by the connected serial peer (adjacent attacker), while its size and location are fixed at one byte immediately after the buffer. Exploitation requires the async UART config (not enabled by default on the in-tree PIC32CM-JH boards) and a consumer that enables RX with a one-byte buffer; impact is limited single-byte memory corruption adjacent to the RX buffer (possible crash / denial of service). The defect shipped in v4.4.0. The fix reads the first byte with the CPU and, for one-byte buffers, performs no DMA at all; for larger buffers it sizes the DMA for the remaining len-1 bytes.",
-      "published": "2026-06-28T05:16:20.980Z",
-      "lastModified": "2026-07-14T19:16:47.990Z",
-      "severity": "Medium",
-      "cvssScore": 4.2,
-      "cvssVector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00229,
-      "epssPercentile": 0.13827,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.95,
-      "tags": [
-        "CWE-787"
-      ]
-    },
-    {
       "id": "CVE-2026-12114",
       "summary": "The Team Members – Multi Language Supported Team Plugin plugin for WordPress is vulnerable to Stored Cross-Site Scripting via admin settings in all versions up to, and including, 8.7 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with administrator-level permissions and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This only affects multi-site installations and installations where unfiltered_html has been disabled.",
       "published": "2026-06-30T03:17:09.940Z",
@@ -43453,56 +43547,6 @@
       ]
     },
     {
-      "id": "CVE-2026-13482",
-      "summary": "A vulnerability was detected in skypilot-org skypilot up to 0.12.0. Impacted is the function username.encode of the file sky/users/server.py of the component User ID Handler. The manipulation results in use of weak hash. The attack may be performed from remote. This attack is characterized by high complexity. The exploitability is considered difficult. The exploit is now public and may be used. The vendor was contacted early about this disclosure.",
-      "published": "2026-06-28T05:16:21.200Z",
-      "lastModified": "2026-06-29T18:46:31.617Z",
-      "severity": "Low",
-      "cvssScore": 3.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00189,
-      "epssPercentile": 0.08795,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-327",
-          "name": "CWE-327",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-328",
-          "name": "CWE-328",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.6,
-      "tags": [
-        "CWE-327",
-        "CWE-328"
-      ]
-    },
-    {
       "id": "CVE-2026-13502",
       "summary": "A flaw has been found in antlr ANTLR4 up to 4.13.2. This affects the function ObjectInputStream.readObject of the file antlr4-maven-plugin/src/main/java/org/antlr/mojo/antlr4/GrammarDependencies.java of the component Maven Plugin. This manipulation causes time-of-check time-of-use. The attack is restricted to local execution. A high degree of complexity is needed for the attack. It is indicated that the exploitability is difficult. The exploit has been published and may be used. The vendor was contacted early about this disclosure but did not respond in any way.",
       "published": "2026-06-28T15:16:53.150Z",
@@ -44968,50 +45012,6 @@
       "priorityScore": 1.14,
       "tags": [
         "CWE-789"
-      ]
-    },
-    {
-      "id": "CVE-2026-13483",
-      "summary": "A flaw has been found in arc53 DocsGPT up to 0.18.0. The affected element is the function encrypt_credentials of the file application/security/encryption.py of the component Credential Storage. This manipulation causes insufficient verification of data authenticity. It is possible to initiate the attack remotely. The complexity of an attack is rather high. The exploitability is described as difficult. The exploit has been published and may be used. The pull request to fix this issue awaits acceptance.",
-      "published": "2026-06-28T07:16:21.417Z",
-      "lastModified": "2026-06-29T18:43:23.110Z",
-      "severity": "Low",
-      "cvssScore": 3.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00097,
-      "epssPercentile": 0.00883,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-345",
-          "name": "CWE-345",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.12,
-      "tags": [
-        "CWE-345"
       ]
     },
     {
