@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-27T23:37:45.348Z",
+  "generatedAt": "2026-07-28T01:06:16.347Z",
   "count": 1000,
   "items": [
     {
@@ -12836,51 +12836,6 @@
       ]
     },
     {
-      "id": "CVE-2026-8095",
-      "summary": "The Frontend File Manager Plugin plugin for WordPress is vulnerable to Authenticated Arbitrary File Deletion in versions up to and including 23.6. This is due to a case-sensitive bypass of the wpfm_dir_path parameter sanitization in the wpfm_file_meta_update AJAX handler, where supplying WPFM_DIR_PATH in uppercase evades the unset check and is normalized to wpfm_dir_path by sanitize_key() during update_post_meta(), allowing an attacker to overwrite the stored file path with an arbitrary filesystem path that is then passed directly to unlink() in delete_file_locally() without any directory containment validation. This makes it possible for authenticated attackers with Subscriber-level access to delete arbitrary files on the server, including sensitive files such as wp-config.php, potentially leading to full site takeover.",
-      "published": "2026-06-28T00:16:25.180Z",
-      "lastModified": "2026-06-29T18:40:23.203Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00405,
-      "epssPercentile": 0.33136,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-73",
-          "name": "CWE-73",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.99,
-      "tags": [
-        "WordPress",
-        "CWE-73"
-      ]
-    },
-    {
       "id": "CVE-2026-58057",
       "summary": "Flowise before 3.1.3 validates Custom MCP stdio environment variables against a denylist using a case-sensitive comparison, so on Windows, where environment names are case-insensitive, supplying 'node_options' bypasses the NODE_OPTIONS denylist entry. An authenticated user who can configure a Custom MCP node can thereby inject NODE_OPTIONS --require and execute arbitrary code in the Flowise server context.",
       "published": "2026-06-28T02:16:32.990Z",
@@ -24266,50 +24221,6 @@
       ]
     },
     {
-      "id": "CVE-2026-10643",
-      "summary": "Zephyr's IP socket recvmsg() implementation (subsys/net/lib/sockets/sockets_inet.c, insert_pktinfo()) validated the user-supplied ancillary (msg_control) buffer using only the payload length (msg->msg_controllen < pktinfo_len) before writing a full control message consisting of an aligned cmsg header plus the payload. Because the check omitted the cmsg header size, a control buffer whose length falls in the under-checked window (e.g. 16-27 bytes for IPv4 IP_PKTINFO on a 64-bit target, where a single element actually occupies 28 bytes) passes the guard yet causes a fixed-size out-of-bounds write of up to one cmsg header (~12 bytes) past the end of the buffer. Under CONFIG_USERSPACE the recvmsg verifier allocates a kernel-heap copy of the control buffer sized to msg_controllen and runs the implementation against it, so the overflow corrupts kernel heap memory and is triggerable from an unprivileged userspace thread; in supervisor mode it corrupts the caller's buffer. The path is reachable on a UDP/IP socket with IP_PKTINFO/IPV6_RECVPKTINFO (or hoplimit/timestamping) enabled when the application calls recvmsg() with an undersized control buffer and a datagram is received; part of the overwritten bytes (the destination IP in ipi_addr) is influenced by the received packet. The fix makes the capacity check use NET_CMSG_SPACE(pktinfo_len) (aligned header + aligned data) and returns -ENOMEM when the buffer is too small. Affected: v3.6.0 through v4.4.0.",
-      "published": "2026-06-28T00:16:24.637Z",
-      "lastModified": "2026-07-14T19:16:47.870Z",
-      "severity": "High",
-      "cvssScore": 8.7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00125,
-      "epssPercentile": 0.02585,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.14,
-      "tags": [
-        "CWE-787"
-      ]
-    },
-    {
       "id": "CVE-2026-43712",
       "summary": "The issue was addressed with improved memory handling. This issue is fixed in Safari 26.5.2, iOS 26.5.2 and iPadOS 26.5.2, macOS Tahoe 26.5.2, tvOS 26.6, visionOS 26.6, watchOS 26.6. Processing maliciously crafted web content may lead to an unexpected process crash.",
       "published": "2026-06-29T20:17:35.977Z",
@@ -33556,6 +33467,51 @@
         "Google",
         "WordPress",
         "CWE-352"
+      ]
+    },
+    {
+      "id": "CVE-2026-12732",
+      "summary": "The LearnPress plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'class_wrapper_form' shortcode attribute in versions up to, and including, 4.4.0. This is due to insufficient input sanitization and output escaping in the FilterCourseTemplate::sections() method at line 98, where the attacker-controlled attribute is inserted into an HTML class attribute via sprintf(' ', $class_wrapper_form) without esc_attr() escaping. The FilterCourseShortcode::render() handler does not apply shortcode_atts() filtering, so raw user attributes flow directly through do_action('learn-press/filter-courses/layout', $data) into the template. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
+      "published": "2026-07-01T08:16:21.487Z",
+      "lastModified": "2026-07-01T13:56:17.493Z",
+      "severity": "Medium",
+      "cvssScore": 6.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00188,
+      "epssPercentile": 0.08648,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.54,
+      "tags": [
+        "WordPress",
+        "CWE-79"
       ]
     },
     {
@@ -45727,6 +45683,50 @@
       "priorityScore": 0.59,
       "tags": [
         "CWE-190"
+      ]
+    },
+    {
+      "id": "CVE-2026-12577",
+      "summary": "DVP80ES3 with Improperly Implemented Security Check for Standard vulnerability.",
+      "published": "2026-07-01T08:16:21.380Z",
+      "lastModified": "2026-07-01T15:28:59.390Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00253,
+      "epssPercentile": 0.16742,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-358",
+          "name": "CWE-358",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.59,
+      "tags": [
+        "CWE-358"
       ]
     },
     {
