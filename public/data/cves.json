@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-28T23:17:03.285Z",
+  "generatedAt": "2026-07-29T00:58:31.376Z",
   "count": 1000,
   "items": [
     {
@@ -6600,56 +6600,6 @@
       ]
     },
     {
-      "id": "CVE-2026-13515",
-      "summary": "A security vulnerability has been detected in Tenda JD12L 16.03.53.23. Impacted is the function formSetPPTPServer of the file /goform/SetPptpServerCfg. Such manipulation of the argument startIp leads to stack-based buffer overflow. The attack can be launched remotely. The exploit has been disclosed publicly and may be used.",
-      "published": "2026-06-29T00:16:47.463Z",
-      "lastModified": "2026-06-29T18:46:31.617Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00476,
-      "epssPercentile": 0.3853,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-119",
-          "name": "CWE-119",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-121",
-          "name": "CWE-121",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.43,
-      "tags": [
-        "CWE-119",
-        "CWE-121"
-      ]
-    },
-    {
       "id": "CVE-2026-13759",
       "summary": "IBM WebSphere Extreme Scale 8.6.1.0 through 8.6.1.6 ships three ObjectInputStream subclasses (WsObjectInputStream, ObjectStreamPool$ReusableInputStream, ObjectInputStreamResolver) that install no JEP-290 class filter; when Coherence is on the classpath, multiple RCE gadget chains including RemoteConstructor.readResolve and PriorityQueue/ExtractorComparator are confirmed working, allowing a post-login attacker who can write a session attribute or a LAN-adjacent attacker on the grid replication wire to execute arbitrary code on peer WAS JVMs",
       "published": "2026-06-30T20:17:28.953Z",
@@ -6738,56 +6688,6 @@
         "Chrome",
         "Android",
         "CWE-416"
-      ]
-    },
-    {
-      "id": "CVE-2026-13516",
-      "summary": "A vulnerability was detected in Tenda JD12L 16.03.53.23. The affected element is the function fromSetWifiGusetBasic of the file /goform/WifiGuestSet. Performing a manipulation of the argument shareSpeed results in stack-based buffer overflow. The attack may be initiated remotely. The exploit is now public and may be used.",
-      "published": "2026-06-29T00:16:47.633Z",
-      "lastModified": "2026-06-29T18:46:31.617Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00466,
-      "epssPercentile": 0.37891,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-119",
-          "name": "CWE-119",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-121",
-          "name": "CWE-121",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.41,
-      "tags": [
-        "CWE-119",
-        "CWE-121"
       ]
     },
     {
@@ -20613,6 +20513,51 @@
       ]
     },
     {
+      "id": "CVE-2026-53346",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: rust: arm64: set uwtable llvm module flag for CONFIG_UNWIND_TABLES Due to a rustc bug [1] the -Cforce-unwind-tables=y flag only emits the uwtable annotation for functions, but not for the module. This means that compiler-generated functions such as 'asan.module_ctor' do not receive the uwtable annotation. When CONFIG_UNWIND_PATCH_PAC_INTO_SCS is enabled, this leads to boot failures because the dwarf information emitted for the kasan constructors is wrong, which causes the SCS boot patching code to patch the constructor in an illegal manner. Specifically, the paciasp instruction is patched, but the autiasp instruction is not. This mismatch leads to a crash when the constructor is called during boot. ================================================================== BUG: KASAN: global-out-of-bounds in do_basic_setup+0x4c/0x90 Read of size 8 at addr ffffffe3cc7eb488 by task swapper/0/1 Specifically the faulting instruction is the (*fn)() to invoke the constructor in do_ctors() of the init/main.c file. Once the fix lands in rustc, this flag can be made conditional on the rustc version. Note that passing the flag on a rustc with the fix present has no effect. [ The fix [1] has landed for Rust 1.98.0 (expected release on 2026-08-20). Thus add a version check as discussed. - Miguel ] [ Adjusted link and comment. - Miguel ]",
+      "published": "2026-07-01T14:16:42.693Z",
+      "lastModified": "2026-07-22T19:16:11.077Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00116,
+      "epssPercentile": 0.01905,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.55,
+      "tags": [
+        "Linux",
+        "CWE-125"
+      ]
+    },
+    {
       "id": "CVE-2026-41992",
       "summary": "GNU gzip contains a global buffer overflow vulnerability in the LZH decompression logic caused by improper reuse of shared global state between different decompression formats within a single execution. GNU gzip maintains a global array that is shared across the LZ77, LZW, and LZH decompression routines and is not reinitialized between files processed in the same invocation. By decompressing a specially crafted LZW file followed by a specially crafted LZH file in a single gzip -d command, an attacker can poison the shared global state and subsequently trigger an out‑of‑bounds read in the LZH decoder. The LZH decompression logic follows stale values left in the shared array, causing reads past the end of the allocated global buffer. This issue has been fixed in the commit 63dbf6b3b9e6e781df1a6a64e609b10e23969681",
       "published": "2026-06-29T12:16:29.940Z",
@@ -29594,6 +29539,51 @@
       ]
     },
     {
+      "id": "CVE-2026-53341",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: fhandle: fix UAF due to unlocked ->mnt_ns read in may_decode_fh() may_decode_fh() accesses mount::mnt_ns without holding any locks; that means the mount can concurrently be unmounted, and the mnt_namespace can concurrently be freed after an RCU grace period. This race can happens as follows, assuming that the mount point was created by open_tree(..., OPEN_TREE_CLONE): thread 1 thread 2 RCU __do_sys_open_by_handle_at do_handle_open handle_to_path may_decode_fh is_mounted [mount::mnt_ns access] [mount::mnt_ns access] __do_sys_close fput_close_sync __fput dissolve_on_fput umount_tree class_namespace_excl_destructor namespace_unlock free_mnt_ns mnt_ns_tree_remove call_rcu(mnt_ns_release_rcu) mnt_ns_release_rcu mnt_ns_release kfree [mnt_namespace::user_ns access] **UAF** Fix it by taking rcu_read_lock() around the mount::mnt_ns access, like in __prepend_path(). Additionally, document the semantics of mount::mnt_ns, and use WRITE_ONCE() for writers that can race with lockless readers. This bug is unreachable unless one of the following is set: - CONFIG_PREEMPTION - CONFIG_RCU_STRICT_GRACE_PERIOD because it requires an RCU grace period to happen during a syscall without an explicit preemption. This doesn't seem to have interesting security impact; worst-case, it could leak the result of an integer comparison to userspace (from the level check in cap_capable()), cause an endless loop, or crash the kernel by dereferencing an invalid address.",
+      "published": "2026-07-01T14:16:42.143Z",
+      "lastModified": "2026-07-23T21:32:39.067Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0012,
+      "epssPercentile": 0.0214,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.8,
+      "tags": [
+        "Linux",
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-58448",
       "summary": "yudao-cloud before 2026.06 contains a broken access control vulnerability in the BPM module that allows any authenticated user to access arbitrary process instance records by supplying a caller-controlled process-instance identifier to an unprotected endpoint lacking the @PreAuthorize annotation. Attackers can query any process-instance identifier through the unguarded GET endpoint to read sensitive workflow data including submitted form variables, approver identities, approval and rejection comments, and process BPMN XML without ownership or tenant party verification.",
       "published": "2026-06-30T22:16:58.240Z",
@@ -31851,56 +31841,6 @@
         "Chrome",
         "Windows",
         "CWE-693"
-      ]
-    },
-    {
-      "id": "CVE-2026-13512",
-      "summary": "A vulnerability was identified in Databend up to 1.2.881 on HTTP. This affects the function ClientSessionManager::state_key of the file src/query/service/src/servers/http/v1/session/client_session_manager.rs of the component Tenant Handler. The manipulation leads to authorization bypass. It is possible to initiate the attack remotely. The exploit is publicly available and might be used. The pull request to fix this issue awaits acceptance.",
-      "published": "2026-06-28T23:16:48.487Z",
-      "lastModified": "2026-06-30T18:16:43.397Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.0022,
-      "epssPercentile": 0.1265,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-285",
-          "name": "CWE-285",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.65,
-      "tags": [
-        "CWE-285",
-        "CWE-639"
       ]
     },
     {
@@ -39313,6 +39253,44 @@
       ]
     },
     {
+      "id": "CVE-2026-53343",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ARM: 9475/1: entry: use byte load for KASAN VMAP stack shadow Commit 44e9a3bb76e5 (\"ARM: 9430/1: entry: Do a dummy read from VMAP shadow\") added a dummy read from the KASAN VMAP stack shadow in __switch_to(). The read uses ldr, but the KASAN shadow address is byte-granular and is not guaranteed to be word aligned. ARMv5 faults unaligned word loads. With CONFIG_KASAN_VMALLOC and CONFIG_VMAP_STACK enabled, ARM926/VersatilePB crashes in __switch_to() with an alignment exception before reaching init. Use ldrb for the dummy shadow access. The code only needs to fault in the shadow mapping if the stack shadow is missing, so a byte load is sufficient and matches the granularity of KASAN shadow memory.",
+      "published": "2026-07-01T14:16:42.363Z",
+      "lastModified": "2026-07-23T21:32:28.700Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00114,
+      "epssPercentile": 0.01731,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.99,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-13842",
       "summary": "Inappropriate implementation in Chrome for iOS in Google Chrome on iOS prior to 150.0.7871.47 allowed a remote attacker to spoof the contents of the Omnibox (URL bar) via a crafted HTML page. (Chromium security severity: High)",
       "published": "2026-06-30T23:16:58.750Z",
@@ -39524,6 +39502,127 @@
       "tags": [
         "Linux",
         "CWE-476"
+      ]
+    },
+    {
+      "id": "CVE-2026-53340",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: i2c: imx: fix clock and pinctrl state inconsistency in runtime PM In i2c_imx_runtime_suspend(), the clock is disabled before switching the pinctrl state to sleep. If pinctrl_pm_select_sleep_state() fails, the runtime suspend is aborted but the clock remains disabled, causing a system crash when the hardware is subsequently accessed. Fix this by switching the pinctrl state before disabling the clock so that a pinctrl failure leaves the clock enabled and the hardware accessible. In i2c_imx_runtime_resume(), restore the pinctrl state back to sleep if clk_enable() fails to keep the consistent.",
+      "published": "2026-07-01T14:16:42.040Z",
+      "lastModified": "2026-07-23T21:32:49.007Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00112,
+      "epssPercentile": 0.0163,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.98,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53342",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: arm64: mm: call pagetable dtor when freeing hot-removed page tables Since 5e8eb9aeeda3 (\"arm64: mm: always call PTE/PMD ctor in __create_pgd_mapping()\") page-table allocation on ARM64 always calls pagetable_{pte,pmd,pud,p4d}_ctor(). This sets the page_type to PGTY_table, increments NR_PAGETABLE and possible allocates a PTL. However the matching pagetable_dtor() calls were never added. With DEBUG_VM enabled on kernel versions prior to v6.17 without 2dfcd1608f3a9 (\"mm/page_alloc: let page freeing clear any set page type\") this leads to the following warning when freeing these pages due to page->page_type sharing page->_mapcount: BUG: Bad page state in process ... pfn:284fbb page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x284fbb flags: 0x17fffc000000000(node=0|zone=2|lastcpupid=0x1ffff) page_type: f2(table) page dumped because: nonzero mapcount Call trace: bad_page+0x13c/0x160 __free_frozen_pages+0x6cc/0x860 ___free_pages+0xf4/0x180 free_pages+0x54/0x80 free_hotplug_page_range.part.0+0x58/0x90 free_empty_tables+0x438/0x500 __remove_pgd_mapping.constprop.0+0x60/0xa8 arch_remove_memory+0x48/0x80 try_remove_memory+0x158/0x1d8 offline_and_remove_memory+0x138/0x180 It can also lead to leaking the ptl allocation if ALLOC_SPLIT_PTLOCKS is defined and incorrect NR_PAGETABLE stats. Fix this by calling pagetable_dtor() in free_hotplug_pgtable_page() prior to freeing the page to undo the effects of calling pagetable_*_ctor().",
+      "published": "2026-07-01T14:16:42.260Z",
+      "lastModified": "2026-07-23T21:32:31.813Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00112,
+      "epssPercentile": 0.01613,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.98,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-53345",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: KVM: Don't WARN if memory is dirtied without a vCPU when the VM is dying When marking a page dirty, complain about not having a running/loaded vCPU if and only if the VM is still alive, i.e. its refcount is non-zero. This will allow fixing a memory leak for x86 SEV-ES guests without hitting what is effectively a false positive on the WARN. For some SEV-ES VM-Exits, KVM keeps a writable mapping of a guest page across an exit to userspace, and typically unmaps the page on the next KVM_RUN. But if userspace never calls KVM_RUN after such an exit, then KVM needs to unmap the page when the vCPU is destroyed, which in turn triggers the WARN about not having a running vCPU. Alternatively, SEV-ES could temporarily load the vCPU to suppress the WARN, as is done in nested_vmx_free_vcpu() (but for completely unrelated reasons; suppressing WARN from nested_put_vmcs12_pages() is pure happenstance). But loading a vCPU during destruction is gross (ideally nVMX code would be cleaned up), risks complicating the SEV-ES code (KVM would need to ensure the temporarily load()+put() only runs when the vCPU isn't already loaded), and is ultimately pointless. The motivation for the WARN is to guard against KVM dirtying guest memory without pushing the corresponding GFN to the active vCPU's dirty ring, e.g. to ensure userspace doesn't miss a dirty page. But for the VM's refcount to reach zero, there can't be _any_ userspace mappings to the dirty ring, as mapping the dirty ring requires doing mmap() on the vCPU FD. I.e. if userspace had a valid mapping for the dirty ring, then the vCPU file and thus the owning VM would still be alive. And so since userspace can't possibly reach the dirty ring, whether or not KVM technically \"misses\" a push to the dirty ring is irrelevant.",
+      "published": "2026-07-01T14:16:42.573Z",
+      "lastModified": "2026-07-22T19:16:15.690Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00114,
+      "epssPercentile": 0.0171,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.98,
+      "tags": [
+        "Linux",
+        "CWE-401"
       ]
     },
     {
@@ -39799,6 +39898,51 @@
         "Chrome",
         "Android",
         "CWE-20"
+      ]
+    },
+    {
+      "id": "CVE-2026-53344",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: pinctrl: mcp23s08: Initialize mcp->dev and mcp->addr before regmap init Regmap initialization triggers regcache_maple_populate() which attempts SPI read to populate cache. SPI read requires mcp->dev and mcp->addr to be set, without them, NULL pointer dereference occurs during probe. Move initialization before mcp23s08_spi_regmap_init() call.",
+      "published": "2026-07-01T14:16:42.480Z",
+      "lastModified": "2026-07-23T21:32:16.227Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.001,
+      "epssPercentile": 0.01006,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-908",
+          "name": "CWE-908",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.96,
+      "tags": [
+        "Linux",
+        "CWE-908"
       ]
     },
     {
@@ -40553,50 +40697,6 @@
         "Chrome",
         "Android",
         "CWE-451"
-      ]
-    },
-    {
-      "id": "CVE-2026-13513",
-      "summary": "A security flaw has been discovered in MyScale MyScaleDB up to 1.8.0. This vulnerability affects the function SegmentId::getCacheKey in the library src/VectorIndex/Common/SegmentId.h. The manipulation results in insufficient verification of data authenticity. It is possible to launch the attack remotely. A high complexity level is associated with this attack. It is stated that the exploitability is difficult. The exploit has been released to the public and may be used for attacks. The pull request to fix this issue awaits acceptance.",
-      "published": "2026-06-29T00:16:47.110Z",
-      "lastModified": "2026-06-29T18:41:05.950Z",
-      "severity": "Medium",
-      "cvssScore": 5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00133,
-      "epssPercentile": 0.03226,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-345",
-          "name": "CWE-345",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.86,
-      "tags": [
-        "CWE-345"
       ]
     },
     {
@@ -42691,56 +42791,6 @@
       ]
     },
     {
-      "id": "CVE-2026-13510",
-      "summary": "A vulnerability was found in SimStudioAI sim up to 0.6.92. Affected by this vulnerability is an unknown functionality in the library apps/sim/lib/core/security/deployment.ts of the component Password Protection Handler. Performing a manipulation results in use of weak hash. The attack is possible to be carried out remotely. The attack's complexity is rated as high. The exploitation appears to be difficult. The exploit has been made public and could be used. The pull request to fix this issue awaits acceptance.",
-      "published": "2026-06-28T23:16:47.263Z",
-      "lastModified": "2026-06-29T18:46:31.617Z",
-      "severity": "Low",
-      "cvssScore": 3.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00216,
-      "epssPercentile": 0.12185,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-327",
-          "name": "CWE-327",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-328",
-          "name": "CWE-328",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.72,
-      "tags": [
-        "CWE-327",
-        "CWE-328"
-      ]
-    },
-    {
       "id": "CVE-2026-55223",
       "summary": "c3p0 is a JDBC Connection pooling library. In versions prior to 0.14.0, c3p0 in combination with other libraries, can compose to a \"sink\" for deserialization gadgets. The JDBC spec's DataSource.getConnection() and ConnectionPoolDataSource.getPooledConnection() match the getXXX() form, so JavaBean libraries treat them as \"properties\" assumed safe while they actually call into JDBC drivers. Attackers can thus craft malicious DataSource objects whose property lookups invoke vulnerable drivers, then smuggle them in serialized form to where an application deserializes and auto-resolves bean properties — triggering the attack. This requires a susceptible DataSource/ConnectionPoolDataSource and JDBC driver on the CLASSPATH, plus a carrier that auto-looks-up JavaBean properties on = deserialization, most commonly a collection paired with an Apache commons-beanutils Comparator that sorts by bean properties. c3p0 supplied that susceptible DataSource/ConnectionPoolDataSource, which was an essential component of the trigger. This issue has been fixed in version 0.14.0.",
       "published": "2026-06-30T23:17:28.260Z",
@@ -43950,56 +44000,6 @@
       ]
     },
     {
-      "id": "CVE-2026-13511",
-      "summary": "A vulnerability was determined in VoltAgent up to 2.1.17. Affected by this issue is the function handleGetMemoryConversation of the file packages/server-core/src/handlers/memory.handlers.ts of the component Memory REST API. Executing a manipulation of the argument conversationId can lead to improper authorization. The attack may be performed from remote. This attack is characterized by high complexity. The exploitation is known to be difficult. The exploit has been publicly disclosed and may be utilized. The pull request to fix this issue awaits acceptance.",
-      "published": "2026-06-28T23:16:48.293Z",
-      "lastModified": "2026-06-29T18:46:31.617Z",
-      "severity": "Low",
-      "cvssScore": 3.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.0022,
-      "epssPercentile": 0.12718,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-266",
-          "name": "CWE-266",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-285",
-          "name": "CWE-285",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.53,
-      "tags": [
-        "CWE-266",
-        "CWE-285"
-      ]
-    },
-    {
       "id": "CVE-2026-44949",
       "summary": "A Rancher FleetWorkspace admission path allowed side effects to occur in the Rancher webhook handler for versions 0.7.0 up to 0.7.10, 0.8.0 up to 0.8.7, 0.9.0 up to 0.9.6 and 0.10.0 up to 0.10.7. An unauthenticated attacker with network access to the in-cluster rancher-webhook service could submit a crafted admission payload and cause workspace-related Kubernetes objects to be created with attacker-chosen identity data.",
       "published": "2026-06-30T15:16:56.853Z",
@@ -44950,57 +44950,6 @@
       "priorityScore": 1.09,
       "tags": [
         "CWE-770"
-      ]
-    },
-    {
-      "id": "CVE-2026-13514",
-      "summary": "A weakness has been identified in Chess Play and Learn App up to 4.9.42 on Android. This issue affects some unknown processing of the file AndroidManifest.xml of the component com.chess. This manipulation causes exposure of backup file to an unauthorized control sphere. It is feasible to perform the attack on the physical device. The exploit has been made available to the public and could be used for attacks. Upgrading the affected component is advised. The vendor was informed early about this issue. They confirmed the existence and that they will address it. Furthermore, they explain that their bug bounty \"explicitly excludes physical-access attacks\". However, they appreciate the quality of the report and aim at making a goodwill payment to the researcher.",
-      "published": "2026-06-29T00:16:47.280Z",
-      "lastModified": "2026-06-29T18:46:31.617Z",
-      "severity": "Low",
-      "cvssScore": 2.4,
-      "cvssVector": "CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Physical",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00133,
-      "epssPercentile": 0.03195,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Android",
-      "product": "Android",
-      "cwe": [
-        {
-          "id": "CWE-285",
-          "name": "CWE-285",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-530",
-          "name": "CWE-530",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.95,
-      "tags": [
-        "Android",
-        "CWE-285",
-        "CWE-530"
       ]
     },
     {
