@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-29T22:15:42.066Z",
+  "generatedAt": "2026-07-29T23:18:06.550Z",
   "count": 1000,
   "items": [
     {
@@ -2171,56 +2171,6 @@
       "tags": [
         "Cisco",
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-8023",
-      "summary": "Zephyr's HTTP server (subsys/net/lib/http) provides a static-filesystem resource type (HTTP_RESOURCE_TYPE_STATIC_FS, available when CONFIG_FILE_SYSTEM is enabled) that serves files from a configured root directory. Before this fix, both the HTTP/1 and HTTP/2 front-ends placed the raw, attacker-controlled request path into client->url_buffer (assembled in on_url() for HTTP/1 and copied verbatim from the :path pseudo-header for HTTP/2) without resolving ./.. segments. The static-FS handler then built the on-disk filename by directly concatenating the configured root with that raw URL (snprintk(fname, ..., \"%s%s\", static_fs_detail->fs_path, client->url_buffer) at http_server_http1.c:603 and http_server_http2.c:490) and opened it with fs_open(fname, FS_O_READ). Because the handler is reached via wildcard/leading-dir (fnmatch FNM_LEADING_DIR) or fallback resource matching, a request such as GET / /../../ is dispatched to the handler and, after the underlying filesystem (e.g. LittleFS/FAT) resolves the .. segments, escapes the configured web root, letting an unauthenticated remote client read arbitrary readable files on the mounted volume (information disclosure). The HTTP server requires no TLS or authentication to reach this path. The fix adds http_server_remove_dot_segments(), which canonicalizes the path portion of the URL before resource lookup in both protocol handlers, neutralizing the traversal. Affects releases v4.0.0 through v4.4.0 for deployments that register a static-filesystem resource.",
-      "published": "2026-06-29T23:16:43.777Z",
-      "lastModified": "2026-07-17T16:17:19.503Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00912,
-      "epssPercentile": 0.56433,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        },
-        {
-          "id": "CWE-23",
-          "name": "CWE-23",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.6,
-      "tags": [
-        "CWE-22",
-        "CWE-23"
       ]
     },
     {
@@ -6524,57 +6474,6 @@
       "tags": [
         "CWE-129",
         "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-7656",
-      "summary": "The IPv6 Neighbor Discovery handlers in subsys/net/ip/ipv6_nbr.c (handle_ra_input, handle_ns_input, handle_na_input) used an incorrect boolean expression that combined the RFC 4861 validity checks with the ICMPv6 code check using the wrong operator precedence: the form was '((length/hop/source/target checks) && (icmp_hdr->code != 0))'. Because every legitimate ND message carries ICMPv6 code 0, an attacker setting code == 0 (the normal value) caused the entire predicate to evaluate false, so the packet was never dropped and all of the other checks were silently skipped. The bypassed checks include the mandatory Hop Limit == 255 verification (which proves an ND packet originated on-link and was not forwarded) and, for Router Advertisements, the requirement that the source be a link-local address, as well as multicast-target sanity checks. As a result, an adjacent on-link attacker — and, because the Hop-Limit-255 guard is bypassed, potentially a remote/off-link attacker whose packets would otherwise be rejected — can have forged Router Advertisement, Neighbor Solicitation, and Neighbor Advertisement messages accepted. A forged RA lets the attacker reconfigure the victim's default router, on-link prefixes (SLAAC), MTU, reachable/retransmit timers, and (with CONFIG_NET_IPV6_RA_RDNSS) DNS servers, while forged NS/NA enable neighbor-cache poisoning, enabling man-in-the-middle, traffic redirection, and denial of service. The flaw is an input-validation/authentication weakness rather than a memory-safety issue: the underlying packet-parsing primitives (net_pkt_get_data, net_pkt_read, net_pkt_skip) are independently bounds-safe and the validated 'length' is the true buffer length, so skipping the length check causes no out-of-bounds access. The defect has existed since the logic was introduced in 2018 and shipped in all releases through v4.4.0; it is fixed by splitting the condition so any failing check drops the packet.",
-      "published": "2026-06-29T23:16:43.650Z",
-      "lastModified": "2026-07-17T16:17:18.483Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00312,
-      "epssPercentile": 0.23614,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-290",
-          "name": "CWE-290",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-670",
-          "name": "CWE-670",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.66,
-      "tags": [
-        "F5",
-        "CWE-290",
-        "CWE-670"
       ]
     },
     {
@@ -10975,50 +10874,6 @@
       "tags": [
         "CWE-193",
         "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-34592",
-      "summary": "Coolify is an open-source and self-hostable tool for managing servers, applications, and databases. Prior to 4.0.0-beta.471, Coolify server and project lookups are not scoped to the current team, allowing any authenticated user to access servers and projects belonging to other teams by specifying their IDs directly. This vulnerability is fixed in 4.0.0-beta.471.",
-      "published": "2026-06-29T22:16:44.120Z",
-      "lastModified": "2026-06-30T14:14:35.520Z",
-      "severity": "High",
-      "cvssScore": 7.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00212,
-      "epssPercentile": 0.11659,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.1,
-      "tags": [
-        "CWE-639"
       ]
     },
     {
@@ -16787,6 +16642,58 @@
       ]
     },
     {
+      "id": "CVE-2026-14430",
+      "summary": "Integer overflow in V8 in Google Chrome prior to 150.0.7871.46 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-01T23:16:51.497Z",
+      "lastModified": "2026-07-03T04:17:51.183Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00291,
+      "epssPercentile": 0.21314,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-472",
+          "name": "CWE-472",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-190",
+          "name": "CWE-190",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.83,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-472",
+        "CWE-190"
+      ]
+    },
+    {
       "id": "CVE-2026-13791",
       "summary": "Insufficient validation of untrusted input in Downloads in Google Chrome prior to 150.0.7871.47 allowed an attacker who convinced a user to install a malicious extension to execute arbitrary code via a crafted Chrome Extension. (Chromium security severity: High)",
       "published": "2026-06-30T23:16:53.900Z",
@@ -17302,6 +17209,52 @@
       ]
     },
     {
+      "id": "CVE-2026-14423",
+      "summary": "Type Confusion in Tint in Google Chrome prior to 150.0.7871.46 allowed a remote attacker to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-01T23:16:50.787Z",
+      "lastModified": "2026-07-03T04:17:49.760Z",
+      "severity": "Critical",
+      "cvssScore": 9.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00221,
+      "epssPercentile": 0.12747,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-843",
+          "name": "CWE-843",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.81,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-843"
+      ]
+    },
+    {
       "id": "CVE-2026-10817",
       "summary": "Insufficient input validation leading to memory overread in NetScaler ADC and NetScaler Gateway if the TCP TimeStamp is enabled in TCP Profile and is associated with the virtual server (of type LB, CS, VPN) or the service configured on NetScaler",
       "published": "2026-06-30T13:17:04.363Z",
@@ -17574,6 +17527,52 @@
       ]
     },
     {
+      "id": "CVE-2026-14425",
+      "summary": "Use after free in ANGLE in Google Chrome prior to 150.0.7871.46 allowed a remote attacker to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-01T23:16:51.000Z",
+      "lastModified": "2026-07-03T04:17:50.317Z",
+      "severity": "Critical",
+      "cvssScore": 9.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00218,
+      "epssPercentile": 0.12444,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.8,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-14393",
       "summary": "Use after free in V8 in Google Chrome prior to 150.0.7871.46 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: Medium)",
       "published": "2026-07-01T23:16:47.733Z",
@@ -17802,6 +17801,53 @@
       "knownRansomwareUse": false,
       "priorityScore": 3.78,
       "tags": [
+        "Google",
+        "Chrome",
+        "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-14424",
+      "summary": "Use after free in Dawn in Google Chrome on Mac prior to 150.0.7871.46 allowed a remote attacker to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-01T23:16:50.897Z",
+      "lastModified": "2026-07-03T04:17:50.160Z",
+      "severity": "Critical",
+      "cvssScore": 9.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00215,
+      "epssPercentile": 0.1206,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apple",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.78,
+      "tags": [
+        "Apple",
         "Google",
         "Chrome",
         "CWE-416"
@@ -18561,6 +18607,52 @@
         "Google",
         "Chrome",
         "CWE-787"
+      ]
+    },
+    {
+      "id": "CVE-2026-14431",
+      "summary": "Type Confusion in V8 in Google Chrome prior to 150.0.7871.46 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-01T23:16:51.600Z",
+      "lastModified": "2026-07-03T04:17:51.320Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00264,
+      "epssPercentile": 0.18217,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-843",
+          "name": "CWE-843",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.72,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-843"
       ]
     },
     {
@@ -20011,50 +20103,6 @@
       ]
     },
     {
-      "id": "CVE-2026-51221",
-      "summary": "A buffer overflow in the Get_Attribute_List function of EIPStackGroup OpENer commit 76b95c allows attackers to cause a Denial of Service (DoS) via supplying a crafted Common Packet Format (CPF) packet.",
-      "published": "2026-06-29T22:16:49.070Z",
-      "lastModified": "2026-06-30T14:22:10.020Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00351,
-      "epssPercentile": 0.27696,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.59,
-      "tags": [
-        "CWE-284"
-      ]
-    },
-    {
       "id": "CVE-2026-56149",
       "summary": "Allocation of Resources Without Limits or Throttling (CWE-770) in Elasticsearch can lead to a denial of service via Excessive Allocation (CAPEC-130). A user with elevated privileges can submit a specially crafted machine learning request that causes excessive memory consumption, which may render the affected node unavailable.",
       "published": "2026-07-01T17:16:36.957Z",
@@ -21104,6 +21152,53 @@
       ]
     },
     {
+      "id": "CVE-2026-14428",
+      "summary": "Insufficient validation of untrusted input in Dawn in Google Chrome on Android prior to 150.0.7871.46 allowed a remote attacker who had compromised the renderer process to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-01T23:16:51.297Z",
+      "lastModified": "2026-07-03T04:17:50.907Z",
+      "severity": "High",
+      "cvssScore": 8.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00249,
+      "epssPercentile": 0.16327,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-20",
+          "name": "CWE-20",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.48,
+      "tags": [
+        "Google",
+        "Chrome",
+        "Android",
+        "CWE-20"
+      ]
+    },
+    {
       "id": "CVE-2026-52760",
       "summary": "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') vulnerability in Apache ActiveMQ, Apache ActiveMQ Web Console. The browse page in the web console renders a message Id directly without sanitization. This allows an authenticated producer to send a message with a JMS message ID that has been crafted to contain HTML/JavaScript such that when an administrator browses the queue in the Web Console, the payload executes in their browser. This issue affects Apache ActiveMQ: before 5.19.8, from 6.0.0 before 6.2.7; Apache ActiveMQ Web Console: before 5.19.8, from 6.0.0 before 6.2.7. Users are recommended to upgrade to version 6.2.7 or 5.19.8, which fixes the issue.",
       "published": "2026-06-30T11:16:30.037Z",
@@ -21194,6 +21289,52 @@
         "F5",
         "Chrome",
         "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-14427",
+      "summary": "Heap buffer overflow in Skia in Google Chrome prior to 150.0.7871.46 allowed a remote attacker who had compromised the renderer process to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: Critical)",
+      "published": "2026-07-01T23:16:51.200Z",
+      "lastModified": "2026-07-03T04:17:50.770Z",
+      "severity": "High",
+      "cvssScore": 8.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00246,
+      "epssPercentile": 0.1591,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-122",
+          "name": "CWE-122",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.46,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-122"
       ]
     },
     {
@@ -21791,6 +21932,52 @@
       "priorityScore": 3.38,
       "tags": [
         "CWE-639"
+      ]
+    },
+    {
+      "id": "CVE-2026-14429",
+      "summary": "Insufficient validation of untrusted input in Skia in Google Chrome prior to 150.0.7871.46 allowed a remote attacker who had compromised the renderer process to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-01T23:16:51.400Z",
+      "lastModified": "2026-07-03T04:17:51.043Z",
+      "severity": "High",
+      "cvssScore": 8.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00228,
+      "epssPercentile": 0.13708,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-20",
+          "name": "CWE-20",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.38,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-20"
       ]
     },
     {
@@ -22664,50 +22851,6 @@
         "F5",
         "Linux",
         "CWE-126"
-      ]
-    },
-    {
-      "id": "CVE-2026-51219",
-      "summary": "A heap buffer overflow in the HighPriorityASDUQueue_hasUnconfirmedIMessages function of lib60870 v2.3.3 to v2.3.6 allows attackers to cause a Denial of Service (DoS) via a crafted payload.",
-      "published": "2026-06-29T23:16:42.733Z",
-      "lastModified": "2026-06-30T14:22:10.020Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00348,
-      "epssPercentile": 0.27384,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-122",
-          "name": "CWE-122",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.23,
-      "tags": [
-        "CWE-122"
       ]
     },
     {
@@ -24581,50 +24724,6 @@
       ]
     },
     {
-      "id": "CVE-2026-51218",
-      "summary": "A heap buffer overflow in the TS7Worker::PerformFunctionWrite() function (/core/s7_server.cpp) of snap7 v1.4.3 allows attackers to cause a Denial of Service (DoS) via a crafted packet.",
-      "published": "2026-06-29T23:16:42.623Z",
-      "lastModified": "2026-06-30T14:22:10.020Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00303,
-      "epssPercentile": 0.22575,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-122",
-          "name": "CWE-122",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.07,
-      "tags": [
-        "CWE-122"
-      ]
-    },
-    {
       "id": "CVE-2026-13889",
       "summary": "Side-channel information leakage in WebAuthentication in Google Chrome on iOS prior to 150.0.7871.47 allowed a remote attacker to leak cross-origin data via a crafted HTML page. (Chromium security severity: Medium)",
       "published": "2026-06-30T23:17:03.137Z",
@@ -24899,6 +24998,52 @@
         "Google",
         "Chrome",
         "CWE-20"
+      ]
+    },
+    {
+      "id": "CVE-2026-14426",
+      "summary": "Use after free in V8 in Google Chrome prior to 150.0.7871.46 allowed a remote attacker who convinced a user to engage in specific UI gestures to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-01T23:16:51.100Z",
+      "lastModified": "2026-07-03T04:17:50.543Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00217,
+      "epssPercentile": 0.12226,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.05,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-416"
       ]
     },
     {
@@ -34653,50 +34798,6 @@
       ]
     },
     {
-      "id": "CVE-2026-10648",
-      "summary": "mcumgr_serial_process_frag() in subsys/mgmt/mcumgr/transport/src/serial_util.c calls net_buf_reset() on the result of smp_packet_alloc() before checking it for NULL. smp_packet_alloc() uses net_buf_alloc(K_NO_WAIT) against the shared MCUmgr packet pool (CONFIG_MCUMGR_TRANSPORT_NETBUF_COUNT, default 4), which returns NULL when the pool is exhausted. In default builds the __ASSERT_NO_MSG in net_buf_reset is a no-op, so net_buf_simple_reset writes through the NULL pointer (buf->len = 0; buf->data = buf->__buf), causing a fault/crash. The fragment data reaches this code from attacker-controlled bytes on the MCUmgr serial/UART/shell-console transports (smp_uart.c, smp_raw_uart.c, smp_shell.c), and a fresh buffer is allocated at the start of essentially every new packet. An attacker on the serial/console link can flood the transport to drive the 4-entry buffer pool to exhaustion and induce the NULL dereference, crashing the device (denial of service). The defect was introduced after the original MCUmgr rework and shipped in Zephyr v4.4.0. The fix moves the NULL check ahead of net_buf_reset.",
-      "published": "2026-06-29T23:16:42.180Z",
-      "lastModified": "2026-07-14T19:16:48.460Z",
-      "severity": "Medium",
-      "cvssScore": 6.2,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00149,
-      "epssPercentile": 0.04581,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.33,
-      "tags": [
-        "CWE-476"
-      ]
-    },
-    {
       "id": "CVE-2026-14112",
       "summary": "Inappropriate implementation in Enterprise in Google Chrome prior to 150.0.7871.47 allowed a remote attacker who convinced a user to engage in specific UI gestures to obtain potentially sensitive information from process memory via a crafted HTML page. (Chromium security severity: Low)",
       "published": "2026-06-30T23:17:23.013Z",
@@ -35441,56 +35542,6 @@
       "priorityScore": 2.25,
       "tags": [
         "CWE-476"
-      ]
-    },
-    {
-      "id": "CVE-2026-10647",
-      "summary": "The USB CDC-NCM device class (subsys/usb/device_next/class/usbd_cdc_ncm.c) ignores the return value of usbd_ep_enqueue() in its ethernet transmit callback cdc_ncm_send(). When the enqueue fails, the function still calls k_sem_take(&data->sync_sem, K_FOREVER), blocking on a completion semaphore that is only ever signaled from the bulk-IN transfer-completion callback. Because nothing was enqueued, that callback never fires and the calling thread — a shared network traffic-class TX thread — deadlocks permanently while holding the interface TX lock, halting transmission until reboot (and leaking the transmit buffer). The enqueue fails under conditions controlled by the attached USB host: usbd_ep_enqueue() returns -EPERM whenever the bus is suspended (a standard, persistent host operation), and the underlying udc_ep_enqueue() returns -EPERM/-ENODEV on disconnect, bus reset, or endpoint disable. The cdc_ncm_send() guard only checks the DATA_IFACE_ENABLED and IFACE_UP flags, not the suspended state, so a packet transmitted while the host holds the bus suspended reaches the failing enqueue and deadlocks the TX path. The realistic trigger is a bus suspend that occurs while the exported network interface is active and has traffic to send — host sleep, USB selective/auto-suspend, or hub power management — after which any device-originated packet deadlocks the path, recoverable only by reboot. The impact is a persistent loss of the virtual network connection between the host's NCM interface and the Zephyr device; because the deadlocked thread is a shared traffic-class TX thread, egress on other network interfaces can stall as well. There is no memory corruption or information disclosure. The defect was introduced with the CDC-NCM driver and shipped in releases through v4.4.0; it is fixed by checking the usbd_ep_enqueue() return value and freeing the buffer before the blocking wait.",
-      "published": "2026-06-29T22:16:42.940Z",
-      "lastModified": "2026-07-14T19:16:48.337Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00207,
-      "epssPercentile": 0.10935,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-833",
-          "name": "CWE-833",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-667",
-          "name": "CWE-667",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.24,
-      "tags": [
-        "CWE-833",
-        "CWE-667"
       ]
     },
     {
@@ -41136,50 +41187,6 @@
       "tags": [
         "WordPress",
         "CWE-639"
-      ]
-    },
-    {
-      "id": "CVE-2026-57997",
-      "summary": "Strapi users-permissions plugin fails to restrict JWT algorithms when plugin::users-permissions.jwt.algorithm is not explicitly configured, allowing acceptance of HS384 and HS512 tokens alongside HS256. Attackers possessing the jwtSecret can mint tokens with non-standard HMAC variants to bypass algorithm restrictions and weaken authentication controls.",
-      "published": "2026-06-29T22:16:49.350Z",
-      "lastModified": "2026-07-01T15:17:10.893Z",
-      "severity": "Medium",
-      "cvssScore": 4.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00147,
-      "epssPercentile": 0.04421,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-327",
-          "name": "CWE-327",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.83,
-      "tags": [
-        "CWE-327"
       ]
     },
     {
