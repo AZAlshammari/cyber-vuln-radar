@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-29T18:42:22.566Z",
+  "generatedAt": "2026-07-29T20:02:59.577Z",
   "count": 1000,
   "items": [
     {
@@ -651,50 +651,6 @@
       ]
     },
     {
-      "id": "CVE-2026-58000",
-      "summary": "luci-proto-openvpn through 0.11.1, fixed in commit e4ff45e, contains a command injection vulnerability in the generateKey ubus method where the cl_meta parameter is interpolated into a shell command without proper escaping or quoting. An authenticated LuCI user with OpenVPN protocol configuration access can inject arbitrary shell metacharacters into cl_meta to execute commands as root via the popen function.",
-      "published": "2026-06-29T19:16:42.993Z",
-      "lastModified": "2026-07-14T22:17:26.297Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.01401,
-      "epssPercentile": 0.69737,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 6.52,
-      "tags": [
-        "CWE-78"
-      ]
-    },
-    {
       "id": "CVE-2026-7838",
       "summary": "UltraVNC viewer through 1.8.2.2 contains an integer overflow leading to a heap buffer overflow in the RFB protocol failure-response parsing path. In vncviewer/ClientConnection.cpp, the 4-byte network-supplied reasonLen field (type CARD32) is passed as reasonLen+1 to CheckBufferSize(). Because both operands are unsigned 32-bit, a reasonLen of 0xFFFFFFFF overflows to 0, causing CheckBufferSize to allocate only 256 bytes. The subsequent ReadString(m_netbuf, reasonLen) call then performs ReadExact for the original 4 GiB length into that 256-byte heap buffer. This overflow is reachable via rfbConnFailed (auth-scheme negotiation) and rfbVncAuthFailed (post-handshake) message types without successful authentication. A malicious VNC server, or any man-in-the-middle on the RFB stream, can trigger this condition when the victim viewer connects, potentially resulting in remote code execution as the user running the viewer. The crash was confirmed with AddressSanitizer on a portable reproduction harness (heap-buffer-overflow WRITE at offset 256).",
       "published": "2026-07-01T05:16:24.540Z",
@@ -788,50 +744,6 @@
         "Adobe",
         "F5",
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-57999",
-      "summary": "luci-app-tailscale-community contains a command injection vulnerability in the tailscale.do_login RPC method that allows authenticated users to execute arbitrary commands as root. The vulnerability exists because user-controlled loginserver and loginserver_authkey parameters are improperly quoted within a double-quoted shell command, allowing shell substitutions like $() to be evaluated by the outer shell before argument processing.",
-      "published": "2026-06-29T19:16:42.857Z",
-      "lastModified": "2026-07-14T22:17:26.180Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.01179,
-      "epssPercentile": 0.64469,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 6.34,
-      "tags": [
-        "CWE-78"
       ]
     },
     {
@@ -8888,6 +8800,56 @@
       ]
     },
     {
+      "id": "CVE-2026-55153",
+      "summary": "mchange-commons-java is a Java library of shared utility classes used by mchange projects like the c3p0 connection pool. Prior to version 0.6.0, its JNDI ObjectFactory implementation (com.mchange.v2.naming.JavaBeanObjectFactory) will construct objects of arbitrary classes and initialize \"JavaBean\"-style properties, which for certain classes enables JNDI injection and \"deserialization gadgets.\" Such initialization is unsafe for some classes: for example, setting the contentType property of a Swing JEditorPane to text/html and its text property to HTML containing a stylesheet will provoke an HTTP GET on an arbitrary URL, potentially from within a trusted security domain. The problem is aggravated by the library's ReferenceIndirector, through which malicious JNDI Reference objects can be smuggled in for dereferencing wherever an application reads a Java-serialized object. This has been resolved in version 0.6.0.",
+      "published": "2026-07-01T21:17:03.823Z",
+      "lastModified": "2026-07-06T15:16:39.837Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:A/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00327,
+      "epssPercentile": 0.2524,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-470",
+          "name": "CWE-470",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-502",
+          "name": "Deserialization of Untrusted Data",
+          "description": "Untrusted serialized data can alter control flow or objects."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.37,
+      "tags": [
+        "CWE-470",
+        "CWE-502"
+      ]
+    },
+    {
       "id": "CVE-2026-43705",
       "summary": "A type confusion issue was addressed with improved checks. This issue is fixed in Safari 26.5.2, iOS 26.5.2 and iPadOS 26.5.2, macOS Tahoe 26.5.2, tvOS 26.6, visionOS 26.6, watchOS 26.6. Processing maliciously crafted web content may lead to memory corruption.",
       "published": "2026-06-29T20:17:35.467Z",
@@ -14174,6 +14136,50 @@
       "tags": [
         "Linux",
         "CWE-502"
+      ]
+    },
+    {
+      "id": "CVE-2026-54074",
+      "summary": "Tina is a headless content management system. @tinacms/cli versions prior to 2.4.3 contain a Remote Code Execution vulnerability in the Forestry-to-Tina migration command. The internal helper addVariablesToCode unquotes any value matching the marker \"__TINA_INTERNAL__:::(.*?):::\" inside the stringified collection JSON. User-supplied label and name fields from .forestry/**/*.yml are placed into that JSON without any sanitisation. An attacker who controls a Forestry-style project can therefore inject arbitrary JavaScript into the generated tina/templates.{ts,js} file. The injected code is written at module top level, so it executes the moment the developer runs tinacms dev or tinacms build, with the developer's privileges. This issue has been fixed in version 2.4.3.",
+      "published": "2026-07-01T21:17:03.227Z",
+      "lastModified": "2026-07-02T17:45:00.780Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0017,
+      "epssPercentile": 0.06691,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-94",
+          "name": "CWE-94",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.96,
+      "tags": [
+        "CWE-94"
       ]
     },
     {
@@ -21467,9 +21473,9 @@
     },
     {
       "id": "CVE-2026-43740",
-      "summary": "The issue was addressed with improved memory handling. This issue is fixed in Safari 26.5.2, Safari 26.6, iOS 26.5.2 and iPadOS 26.5.2, iOS 26.6 and iPadOS 26.6, macOS Tahoe 26.5.2, macOS Tahoe 26.6, tvOS 26.6, visionOS 26.6, watchOS 26.6. Processing maliciously crafted web content may result in the disclosure of process memory.",
+      "summary": "The issue was addressed with improved memory handling. This issue is fixed in Safari 26.5.2, iOS 26.5.2 and iPadOS 26.5.2, macOS Tahoe 26.5.2, tvOS 26.6, visionOS 26.6, watchOS 26.6. Processing maliciously crafted web content may result in the disclosure of process memory.",
       "published": "2026-06-29T20:17:37.600Z",
-      "lastModified": "2026-07-27T21:16:58.623Z",
+      "lastModified": "2026-07-29T19:16:46.123Z",
       "severity": "Medium",
       "cvssScore": 6.5,
       "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
@@ -22582,52 +22588,6 @@
       ]
     },
     {
-      "id": "CVE-2026-13757",
-      "summary": "A flaw was found in p11-kit. The RPC message attribute parsing functions p11_rpc_message_get_attribute() and p11_rpc_message_get_attribute_array_value() form a mutually-recursive call chain with no recursion depth limit when processing nested CKA_WRAP_TEMPLATE, CKA_UNWRAP_TEMPLATE, and CKA_DERIVE_TEMPLATE attributes. An unauthenticated attacker with local access to the p11-kit RPC Unix domain socket can send a specially crafted request with deeply nested template attributes, causing stack exhaustion and crashing the p11-kit server process and its dependent services.",
-      "published": "2026-06-29T19:16:40.907Z",
-      "lastModified": "2026-07-13T06:16:24.863Z",
-      "severity": "Medium",
-      "cvssScore": 6.2,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00136,
-      "epssPercentile": 0.03472,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-674",
-          "name": "CWE-674",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.29,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-674"
-      ]
-    },
-    {
       "id": "CVE-2026-43676",
       "summary": "An out-of-bounds access issue was addressed with improved bounds checking. This issue is fixed in Safari 26.5.2, iOS 26.5.2 and iPadOS 26.5.2, macOS Tahoe 26.5.2, visionOS 26.6, watchOS 26.6. Processing maliciously crafted web content may lead to an unexpected Safari crash.",
       "published": "2026-06-29T20:17:34.873Z",
@@ -23374,9 +23334,9 @@
     },
     {
       "id": "CVE-2026-11541",
-      "summary": "IBM WebSphere Application Server 9.0, and 8.5 and IBM WebSphere Application Server - Liberty 17.0.0.3 through 26.0.0.6 are affected by an HTTP request smuggling vulnerability.",
+      "summary": "IBM CICS Transaction Gateway for Multiplatforms 9.1, 9.2, 9.3, and 10.1 IBM WebSphere Application Server 9.0, and 8.5 and IBM WebSphere Application Server - Liberty 17.0.0.3 through 26.0.0.6 are affected by an HTTP request smuggling vulnerability.",
       "published": "2026-06-30T22:16:46.317Z",
-      "lastModified": "2026-07-02T17:55:28.050Z",
+      "lastModified": "2026-07-29T19:16:43.893Z",
       "severity": "High",
       "cvssScore": 7.4,
       "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
@@ -23409,7 +23369,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 3.19,
       "tags": [
@@ -23458,6 +23418,56 @@
       "priorityScore": 3.19,
       "tags": [
         "CWE-384"
+      ]
+    },
+    {
+      "id": "CVE-2026-54786",
+      "summary": "Wasmtime is a runtime for WebAssembly. All versions prior to 24.0.10; versions 25.0.0 through those before 36.0.11; versions 37.0.0 through those before 44.0.3; and versions 45.0.0 and 45.0.1 contain a native implementation of WASIp1 which suffers from a leak in the fd_renumber function where the file descriptor being renumbered to is not properly closed. Wasmtime's implementation erroneously only updated the table of descriptors for WASIp1 and didn't update the underlying table of descriptors used by the host. This behavior means that while fd_renumber works correctly from a guest's perspective it ends up leaking resources in the host that aren't cleaned up until the corresponding Store is destroyed. In a loop, guests can use fd_renumber to cause hosts to exhaust both resources and file descriptors. This bug only affects the native implementation of WASIp1, meaning that only runtimes which load core wasm modules and expose fd_renumber are affected. Runtimes are additionally only affected if they expose the ability to acquire a file descriptor, such as opening a file. For runtimes that deny access to files they are unaffected. This issue has been fixed in versions 24.0.10, 36.0.11, 44.0.3, and 45.0.2.",
+      "published": "2026-07-01T21:17:03.690Z",
+      "lastModified": "2026-07-02T19:27:54.017Z",
+      "severity": "Medium",
+      "cvssScore": 5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:N/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00217,
+      "epssPercentile": 0.12271,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-400",
+          "name": "CWE-400",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-772",
+          "name": "CWE-772",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.18,
+      "tags": [
+        "CWE-400",
+        "CWE-772"
       ]
     },
     {
@@ -37202,6 +37212,50 @@
       ]
     },
     {
+      "id": "CVE-2026-54720",
+      "summary": "Silverstripe Framework is a PHP framework which powers the Silverstripe CMS. In versions prior to 6.2.2, the \"Insert media from web\" functionality in the CMS is vulnerable to XSS from a specially crafted embed. This issue was fixed in version 6.2.2/",
+      "published": "2026-07-01T21:17:03.417Z",
+      "lastModified": "2026-07-02T17:54:15.243Z",
+      "severity": "Medium",
+      "cvssScore": 5.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00155,
+      "epssPercentile": 0.05105,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.07,
+      "tags": [
+        "CWE-79"
+      ]
+    },
+    {
       "id": "CVE-2026-13758",
       "summary": "CryptX versions before 0.088_001 for Perl compare AEAD authentication tags in non-constant time in the streaming decrypt_done path. The decrypt_done($tag) form compares it against the computed tag with memNE (memcmp() != 0), which short-circuits on the first differing byte, so its run time depends on the number of matching leading bytes. This affects all five AEAD modes: GCM, CCM, ChaCha20Poly1305, EAX and OCB. The one-shot *_decrypt_verify helpers are unaffected; they verify the tag inside libtomcrypt with a constant-time comparison. The timing difference is a tag-verification oracle. An attacker who can submit many candidate tags for the same nonce, ciphertext and associated data while measuring the timing precisely enough may recover the expected tag byte by byte and forge a message that verifies.",
       "published": "2026-06-29T21:16:43.067Z",
@@ -44406,50 +44460,6 @@
       ]
     },
     {
-      "id": "CVE-2026-53427",
-      "summary": "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') vulnerability in leandrocp MDEx allows stored or reflected cross-site scripting via attacker-controlled Markdown. When syntax highlighting and full info-string forwarding (render: [full_info_string: true]) are enabled, the Lumis adapter copies the value of a code fence's highlight_lines_class info-string attribute, unescaped, into the class attribute of every rendered line. comrak_nif::lumis_adapter::LumisAdapter::parse_custom_attributes in native/comrak_nif/src/lumis_adapter.rs shlex-parses the info string and stores each key=value pair verbatim, highlight_lines_config pulls highlight_lines_class into the per-line class value, and write_highlighted interpolates that value directly into the class attribute of the per-line . A single-quoted shell token preserves an inner double quote through shlex parsing, so a value such as '\"> alert(1) ' terminates the class attribute early and the markup that follows is emitted as live HTML. An attacker who can submit Markdown (through comments, posts, wiki pages, documentation, or any user-generated content) can inject arbitrary HTML and JavaScript that runs in the browser of every user who views the rendered output, enabling session theft, account takeover, and other client-side attacks. No authentication or special privileges are required. The vulnerable native code originally shipped inside mdex (in native/comrak_nif/src/lumis_adapter.rs) and was later extracted into the separate mdex_native package (native/mdex_native_nif/src/lumis_adapter.rs), where it remains unpatched. This issue affects mdex from 0.11.3 before 0.12.3, and mdex_native from 0.1.0 before 0.2.3.",
-      "published": "2026-06-29T19:16:41.597Z",
-      "lastModified": "2026-06-29T20:17:38.650Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00405,
-      "epssPercentile": 0.33215,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.16,
-      "tags": [
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-12578",
       "summary": "The affected product is vulnerable to a deserialization of untrusted data, which may allow an attacker to execute arbitrary code.",
       "published": "2026-06-30T09:16:24.267Z",
@@ -44491,50 +44501,6 @@
       "priorityScore": 1.15,
       "tags": [
         "CWE-502"
-      ]
-    },
-    {
-      "id": "CVE-2026-53428",
-      "summary": "Memory Allocation with Excessive Size Value vulnerability in leandrocp mdex allows an unauthenticated attacker to cause a denial of service through unbounded memory allocation. comrak_nif::lumis_adapter::LumisAdapter::parse_highlight_lines in native/comrak_nif/src/lumis_adapter.rs eagerly expands a user-controlled inclusive line range from a fenced code block's highlight_lines decorator into a Vec , pushing one element per integer in the range with no upper bound on the range size. An attacker who can supply Markdown that an application renders with MDEx.to_html/2 (for example a comment, chat message, or wiki page) can embed a code block whose info string is rust highlight_lines=\"1-100000000\", forcing the native adapter to allocate roughly 8 bytes per line in the range. A payload that differs by only a few bytes can therefore allocate hundreds of megabytes, and a sufficiently large range (for example 1-2000000000) exhausts host memory and aborts the BEAM, denying service to every user of the rendering process. The per-line write loop additionally tests membership with a linear scan over the same vector, degrading rendering to a quadratic cost even for ranges that do not immediately exhaust memory. The vulnerable native code originally shipped inside mdex (in native/comrak_nif/src/lumis_adapter.rs) and was later extracted into the separate mdex_native package (native/mdex_native_nif/src/lumis_adapter.rs), where it remains unpatched. This issue affects mdex from 0.11.0 before 0.12.3, and mdex_native from 0.1.0 before 0.2.3.",
-      "published": "2026-06-29T19:16:41.817Z",
-      "lastModified": "2026-06-29T20:17:38.850Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00142,
-      "epssPercentile": 0.03958,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-789",
-          "name": "CWE-789",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.14,
-      "tags": [
-        "CWE-789"
       ]
     },
     {
@@ -45001,6 +44967,50 @@
       "tags": [
         "CWE-20",
         "CWE-323"
+      ]
+    },
+    {
+      "id": "CVE-2026-54756",
+      "summary": "Jodit Editor is a WYSIWYG editor with written in pure TypeScript file and image editing capabilities. In versions prior to 4.12.18, Jodit.configure(options) — and the internal ConfigMerge / ConfigProto helpers — merged user-supplied options into the editor configuration without filtering prototype-mutating keys, potentially causing a Prototype Pollution vulnerability. A payload nested under an existing plain-object option such as controls could reach and mutate Object.prototype. Applications that pass user-controlled or partially user-controlled configuration into Jodit.configure() may be vulnerable. This issue was fixed in version 4.12.18.",
+      "published": "2026-07-01T21:17:03.553Z",
+      "lastModified": "2026-07-02T15:17:04.763Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00273,
+      "epssPercentile": 0.19475,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-1321",
+          "name": "CWE-1321",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.68,
+      "tags": [
+        "CWE-1321"
       ]
     },
     {
