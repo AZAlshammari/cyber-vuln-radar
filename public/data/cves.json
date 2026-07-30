@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-30T00:55:30.278Z",
+  "generatedAt": "2026-07-30T04:07:17.679Z",
   "count": 1000,
   "items": [
     {
@@ -3583,51 +3583,6 @@
       "priorityScore": 5.19,
       "tags": [
         "CWE-89"
-      ]
-    },
-    {
-      "id": "CVE-2026-12243",
-      "summary": "NLTK version 3.9.4 is vulnerable to a path traversal attack due to an incomplete fix for GitHub Issue #3504. The `_UNSAFE_NO_PROTOCOL_RE` regex in `nltk/data.py` checks for literal `../` sequences but fails to account for percent-encoded traversal sequences such as `..%2f`. The `url2pathname()` function decodes these sequences after the validation step, allowing an attacker to bypass the protection. This vulnerability enables an attacker to read arbitrary files accessible to the Python process by controlling the resource name parameter passed to `nltk.data.load()` or `nltk.data.find()`. The issue affects applications that rely on NLTK for resource loading, including NLP web applications, Jupyter notebooks, and CLI tools. The default `pathsec.ENFORCE=False` setting exacerbates the impact by not blocking the file read at the `open()` stage.",
-      "published": "2026-06-30T01:16:29.063Z",
-      "lastModified": "2026-06-30T20:10:25.837Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00583,
-      "epssPercentile": 0.44448,
-      "isKev": false,
-      "kev": null,
-      "vendor": "GitHub",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.18,
-      "tags": [
-        "GitHub",
-        "CWE-22"
       ]
     },
     {
@@ -10735,51 +10690,6 @@
       "tags": [
         "WordPress",
         "CWE-89"
-      ]
-    },
-    {
-      "id": "CVE-2026-58302",
-      "summary": "rtapi_app in linuxcnc-uspace in LinuxCNC before 2.9.9 allows privilege escalation. It is installed SUID root and loads shared library modules via dlopen() by using a user-supplied module name. Insufficient validation of the module name allows path traversal, enabling an unprivileged local user to load an arbitrary shared library. Because the process retains elevated privileges during module loading, this results in local privilege escalation to root.",
-      "published": "2026-06-30T02:16:26.820Z",
-      "lastModified": "2026-06-30T14:22:10.020Z",
-      "severity": "High",
-      "cvssScore": 8.4,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0015,
-      "epssPercentile": 0.04715,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.11,
-      "tags": [
-        "Linux",
-        "CWE-22"
       ]
     },
     {
@@ -18752,6 +18662,50 @@
       ]
     },
     {
+      "id": "CVE-2026-14440",
+      "summary": "Description: To issue and renew TLS certificates on behalf of customers, Cloudflare's Universal SSL feature automatically manages the CAA RRset for the customer's zone. This auto-managed RRset is permissive by design (e.g. 'issue \"letsencrypt.org\"' without parameters). On Universal SSL zones, Cloudflare's authoritative DNS serves this auto-managed RRset at query time, superseding any customer-configured CAA records on the zone. When a customer publishes a stricter CAA record using the RFC 8657 accounturi or validationmethods parameters, the Certificate Authority does not observe those parameters when evaluating the served RRset under RFC 8659. As a result, the RFC 8657 account-binding and validation-method-binding protections are not enforced end-to-end on Universal SSL zones. Successful exploitation could result in issuance of a browser-trusted TLS certificate to an attacker, enabling MITM against the affected domain. Exploitation is non-trivial in practice: an attacker would need to hold an ACME account at one of the Certificate Authorities in the served CAA RRset and to simultaneously satisfy domain control validation across the multiple geographically distinct Network Perspectives the CA relies on for Multi-Perspective Issuance Corroboration. Cloudflare prefixes are anycast-announced from hundreds of locations globally, raising the bar against single-vantage-point BGP hijacks. Any resulting misissuance of a browser-trusted certificate is subject to Certificate Transparency logging required by major browsers, and would be visible to CT monitoring. Mitigation: Customers requiring strict RFC 8657 enforcement need to disable Universal SSL on the affected zone. Universal SSL's automatic CAA management and customer-set RFC 8657 accounturi and validationmethods enforcement are mutually exclusive by the nature of the issue, so there is no in-product workaround that preserves both. Certificate Transparency monitoring is recommended for all customers as a general detection control. Credits: David Osipov (ORCID: https://orcid.org/0009-0005-2713-9242), independent researcher",
+      "published": "2026-07-01T23:16:52.007Z",
+      "lastModified": "2026-07-02T20:17:01.137Z",
+      "severity": "Medium",
+      "cvssScore": 6.8,
+      "cvssVector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00195,
+      "epssPercentile": 0.09554,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-693",
+          "name": "CWE-693",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.71,
+      "tags": [
+        "CWE-693"
+      ]
+    },
+    {
       "id": "CVE-2026-14403",
       "summary": "Use after free in V8 in Google Chrome prior to 150.0.7871.46 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: Low)",
       "published": "2026-07-01T23:16:48.723Z",
@@ -19686,6 +19640,52 @@
         "Google",
         "Chrome",
         "CWE-20"
+      ]
+    },
+    {
+      "id": "CVE-2026-14432",
+      "summary": "Use after free in V8 in Google Chrome prior to 150.0.7871.46 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: Medium)",
+      "published": "2026-07-01T23:16:51.697Z",
+      "lastModified": "2026-07-03T04:17:51.457Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00247,
+      "epssPercentile": 0.16145,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.65,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-416"
       ]
     },
     {
@@ -24312,50 +24312,6 @@
       "tags": [
         "F5",
         "CWE-942"
-      ]
-    },
-    {
-      "id": "CVE-2026-14160",
-      "summary": "Time-of-check time-of-use (TOCTOU) race condition vulnerability in Samsung Open Source Escargot allows Leveraging Race Conditions. This issue affects Escargot: bab3a5797557014ce3c2e28419a6310cfba90d0d.",
-      "published": "2026-06-30T03:17:15.177Z",
-      "lastModified": "2026-06-30T14:14:35.520Z",
-      "severity": "Medium",
-      "cvssScore": 5.9,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.0009,
-      "epssPercentile": 0.00557,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-367",
-          "name": "CWE-367",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.08,
-      "tags": [
-        "CWE-367"
       ]
     },
     {
@@ -32475,6 +32431,56 @@
       ]
     },
     {
+      "id": "CVE-2026-14439",
+      "summary": "A path traversal vulnerability exists in the Git Service component shared by Altium Enterprise Server and Altium 365. The service accepts a sequence of post-clone file-manipulation operations that use user-supplied paths without validation, allowing an authenticated user with basic git access to move arbitrary files outside the intended repository area. This file-move primitive can be used to place attacker-controlled script content into directories where it is later executed by the service, resulting in remote code execution under the Git Service account. On multi-tenant Altium 365 deployments, this could have allowed access to data belonging to other tenants on the same infrastructure node. Altium Enterprise Server is fixed in 8.1.1; the issue has been remediated in Altium 365 (commercial and government cloud) at the service level.",
+      "published": "2026-07-01T23:16:51.800Z",
+      "lastModified": "2026-07-20T23:16:55.490Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00601,
+      "epssPercentile": 0.45274,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        },
+        {
+          "id": "CWE-94",
+          "name": "CWE-94",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.58,
+      "tags": [
+        "CWE-22",
+        "CWE-94"
+      ]
+    },
+    {
       "id": "CVE-2026-13877",
       "summary": "Insufficient validation of untrusted input in ANGLE in Google Chrome prior to 150.0.7871.47 allowed a remote attacker who had compromised the renderer process to obtain potentially sensitive information from process memory via a crafted HTML page. (Chromium security severity: Medium)",
       "published": "2026-06-30T23:17:01.990Z",
@@ -39749,51 +39755,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12114",
-      "summary": "The Team Members – Multi Language Supported Team Plugin plugin for WordPress is vulnerable to Stored Cross-Site Scripting via admin settings in all versions up to, and including, 8.7 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with administrator-level permissions and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This only affects multi-site installations and installations where unfiltered_html has been disabled.",
-      "published": "2026-06-30T03:17:09.940Z",
-      "lastModified": "2026-06-30T17:16:20.497Z",
-      "severity": "Medium",
-      "cvssScore": 4.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00212,
-      "epssPercentile": 0.11657,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.95,
-      "tags": [
-        "WordPress",
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2025-36328",
       "summary": "IBM watsonx.data intelligence 5.2.0, 5.2.1, 5.2.2, 5.3.0 could allow a remote attacker to obtain sensitive information when a detailed technical error message is returned in the browser. This information could be used in further attacks against the system.",
       "published": "2026-06-30T21:16:29.790Z",
@@ -43480,6 +43441,56 @@
         "Chrome",
         "Android",
         "CWE-451"
+      ]
+    },
+    {
+      "id": "CVE-2026-50283",
+      "summary": "Craft CMS is a content management system (CMS). Versions 5.0.0-RC1 through 5.9.20, and 4.0.0-RC1 through 4.17.13 contain an authorization issue in the AssetsController::actionReplaceFile that can delete a source asset without source delete permission by supplying both assetId and sourceAssetId. AssetsController::actionReplaceFile() supports replacing a target asset file using another existing asset as the source. The action loads: assetId -> $assetToReplace and sourceAssetId -> $sourceAsset, then enforces replace permissions using ($assetToReplace ?: $sourceAsset). When both IDs are provided, this expression resolves to the target asset so no permission check is performed against the source asset volume. When both assets are present, Craft copies the source file into the target and then deletes the source asset. There is no deletion check for for the source asset. An authenticated user who can replace files in one volume can delete assets in another volume where they do not have delete permission, as long as they can obtain a sourceAssetId, leading to broken content references and data loss. This issue has been fixed in versions 4.17.14 and 5.9.21.",
+      "published": "2026-07-01T23:16:52.207Z",
+      "lastModified": "2026-07-02T15:17:02.463Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00265,
+      "epssPercentile": 0.18303,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-639",
+          "name": "CWE-639",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.64,
+      "tags": [
+        "CWE-639",
+        "CWE-862"
       ]
     },
     {
