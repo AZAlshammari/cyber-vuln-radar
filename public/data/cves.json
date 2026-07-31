@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-31T09:46:47.267Z",
+  "generatedAt": "2026-07-31T12:02:32.614Z",
   "count": 1000,
   "items": [
     {
@@ -360,6 +360,51 @@
       "priorityScore": 6.97,
       "tags": [
         "CWE-78"
+      ]
+    },
+    {
+      "id": "CVE-2026-43825",
+      "summary": "Untrusted Java Deserialization in Apache OpenNLP SvmDoccatModel Versions Affected: before 3.0.0-M4 (libsvm document categorization module; introduced in OPENNLP-1808 and only present on the 3.x line) Description: SvmDoccatModel.deserialize(InputStream) reads an attacker-controlled stream with java.io.ObjectInputStream and calls readObject() without an ObjectInputFilter installed. ObjectInputStream materialises every class referenced in the stream before the resulting object is cast to SvmDoccatModel, so the cast that follows readObject() executes only after the foreign object graph has already been deserialised in full. If a Java deserialization gadget chain is available on the consumer's classpath, a crafted payload supplied to deserialize() executes arbitrary code in the JVM that loads it. Apache OpenNLP itself does not ship a known gadget chain, so the realistic risk is to downstream applications that embed the libsvm module alongside vulnerable transitive dependencies. The method is public and static, so any caller can pass an untrusted stream to it directly. The practical impact is remote code execution against processes that load SvmDoccatModel instances from untrusted or semi-trusted origins. Mitigation: 3.x users should upgrade to 3.0.0-M4. Users who cannot upgrade immediately should treat all serialized SvmDoccatModel streams as untrusted input unless their provenance is verified, and should avoid invoking SvmDoccatModel.deserialize() on streams supplied by end users or fetched from third-party sources without integrity checks.",
+      "published": "2026-07-06T17:16:31.570Z",
+      "lastModified": "2026-07-08T19:46:24.460Z",
+      "severity": "High",
+      "cvssScore": 7.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.08796,
+      "epssPercentile": 0.94644,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-502",
+          "name": "Deserialization of Untrusted Data",
+          "description": "Untrusted serialized data can alter control flow or objects."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.87,
+      "tags": [
+        "Apache",
+        "CWE-502"
       ]
     },
     {
@@ -1145,6 +1190,52 @@
       ]
     },
     {
+      "id": "CVE-2026-48316",
+      "summary": "ColdFusion versions 2025.9, 2023.20 and earlier are affected by an Improper Input Validation vulnerability that could result in arbitrary code execution in the context of the current user. Exploitation of this issue does not require user interaction. Scope is changed.",
+      "published": "2026-07-06T17:16:32.010Z",
+      "lastModified": "2026-07-09T17:19:22.820Z",
+      "severity": "Critical",
+      "cvssScore": 10,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.01601,
+      "epssPercentile": 0.73371,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Adobe",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-20",
+          "name": "CWE-20",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.07,
+      "tags": [
+        "Adobe",
+        "F5",
+        "CWE-20"
+      ]
+    },
+    {
       "id": "CVE-2026-9834",
       "summary": "The WP Database Backup – Unlimited Database & Files Backup by Backup for WP plugin for WordPress is vulnerable to OS Command Injection in all versions up to and including 7.11 via the `wp_db_exclude_table` parameter. This is due to the direct concatenation of user-supplied `$_POST['wp_db_exclude_table']` values into the `mysqldump` shell command string in the `mysqldump()` function of `includes/admin/class-wpdb-admin.php` without wrapping them in `escapeshellarg()`—every other argument in the same command (DB_USER, DB_PASSWORD, host, filename, DB_NAME) is properly escaped, making the exclude-table values the sole exception—and because the only applied filtering, `sanitize_text_field()` via `recursive_sanitize_text_field()`, strips HTML tags but leaves shell metacharacters such as `;`, `|`, `` ` ``, and `$()` intact. This makes it possible for authenticated attackers, with administrator-level access and above, to execute arbitrary operating system commands on the server, potentially enabling full remote code execution. The injection is stored: malicious values submitted through the plugin settings form are persisted to the WordPress options table via `update_option('wp_db_exclude_table')` and later retrieved with `get_option()` and passed unsanitized to `shell_exec()` whenever a backup operation runs.",
       "published": "2026-07-02T10:16:29.353Z",
@@ -1811,6 +1902,50 @@
       "tags": [
         "Apache",
         "CWE-502"
+      ]
+    },
+    {
+      "id": "CVE-2026-40141",
+      "summary": "A high-severity vulnerability exists in a web application component of BeyondTrust Remote Support and Privileged Remote Access related to the processing of certain input parameters. Insufficient validation of user-supplied input may allow an authenticated attacker with limited privileges to access unintended resources or data beyond their authorization scope. Exploitation is restricted to accounts with specific permissions.",
+      "published": "2026-07-06T17:16:31.143Z",
+      "lastModified": "2026-07-07T18:43:46.610Z",
+      "severity": "Critical",
+      "cvssScore": 9.9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00494,
+      "epssPercentile": 0.39718,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-943",
+          "name": "CWE-943",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.86,
+      "tags": [
+        "CWE-943"
       ]
     },
     {
@@ -3554,6 +3689,50 @@
       "tags": [
         "Linux",
         "CWE-190"
+      ]
+    },
+    {
+      "id": "CVE-2026-48614",
+      "summary": "An improper authorization vulnerability in the Plesk XML API allows an authenticated user to inject arbitrary configuration directives, resulting in arbitrary file write as root and full privilege escalation on the underlying server.",
+      "published": "2026-07-06T18:16:46.130Z",
+      "lastModified": "2026-07-06T19:41:00.653Z",
+      "severity": "Critical",
+      "cvssScore": 9.9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0033,
+      "epssPercentile": 0.25536,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-94",
+          "name": "CWE-94",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.36,
+      "tags": [
+        "CWE-94"
       ]
     },
     {
@@ -6738,51 +6917,6 @@
       "priorityScore": 4.87,
       "tags": [
         "CWE-918"
-      ]
-    },
-    {
-      "id": "CVE-2026-13228",
-      "summary": "The LatePoint – Calendar Booking Plugin for Appointments and Events plugin for WordPress is vulnerable to Privilege Escalation to Administrator in versions up to, and including, 5.6.3 This is due to an Insecure Direct Object Reference (IDOR) in the create_or_update() function of OsOrdersController, which allows an authenticated Agent to supply an arbitrary order[customer_id] and overwrite any LatePoint customer's email field (including one linked to a WordPress Administrator's account) through the public-scope customer set_data() call, combined with a missing role verification in OsAuthHelper::authorize_customer() which logs in the linked WordPress user without checking its role. This makes it possible for authenticated attackers, with custom (Agent)-level access and above, to elevate their privileges to Administrator.",
-      "published": "2026-07-01T11:16:25.377Z",
-      "lastModified": "2026-07-01T17:16:19.873Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.003,
-      "epssPercentile": 0.22296,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-269",
-          "name": "Improper Privilege Management",
-          "description": "Privileges are assigned, modified, or checked incorrectly."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.86,
-      "tags": [
-        "WordPress",
-        "CWE-269"
       ]
     },
     {
@@ -10928,51 +11062,6 @@
       "priorityScore": 4.33,
       "tags": [
         "CWE-306"
-      ]
-    },
-    {
-      "id": "CVE-2026-12142",
-      "summary": "The NEX-Forms – Ultimate Forms Plugin for WordPress plugin for WordPress is vulnerable to Stored Cross-Site Scripting via '_name[]' Array Parameter in all versions up to, and including, 9.2.2 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The wp_kses() output filtering pass provides no mitigation because NEXForms_allowed_tags() explicitly permits <script>, <iframe src/srcdoc>, and JS event handlers such as onClick, onBlur, and onChange in its allow-list.",
-      "published": "2026-07-01T11:16:24.043Z",
-      "lastModified": "2026-07-01T13:56:17.493Z",
-      "severity": "High",
-      "cvssScore": 7.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00304,
-      "epssPercentile": 0.22735,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.32,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -17009,51 +17098,6 @@
       "priorityScore": 3.91,
       "tags": [
         "CWE-502"
-      ]
-    },
-    {
-      "id": "CVE-2026-13454",
-      "summary": "The MotoPress Appointment Booking plugin for WordPress is vulnerable to generic SQL Injection via the 's' parameter in all versions up to, and including, 2.4.5 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers, with custom-level access and above, to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. Exploitation requires the mpa_appointment_employee custom role, meaning any user assigned this role can perform the attack.",
-      "published": "2026-07-01T10:16:27.980Z",
-      "lastModified": "2026-07-01T13:56:17.493Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00261,
-      "epssPercentile": 0.17787,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.9,
-      "tags": [
-        "WordPress",
-        "CWE-89"
       ]
     },
     {
@@ -24339,51 +24383,6 @@
       "priorityScore": 3.57,
       "tags": [
         "CWE-20"
-      ]
-    },
-    {
-      "id": "CVE-2026-12754",
-      "summary": "The VikBooking Hotel Booking Engine & PMS plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the 'layoutstyle' parameter in all versions up to, and including, 1.8.12 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link. Exploitation requires the targeted page to render the [vikbooking view=\"roomslist\"] shortcode, as the vulnerable layoutstyle parameter is only processed in that view context.",
-      "published": "2026-07-01T10:16:26.790Z",
-      "lastModified": "2026-07-01T13:56:17.493Z",
-      "severity": "Medium",
-      "cvssScore": 6.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00215,
-      "epssPercentile": 0.12071,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.56,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -31728,50 +31727,6 @@
       ]
     },
     {
-      "id": "CVE-2026-14258",
-      "summary": "A flaw was found in dhcpcd's IPv6 Neighbor Discovery Router Advertisement processing. A specially crafted IPv6 Router Advertisement containing a zero-length Neighbor Discovery option can bypass validation during packet storage and later be reparsed without adequate validation, causing the parser to enter a non-advancing loop. Successful exploitation may result in excessive CPU consumption, leading to a denial of service.",
-      "published": "2026-07-01T11:16:25.980Z",
-      "lastModified": "2026-07-01T18:31:17.080Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00256,
-      "epssPercentile": 0.17221,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-835",
-          "name": "CWE-835",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.88,
-      "tags": [
-        "CWE-835"
-      ]
-    },
-    {
       "id": "CVE-2026-58033",
       "summary": "Exposure of Sensitive Information to an Unauthorized Actor vulnerability in Wikimedia Foundation MediaWiki. This vulnerability is associated with program files includes/Actions/InfoAction.Php. This issue affects MediaWiki: from * before 1.46.0, 1.45.4, 1.44.6, 1.43.9.",
       "published": "2026-07-01T16:16:50.627Z",
@@ -32908,51 +32863,6 @@
       "tags": [
         "CWE-285",
         "CWE-863"
-      ]
-    },
-    {
-      "id": "CVE-2026-10095",
-      "summary": "The WP Photo Album Plus plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'subtext' parameter in all versions up to, and including, 9.1.13.005 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. A contributor-level attacker can embed the malicious [photo] shortcode in a post submitted for review, causing the stored payload to execute when an administrator or any other user views the post.",
-      "published": "2026-07-01T11:16:21.827Z",
-      "lastModified": "2026-07-01T13:56:17.493Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00234,
-      "epssPercentile": 0.14468,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.75,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -35395,6 +35305,52 @@
       "priorityScore": 2.55,
       "tags": [
         "CWE-352"
+      ]
+    },
+    {
+      "id": "CVE-2026-12154",
+      "summary": "The Reviews Widgets for Google, Yelp & TripAdvisor plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'page_id' shortcode attribute of the [fbrev] shortcode in versions up to and including 2.7.3. This is due to insufficient input sanitization and output escaping in the Feed_Shortcode::fbrev() method, which passes the raw shortcode attribute through Feed_Old::get_feed() into the View::render() method, where it is echoed directly into the data-id HTML attribute without esc_attr(). This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
+      "published": "2026-07-06T18:16:36.670Z",
+      "lastModified": "2026-07-07T15:16:42.180Z",
+      "severity": "Medium",
+      "cvssScore": 6.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00188,
+      "epssPercentile": 0.08679,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.54,
+      "tags": [
+        "Google",
+        "WordPress",
+        "CWE-79"
       ]
     },
     {
@@ -38409,50 +38365,6 @@
       ]
     },
     {
-      "id": "CVE-2026-27435",
-      "summary": "Missing Authorization vulnerability in WofficeIO Woffice allows Exploiting Incorrectly Configured Access Control Security Levels. This issue affects Woffice: from n/a before 5.4.33.",
-      "published": "2026-07-01T10:16:28.120Z",
-      "lastModified": "2026-07-01T13:56:17.493Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00171,
-      "epssPercentile": 0.06745,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.09,
-      "tags": [
-        "CWE-862"
-      ]
-    },
-    {
       "id": "CVE-2026-14647",
       "summary": "A weakness has been identified in onnx up to 1.21.x. This vulnerability affects the function convPoolShapeInference_opset19 of the file onnx/defs/nn/old.cc of the component onnxruntime. This manipulation causes out-of-bounds read. It is possible to initiate the attack remotely. The exploit has been made available to the public and could be used for attacks. Patch name: a7bf3a0f1d18bb62575236ef6e4944980c40e045. It is recommended to apply a patch to fix this issue.",
       "published": "2026-07-04T19:16:53.640Z",
@@ -40004,6 +39916,52 @@
       "priorityScore": 1.98,
       "tags": [
         "CWE-369"
+      ]
+    },
+    {
+      "id": "CVE-2026-40257",
+      "summary": "OP-TEE is a Trusted Execution Environment (TEE) designed as companion to a non-secure Linux kernel running on Arm; Cortex-A cores using the TrustZone technology. Starting in version 3.21.0 and prior to version 4.11.0, the ARM Crypto Extensions accelerated SHA-3 implementation has an off-by-one error that can cause a massive heap overflow that corrupts all TEE kernel memory following the hash state. This affects all platforms built with `CFG_CRYPTO_WITH_CE82=y` (ARMv8.2+ with SHA3 Crypto Extensions). Version 4.11.0 contains a patch. As a workaround, disable SHA3 Crypto Extensions with `CFG_CRYPTO_WITH_CE82=n`.",
+      "published": "2026-07-06T17:16:31.253Z",
+      "lastModified": "2026-07-07T18:56:50.250Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00109,
+      "epssPercentile": 0.01433,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.98,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-787"
       ]
     },
     {
@@ -43899,6 +43857,51 @@
       "tags": [
         "CWE-119",
         "CWE-415"
+      ]
+    },
+    {
+      "id": "CVE-2026-41434",
+      "summary": "OP-TEE is a Trusted Execution Environment (TEE) designed as companion to a non-secure Linux kernel running on Arm; Cortex-A cores using the TrustZone technology. Starting in version 3.10.0 and prior to version 4.11.0, an unbounded recursion can crash the PKCS#11 TA. Version 4.11.0 contains a patch. No known workarounds are available.",
+      "published": "2026-07-06T18:16:43.923Z",
+      "lastModified": "2026-07-07T18:53:03.177Z",
+      "severity": "Low",
+      "cvssScore": 3.3,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00105,
+      "epssPercentile": 0.01255,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-121",
+          "name": "CWE-121",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.2,
+      "tags": [
+        "Linux",
+        "CWE-121"
       ]
     },
     {
