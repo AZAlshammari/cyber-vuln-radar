@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-31T23:31:25.393Z",
+  "generatedAt": "2026-08-01T01:16:18.277Z",
   "count": 1000,
   "items": [
     {
@@ -2595,6 +2595,51 @@
       ]
     },
     {
+      "id": "CVE-2026-14489",
+      "summary": "The WHMCS Bridge plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the connect() function in all versions up to, and including, 6.9. This makes it possible for authenticated attackers, with Custom-level access and above, to upload arbitrary files on the affected site's server which may make remote code execution possible.",
+      "published": "2026-07-08T06:16:22.307Z",
+      "lastModified": "2026-07-08T14:55:07.843Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00545,
+      "epssPercentile": 0.42636,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-434",
+          "name": "CWE-434",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.57,
+      "tags": [
+        "WordPress",
+        "CWE-434"
+      ]
+    },
+    {
       "id": "CVE-2026-56004",
       "summary": "A shellcode injection in the mercurial handler of the obs tar_scm source service before version 0.12.4 could be used by attackers able to provide a _service file to execute code as the source service or the local user checking out the malicious services",
       "published": "2026-07-02T15:17:06.413Z",
@@ -2636,6 +2681,51 @@
       "priorityScore": 5.56,
       "tags": [
         "CWE-78"
+      ]
+    },
+    {
+      "id": "CVE-2026-12153",
+      "summary": "The WP Learn Manager plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 1.1.8. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for unauthenticated attackers to install and activate arbitrary plugins from the WordPress.org repository on the vulnerable site.",
+      "published": "2026-07-08T06:16:22.157Z",
+      "lastModified": "2026-07-08T18:16:30.763Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00385,
+      "epssPercentile": 0.31288,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.53,
+      "tags": [
+        "WordPress",
+        "CWE-862"
       ]
     },
     {
@@ -3703,6 +3793,51 @@
       "priorityScore": 5.33,
       "tags": [
         "CWE-78"
+      ]
+    },
+    {
+      "id": "CVE-2026-14495",
+      "summary": "The DoLogin Security plugin for WordPress is vulnerable to Authentication Bypass via Insufficient Randomness in all versions up to, and including, 4.3. The vulnerability exists because `dologin\\s::rrand()` seeds the Mersenne Twister with `mt_srand((double) microtime() * 1000000)` — discarding the integer-seconds component of `microtime()` and constraining the seed to a range of approximately 10^6 values (~20 bits of entropy) — after which every character of the 32-character magic-link token is drawn sequentially with `mt_rand()`, making the entire token a deterministic function of that seed. Because `Pswdless::try_login()` is registered on the unauthenticated `init` hook, resolves the target account by the auto-increment numeric ID embedded in the `?dologin= . ` parameter, performs the hash comparison using a non-constant-time `!=` operator, and then calls `wp_set_auth_cookie()` directly — never passing through `wp_authenticate()` and therefore never triggering the plugin's own `Auth::_has_login_err()` lockout — an unauthenticated attacker can brute-force the ~10^6-candidate seed space to reconstruct an active passwordless login token and authenticate as any targeted user, including administrators, without a password. Exploitation requires that a valid, unexpired passwordless login link (active for up to 7 days) exists for the target account at the time of the attack, and that the numeric link ID is known or guessable from the auto-increment primary key.",
+      "published": "2026-07-08T06:16:22.443Z",
+      "lastModified": "2026-07-08T14:55:07.843Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00434,
+      "epssPercentile": 0.35713,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-338",
+          "name": "CWE-338",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.33,
+      "tags": [
+        "WordPress",
+        "CWE-338"
       ]
     },
     {
@@ -19821,6 +19956,52 @@
       ]
     },
     {
+      "id": "CVE-2026-14500",
+      "summary": "The Bulk Order Update for WooCommerce plugin for WordPress is vulnerable to Arbitrary File Read in versions up to, and including, 1.6. This is due to the bouw_fetch_csv_data() AJAX handler being registered on the wp_ajax_nopriv_ hook with no capability or nonce check, and passing the attacker-supplied csv_url POST parameter — filtered only by esc_url_raw() (which leaves absolute filesystem paths intact) and validate_file() (which only rejects '..' traversal patterns) — directly into fopen()/fgetcsv() and reflecting the first parsed line in the JSON response. This makes it possible for unauthenticated attackers to read the first line of arbitrary files on the server (such as /etc/passwd) and to use the handler as a file-existence oracle.",
+      "published": "2026-07-08T06:16:22.583Z",
+      "lastModified": "2026-07-08T16:16:27.123Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00333,
+      "epssPercentile": 0.25838,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Oracle",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.76,
+      "tags": [
+        "Oracle",
+        "WordPress",
+        "CWE-22"
+      ]
+    },
+    {
       "id": "CVE-2026-14691",
       "summary": "A security vulnerability has been detected in SourceCodester Multi-Vendor Online Grocery Management System 1.0. This impacts the function update_settings_info of the file classes/SystemSettings.php of the component Setting Handler. Such manipulation of the argument content[] leads to code injection. The attack can be executed remotely. The exploit has been disclosed publicly and may be used.",
       "published": "2026-07-05T02:17:40.907Z",
@@ -25456,6 +25637,51 @@
       "tags": [
         "Apache",
         "CWE-200"
+      ]
+    },
+    {
+      "id": "CVE-2026-12097",
+      "summary": "The User Management plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 1.2. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for unauthenticated attackers to modify the plugin's export field configuration stored in the uiewp_export_field option, controlling which user fields such as password hashes are included in CSV exports and how columns are mapped during imports.",
+      "published": "2026-07-08T06:16:22.000Z",
+      "lastModified": "2026-07-08T14:55:07.843Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00255,
+      "epssPercentile": 0.17136,
+      "isKev": false,
+      "kev": null,
+      "vendor": "WordPress",
+      "product": "WordPress",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.45,
+      "tags": [
+        "WordPress",
+        "CWE-862"
       ]
     },
     {
@@ -39183,62 +39409,6 @@
       ]
     },
     {
-      "id": "CVE-2026-55791",
-      "summary": "Craft CMS is a content management system (CMS). Versions 4.0.0-RC1 and above, prior to 4.18.0 and 5.0.0-RC1, and above, prior to 5.10.0, are vulnerable to Server-Side Request Forgery (SSRF) and Arbitrary JavaScript Injection through the /actions/app/resource-js endpoint. By exploiting the default permissive trustedHosts configuration, an attacker can poison the Host or X-Forwarded-Host header to manipulate the application’s $baseUrl. This bypasses the endpoint’s internal URL validation, forcing the backend Guzzle client to fetch a malicious payload from an attacker-controlled server and reflect it to the client with a Content-Type: application/javascript header. The vulnerability manifests when assetManager.cacheSourcePaths is set to false. This issue has been fixed in versions 4.18.0 and 5.10.0.",
-      "published": "2026-07-02T00:16:44.803Z",
-      "lastModified": "2026-07-02T16:16:33.677Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00331,
-      "epssPercentile": 0.2563,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-644",
-          "name": "CWE-644",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.9,
-      "tags": [
-        "CWE-79",
-        "CWE-644",
-        "CWE-918"
-      ]
-    },
-    {
       "id": "CVE-2026-13373",
       "summary": "Improper Neutralization of Input During Web Page Generation (XSS or 'Cross-site Scripting') vulnerability in WatchGuard Fireware OS (Tigerpaw Technology Integration module) allows Stored XSS. This vulnerability is an additional unmitigated attack path for CVE-2025-13936. This issue affects Fireware OS 12.4 up to and including 12.12, 12.5 up to and including 12.5.18, and 2025.1 up to and including 2026.2.",
       "published": "2026-07-03T00:16:51.137Z",
@@ -39859,56 +40029,6 @@
       "priorityScore": 1.77,
       "tags": [
         "CWE-915"
-      ]
-    },
-    {
-      "id": "CVE-2026-55794",
-      "summary": "Craft CMS is a content management system (CMS). In versions 5.9.0 and above prior to 5.10.0, control panel users with the ability to edit entries can execute unsandboxed Twig code via the HTTP Referrer header, potentially leading to authenticated RCE. The issue happens when a user is saving entries. Strings for a signed redirect URL are being compiled as a Twig template via renderObjectTemplate(), and while a sandboxed alternative already exists (renderSandboxedObjectTemplate()), it is not used in this case. This signed URL can be specified by users, as it is reflected in the “Referer” HTTP request header, which is under attacker control. This issue has been fixed in version 5.10.0.",
-      "published": "2026-07-02T00:16:45.067Z",
-      "lastModified": "2026-07-02T15:12:53.577Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00293,
-      "epssPercentile": 0.21616,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-1336",
-          "name": "CWE-1336",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.76,
-      "tags": [
-        "CWE-94",
-        "CWE-1336"
       ]
     },
     {
@@ -40683,50 +40803,6 @@
       "tags": [
         "CWE-754",
         "CWE-1284"
-      ]
-    },
-    {
-      "id": "CVE-2026-50280",
-      "summary": "Craft CMS is a content management system (CMS). In versions 5.0.0-RC1 and above prior to 5.9.21, the EntriesController::actionMoveToSection() endpoint gates the destination section only by viewEntries:$section->uid rather than requiring saveEntries permission (the source entry is separately checked via Entry::canMove()). As a result, a low-privileged authenticated control-panel user who can move an entry out of its current section can call moveEntryToSection() to rewrite the entry's sectionId and save it into a section where they have read access but no write access. This breaks the section-level authorization model, letting a user with limited permissions inject content into a protected section and interfere with editorial boundaries, approval workflows, and section-specific business logic. This issue has been fixed in version 5.9.21.",
-      "published": "2026-07-02T00:16:44.677Z",
-      "lastModified": "2026-07-02T16:16:30.673Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00273,
-      "epssPercentile": 0.19446,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.68,
-      "tags": [
-        "CWE-284"
       ]
     },
     {
@@ -44387,50 +44463,6 @@
       ]
     },
     {
-      "id": "CVE-2026-55792",
-      "summary": "Craft CMS is a content management system (CMS). In versions starting from 4.0.0-RC1 and prior to 4.18.0, and 5.0.0-RC1 and above, prior to 5.10.0, the dataUrl() Twig function is included in Craft’s Twig sandbox allowlist, allowing any control panel user granted the utility:system-messages permission to embed a file-reading payload into system email templates. When those emails are sent, the server reads the target file and returns its contents as a base64-encoded data URL embedded in the email body. The .env file, which typically contains the database password, CRAFT_SECURITY_KEY, and third-party API keys, passes all of Craft’s existing dataUrl() protection checks and is fully exfiltrated. Obtaining CRAFT_SECURITY_KEY enables an attacker to forge session tokens and escalate to full admin account takeover. This issue has been fixed in versions 4.18.0 and 5.10.0.",
-      "published": "2026-07-02T00:16:44.940Z",
-      "lastModified": "2026-07-02T15:17:06.300Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00268,
-      "epssPercentile": 0.18788,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.66,
-      "tags": [
-        "CWE-200"
-      ]
-    },
-    {
       "id": "CVE-2026-14449",
       "summary": "u5CMS through v12.8.8 is vulnerable to reflected XSS via the ‘thanks’ parameter in multiple form components",
       "published": "2026-07-02T12:16:55.580Z",
@@ -44604,50 +44636,6 @@
       "priorityScore": 0.58,
       "tags": [
         "CWE-98"
-      ]
-    },
-    {
-      "id": "CVE-2026-50279",
-      "summary": "Craft CMS is a content management system (CMS). IN versions 5.0.0-RC1 and above prior to 5.9.21, theEntriesController::actionSaveEntry() performs entry-edit permission checks before request-controlled author changes are applied to the model, allowing for authorship spoofing. The subsequent author mutation path accepts attacker-supplied authors / author parameters and allows the change when the current user is one of the old authors. Because the controller does not re-run authorization after mutating the author list, a low-privileged user can reassign an entry’s authorship to another user without holding the dedicated peer-author-change permission. This issue has been fixed in version 5.9.21.",
-      "published": "2026-07-02T00:16:44.543Z",
-      "lastModified": "2026-07-02T15:11:16.363Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00245,
-      "epssPercentile": 0.15916,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-285",
-          "name": "CWE-285",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.56,
-      "tags": [
-        "CWE-285"
       ]
     },
     {
