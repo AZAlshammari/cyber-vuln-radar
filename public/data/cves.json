@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-02T10:47:17.497Z",
+  "generatedAt": "2026-08-02T12:04:31.391Z",
   "count": 1000,
   "items": [
     {
@@ -5614,6 +5614,57 @@
       ]
     },
     {
+      "id": "CVE-2026-54772",
+      "summary": "CoreWCF is a port of the service side of Windows Communication Foundation (WCF) to .NET Core. Prior to 1.8.1 and 1.9.1, an unauthenticated remote attacker that can reach a NetTcpBinding, NetNamedPipeBinding, or UnixDomainSocketBinding endpoint can trigger premature EOF handling in the CoreWCF net.tcp, net.pipe, or net.uds framing handshake and pin one server thread-pool worker at full CPU per connection. This issue is fixed in versions 1.8.1 and 1.9.1.",
+      "published": "2026-07-08T23:16:54.830Z",
+      "lastModified": "2026-07-09T16:29:14.203Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.0047,
+      "epssPercentile": 0.38212,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": "Windows",
+      "cwe": [
+        {
+          "id": "CWE-400",
+          "name": "CWE-400",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-835",
+          "name": "CWE-835",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.96,
+      "tags": [
+        "Windows",
+        "CWE-400",
+        "CWE-835"
+      ]
+    },
+    {
       "id": "CVE-2026-26307",
       "summary": "Gitea versions before 1.25.5 do not enforce a timeout on git grep searches, allowing expensive searches to consume server resources.",
       "published": "2026-07-03T21:16:58.620Z",
@@ -7038,56 +7089,6 @@
       "knownRansomwareUse": false,
       "priorityScore": 4.76,
       "tags": []
-    },
-    {
-      "id": "CVE-2026-10055",
-      "summary": "In Eclipse Theia since version 1.26.0, the backend /services/request-service RPC accepts an attacker-controlled URL from any client connected to the standard /services messaging endpoint, performs the HTTP request server-side, and returns the full response body to the caller. Because the destination URL is neither validated nor allowlisted, a remote attacker with access to the Theia service connection can issue server-side HTTP requests to localhost or other backend-reachable hosts and read their responses, exposing internal administrative endpoints, cloud instance metadata services, and other resources that are intentionally outside the browser network boundary. The vulnerability affects deployments where the Theia service connection is reachable by untrusted users (for example, multi-tenant or publicly-reachable Theia deployments).",
-      "published": "2026-07-03T11:16:27.600Z",
-      "lastModified": "2026-07-06T18:56:27.910Z",
-      "severity": "High",
-      "cvssScore": 8.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00297,
-      "epssPercentile": 0.21971,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.74,
-      "tags": [
-        "CWE-200",
-        "CWE-918"
-      ]
     },
     {
       "id": "CVE-2026-4375",
@@ -10690,56 +10691,6 @@
       "priorityScore": 4.29,
       "tags": [
         "CWE-125"
-      ]
-    },
-    {
-      "id": "CVE-2026-10054",
-      "summary": "In affected versions of Eclipse Theia (1.8.1 and later), the browser backend exposes privileged terminal RPC over WebSocket (/services/shell-terminal, /services/terminals/:id) without service-level authentication. WebSocket origin validation in @theia/core is fail-open: connections are accepted when the Origin header is missing or when no THEIA_HOSTS allowlist is configured (the default). The Socket.IO integration additionally replaces the real Origin header with a client-supplied fix-origin header that an attacker can control or omit. As a result, a foreign-origin web page visited by a user with a running Theia instance can open the /services WebSocket namespace, invoke terminal creation, attach to the resulting terminal data channel, execute arbitrary OS commands, and read their output. This affects both local developer setups (drive-by attack) and hosted or tunneled deployments without strong external authentication. A fix is in development that enforces same-origin validation by default, removes trust in the fix-origin header, gates HTTP and WebSocket access on a SameSite=Strict; HttpOnly connection-token cookie, and sanitizes shell terminal creation options.",
-      "published": "2026-07-03T11:16:26.847Z",
-      "lastModified": "2026-07-07T05:16:48.237Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00159,
-      "epssPercentile": 0.05578,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-1385",
-          "name": "CWE-1385",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.28,
-      "tags": [
-        "CWE-306",
-        "CWE-1385"
       ]
     },
     {
@@ -20202,6 +20153,51 @@
       ]
     },
     {
+      "id": "CVE-2026-54773",
+      "summary": "CoreWCF is a port of the service side of Windows Communication Foundation (WCF) to .NET Core. Prior to 1.8.1 and 1.9.1, CoreWCF WS-Security signature verification performs a document-wide ds:Signature lookup, allowing an unauthenticated remote attacker to place a SOAP header before wsse:Security and cause WSSecurityOneDotZeroReceiveSecurityHeader to verify an attacker-supplied signature instead of the security header signature. This issue is fixed in versions 1.8.1 and 1.9.1.",
+      "published": "2026-07-08T23:16:54.960Z",
+      "lastModified": "2026-07-10T15:16:41.373Z",
+      "severity": "Medium",
+      "cvssScore": 5.9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00238,
+      "epssPercentile": 0.14982,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": "Windows",
+      "cwe": [
+        {
+          "id": "CWE-347",
+          "name": "CWE-347",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.59,
+      "tags": [
+        "Windows",
+        "CWE-347"
+      ]
+    },
+    {
       "id": "CVE-2026-27657",
       "summary": "Gitea versions before 1.25.5 allow a user to change another user's primary email address.",
       "published": "2026-07-03T21:16:58.720Z",
@@ -21083,6 +21079,56 @@
         "Google",
         "Chrome",
         "CWE-863"
+      ]
+    },
+    {
+      "id": "CVE-2026-54499",
+      "summary": "Stanza is a Stanford NLP Python library for tokenization, sentence segmentation, NER, and parsing of many human languages. Prior to 1.12.2, Stanza model loaders such as stanza.models.common.pretrain.Pretrain.load() attempt torch.load(..., weights_only=True) but fall back to torch.load(..., weights_only=False) on attacker-controllable pickle.UnpicklingError, allowing a malicious .pt pretrain or model file to execute arbitrary pickle code when a Stanza NLP pipeline loads it. This issue is fixed in version 1.12.2.",
+      "published": "2026-07-08T23:16:54.690Z",
+      "lastModified": "2026-07-13T14:57:10.527Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00344,
+      "epssPercentile": 0.27059,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-502",
+          "name": "Deserialization of Untrusted Data",
+          "description": "Untrusted serialized data can alter control flow or objects."
+        },
+        {
+          "id": "CWE-676",
+          "name": "CWE-676",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.57,
+      "tags": [
+        "CWE-502",
+        "CWE-676"
       ]
     },
     {
@@ -25627,50 +25673,6 @@
       "tags": [
         "Linux",
         "CWE-285"
-      ]
-    },
-    {
-      "id": "CVE-2026-13341",
-      "summary": "A vulnerability exists in the Kong Konnect Model Context Protocol (MCP) server prior to version 1.0.0, which could allow a remote attacker to perform an indirect prompt injection attack and execute unintended API requests.",
-      "published": "2026-07-03T11:16:27.720Z",
-      "lastModified": "2026-07-06T19:01:56.880Z",
-      "severity": "High",
-      "cvssScore": 7.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00258,
-      "epssPercentile": 0.17506,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-20",
-          "name": "CWE-20",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.2,
-      "tags": [
-        "CWE-20"
       ]
     },
     {
@@ -30553,6 +30555,57 @@
       "tags": [
         "CWE-285",
         "CWE-863"
+      ]
+    },
+    {
+      "id": "CVE-2026-54774",
+      "summary": "CoreWCF is a port of the service side of Windows Communication Foundation (WCF) to .NET Core. Prior to 1.8.1 and 1.9.1, SamlSerializer skips final SignatureValue verification when a CoreWCF service validates SAML tokens using a non-X.509 signing token, allowing an attacker to reference a non-X.509 SecurityToken key identifier and bypass assertion signature verification. This issue is fixed in versions 1.8.1 and 1.9.1.",
+      "published": "2026-07-08T23:16:55.090Z",
+      "lastModified": "2026-07-10T05:16:37.267Z",
+      "severity": "High",
+      "cvssScore": 7.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.0015,
+      "epssPercentile": 0.04718,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": "Windows",
+      "cwe": [
+        {
+          "id": "CWE-345",
+          "name": "CWE-345",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-347",
+          "name": "CWE-347",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.76,
+      "tags": [
+        "Windows",
+        "CWE-345",
+        "CWE-347"
       ]
     },
     {
@@ -45554,42 +45607,6 @@
       "tags": [
         "CWE-215"
       ]
-    },
-    {
-      "id": "CVE-2026-50238",
-      "summary": "Rejected reason: Red Hat Product Security has concluded that this CVE is not required. The reported issue has been classified as a regular bug and will be addressed through the standard bug-fixing process.",
-      "published": "2026-07-03T11:16:27.850Z",
-      "lastModified": "2026-07-03T11:16:27.850Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0,
-      "epssPercentile": 0,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0,
-      "tags": []
     },
     {
       "id": "CVE-2026-54709",
