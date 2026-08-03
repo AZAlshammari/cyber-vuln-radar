@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-03T10:59:20.332Z",
+  "generatedAt": "2026-08-03T13:46:10.824Z",
   "count": 1000,
   "items": [
     {
@@ -459,6 +459,51 @@
         "Windows",
         "Kubernetes",
         "CWE-22"
+      ]
+    },
+    {
+      "id": "CVE-2026-58459",
+      "summary": "gpsd through release-3.27.5, fixed at commit 4c06658, contains a command injection vulnerability in gpsprof that allows attackers who control the GPS device subtype value to execute arbitrary shell commands by embedding backtick payloads in the gnuplot plot title without proper escaping. The subtype field sourced from a DEVICES JSON log entry or NMEA PGRMT sentence is written into a generated gnuplot program via a set title statement with only double-quote characters escaped, enabling arbitrary shell command execution as the user running gnuplot when the victim renders the generated plot through the gpsprof and gnuplot workflow.",
+      "published": "2026-07-09T17:17:01.493Z",
+      "lastModified": "2026-07-14T23:17:30.803Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.01796,
+      "epssPercentile": 0.76268,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-78",
+          "name": "OS Command Injection",
+          "description": "Improper neutralization of special elements used in OS commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.4,
+      "tags": [
+        "F5",
+        "CWE-78"
       ]
     },
     {
@@ -4787,52 +4832,6 @@
       "priorityScore": 5.07,
       "tags": [
         "CWE-89"
-      ]
-    },
-    {
-      "id": "CVE-2026-53359",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: KVM: x86: Fix shadow paging use-after-free due to unexpected role Commit 0cb2af2ea66ad (\"KVM: x86: Fix shadow paging use-after-free due to unexpected GFN\") fixed a shadow paging mismatch between stored and computed GFNs; the bug could be triggered by changing a PDE mapping from outside the guest, and then deleting a memslot. The rmap_remove() call would miss entries created after the PDE change because the GFN of the leaf SPTE does not match the GFN of the struct kvm_mmu_page. A similar hole however remains if the modified PDE points to a non-leaf page. In this case the gfn can be made to match, but the role does not match: the original large 2MB page creates a kvm_mmu_page with direct=1, while the new 4KB needs a kvm_mmu_page with direct=0. However, kvm_mmu_get_child_sp() does not compare the role, and therefore reuses the page. The next step is installing a leaf (4KB) SPTE on the new path which records an rmap entry under the gfn resolved by the walk. But when that child is zapped its parent kvm_mmu_page has direct=1 and kvm_mmu_page_get_gfn() computes the gfn for the 4KB page as sp->gfn + index instead of using sp->shadowed_translation[] (or sp->gfns[] in older kernels). It therefore fails to remove the recorded entry. When the memslot is dropped the shadow page is freed but the rmap entry survives, as in the scenario that was already fixed. Code that later walks that gfn (dirty logging, MMU notifier invalidation, and so on) dereferences an sptep that lies in the freed page, causing the use-after-free.",
-      "published": "2026-07-04T12:17:01.760Z",
-      "lastModified": "2026-07-29T19:16:47.180Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00908,
-      "epssPercentile": 0.56439,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.06,
-      "tags": [
-        "F5",
-        "Linux",
-        "CWE-416"
       ]
     },
     {
@@ -9208,53 +9207,6 @@
       "priorityScore": 4.37,
       "tags": [
         "CWE-1188"
-      ]
-    },
-    {
-      "id": "CVE-2026-53360",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: KVM: SEV: Require in-GHCB scratch area if GHCB v2+ is in use As per the GHCB spec, when using GHCB v2+ require the software scratch area to reside in the GHCB's shared buffer. Note, things like Page State Change (PSC) requests _rely_ on this behavior, as the guest can't provide a length when making the request, i.e. the size of the guest payload is bounded by the size of the shared buffer. Failure to force usage of the GHCB, and a slew of other flaws, lets a malicious SNP guest corrupt host kernel heap memory, and leak host heap layout information. setup_vmgexit_scratch() allocates a buffer via kvzalloc(exit_info_2), where exit_info_2 is guest-controlled. With exit_info_2=24, this yields a 24-byte allocation in kmalloc-cg-32 (32-byte slab objects). The buffer holds an 8-byte psc_hdr followed by 8-byte psc_entry structs, so only entries[0] and entries[1] are in-bounds. snp_begin_psc() validates end_entry against VMGEXIT_PSC_MAX_COUNT (253) but NOT against the actual buffer size: idx_end = hdr->end_entry; if (idx_end >= VMGEXIT_PSC_MAX_COUNT) { // checks 253, not buffer snp_complete_psc(svm, ...); return 1; } for (idx = idx_start; idx = 2 The guest sets end_entry=10+, causing the host to iterate entries[2+] which are OOB into adjacent slab objects. For each OOB entry: - The host reads 8 bytes (OOB READ / info leak oracle) - If the data passes PSC validation, __snp_complete_one_psc() writes cur_page = 1 or 512 into the entry (OOB WRITE, sev.c:3806) - If validation fails, the error response reveals whether adjacent memory is zero vs non-zero (information disclosure to guest) The guest controls allocation size (exit_info_2), entry range (cur_entry/end_entry), and can fire unlimited VMGEXITs to repeatedly hit different slab positions. By exploiting the variety of bugs, a malicious SEV-SNP guest can: - OOB read adjacent kmalloc-cg-32 objects (heap layout disclosure) - OOB write cur_page bits into adjacent objects (heap corruption) - Trigger use-after-free conditions across VMGEXITs E.g. with KASAN enabled, a single insmod of the PoC guest module produces 73 KASAN reports: BUG: KASAN: slab-out-of-bounds in snp_begin_psc+0x126/0x890 Read of size 8 at addr ffff888219ffb5e0 by task qemu-system-x86/2199 BUG: KASAN: slab-out-of-bounds in snp_begin_psc+0x468/0x890 Write of size 8 at addr ffff888351566648 by task qemu-system-x86/2199 The buggy address belongs to the object at ffff888XXXXXXXXX which belongs to the cache kmalloc-cg-32 of size 32 The buggy address is located N bytes to the right of allocated 32-byte region [ffff888XXXXXXXXX, ffff888XXXXXXXXX) Breakdown: 62 slab-out-of-bounds (reads + writes past allocation) 7 slab-use-after-free 4 use-after-free All credit to Stan for the wonderful description and reproducer! [sean: write changelog]",
-      "published": "2026-07-04T12:17:01.880Z",
-      "lastModified": "2026-07-22T19:07:37.640Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00183,
-      "epssPercentile": 0.08104,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Oracle",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.36,
-      "tags": [
-        "Oracle",
-        "F5",
-        "Linux",
-        "CWE-125"
       ]
     },
     {
@@ -13735,6 +13687,56 @@
       "tags": [
         "WordPress",
         "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-59209",
+      "summary": "n8n is an open source workflow automation platform. Prior to 1.123.61, 2.27.4, and, 2.28.1, an authenticated member with use-only editor access to a shared workflow could read credential-populated headers exposed via the $request object inside an HTTP Request node's pagination expression and exfiltrate the secret through item data. This issue is fixed in versions 1.123.61, 2.27.4, and 2.28.1.",
+      "published": "2026-07-09T17:17:01.780Z",
+      "lastModified": "2026-07-13T15:28:25.360Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00295,
+      "epssPercentile": 0.21757,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-200",
+          "name": "CWE-200",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-522",
+          "name": "CWE-522",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.04,
+      "tags": [
+        "CWE-200",
+        "CWE-522"
       ]
     },
     {
@@ -20508,50 +20510,6 @@
       ]
     },
     {
-      "id": "CVE-2026-14628",
-      "summary": "A vulnerability was detected in NousResearch hermes-agent up to 2026.5.16. This impacts the function extract_media of the file gateway/platforms/base.py of the component Live Webhook Endpoint. Performing a manipulation results in path traversal. The attack may be initiated remotely. The exploit is now public and may be used. The vendor was contacted early about this disclosure but did not respond in any way.",
-      "published": "2026-07-04T13:16:30.413Z",
-      "lastModified": "2026-07-06T18:02:49.450Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00672,
-      "epssPercentile": 0.48494,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.55,
-      "tags": [
-        "CWE-22"
-      ]
-    },
-    {
       "id": "CVE-2026-59724",
       "summary": "Socket.IO enables bidirectional and low-latency communication for every platform. From 6.5.0 before 6.6.7, Engine.IO servers with WebTransport enabled can resolve a crafted session ID such as __proto__ through an inherited property of the clients object during WebTransport upgrade handling, causing a TypeError and denial of service. This issue is fixed in version 6.6.7.",
       "published": "2026-07-08T16:16:32.980Z",
@@ -21029,6 +20987,68 @@
       "priorityScore": 3.51,
       "tags": [
         "CWE-94"
+      ]
+    },
+    {
+      "id": "CVE-2026-59216",
+      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. Prior to 0.10.0, get_event_call delivered execute:python and execute:tool Socket.IO events to a client-supplied session_id after checking only that the session was connected, allowing authenticated users who learned another socket ID through ydoc:document:join to run code interpreter Python or tools in that user session. This issue is fixed in version 0.10.0.",
+      "published": "2026-07-09T17:17:02.467Z",
+      "lastModified": "2026-07-13T12:24:30.137Z",
+      "severity": "High",
+      "cvssScore": 7.7,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00308,
+      "epssPercentile": 0.23219,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-94",
+          "name": "CWE-94",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-200",
+          "name": "CWE-200",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-639",
+          "name": "CWE-639",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.51,
+      "tags": [
+        "CWE-94",
+        "CWE-200",
+        "CWE-639",
+        "CWE-862"
       ]
     },
     {
@@ -22555,6 +22575,50 @@
       ]
     },
     {
+      "id": "CVE-2026-59218",
+      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. Prior to 0.10.0, the /api/v1/auths/signin endpoint looked users up by email and only ran bcrypt password verification when a credential existed, making registered-account attempts measurably slower than missing-email attempts and allowing unauthenticated account enumeration. This issue is fixed in version 0.10.0.",
+      "published": "2026-07-09T17:17:02.750Z",
+      "lastModified": "2026-07-10T18:30:58.837Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.0024,
+      "epssPercentile": 0.15302,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-208",
+          "name": "CWE-208",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.39,
+      "tags": [
+        "CWE-208"
+      ]
+    },
+    {
       "id": "CVE-2026-55830",
       "summary": "RestrictedPython is a tool that helps to define a subset of the Python language which allows to provide a program input into a trusted environment. Prior to 8.3, check_function_argument_names() rejected protected guard hook names for regular, variadic, and keyword-only arguments but omitted positional-only arguments, allowing __getattr__, _getitem_, _write_, or _print_ to be shadowed by a local parameter and bypass the embedding application's access policy. This issue is fixed in version 8.3.",
       "published": "2026-07-08T22:17:15.653Z",
@@ -22648,45 +22712,6 @@
         "Chrome",
         "CWE-125",
         "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-53362",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: ipv6: account for fraggap on the paged allocation path In __ip6_append_data(), when the paged-allocation branch is taken (MSG_MORE / NETIF_F_SG / large fraglen), alloclen and pagedlen are computed as alloclen = fragheaderlen + transhdrlen; pagedlen = datalen - transhdrlen; datalen already includes fraggap (datalen = length + fraggap). When fraggap is non-zero, this is not the first skb and transhdrlen is zero. The fraggap bytes carried over from the previous skb are copied just past the fragment headers in the new skb's linear area. The linear area is therefore undersized by fraggap bytes while pagedlen is overstated by the same amount, and the copy writes past skb->end into the trailing skb_shared_info. An unprivileged user can trigger this via a UDPv6 socket using MSG_MORE together with MSG_SPLICE_PAGES. The bad accounting was introduced by commit 773ba4fe9104 (\"ipv6: avoid partial copy for zc\"). Before commit ce650a166335 (\"udp6: Fix __ip6_append_data()'s handling of MSG_SPLICE_PAGES\"), the negative copy value caused -EINVAL to be returned. That later commit allowed MSG_SPLICE_PAGES to proceed in this case, making the corruption triggerable. The non-paged branch sets alloclen to fraglen, which already accounts for fraggap because datalen does. Bring the paged branch in line by adding fraggap to alloclen and subtracting it from pagedlen. After this adjustment, copy no longer collapses to -fraggap on the paged path, so remove the stale comment describing that old arithmetic. Since a negative copy is no longer expected for a valid MSG_SPLICE_PAGES case, remove the MSG_SPLICE_PAGES exception from the negative copy check.",
-      "published": "2026-07-04T12:17:02.113Z",
-      "lastModified": "2026-07-22T19:07:28.920Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00265,
-      "epssPercentile": 0.18316,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.37,
-      "tags": [
-        "F5",
-        "Linux"
       ]
     },
     {
@@ -23011,6 +23036,50 @@
       "tags": [
         "CWE-281",
         "CWE-863"
+      ]
+    },
+    {
+      "id": "CVE-2026-59220",
+      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.9.2 before 0.10.0, the SKILL_MENTION_RE and strip_re regular expressions in backend/open_webui/utils/middleware.py parsed skill mentions with overlapping quantifiers, allowing an authenticated chat message containing to trigger quadratic backtracking and block the asyncio event loop. This issue is fixed in version 0.10.0.",
+      "published": "2026-07-09T17:17:03.040Z",
+      "lastModified": "2026-07-10T18:15:48.287Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00372,
+      "epssPercentile": 0.30007,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-1333",
+          "name": "CWE-1333",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.33,
+      "tags": [
+        "CWE-1333"
       ]
     },
     {
@@ -23428,6 +23497,94 @@
       "priorityScore": 3.28,
       "tags": [
         "CWE-90"
+      ]
+    },
+    {
+      "id": "CVE-2026-59214",
+      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. Prior to 0.10.0, Open WebUI runs client-side Python with Pyodide in a same-origin web worker, allowing stored chat payloads that use pyodide.http.pyfetch or the js module fetch and XMLHttpRequest APIs to issue authenticated same-origin requests when a victim clicks Run, which can reach admin-only endpoints and execute server-side code through configured tools. This issue is fixed in version 0.10.0.",
+      "published": "2026-07-09T17:17:02.177Z",
+      "lastModified": "2026-07-10T19:24:29.937Z",
+      "severity": "High",
+      "cvssScore": 7.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00286,
+      "epssPercentile": 0.20835,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.28,
+      "tags": [
+        "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-59219",
+      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.9.0 before 0.10.0 with Redis configured, Socket.IO connect, user-join, join-channels, join-note, and the terminal websocket first-message authentication used decode_token without the Redis-backed is_valid_token revocation check, allowing revoked JWTs to continue authenticating realtime connections. This issue is fixed in version 0.10.0.",
+      "published": "2026-07-09T17:17:02.877Z",
+      "lastModified": "2026-07-10T18:17:21.790Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00305,
+      "epssPercentile": 0.22826,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-613",
+          "name": "CWE-613",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.28,
+      "tags": [
+        "CWE-613"
       ]
     },
     {
@@ -25496,6 +25653,50 @@
       ]
     },
     {
+      "id": "CVE-2026-59222",
+      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.7.0 before 0.10.0, GET /api/v1/channels//members returned full UserModelResponse objects for channel members, including settings.ui.toolServers[].key and webhook configuration, allowing a normal channel participant to retrieve other users’ sensitive settings. This issue is fixed in version 0.10.0.",
+      "published": "2026-07-09T17:17:03.353Z",
+      "lastModified": "2026-07-10T17:43:06.180Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00322,
+      "epssPercentile": 0.2469,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-200",
+          "name": "CWE-200",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.14,
+      "tags": [
+        "CWE-200"
+      ]
+    },
+    {
       "id": "CVE-2026-12746",
       "summary": "Dancer2::Plugin::Auth::OAuth::Provider versions before 0.23 for Perl do not support the OAuth 2.0 state parameter. The authentication_url method builds the provider authorization redirect without issuing a state value, and the callback method exchanges the callback code and registers the resulting token into the session without verifying that the callback corresponds to an authorization request this session initiated. Any application that uses this plugin for OAuth 2.0 login is exposed to login cross-site request forgery: because the callback is not bound to the session that began the flow, an attacker who starts an authorization with their own provider account can deliver the resulting callback to a victim, causing the victim's session to complete the attacker's authorization and associating the attacker's provider identity and access token with that session. Where the application persists this as an account link, the attacker may retain access to the victim's account through their own provider credentials.",
       "published": "2026-07-04T18:16:28.247Z",
@@ -26623,50 +26824,6 @@
       "priorityScore": 3.01,
       "tags": [
         "CWE-352"
-      ]
-    },
-    {
-      "id": "CVE-2026-14627",
-      "summary": "A security vulnerability has been detected in NousResearch hermes-agent up to 0.15.2. This affects the function DiscordAdapter._is_allowed_user of the file gateway/platforms/discord.py of the component Discord Platform Integration. Such manipulation leads to improper authentication. The attack can be launched remotely. This attack is characterized by high complexity. The exploitability is reported as difficult. The exploit has been disclosed publicly and may be used. The vendor was contacted early about this disclosure but did not respond in any way.",
-      "published": "2026-07-04T13:16:30.230Z",
-      "lastModified": "2026-07-06T18:16:37.460Z",
-      "severity": "Medium",
-      "cvssScore": 5.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00369,
-      "epssPercentile": 0.29566,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-287",
-          "name": "Improper Authentication",
-          "description": "Authentication is missing or can be bypassed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.99,
-      "tags": [
-        "CWE-287"
       ]
     },
     {
@@ -29661,6 +29818,50 @@
       ]
     },
     {
+      "id": "CVE-2026-59212",
+      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.9.6 before 0.10.0, _verify_knowledge_file_access only checked read access while file write and delete routes later trusted object-derived access through writable model meta.knowledge entries, allowing a user with read-only knowledge file access to upgrade to file write or delete operations. This issue is fixed in version 0.10.0.",
+      "published": "2026-07-09T17:17:01.903Z",
+      "lastModified": "2026-07-10T19:59:36.867Z",
+      "severity": "Medium",
+      "cvssScore": 5.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.0033,
+      "epssPercentile": 0.25541,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-863",
+          "name": "CWE-863",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.78,
+      "tags": [
+        "CWE-863"
+      ]
+    },
+    {
       "id": "CVE-2026-6901",
       "summary": "Untrusted Search Path vulnerability in B&R Industrial Automation GmbH APROL. This issue affects APROL: before R 4.4-01P5.",
       "published": "2026-07-06T11:16:31.433Z",
@@ -30858,50 +31059,6 @@
       ]
     },
     {
-      "id": "CVE-2026-14625",
-      "summary": "A security flaw has been discovered in NousResearch hermes-agent up to 0.15.2. The affected element is the function shell.exec of the file tui_gateway/server.py. The manipulation results in protection mechanism failure. It is possible to launch the attack remotely. The exploit has been released to the public and may be used for attacks. The vendor was contacted early about this disclosure but did not respond in any way.",
-      "published": "2026-07-04T12:16:53.740Z",
-      "lastModified": "2026-07-06T18:16:37.330Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00224,
-      "epssPercentile": 0.13209,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-693",
-          "name": "CWE-693",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.67,
-      "tags": [
-        "CWE-693"
-      ]
-    },
-    {
       "id": "CVE-2026-42145",
       "summary": "Coolify is an open-source and self-hostable tool for managing servers, applications, and databases. Prior to 4.0.0-beta.474, the file upload endpoint (app/Http/Controllers/UploadController.php) for database backup restore uploads did not enforce file type or size validation, allowing an authenticated user to upload unexpected or oversized files that could affect service availability. This issue is fixed in version 4.0.0-beta.474.",
       "published": "2026-07-07T04:17:51.353Z",
@@ -31675,45 +31832,6 @@
       "tags": [
         "CWE-22",
         "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-53361",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: af_unix: Set gc_in_progress to true in unix_gc(). Igor Ushakov reported that unix_gc() could run with gc_in_progress being false if the work is scheduled while running: Thread 1 Thread 2 Thread 3 -------- -------- -------- unix_schedule_gc() unix_schedule_gc() `- if (!gc_in_progress) `- if (!gc_in_progress) |- gc_in_progress = true | `- queue_work() | unix_gc() <----------------/ | | |- gc_in_progress = true ... `- queue_work() | | `- gc_in_progress = false | | unix_gc() <---------------------------------------------' | ... /* gc_in_progress == false */ | `- gc_in_progress = false unix_peek_fpl() relies on gc_in_progress not to confuse GC by MSG_PEEK. Let's set gc_in_progress to true in unix_gc().",
-      "published": "2026-07-04T12:17:02.010Z",
-      "lastModified": "2026-07-22T19:07:32.853Z",
-      "severity": "High",
-      "cvssScore": 7.1,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00124,
-      "epssPercentile": 0.02519,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.57,
-      "tags": [
-        "F5",
-        "Linux"
       ]
     },
     {
@@ -33318,50 +33436,6 @@
       ]
     },
     {
-      "id": "CVE-2026-14624",
-      "summary": "A vulnerability was identified in omec-project amf up to 2.0.2/2.1.1. Impacted is an unknown function of the file /go/src/amf/ngap/handler.go of the component NGSetupRequest Handler. The manipulation leads to denial of service. It is possible to initiate the attack remotely. The exploit is publicly available and might be used. The identifier of the patch is 34bc6724acc97dba1f8691e586da95b042cb612d. To fix this issue, it is recommended to deploy a patch.",
-      "published": "2026-07-04T11:16:47.613Z",
-      "lastModified": "2026-07-06T20:16:30.180Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00317,
-      "epssPercentile": 0.24093,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-404",
-          "name": "CWE-404",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.35,
-      "tags": [
-        "CWE-404"
-      ]
-    },
-    {
       "id": "CVE-2026-55433",
       "summary": "Coder allows organizations to provision remote development environments via Terraform. Prior to versions 2.29.7, 2.32.7, 2.33.8, and 2.34.2, the devcontainer recreate endpoint relied on route middleware that checked only `ActionRead` on the workspace and, unlike the sibling delete endpoint, performed no `ActionUpdate` check before triggering the destructive rebuild. Exploitation requires an existing low-privilege role with access to the target workspace. The fix in versions 2.29.7, 2.32.7, 2.33.8, and 2.34.2 adds an explicit `ActionUpdate` authorization check before the agent is dialed like the delete endpoint. No known workarounds are available.",
       "published": "2026-07-08T01:16:27.760Z",
@@ -34626,6 +34700,56 @@
       ]
     },
     {
+      "id": "CVE-2026-59217",
+      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. Prior to 0.10.0, the file upload path accepted metadata.knowledge_id and auto-linked uploaded files to a target knowledge base without applying the write-access check used by /api/v1/knowledge//file/add, allowing read-only knowledge-base users to add arbitrary files. This issue is fixed in version 0.10.0.",
+      "published": "2026-07-09T17:17:02.613Z",
+      "lastModified": "2026-07-14T02:16:57.147Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00292,
+      "epssPercentile": 0.21479,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-863",
+          "name": "CWE-863",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.26,
+      "tags": [
+        "CWE-862",
+        "CWE-863"
+      ]
+    },
+    {
       "id": "CVE-2026-14704",
       "summary": "A vulnerability was found in stephen-kruger bluebox up to 4.5.12. Affected by this vulnerability is an unknown functionality. Performing a manipulation of the argument code results in cross site scripting. It is possible to initiate the attack remotely. The exploit has been made public and could be used. The project was informed of the problem early through an issue report.",
       "published": "2026-07-05T06:16:28.420Z",
@@ -34717,50 +34841,6 @@
       "priorityScore": 2.24,
       "tags": [
         "CWE-1021"
-      ]
-    },
-    {
-      "id": "CVE-2026-12195",
-      "summary": "myVesta is affected by an authenticated remote code execution vulnerability. Low privileged users can insert arbitrary commands as a part of the v_ftp_user parameter when deleting FTP usernames. This could result in the execution of commands as the admin user or takevoer of the admin user in myVesta.",
-      "published": "2026-07-04T12:16:53.300Z",
-      "lastModified": "2026-07-06T19:43:54.290Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00424,
-      "epssPercentile": 0.34925,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.22,
-      "tags": [
-        "CWE-78"
       ]
     },
     {
@@ -35178,50 +35258,6 @@
       "tags": [
         "F5",
         "CWE-532"
-      ]
-    },
-    {
-      "id": "CVE-2026-14626",
-      "summary": "A weakness has been identified in NousResearch hermes-agent up to 2026.4.30. The impacted element is the function AIAgent.run_conversation of the file run_agent.py of the component HTTP API. This manipulation of the argument todos causes denial of service. The attack can be initiated remotely. The exploit has been made available to the public and could be used for attacks. The vendor was contacted early about this disclosure but did not respond in any way.",
-      "published": "2026-07-04T12:16:53.903Z",
-      "lastModified": "2026-07-07T04:17:23.623Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00277,
-      "epssPercentile": 0.19936,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-404",
-          "name": "CWE-404",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.2,
-      "tags": [
-        "CWE-404"
       ]
     },
     {
@@ -37856,6 +37892,50 @@
       ]
     },
     {
+      "id": "CVE-2026-59213",
+      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.6.27 before 0.10.0, get_all_models handlers in routers/openai.py and routers/ollama.py passed a lambda to aiocache key instead of key_builder, causing permission-filtered per-user model lists to share a static cache entry and exposing one user’s model list to another caller during the TTL window. This issue is fixed in version 0.10.0.",
+      "published": "2026-07-09T17:17:02.030Z",
+      "lastModified": "2026-07-10T19:49:23.313Z",
+      "severity": "Low",
+      "cvssScore": 3.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00297,
+      "epssPercentile": 0.21981,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-524",
+          "name": "CWE-524",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.99,
+      "tags": [
+        "CWE-524"
+      ]
+    },
+    {
       "id": "CVE-2026-40257",
       "summary": "OP-TEE is a Trusted Execution Environment (TEE) designed as companion to a non-secure Linux kernel running on Arm; Cortex-A cores using the TrustZone technology. Starting in version 3.21.0 and prior to version 4.11.0, the ARM Crypto Extensions accelerated SHA-3 implementation has an off-by-one error that can cause a massive heap overflow that corrupts all TEE kernel memory following the hash state. This affects all platforms built with `CFG_CRYPTO_WITH_CE82=y` (ARMv8.2+ with SHA3 Crypto Extensions). Version 4.11.0 contains a patch. As a workaround, disable SHA3 Crypto Extensions with `CFG_CRYPTO_WITH_CE82=n`.",
       "published": "2026-07-06T17:16:31.253Z",
@@ -40357,6 +40437,50 @@
       ]
     },
     {
+      "id": "CVE-2026-59215",
+      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. Prior to 0.10.0, channel thread parent and reply handling did not bind parent_id to the channel in the URL, allowing an authenticated user to reference a message from another private or DM channel and disclose thread context across channels. This issue is fixed in version 0.10.0.",
+      "published": "2026-07-09T17:17:02.340Z",
+      "lastModified": "2026-07-13T12:27:12.263Z",
+      "severity": "Low",
+      "cvssScore": 3.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00255,
+      "epssPercentile": 0.17114,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-639",
+          "name": "CWE-639",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.68,
+      "tags": [
+        "CWE-639"
+      ]
+    },
+    {
       "id": "CVE-2026-14896",
       "summary": "HashiCorp Nomad and Nomad Enterprise are vulnerable to a cross-namespace authorization bypass in the dynamic host volumes feature that may allow an operator holding the host volume delete permission in one namespace to delete a sticky volume claim belonging to a job in another namespace. This vulnerability, CVE-2026-14896, is fixed in Nomad Community Edition 2.0.4 and Nomad Enterprise 2.0.4, 1.11.8, and 1.10.14.",
       "published": "2026-07-08T21:16:47.030Z",
@@ -42106,50 +42230,6 @@
       "priorityScore": 1.42,
       "tags": [
         "CWE-248"
-      ]
-    },
-    {
-      "id": "CVE-2025-13475",
-      "summary": "In multi-tenanted deployments, the application consent management mechanism fails to correctly isolate consent scopes between tenants. Consent granted by a user for a specific SaaS application within one tenant can be incorrectly applied to SaaS applications with the same name in other tenants, leading to unintended cross-tenant consent sharing. This vulnerability may result in the exposure of user data across tenants, enabling SaaS applications in different tenants to access and modify information without explicit user authorization. This can lead to unauthorized data access and privacy violations. This vulnerability has no impact if the deployment does not support multi-tenancy.",
-      "published": "2026-07-04T13:16:30.083Z",
-      "lastModified": "2026-07-09T17:55:35.993Z",
-      "severity": "Low",
-      "cvssScore": 3.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00158,
-      "epssPercentile": 0.05427,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-288",
-          "name": "CWE-288",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.41,
-      "tags": [
-        "CWE-288"
       ]
     },
     {
@@ -44185,50 +44265,6 @@
       "priorityScore": 0.66,
       "tags": [
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-12196",
-      "summary": "HestiaCP panel cronjob feature is affected by a broken access control vulnerability. Low privilege users can modify the panel cronjob to execute scripts HestiaCP management scripts with passwordless sudo. This could result in the takeover of administrator users in the application and the underlying webserver.",
-      "published": "2026-07-04T12:16:53.600Z",
-      "lastModified": "2026-07-06T19:43:54.290Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00256,
-      "epssPercentile": 0.17205,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-287",
-          "name": "Improper Authentication",
-          "description": "Authentication is missing or can be bypassed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.6,
-      "tags": [
-        "CWE-287"
       ]
     },
     {
