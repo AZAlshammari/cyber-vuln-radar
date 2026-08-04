@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T20:44:45.793Z",
+  "generatedAt": "2026-08-04T21:59:06.239Z",
   "count": 1000,
   "items": [
     {
@@ -10243,6 +10243,50 @@
       ]
     },
     {
+      "id": "CVE-2026-58143",
+      "summary": "Cotonti Siena 0.9.26 and earlier contains a cross-site request forgery vulnerability that allows unauthenticated attackers to modify administrator configuration by tricking a logged-in administrator into submitting a forged POST request to the admin.php config update handler, which never invokes the application's CSRF validation function. Attackers can disable the PFS module's file extension whitelist by setting pfsfilecheck to 0, enabling any user with PFS access to upload and execute arbitrary PHP files on the server.",
+      "published": "2026-07-09T22:17:09.663Z",
+      "lastModified": "2026-07-14T22:17:26.923Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00175,
+      "epssPercentile": 0.07141,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-352",
+          "name": "Cross-Site Request Forgery",
+          "description": "A web request may execute without user intent."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.33,
+      "tags": [
+        "CWE-352"
+      ]
+    },
+    {
       "id": "CVE-2026-49098",
       "summary": "Improper Input Validation, Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection') vulnerability in Apache Camel Kafka Component. The camel-kafka producer can override its configured target topic at runtime from the kafka.OVERRIDE_TOPIC Exchange header: KafkaProducer.evaluateTopic() returns the header value in preference to the topic configured on the endpoint. The control-header constants in KafkaConstants (for example OVERRIDE_TOPIC = kafka.OVERRIDE_TOPIC, OVERRIDE_TIMESTAMP = kafka.OVERRIDE_TIMESTAMP, PARTITION_KEY = kafka.PARTITION_KEY) used plain, non-Camel-prefixed values. camel-kafka's own KafkaHeaderFilterStrategy does filter the kafka.* namespace, but only on the Kafka-to-Exchange serialization boundary (reading Kafka record headers into the Exchange, and writing Exchange headers into a Kafka record); it does not apply to headers that arrive from an upstream consumer in a multi-component route. The upstream HTTP consumer uses HttpHeaderFilterStrategy, which blocks only the Camel / camel namespace, so a kafka.* header passes through unfiltered. As a result, in a route that bridges an HTTP consumer (for example platform-http) into a kafka: producer, any HTTP client could set the kafka.OVERRIDE_TOPIC header and cause the message to be published to an arbitrary Kafka topic instead of the configured one - redirecting it to a sensitive internal topic, or injecting attacker-crafted messages into a topic consumed by a critical downstream service. The related kafka.OVERRIDE_TIMESTAMP and kafka.PARTITION_KEY headers could likewise be injected to backdate messages or target specific partitions. No credentials are required when the bridging consumer is unauthenticated. This issue affects Apache Camel: from 4.0.0 before 4.14.8, from 4.15.0 before 4.18.3, from 4.19.0 before 4.21.0. Users are recommended to upgrade to version 4.21.0, which fixes the issue. If users are on the 4.14.x LTS releases stream, then they are suggested to upgrade to 4.14.8. If users are on the 4.18.x releases stream, then they are suggested to upgrade to 4.18.3. After upgrading, routes that set or read Kafka headers via the raw header names must use the CamelKafka* names (for example CamelKafkaOverrideTopic and CamelKafkaTopic) instead of the old kafka.* values. For deployments that cannot upgrade immediately, strip the kafka.* headers from any untrusted ingress before the kafka: producer (for example removeHeaders('kafka.*') at the start of the route), and set the target topic from a trusted source.",
       "published": "2026-07-06T09:16:38.357Z",
@@ -11112,56 +11156,6 @@
       ]
     },
     {
-      "id": "CVE-2026-14770",
-      "summary": "A vulnerability was detected in SourceCodester Class and Exam Timetabling System 1.0. Impacted is an unknown function of the file /edit_room.php. Performing a manipulation of the argument ID results in sql injection. It is possible to initiate the attack remotely. The exploit is now public and may be used.",
-      "published": "2026-07-05T21:16:54.310Z",
-      "lastModified": "2026-07-06T18:16:40.447Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00284,
-      "epssPercentile": 0.20629,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.28,
-      "tags": [
-        "CWE-74",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-14771",
       "summary": "A flaw has been found in SourceCodester Class and Exam Timetabling System 1.0/1.php. The affected element is an unknown function of the file /edit_exam1.php. Executing a manipulation of the argument ID can lead to sql injection. It is possible to launch the attack remotely. The exploit has been published and may be used.",
       "published": "2026-07-05T22:16:52.897Z",
@@ -11756,56 +11750,6 @@
       "priorityScore": 4.22,
       "tags": [
         "CWE-200"
-      ]
-    },
-    {
-      "id": "CVE-2026-14769",
-      "summary": "A security vulnerability has been detected in code-projects Real State Services 1.0. This issue affects some unknown processing of the file /pay.php. Such manipulation of the argument Bankname leads to sql injection. The attack may be performed from remote. The exploit has been disclosed publicly and may be used.",
-      "published": "2026-07-05T21:16:54.153Z",
-      "lastModified": "2026-07-07T04:17:45.107Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00269,
-      "epssPercentile": 0.18837,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.21,
-      "tags": [
-        "CWE-74",
-        "CWE-89"
       ]
     },
     {
@@ -37503,6 +37447,50 @@
       "priorityScore": 2.01,
       "tags": [
         "CWE-606"
+      ]
+    },
+    {
+      "id": "CVE-2026-58144",
+      "summary": "Cotonti Siena 0.9.26 and earlier contains a stored cross-site scripting vulnerability that allows authenticated users with PFS access to inject arbitrary script payloads by supplying malicious HTML in the ntitle parameter processed through the TXT filter in pfs.main.php. Attackers can create a folder with a crafted title containing script tags that are stored unescaped in the database and execute in the browser of any user who views the folder listing, including administrators.",
+      "published": "2026-07-09T22:17:09.817Z",
+      "lastModified": "2026-07-14T22:17:27.043Z",
+      "severity": "Medium",
+      "cvssScore": 5.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00136,
+      "epssPercentile": 0.03455,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.01,
+      "tags": [
+        "CWE-79"
       ]
     },
     {
