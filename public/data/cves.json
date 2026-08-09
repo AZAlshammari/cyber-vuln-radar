@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-08T23:45:39.852Z",
+  "generatedAt": "2026-08-09T00:36:22.431Z",
   "count": 1000,
   "items": [
     {
@@ -633,50 +633,6 @@
       "tags": [
         "WordPress",
         "CWE-434"
-      ]
-    },
-    {
-      "id": "CVE-2026-54769",
-      "summary": "Langroid is a framework for building large-language-model-powered applications. Versions prior to 0.65.2 are vulnerable to a critical Sandbox Escape leading to Remote Code Execution (RCE) in its `TableChatAgent` and `VectorStore` capabilities. When these agents evaluate LLM-generated tool messages with `full_eval=True`, they attempt to sandbox the execution by explicitly setting `locals` to an empty dictionary `{}` inside Python's `eval()` function. However, this relies on an incomplete understanding of Python's execution model. Because `__builtins__` is not explicitly scrubbed from the `globals` dictionary mapping, Python implicitly injects all built-ins during execution, granting full access to functions like `__import__('os').system()`. Since `TableChatAgent.pandas_eval()` executes external LLM outputs natively, this bypass permits any attacker providing prompt payload to achieve unauthenticated RCE on the host system. Version 0.65.2 patches the issue.",
-      "published": "2026-07-10T00:16:33.603Z",
-      "lastModified": "2026-07-10T15:49:19.093Z",
-      "severity": "Critical",
-      "cvssScore": 10,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00638,
-      "epssPercentile": 0.47235,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 6.15,
-      "tags": [
-        "CWE-94"
       ]
     },
     {
@@ -2714,6 +2670,50 @@
       ]
     },
     {
+      "id": "CVE-2026-15427",
+      "summary": "An OS command injection vulnerability exists in the TR-069 / CWMP management interface of Archer VX1800v v1 due to insufficient input validation and sanitization of parameters, allowing crafted input to be executed as system-level commands. Exploitation requires specific conditions such as TR-069 being enabled and ability to influence ACS-delivered commands, compromise or control an ACS server. Successful exploitation may allow arbitrary command execution with root privileges, resulting in complete compromise of the device.",
+      "published": "2026-07-14T17:16:44.653Z",
+      "lastModified": "2026-08-06T18:28:11.360Z",
+      "severity": "High",
+      "cvssScore": 8.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00552,
+      "epssPercentile": 0.43115,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-78",
+          "name": "OS Command Injection",
+          "description": "Improper neutralization of special elements used in OS commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.34,
+      "tags": [
+        "CWE-78"
+      ]
+    },
+    {
       "id": "CVE-2026-54469",
       "summary": "Dell Unisphere for PowerMax, version(s) 10.3.0.5 and prior, contain(s) a Deserialization of Untrusted Data vulnerability. A low privileged attacker with remote access could potentially exploit this vulnerability, leading to arbitrary command execution with root privileges.",
       "published": "2026-07-10T13:16:20.427Z",
@@ -3965,52 +3965,6 @@
       "priorityScore": 5.06,
       "tags": [
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-12597",
-      "summary": "The LoginPress Pro plugin for WordPress is vulnerable to Authentication Bypass via the GitHub OAuth callback in versions up to, and including, 6.2.3. The vulnerability exists in the loginpress_on_github_login() function, which blindly trusts the first element (profile[0]['email']) of the array returned by GitHub's /user/emails endpoint as an account-binding identifier without verifying that the email carries a verified === true status. This makes it possible for unauthenticated attackers to log in as any existing WordPress user, including administrators, by adding an unverified email address matching a local account to their GitHub profile and triggering the OAuth callback via a crafted code parameter — causing the plugin to call get_user_by('email', ...) and establish an authenticated session for the matched account. Practical exploitation is conditional on GitHub returning the attacker-added unverified email at index 0 of the /user/emails response, as GitHub typically prioritizes the primary verified address first; nonetheless, the absence of any email verification check in the plugin constitutes a fundamental authentication bypass flaw.",
-      "published": "2026-07-10T00:16:32.603Z",
-      "lastModified": "2026-07-10T16:16:25.080Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00422,
-      "epssPercentile": 0.34832,
-      "isKev": false,
-      "kev": null,
-      "vendor": "GitHub",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-287",
-          "name": "Improper Authentication",
-          "description": "Authentication is missing or can be bypassed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.05,
-      "tags": [
-        "GitHub",
-        "WordPress",
-        "CWE-287"
       ]
     },
     {
@@ -5542,96 +5496,6 @@
         "Ivanti",
         "CWE-23",
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-12595",
-      "summary": "The LoginPress Pro plugin for WordPress is vulnerable to Authentication Bypass via Unverified OAuth Email in all versions up to and including 6.2.3. The vulnerability exists in the loginpress_on_discord_login() Discord OAuth callback handler, which accepts the email field returned by Discord's /users/@me endpoint without ever checking that the profile's verified flag is true, then directly maps that email to a local WordPress account via get_user_by('email', $profile['email']) and issues an authenticated session cookie via wp_set_auth_cookie(). This makes it possible for unauthenticated attackers to take over any existing WordPress account — including administrator accounts — by registering a Discord account configured with an unverified email address that matches the target user's registered WordPress email and completing the standard Discord OAuth flow.",
-      "published": "2026-07-10T00:16:32.120Z",
-      "lastModified": "2026-07-10T15:43:30.330Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00347,
-      "epssPercentile": 0.27352,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-287",
-          "name": "Improper Authentication",
-          "description": "Authentication is missing or can be bypassed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.79,
-      "tags": [
-        "WordPress",
-        "CWE-287"
-      ]
-    },
-    {
-      "id": "CVE-2026-12598",
-      "summary": "The LoginPress Pro plugin for WordPress is vulnerable to authentication bypass in versions up to and including 6.2.3 via the Spotify Social Login addon. This is due to the loginpress_on_spotify_login() function trusting the unverified 'email' field returned by Spotify's /v1/me endpoint and using it directly with get_user_by('email', $profile['email']) to identify and log in an existing WordPress account, without confirming that the Spotify user actually owns the email address (Spotify documents that the profile email is unverified) and without requiring the user to prove ownership of the matching WordPress account. This makes it possible for unauthenticated attackers to log in as any existing WordPress user, including Administrators, by registering a Spotify account using the targeted user's email address and authenticating via the Spotify provider.",
-      "published": "2026-07-10T00:16:32.727Z",
-      "lastModified": "2026-07-10T19:17:20.113Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00347,
-      "epssPercentile": 0.27352,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-287",
-          "name": "Improper Authentication",
-          "description": "Authentication is missing or can be bypassed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.79,
-      "tags": [
-        "WordPress",
-        "CWE-287"
       ]
     },
     {
@@ -18094,50 +17958,6 @@
       ]
     },
     {
-      "id": "CVE-2026-54771",
-      "summary": "Langroid is a framework for building large-language-model-powered applications. Prior to version 0.65.3, a Langroid application exposing a chat interface to untrusted users may allow direct tool invocation via raw JSON payloads, even when tools are registered with `use=False, handle=True`. Version 0.65.3 fixes the issue.",
-      "published": "2026-07-10T00:16:33.737Z",
-      "lastModified": "2026-07-10T15:49:19.093Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00278,
-      "epssPercentile": 0.19944,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-75",
-          "name": "CWE-75",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.53,
-      "tags": [
-        "CWE-75"
-      ]
-    },
-    {
       "id": "CVE-2026-15330",
       "summary": "A vulnerability was determined in zhayujie CowAgent up to 2.1.1. Impacted is the function _build_image_content/_download_to_data_url of the file agent/tools/vision/vision.py of the component Vision Tool. Executing a manipulation of the argument image can lead to server-side request forgery. The attack can be launched remotely. The exploit has been publicly disclosed and may be utilized. Upgrading to version 2.1.2 is recommended to address this issue. This patch is called e85290cddcbb5ffc9c235927f4c92e5b4c3ec264. Upgrading the affected component is advised.",
       "published": "2026-07-10T05:16:33.820Z",
@@ -22701,6 +22521,50 @@
       ]
     },
     {
+      "id": "CVE-2026-62643",
+      "summary": "In Roundcube Webmail before 1.6.17 and 1.7.x before 1.7.2, insufficient Cascading Style Sheets (CSS) sanitization in HTML e-mail messages may lead to SSRF or Information Disclosure, e.g., if stylesheet links point to local network hosts. NOTE: this issue exists because of insufficient fixes for CVE-2026-35540 and CVE-2026-48843.",
+      "published": "2026-07-14T16:17:04.670Z",
+      "lastModified": "2026-07-20T12:50:11.793Z",
+      "severity": "High",
+      "cvssScore": 7.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00246,
+      "epssPercentile": 0.15907,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-918",
+          "name": "CWE-918",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.08,
+      "tags": [
+        "CWE-918"
+      ]
+    },
+    {
       "id": "CVE-2026-54468",
       "summary": "Dell Unisphere for PowerMax, version(s) 10.3.0.5 and prior, contain(s) a path traversal vulnerability. A low privileged attacker with remote access could potentially exploit this vulnerability to read arbitrary files.",
       "published": "2026-07-10T12:17:23.290Z",
@@ -23611,56 +23475,6 @@
       "priorityScore": 3,
       "tags": [
         "CWE-835"
-      ]
-    },
-    {
-      "id": "CVE-2026-50181",
-      "summary": "Langroid is a framework for building large-language-model-powered applications. Prior to version 0.64.0, Langroid's `ReadFileTool` and `WriteFileTool` appear to treat `curr_dir` as the intended working-directory boundary for file operations. However, the tools only change the process working directory to `curr_dir` and then operate on the user-supplied `file_path` without resolving and enforcing that the final path remains inside `curr_dir`. As a result, a tool caller can supply path traversal sequences such as `../secret.txt` to read files outside the configured current directory, or `../written_by_tool.txt` to write files outside that directory. This can impact applications that expose Langroid file tools to an LLM agent, user-controlled tool call, or delegated coding/documentation agent while relying on `curr_dir` to restrict file access to a project/workspace directory. Version 0.64.0 patches the issue.",
-      "published": "2026-07-10T00:16:33.340Z",
-      "lastModified": "2026-07-14T02:16:55.357Z",
-      "severity": "High",
-      "cvssScore": 7.1,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00234,
-      "epssPercentile": 0.14297,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        },
-        {
-          "id": "CWE-23",
-          "name": "CWE-23",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.99,
-      "tags": [
-        "CWE-22",
-        "CWE-23"
       ]
     },
     {
@@ -24989,6 +24803,50 @@
       "tags": [
         "WordPress",
         "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-62644",
+      "summary": "In Roundcube Webmail before 1.6.17 and 1.7.x before 1.7.2, the password plugin of the Roundcube Webmail was subject to username spoofing via session data, which could lead to account takeover.",
+      "published": "2026-07-14T16:17:04.810Z",
+      "lastModified": "2026-07-20T12:41:22.573Z",
+      "severity": "Medium",
+      "cvssScore": 6.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00259,
+      "epssPercentile": 0.1745,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-290",
+          "name": "CWE-290",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "CWE-290"
       ]
     },
     {
@@ -27107,51 +26965,6 @@
       "priorityScore": 2.77,
       "tags": [
         "CWE-200"
-      ]
-    },
-    {
-      "id": "CVE-2026-15317",
-      "summary": "A security flaw has been discovered in Sipeed PicoClaw up to 0.2.9. Affected by this vulnerability is the function WebFetchTool.Execute of the file pkg/tools/integration/web.go of the component Guarded Web Fetch Flow. The manipulation results in server-side request forgery. The attack can be executed remotely. The exploit has been released to the public and may be used for attacks. The reported GitHub issue was closed automatically due to inactivity.",
-      "published": "2026-07-10T00:16:33.027Z",
-      "lastModified": "2026-07-14T02:16:53.720Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00247,
-      "epssPercentile": 0.15972,
-      "isKev": false,
-      "kev": null,
-      "vendor": "GitHub",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.76,
-      "tags": [
-        "GitHub",
-        "CWE-918"
       ]
     },
     {
@@ -31140,56 +30953,6 @@
       ]
     },
     {
-      "id": "CVE-2026-50180",
-      "summary": "Langroid is a framework for building large-language-model-powered applications. Prior to version 0.64.0, `SQLChatAgent` in `langroid` ships a `_validate_query` defense-in-depth layer whose `_DANGEROUS_SQL_PATTERNS` regex blocklist enumerates dangerous SQL primitives by specific function name. The list misses the canonical PostgreSQL filesystem-disclosure family `pg_read_file()`, `pg_stat_file()`, `pg_ls_logdir()`, `pg_ls_waldir()`, `pg_current_logfile()` (and similar `SELECT`-shaped functions in the same family). It also leaves SQL Server `OPENDATASOURCE` and SQLite `ATTACH ' ' AS x` (DATABASE keyword omitted) unblocked. An attacker able to shape the LLM's generated SQL (directly via prompt input or transitively via prompt-injection in data the LLM ingests) can read arbitrary files from the PostgreSQL host through ordinary `SELECT` queries, even with the agent's strict default configuration (`allow_dangerous_operations=False`, `allowed_statement_types=['SELECT']`). The payloads survive the statement-type allowlist (each is a `SELECT`) and pass through the regex blocklist (none of the function names match), then reach the live SQLAlchemy engine via `SQLChatAgent.run_query`. Version 0.64.0 contains a patch for the issue.",
-      "published": "2026-07-10T00:16:33.197Z",
-      "lastModified": "2026-07-10T21:16:54.860Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00568,
-      "epssPercentile": 0.43944,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        },
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.54,
-      "tags": [
-        "CWE-22",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-13247",
       "summary": "The Logo Slider – Logo Carousel, Client Logo Slider & Brand Showcase for WordPress plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'lgx_tooltip_position' parameter in all versions up to, and including, 5.5 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
       "published": "2026-07-10T10:16:23.137Z",
@@ -34434,6 +34197,50 @@
       ]
     },
     {
+      "id": "CVE-2026-62642",
+      "summary": "In Roundcube Webmail before 1.6.17 and 1.7.x before 1.7.2, an infinite loop was discovered in the TNEF decoder, which may lead to denial of service upon opening an email with a TNEF attachment.",
+      "published": "2026-07-14T16:17:04.530Z",
+      "lastModified": "2026-07-20T12:55:28.270Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00277,
+      "epssPercentile": 0.19837,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-835",
+          "name": "CWE-835",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.2,
+      "tags": [
+        "CWE-835"
+      ]
+    },
+    {
       "id": "CVE-2026-55481",
       "summary": "Snipe-IT is an IT asset/license management system. Prior to 8.6.2, default.blade.php renders header_color and related branding color settings inside a CSS style block with HTML escaping that is insufficient for the CSS context, allowing a superadmin to inject arbitrary CSS that affects authenticated users on subsequent page loads when Content Security Policy is disabled. This issue is fixed in version 8.6.2.",
       "published": "2026-07-10T20:16:47.587Z",
@@ -35148,6 +34955,50 @@
       "tags": [
         "CWE-79",
         "CWE-94"
+      ]
+    },
+    {
+      "id": "CVE-2026-14645",
+      "summary": "Nexus Repository 3 does not validate the destination of the \"Webhook: Global\" capability's configured URL before making an outbound HTTP request, allowing a user holding the Capability Administration permission to cause the server to send requests to internal network locations (Server-Side Request Forgery). This permission is granted by role assignment, independent of authentication status, so an unauthenticated user could also trigger this behavior if the anonymous role has been granted the permission.",
+      "published": "2026-07-14T17:16:44.130Z",
+      "lastModified": "2026-07-15T20:08:02.787Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00397,
+      "epssPercentile": 0.32517,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-918",
+          "name": "CWE-918",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.14,
+      "tags": [
+        "CWE-918"
       ]
     },
     {
@@ -35903,50 +35754,6 @@
       "tags": [
         "WordPress",
         "CWE-639"
-      ]
-    },
-    {
-      "id": "CVE-2026-55615",
-      "summary": "Langroid is a framework for building large-language-model-powered applications. Prior to version 0.65.5, Neo4jChatAgent passes LLM-generated Cypher queries straight to the Neo4j driver with no validation, no statement-type allowlist, and no opt-out gate. The query text is influenceable by prompt injection (direct user input or indirect content the agent reads back via RAG), so an attacker who can influence the prompt can read or destroy all graph data and, when APOC or dbms.security procedures are enabled on the server, achieve OS-command and filesystem access. This is the same defect class and threat model as the SQLChatAgent prompt-to-SQL-to-RCE issue fixed in version 0.63.0 (CVE-2026-25879); that fix did not extend to the neo4j module. Version 0.65.5 contains a fix for the neo4j module.",
-      "published": "2026-07-10T00:16:33.867Z",
-      "lastModified": "2026-07-10T15:49:19.093Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00383,
-      "epssPercentile": 0.31096,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.09,
-      "tags": [
-        "CWE-74"
       ]
     },
     {
@@ -39935,56 +39742,6 @@
       ]
     },
     {
-      "id": "CVE-2026-15311",
-      "summary": "A vulnerability was identified in NousResearch hermes-agent up to 2026.5.29.2. Affected by this issue is the function MatrixAdapter._markdown_to_html of the file gateway/platforms/matrix.py of the component Matrix Adapter. Such manipulation leads to cross site scripting. The attack can be executed remotely. The exploit is publicly available and might be used. The pull request to fix this issue awaits acceptance.",
-      "published": "2026-07-10T00:16:32.853Z",
-      "lastModified": "2026-07-10T15:43:30.330Z",
-      "severity": "Low",
-      "cvssScore": 3.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00203,
-      "epssPercentile": 0.10435,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.59,
-      "tags": [
-        "CWE-79",
-        "CWE-94"
-      ]
-    },
-    {
       "id": "CVE-2026-55671",
       "summary": "ZITADEL is an open source identity management platform. From 4.0.0-rc.1 through 4.15.1, ZITADEL's HTTP notification channels, OIDC BackChannel Logout, and SAML metadata URL fetches do not consistently validate user-defined URLs against protected denylist handling, allowing server-side requests to loopback, internal IP, link-local, or redirected endpoints through DNS rebinding, redirects, or protocol downgrades. This issue is fixed in version 4.15.2.",
       "published": "2026-07-10T18:16:23.503Z",
@@ -40276,56 +40033,6 @@
       "tags": [
         "CWE-79",
         "CWE-94"
-      ]
-    },
-    {
-      "id": "CVE-2026-54760",
-      "summary": "Langroid is a framework for building large-language-model-powered applications. Prior to version 0.65.1, the `SQLChatAgent` SQL-injection mitigation, with default `allow_dangerous_operations=False`, combines a raw-text regex blocklist (`_DANGEROUS_SQL_PATTERNS`) with a `sqlglot` SELECT-only statement allowlist. The blocklist entries that target callable functions require the function name to be immediately followed by `\\s*\\(`. PostgreSQL accepts the same call with the name separated from `(` by a quoted identifier, an inline comment, or schema qualification. These forms evade the regex, still parse as `SELECT`, and execute the same PostgreSQL function. This restores the `pg_read_file` server-side file-read primitive that the prior CVE-2026-25879 / GHSA-pmch-g965-grmr fix was meant to block: the parent advisory fixed a missing `pg_read_file` blocklist entry, while this report shows that the added regex is bypassable. Version 0.65.1 fixes the issue.",
-      "published": "2026-07-10T00:16:33.477Z",
-      "lastModified": "2026-07-10T16:16:33.063Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00558,
-      "epssPercentile": 0.43443,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        },
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.52,
-      "tags": [
-        "CWE-22",
-        "CWE-89"
       ]
     },
     {
@@ -42013,6 +41720,50 @@
       ]
     },
     {
+      "id": "CVE-2026-9127",
+      "summary": "A remote code execution security issue exists within Studio 5000 Logix Designer® due to incorrect authorization on a configuration file. This can allow any authenticated user to modify the paths of external tools configured within the application. If exploited, an attacker could alter the configuration to point to a malicious executable, resulting in arbitrary code execution when any user interacts with the external tools functionality.",
+      "published": "2026-07-14T16:17:05.347Z",
+      "lastModified": "2026-07-14T16:46:49.030Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.0011,
+      "epssPercentile": 0.01477,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-863",
+          "name": "CWE-863",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.05,
+      "tags": [
+        "CWE-863"
+      ]
+    },
+    {
       "id": "CVE-2026-48127",
       "summary": "Frappe is a full-stack web application framework. Prior to 16.20.0 and 15.110.0, users without write access could attach files to any doctype through file-handling API endpoints such as add_attachments. This issue is fixed in versions 16.20.0 and 15.110.0.",
       "published": "2026-07-10T22:16:42.140Z",
@@ -42237,6 +41988,50 @@
       "tags": [
         "Docker",
         "CWE-331"
+      ]
+    },
+    {
+      "id": "CVE-2026-9292",
+      "summary": "A Stored Cross-Site Scripting security issue exists within FactoryTalk® DataMosaix™ Private Cloud. The vulnerability stems from improper neutralization of user-supplied input within the Workflows configuration. An authenticated attacker with high privileges can inject malicious scripts that are permanently stored on the server. This vulnerability can result in the execution of malicious JavaScript when other users access the affected page, potentially allowing for account takeover, credential theft, or redirection to a malicious website.",
+      "published": "2026-07-14T16:17:05.723Z",
+      "lastModified": "2026-07-14T16:46:49.030Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00329,
+      "epssPercentile": 0.2545,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.89,
+      "tags": [
+        "CWE-79"
       ]
     },
     {
@@ -43023,6 +42818,50 @@
       "priorityScore": 0.66,
       "tags": [
         "CWE-80"
+      ]
+    },
+    {
+      "id": "CVE-2026-14646",
+      "summary": "Nexus Repository 3 did not apply its existing Server-Side Request Forgery (SSRF) protections to HTTP redirect targets returned by proxy repository upstream servers. Any user with read access to a proxy repository backed by an attacker-controlled or compromised upstream server — including an anonymous user, if anonymous access is enabled — could receive a response from an internal network address or cloud metadata endpoint as repository content, potentially exposing sensitive information such as cloud IAM credentials.",
+      "published": "2026-07-14T17:16:44.410Z",
+      "lastModified": "2026-07-15T20:08:02.787Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00265,
+      "epssPercentile": 0.18225,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-918",
+          "name": "CWE-918",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.64,
+      "tags": [
+        "CWE-918"
       ]
     },
     {
@@ -43912,6 +43751,94 @@
       ]
     },
     {
+      "id": "CVE-2026-7494",
+      "summary": "Nexus Repository 3 is vulnerable to Server-Side Request Forgery (SSRF) via the SSL Certificate Retrieval endpoint. A user holding the nexus:ssl-truststore:read permission could cause the server to initiate outbound connections to internal or otherwise restricted network hosts. This issue affects Nexus Repository 3.0.0 through versions prior to 3.94.0.",
+      "published": "2026-07-14T16:17:04.953Z",
+      "lastModified": "2026-07-15T20:08:02.787Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00146,
+      "epssPercentile": 0.04287,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-918",
+          "name": "CWE-918",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.15,
+      "tags": [
+        "CWE-918"
+      ]
+    },
+    {
+      "id": "CVE-2026-9636",
+      "summary": "A security issue exists within CompactLogix® 5380, ControlLogix® 5580, and EN4 communication modules related to CIP Security certificate revocation handling. The security issue stems from the controller failing to properly reject certificates signed by an intermediate certificate that has been revoked via a Certificate Revocation List (CRL). This could allow a network-based attacker to establish a connection using a certificate that should be untrusted, potentially bypassing CIP Security protections.",
+      "published": "2026-07-14T16:17:05.860Z",
+      "lastModified": "2026-07-14T16:46:49.030Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.0014,
+      "epssPercentile": 0.03766,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-299",
+          "name": "CWE-299",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.13,
+      "tags": [
+        "CWE-299"
+      ]
+    },
+    {
       "id": "CVE-2026-21052",
       "summary": "Path traversal in SemClipboardService prior to SMR Jul-2026 Release 1 allows local privileged attackers to access files with system privilege.",
       "published": "2026-07-10T05:16:35.877Z",
@@ -44395,6 +44322,50 @@
       ]
     },
     {
+      "id": "CVE-2026-9108",
+      "summary": "A path traversal security issue exists within Studio 5000 Logix Designer® due to improper limitation of file paths within ACD project files. The software does not sanitize or validate file names embedded in the ACD file structure during the project opening procedure, allowing path traversal sequences to escape the intended extraction directory. If exploited, an attacker could craft a malicious ACD project file that results in arbitrary files being written to attacker-controlled locations on the file system, potentially leading to code execution.",
+      "published": "2026-07-14T16:17:05.210Z",
+      "lastModified": "2026-07-14T16:46:49.030Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00109,
+      "epssPercentile": 0.0143,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.05,
+      "tags": [
+        "CWE-22"
+      ]
+    },
+    {
       "id": "CVE-2026-21039",
       "summary": "Improper access control in Settings prior to SMR Jul-2026 Release 1 allows local attackers to configure Theft protection settings.",
       "published": "2026-07-10T05:16:34.387Z",
@@ -44683,6 +44654,50 @@
       "tags": []
     },
     {
+      "id": "CVE-2026-9128",
+      "summary": "A code execution security issue exists within Studio 5000 Logix Designer® due to an unquoted search path in the External Tools configuration. The executable paths specified in the external tools configuration file are not properly quoted, and because these paths contain spaces, the operating system may resolve them to unintended executables placed earlier in the search order. If exploited, an attacker could plant a malicious executable in a location within the search path, resulting in arbitrary code execution with the same permissions of the user running the application.",
+      "published": "2026-07-14T16:17:05.487Z",
+      "lastModified": "2026-07-14T16:46:49.030Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00096,
+      "epssPercentile": 0.0083,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-428",
+          "name": "CWE-428",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.03,
+      "tags": [
+        "CWE-428"
+      ]
+    },
+    {
       "id": "CVE-2025-8412",
       "summary": "A Buffer Copy without Checking Size of Input ('Classic Buffer Overflow') vulnerability in SUSE Virtual Machine Driver Pack allows an attacker with the ability to modify the registry to affect the integrity of the driver. We're not aware of a feasible way to exploit this currently. This issue affects Virtual Machine Driver Pack: before e7a602ec232756ead019bdf19d6d3b9d010cc94b.",
       "published": "2026-07-14T09:16:39.637Z",
@@ -44725,42 +44740,6 @@
       "tags": [
         "CWE-120"
       ]
-    },
-    {
-      "id": "CVE-2026-55616",
-      "summary": "Rejected reason: ** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: CVE-2026-49757. Reason: This candidate is a duplicate of CVE-2026-49757. Notes: All CVE users should reference CVE-2026-49757 instead of this candidate.",
-      "published": "2026-07-10T00:16:33.993Z",
-      "lastModified": "2026-07-10T00:16:33.993Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0,
-      "epssPercentile": 0,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0,
-      "tags": []
     },
     {
       "id": "CVE-2025-12127",
