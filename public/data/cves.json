@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-13T07:54:43.592Z",
+  "generatedAt": "2026-08-13T09:15:36.419Z",
   "count": 1000,
   "items": [
     {
@@ -7070,6 +7070,50 @@
       "priorityScore": 4.87,
       "tags": [
         "CWE-770"
+      ]
+    },
+    {
+      "id": "CVE-2026-56400",
+      "summary": "open-webui before 0.3.14 contains a cross-origin resource sharing misconfiguration allowing arbitrary origins with allow_origins=* and authenticated requests to the /api/v1/functions endpoint. Attackers can execute arbitrary code on the openwebui instance by crafting malicious cross-site requests from attacker-controlled websites when an admin user visits them.",
+      "published": "2026-07-15T12:18:03.017Z",
+      "lastModified": "2026-07-16T20:03:11.553Z",
+      "severity": "High",
+      "cvssScore": 8.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00348,
+      "epssPercentile": 0.27636,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-613",
+          "name": "CWE-613",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.87,
+      "tags": [
+        "CWE-613"
       ]
     },
     {
@@ -40842,52 +40886,6 @@
       ]
     },
     {
-      "id": "CVE-2026-6851",
-      "summary": "An Improper link resolution before file access ('link following') vulnerability in the File Shredder module as used in Bitdefender Total Security and Internet Security on Windows allows a less-privileged local user to elevate rights by leveraging a race conditions via Symbolic Links. This issue affects Total Security: before 27.0.58.315; Internet Security: before 27.0.58.315.",
-      "published": "2026-07-14T08:16:24.000Z",
-      "lastModified": "2026-08-12T17:17:08.307Z",
-      "severity": "High",
-      "cvssScore": 7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00121,
-      "epssPercentile": 0.02257,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Microsoft",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-59",
-          "name": "CWE-59",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": true,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.53,
-      "tags": [
-        "Microsoft",
-        "Windows",
-        "CWE-59"
-      ]
-    },
-    {
       "id": "CVE-2026-10671",
       "summary": "In Zephyr's kernel pipe implementation, the userspace syscall verifier z_vrfy_k_pipe_init() in kernel/pipe.c used K_SYSCALL_OBJ() (which requires the kernel object to already be initialized) instead of K_SYSCALL_OBJ_NEVER_INIT() (which rejects an already-initialized object). As a result, on CONFIG_USERSPACE builds an unprivileged user thread that has been granted access to a k_pipe object can invoke the k_pipe_init syscall to re-initialize a pipe that is already in use. z_impl_k_pipe_init() unconditionally resets the ring buffer, sets pipe->waiting to 0, and re-initializes both wait queues (z_waitq_init on pipe->data and pipe->space) without waking or accounting for threads currently blocked on the pipe. Any thread already pended in k_pipe_read()/k_pipe_write() is left orphaned: still marked pending with pended_on pointing at the cleared wait queue and with stale qnode_dlist links into the (now re-initialized) embedded list head. When such an orphaned waiter is later timed out or woken, the scheduler calls sys_dlist_remove() on its stale node, writing through dangling prev/next pointers into kernel wait-queue/scheduler structures, causing list corruption (an attacker-driven invalid kernel write), lost wakeups, indefinitely blocked threads, and silent data loss. The flaw lets a deprivileged user thread corrupt the state of a kernel object shared with other threads/partitions. The fix switches the verifier to K_SYSCALL_OBJ_NEVER_INIT(), matching the existing k_msgq_init verifier, so a user thread can no longer re-initialize a live pipe. The vulnerable code shipped in v4.1.0 and remained through v4.4.0.",
       "published": "2026-07-14T15:16:55.447Z",
@@ -46586,50 +46584,6 @@
       ]
     },
     {
-      "id": "CVE-2026-59674",
-      "summary": "A UNIX Symbolic Link (Symlink) Following vulnerability in openSUSE Tumbleweed suricata package allows the suricata user to escalate to root. This issue affects openSUSE Tumbleweed: from ? before 8.0.5-2.1; openSUSE Tumbleweed: from ? before 8.0.5-2.1.",
-      "published": "2026-07-14T08:16:22.963Z",
-      "lastModified": "2026-07-15T21:00:44.900Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00129,
-      "epssPercentile": 0.0298,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-61",
-          "name": "CWE-61",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.1,
-      "tags": [
-        "CWE-61"
-      ]
-    },
-    {
       "id": "CVE-2026-10714",
       "summary": "A security issue exists within FactoryTalk® Services Platform (FTSP), allowing an attacker to bypass JWT signature validation during Okta Web Authentication. The vulnerability stems from the application not verifying that the JWT algorithm is configured for RSA, enabling an attacker to set the algorithm to \"none\" and craft forged tokens. This could allow an authenticated low-privilege user to impersonate any authorized user on the FTSP server, resulting in unauthorized access to system configuration and the ability to grant permissions to other systems protected by FTSP.",
       "published": "2026-07-14T15:16:55.673Z",
@@ -46984,6 +46938,42 @@
       "summary": "Rejected reason: This CVE ID has been rejected or withdrawn by its CVE Numbering Authority.",
       "published": "2026-07-15T10:16:47.980Z",
       "lastModified": "2026-07-15T10:16:47.980Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0,
+      "epssPercentile": 0,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0,
+      "tags": []
+    },
+    {
+      "id": "CVE-2026-56699",
+      "summary": "Rejected reason: This CVE ID has been rejected or withdrawn by its CVE Numbering Authority. Per Wazuh's Security Policy, vulnerabilities affecting only non-GA versions are not eligible for a CVE ID.",
+      "published": "2026-07-15T12:18:15.293Z",
+      "lastModified": "2026-08-06T22:17:59.453Z",
       "severity": "Unknown",
       "cvssScore": 0,
       "cvssVector": null,
