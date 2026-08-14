@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-14T06:02:02.251Z",
+  "generatedAt": "2026-08-14T07:51:26.381Z",
   "count": 1000,
   "items": [
     {
@@ -6249,51 +6249,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12512",
-      "summary": "The Quotes llama WordPress plugin before 3.1.6 does not properly sanitize and escape a user-supplied parameter before using it in a SQL query, allowing unauthenticated attackers to perform UNION-based SQL injection and read arbitrary data from the database, including password hashes.",
-      "published": "2026-07-15T06:16:44.757Z",
-      "lastModified": "2026-07-15T19:50:11.367Z",
-      "severity": "High",
-      "cvssScore": 8.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00268,
-      "epssPercentile": 0.18858,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.67,
-      "tags": [
-        "WordPress",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-46485",
       "summary": "Dashy is a self-hostable personal dashboard. Prior to 4.0.8, Dashy deployments using OIDC can allow unauthenticated users or non-admin authenticated users to write changes to the main config.yaml through the config-saving functionality despite configured permissions, allowing unauthorized modification of dashboard configuration and potential service disruption. This issue is fixed in version 4.0.8.",
       "published": "2026-07-15T19:17:17.657Z",
@@ -6627,6 +6582,44 @@
       "priorityScore": 4.63,
       "tags": [
         "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-63825",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: gcov: use atomic counter updates to fix concurrent access crashes GCC's GCOV instrumentation can merge global branch counters with loop induction variables as an optimization. In inflate_fast(), the inner copy loops get transformed so that the GCOV counter value is loaded multiple times to compute the loop base address, start index, and end bound. Since GCOV counters are global (not per-CPU), concurrent execution on different CPUs causes the counter to change between loads, producing inconsistent values and out-of-bounds memory writes. The crash manifests during IPComp (IP Payload Compression) processing when inflate_fast() runs concurrently on multiple CPUs: BUG: unable to handle page fault for address: ffffd0a3c0902ffa RIP: inflate_fast+1431 Call Trace: zlib_inflate __deflate_decompress crypto_comp_decompress ipcomp_decompress [xfrm_ipcomp] ipcomp_input [xfrm_ipcomp] xfrm_input At the crash point, the compiler generated three loads from the same global GCOV counter (__gcov0.inflate_fast+216) to compute base, start, and end for an indexed loop. Another CPU modified the counter between loads, making the values inconsistent - the write went 3.4 MB past a 65 KB buffer. Add -fprofile-update=prefer-atomic to CFLAGS_GCOV at the global level in the top-level Makefile, guarded by a try-run compile test. The test compiles a minimal program with and without -fprofile-update=prefer-atomic using the full KBUILD_CFLAGS, then compares undefined symbols in the resulting object files. If prefer-atomic introduces new undefined references (such as __atomic_fetch_add_8 on i386 or __aarch64_ldadd8_relax on arm64 with outline-atomics), the flag is not added -- the kernel does not link against libatomic. On architectures where GCC inlines 64-bit atomic counter updates (x86_64, s390, ...) the test passes and the flag is enabled, preventing the compiler from merging counters with loop induction variables and fixing the observed concurrent-access crash. On architectures where the flag would introduce libatomic dependencies, it is silently omitted and behaviour is no worse than before this patch. Move the CFLAGS_GCOV block from its original position (before the arch Makefile include) to after the core KBUILD_CFLAGS assignments but before the scripts/Makefile.gcc-plugins include. This placement ensures the try-run test sees arch-specific flags (-m32, -march=, -mno-outline-atomics) while avoiding GCC plugin flags (-fplugin=) that would break the test on clean builds when plugin shared objects do not yet exist.",
+      "published": "2026-07-19T12:16:55.720Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00414,
+      "epssPercentile": 0.34386,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.63,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -9025,51 +9018,6 @@
         "Windows",
         "Docker",
         "CWE-178"
-      ]
-    },
-    {
-      "id": "CVE-2026-12281",
-      "summary": "The Shibboleth WordPress plugin before 2.5.4 does not fail closed when its HTTP header identity mode is enabled without an anti-spoofing key, treating any request that carries identity headers as an authenticated session without verifying them. On a deployment where untrusted client headers reach the application, an unauthenticated attacker can log in with forged identity headers and, when automatic account creation and the default administrator role mapping are enabled, create and sign in as a new administrator. Exploitation requires the non-default HTTP header attribute mode, an empty or absent spoof key, automatic account creation enabled, and a deployment that does not strip untrusted client headers before they reach the application.",
-      "published": "2026-07-15T06:16:43.840Z",
-      "lastModified": "2026-07-15T19:50:11.367Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00231,
-      "epssPercentile": 0.14054,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-287",
-          "name": "Improper Authentication",
-          "description": "Authentication is missing or can be bypassed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.33,
-      "tags": [
-        "WordPress",
-        "CWE-287"
       ]
     },
     {
@@ -18657,51 +18605,6 @@
       ]
     },
     {
-      "id": "CVE-2026-11579",
-      "summary": "The Kali Forms — Contact Form & Drag-and-Drop Builder WordPress plugin before 2.4.17 does not verify that a file upload is made against an existing form configured with a file-upload field, accepting uploads regardless of whether any such form exists, which allows unauthenticated users to upload files to the WordPress Media Library; the uploads are limited to WordPress's default-allowed MIME types, so this does not lead to code execution.",
-      "published": "2026-07-15T06:16:40.433Z",
-      "lastModified": "2026-07-15T19:50:11.367Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00237,
-      "epssPercentile": 0.14887,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-434",
-          "name": "CWE-434",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.38,
-      "tags": [
-        "WordPress",
-        "CWE-434"
-      ]
-    },
-    {
       "id": "CVE-2026-10525",
       "summary": "The NEX-Forms WordPress plugin before 9.2.3 does not sanitise and escape some submitted form data before storing it and outputting it back in the admin dashboard, leading to a Stored Cross-Site Scripting vulnerability which could allow unauthenticated users to perform Stored Cross-Site Scripting attacks against high privilege users such as administrators when they view the submitted entries.",
       "published": "2026-07-17T07:16:37.650Z",
@@ -22734,6 +22637,44 @@
       ]
     },
     {
+      "id": "CVE-2026-63828",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: apparmor: mediate the implicit connect of TCP fast open sendmsg sendmsg()/sendto() with MSG_FASTOPEN is a combination of connect(2) and write(2): it opens the connection in the SYN. apparmor_socket_sendmsg() only checks AA_MAY_SEND, so a profile that grants send but denies connect lets a confined task open an outbound TCP/MPTCP connection that connect(2) would have refused, bypassing connect mediation. Mediate the implicit connect when MSG_FASTOPEN is set and a destination is supplied. Add it to apparmor_socket_sendmsg() (not the shared aa_sock_msg_perm() helper, which recvmsg also uses) and call aa_sk_perm() directly, mirroring the selinux and tomoyo fixes. sk_is_tcp() does not cover MPTCP fast open, so the SOCK_STREAM/IPPROTO_MPTCP arm is explicit.",
+      "published": "2026-07-19T12:16:56.110Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 8.4,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00131,
+      "epssPercentile": 0.031,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.05,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-59255",
       "summary": "BloodHound through 9.4.0, fixed in commit 8f79035, contains a missing authorization vulnerability in the custom-nodes API endpoints that allows any authenticated user to modify the global graph schema. Attackers with valid session tokens can create, update, or delete custom node types affecting all users and tenants by invoking unprotected POST, PUT, and DELETE operations on the custom-nodes endpoints.",
       "published": "2026-07-15T18:16:49.017Z",
@@ -24314,50 +24255,6 @@
       ]
     },
     {
-      "id": "CVE-2026-42936",
-      "summary": "The installer of HYPER SBI 2 insecurely loads Dynamic Link Libraries. If there is a crafted DLL at the same directory when invoking the affected installer, arbitrary code may be executed with the privilege of the user invoking the installer.",
-      "published": "2026-07-15T06:16:45.003Z",
-      "lastModified": "2026-07-15T20:27:37.663Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00142,
-      "epssPercentile": 0.03954,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-427",
-          "name": "CWE-427",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.87,
-      "tags": [
-        "CWE-427"
-      ]
-    },
-    {
       "id": "CVE-2026-20146",
       "summary": "A vulnerability in Cisco Identity Services Engine (ISE) and Cisco ISE Passive Identity Connector (ISE-PIC) could allow an authenticated, remote attacker to perform path traversal attacks on the underlying operating system to either read or delete arbitrary files. To exploit this vulnerability, the attacker must have valid administrative credentials. This vulnerability is due to improper validation of user-supplied input. An attacker could exploit this vulnerability by sending a crafted HTTP request to an affected system. A successful exploit could allow the attacker to access sensitive files or delete arbitrary files on the affected system.",
       "published": "2026-07-15T17:16:46.970Z",
@@ -25654,6 +25551,44 @@
       ]
     },
     {
+      "id": "CVE-2026-63824",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: KEYS: fix overflow in keyctl_pkey_params_get_2() The length for the internal output buffer is calculated incorrectly, which can result overflow when a too small buffer is provided. Fix the bug by allocating internal output with the size of the maximum length of the cryptographic primitive instead of caller provided size.",
+      "published": "2026-07-19T12:16:55.583Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00127,
+      "epssPercentile": 0.02793,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.83,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-54562",
       "summary": "Cloudreve is a self-hosted file management and sharing system. Prior to 4.16.1, Cloudreve's remote download workflow accepts user-supplied URLs at POST /api/v4/workflow/download and passes them to the configured downloader without blocking loopback, localhost, IPv6 localhost, or redirect-to-loopback targets, allowing a non-admin user with remote download permission to fetch internal-only URLs and read the response after it is imported into the user's own files. This issue is fixed in version 4.16.1.",
       "published": "2026-07-15T15:16:44.977Z",
@@ -25860,6 +25795,44 @@
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.82,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-63827",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: apparmor: fix use-after-free in rawdata dedup loop aa_replace_profiles() walks ns->rawdata_list to dedup the incoming policy blob against entries already attached to existing profiles. Per the kernel-doc on struct aa_loaddata, list membership does not hold a reference: profiles hold pcount, and when the last pcount drops, do_ploaddata_rmfs() is queued on a workqueue that takes ns->lock and removes the entry. Between dropping the last pcount and the workqueue running, an entry remains on the list with pcount == 0. aa_get_profile_loaddata() is an unconditional kref_get() on pcount, so when the dedup loop hits such an entry, refcount hardening reports refcount_t: addition on 0; use-after-free. inside aa_replace_profiles(), and the poisoned counter then trips \"saturated\" and \"underflow\" warnings on the subsequent uses of the same loaddata. Before commit a0b7091c4de4 (\"apparmor: fix race on rawdata dereference\") the dedup path used a get_unless_zero-style helper on a single counter, so the existing \"if (tmp)\" guard was meaningful. The split-refcount refactor introduced aa_get_profile_loaddata(), which has plain kref_get() semantics, and the guard quietly became a no-op. Introduce aa_get_profile_loaddata_not0(), matching the existing _not0 convention used by aa_get_profile_not0(), and use it for the rawdata_list dedup lookup so dying entries are skipped. Reproduced on x86_64 with v7.1-rc5 in QEMU+KVM running Ubuntu 24.04 + stress-ng 0.17.06: stress-ng --apparmor 1 --klog-check --timeout 60s Without this patch the three refcount_t warnings fire within a few seconds. With it the same 60 s run is clean. Coverage is a smoke-test only; a longer soak with CONFIG_KASAN, CONFIG_KCSAN and CONFIG_PROVE_LOCKING would be welcome from anyone with the cycles.",
+      "published": "2026-07-19T12:16:55.960Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00124,
+      "epssPercentile": 0.02523,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
@@ -32319,51 +32292,6 @@
       "tags": [
         "WordPress",
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-11580",
-      "summary": "The Kali Forms — Contact Form & Drag-and-Drop Builder WordPress plugin before 2.4.17 does not perform a per-object capability check in its post-duplication AJAX action, allowing users with Contributor-level access or above to duplicate any post (regardless of owner, post type, or status) into a published post they own and read its private post metadata, including secrets stored by other Kali Forms — Contact Form & Drag-and-Drop Builder WordPress plugin before 2.4.17.",
-      "published": "2026-07-15T06:16:43.663Z",
-      "lastModified": "2026-07-15T19:50:11.367Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00189,
-      "epssPercentile": 0.08792,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.23,
-      "tags": [
-        "WordPress",
-        "CWE-639"
       ]
     },
     {
@@ -43511,6 +43439,44 @@
       "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 0.25,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-63826",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: fbdev: fix use-after-free in store_modes() store_modes() replaces a framebuffer's modelist with modes from userspace. On success it frees the old modelist with fb_destroy_modelist(). Two fields still point into that freed list. One pointer is fb_display[i].mode, the mode a console is using. fbcon_new_modelist() moves these pointers to the new list. It only does so for consoles still mapped to the framebuffer. An unmapped console is skipped and keeps its stale pointer. Unbinding fbcon, for example, sets con2fb_map[i] to -1 but leaves fb_display[i].mode set. An FBIOPUT_VSCREENINFO ioctl with FB_ACTIVATE_INV_MODE later reaches fbcon_mode_deleted(). That function reads the stale fb_display[i].mode through fb_mode_is_equal(). The read is a use-after-free. The other pointer is fb_info->mode, the current mode. It is set through the mode sysfs attribute. store_modes() does not update fb_info->mode, so it is left pointing into the freed list. show_mode(), the attribute's read handler, dereferences the stale fb_info->mode through mode_string(). The read is a use-after-free. Clear both pointers before freeing the list. Commit a1f305893074 (\"fbcon: Set fb_display[i]->mode to NULL when the mode is released\") added the helper fbcon_delete_modelist(). It clears every fb_display[i].mode that points into a given list. So far it is called only from the unregister path. Call it from store_modes() too, and set fb_info->mode to NULL.",
+      "published": "2026-07-19T12:16:55.833Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00172,
+      "epssPercentile": 0.06867,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.24,
       "tags": [
         "Linux"
       ]
