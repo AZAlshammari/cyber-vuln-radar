@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-14T20:50:17.656Z",
+  "generatedAt": "2026-08-14T21:27:52.097Z",
   "count": 1000,
   "items": [
     {
@@ -310,56 +310,6 @@
       "tags": [
         "CWE-306",
         "CWE-321"
-      ]
-    },
-    {
-      "id": "CVE-2026-46339",
-      "summary": "9Router is an AI router & token saver. From 0.4.30 until 0.4.37, 9Router's src/proxy.js middleware did not protect /api/cli-tools/* and /api/mcp/*, allowing unauthenticated registration of customPlugins through src/app/api/cli-tools/cowork-settings/route.js and command execution through the MCP bridge. This vulnerability is fixed in 0.4.37.",
-      "published": "2026-07-15T21:16:50.067Z",
-      "lastModified": "2026-07-16T14:16:52.513Z",
-      "severity": "Critical",
-      "cvssScore": 10,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.02395,
-      "epssPercentile": 0.82525,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        },
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 7.39,
-      "tags": [
-        "CWE-78",
-        "CWE-306"
       ]
     },
     {
@@ -1718,6 +1668,44 @@
         "Linux",
         "Windows",
         "CWE-306"
+      ]
+    },
+    {
+      "id": "CVE-2026-64067",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix missing barriers when accessing stream->subrequests locklessly The list of subrequests attached to stream->subrequests is accessed without locks by netfs_collect_read_results() and netfs_collect_write_results(), and then they access subreq->flags without taking a barrier after getting the subreq pointer from the list. Relatedly, the functions that build the list don't use any sort of write barrier when constructing the list to make sure that the NETFS_SREQ_IN_PROGRESS flag is perceived to be set first if no lock is taken. Fix this by: (1) Add a new list_add_tail_release() function that uses a release barrier to set the pointer to the new member of the list. (2) Add a new list_first_entry_or_null_acquire() function that uses an acquire barrier to read the pointer to the first member in a list (or return NULL). (3) Use list_add_tail_release() when adding a subreq to ->subrequests. (4) Use list_first_entry_or_null_acquire() when initially accessing the front of the list (when an item is removed, the pointer to the new front iterm is obtained under the same lock).",
+      "published": "2026-07-19T16:17:47.290Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0038,
+      "epssPercentile": 0.31008,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.52,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -3562,50 +3550,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52887",
-      "summary": "NocoBase is an AI-powered no-code/low-code platform for building business applications and enterprise solutions. Prior to 2.0.61, NocoBase @nocobase/plugin-notification-in-app-message exposed GET /api/myInAppChannels:list, where the filter[latestMsgReceiveTimestamp][$lt] value was inserted into a Sequelize.literal() template string without escaping or parameter binding, allowing a signed-up authenticated user to run stacked PostgreSQL statements and potentially execute commands with COPY ... TO PROGRAM. This vulnerability is fixed in 2.0.61.",
-      "published": "2026-07-15T21:16:54.543Z",
-      "lastModified": "2026-07-20T16:17:05.020Z",
-      "severity": "Critical",
-      "cvssScore": 10,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00593,
-      "epssPercentile": 0.45402,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.09,
-      "tags": [
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-45260",
       "summary": "Pimcore is an Open Source Data & Experience Management Platform. Prior to 11.5.17 (LTS) and 12.3.7, Pimcore's WebDAV asset endpoint exposes a MOVE operation through /asset/webdav{path} without an authentication plugin in bundles/CoreBundle/src/Controller/WebDavController.php, and models/Asset/WebDAV/Tree.php performs asset mutation and deletion through models/Asset.php before checking a current Pimcore user or the rename, delete, create, or publish permissions, allowing unauthorized asset deletion, moves, or overwrites. This issue is fixed in versions 11.5.17 (LTS) and 12.3.7.",
       "published": "2026-07-17T20:17:16.857Z",
@@ -4130,6 +4074,44 @@
         "Kubernetes",
         "Docker",
         "CWE-20"
+      ]
+    },
+    {
+      "id": "CVE-2026-64056",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: ethernet: cortina: Make RX SKB per-port The SKB used to assemble packets from fragments in gmac_rx() is static local, but the Gemini has two ethernet ports, meaning there can be races between the ports on a bad day if a device is using both. Make the RX SKB a per-port variable and carry it over between invocations in the port struct instead. Zero the pointer once we call napi_gro_frags(), on error (after calling napi_free_frags()) or if the port is stopped. Zero it in some place where not strictly necessary just to emphasize what is going on. This was found by Sashiko during normal patch review.",
+      "published": "2026-07-19T16:17:46.057Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00552,
+      "epssPercentile": 0.43396,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.95,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -4710,6 +4692,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64055",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: ethernet: cortina: Carry over frag counter The gmac_rx() NAPI poll function assembles packets in an SKB from a ring buffer. If the ring buffer gets completely emptied during a poll cycle, we exit gmac_rx(), but the packet is not yet completely assembled in the SKB, yet the fragment counter frag_nr is reset to zero on the next invocation. Solve this by making the RX fragment counter a part of the port struct, and carry it over between invocations. Reset the fragment counter only right after calling napi_gro_frags(), on error (after calling napi_free_frags()) or if stopping the port. Reset it in some place where not strictly necessary just to emphasize what is going on. This was found by Sashiko during normal patch review.",
+      "published": "2026-07-19T16:17:45.930Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00514,
+      "epssPercentile": 0.41291,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.88,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-62207",
       "summary": "OpenClaw versions before 2026.6.5 contain an authentication bypass vulnerability that allows lower-trust callers to reach admin-scoped tools. Attackers can perform actions requiring stronger authorization by exploiting insufficient policy checks on configured input paths.",
       "published": "2026-07-17T02:18:07.040Z",
@@ -4841,50 +4861,6 @@
       "priorityScore": 4.86,
       "tags": [
         "CWE-863"
-      ]
-    },
-    {
-      "id": "CVE-2026-62312",
-      "summary": "9Router is an AI router & token saver. Prior to 0.5.2, 9Router allows a remote authenticated attacker to achieve arbitrary code execution on the host operating system by combining a Host header bypass of localhost-only routes with unvalidated MCP plugin args passed to child_process.spawn(), allowing malicious custom plugins to execute commands through /api/mcp//sse. This issue is fixed in version 0.5.2.",
-      "published": "2026-07-15T21:16:55.810Z",
-      "lastModified": "2026-07-16T19:16:51.010Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00719,
-      "epssPercentile": 0.50705,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.85,
-      "tags": [
-        "CWE-78"
       ]
     },
     {
@@ -5762,6 +5738,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64061",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix early put of sink folio in netfs_read_gaps() Fix netfs_read_gaps() to release the sink page it uses after waiting for the request to complete. The way the sink page is used is that an ITER_BVEC-class iterator is created that has the gaps from the target folio at either end, but has the sink page tiled over the middle so that a single read op can fill in both gaps. The bug was found by KASAN detecting a UAF on the generic/075 xfstest in the cifsd kernel thread that handles reception of data from the TCP socket: BUG: KASAN: use-after-free in _copy_to_iter+0x48a/0xa20 Write of size 885 at addr ffff888107f92000 by task cifsd/1285 CPU: 2 UID: 0 PID: 1285 Comm: cifsd Not tainted 7.0.0 #6 PREEMPT(lazy) Call Trace: dump_stack_lvl+0x5d/0x80 print_report+0x17f/0x4f1 kasan_report+0x100/0x1e0 kasan_check_range+0x10f/0x1e0 __asan_memcpy+0x3c/0x60 _copy_to_iter+0x48a/0xa20 __skb_datagram_iter+0x2c9/0x430 skb_copy_datagram_iter+0x6e/0x160 tcp_recvmsg_locked+0xce0/0x1130 tcp_recvmsg+0xeb/0x300 inet_recvmsg+0xcf/0x3a0 sock_recvmsg+0xea/0x100 cifs_readv_from_socket+0x3a6/0x4d0 [cifs] cifs_read_iter_from_socket+0xdd/0x130 [cifs] cifs_readv_receive+0xaad/0xb10 [cifs] cifs_demultiplex_thread+0x1148/0x1740 [cifs] kthread+0x1cf/0x210",
+      "published": "2026-07-19T16:17:46.613Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00444,
+      "epssPercentile": 0.36846,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.72,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-64016",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: fix durable reconnect error path file lifetime After a durable reconnect succeeds, ksmbd_reopen_durable_fd() republishes the same ksmbd_file into the session volatile-id table. If smb2_open() then takes a later error path, cleanup first calls ksmbd_fd_put(work, fp) and then unconditionally calls ksmbd_put_durable_fd(dh_info.fp). In this case fp and dh_info.fp are the same object. The first put drops the reconnect lookup reference, but the final durable put can run __ksmbd_close_fd(NULL, fp). Because the final close is not session-aware, it can free the file object without removing the volatile-id entry that was just published into the session table. Use the session-aware put for the final reconnect drop when the reconnect had already succeeded and the error path is cleaning up the republished file. Earlier reconnect failures, before fp is assigned to dh_info.fp, keep using the durable-only put path.",
       "published": "2026-07-19T16:17:41.577Z",
@@ -5838,10 +5852,10 @@
       ]
     },
     {
-      "id": "CVE-2026-49352",
-      "summary": "9Router is an AI router & token saver. From 0.2.21 until 0.4.44, 9Router used the hardcoded fallback JWT secret 9router-default-secret-change-me in src/app/api/auth/login/route.js, src/middleware.js, and later src/lib/auth/dashboardSession.js, allowing attackers to forge an auth_token cookie when JWT_SECRET was unset. This issue is fixed in version 0.4.44",
-      "published": "2026-07-15T21:16:53.743Z",
-      "lastModified": "2026-07-16T19:16:49.870Z",
+      "id": "CVE-2026-64066",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix netfs_read_to_pagecache() to pause on subreq failure Fix netfs_read_to_pagecache() so that it pauses the generation of new subrequests if an already-issued subrequest fails.",
+      "published": "2026-07-19T16:17:47.190Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
       "severity": "Critical",
       "cvssScore": 9.8,
       "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
@@ -5855,19 +5869,51 @@
         "integrity": "High",
         "availability": "High"
       },
-      "epssScore": 0.00437,
-      "epssPercentile": 0.36243,
+      "epssScore": 0.00442,
+      "epssPercentile": 0.36678,
       "isKev": false,
       "kev": null,
-      "vendor": null,
+      "vendor": "Linux",
       "product": null,
-      "cwe": [
-        {
-          "id": "CWE-798",
-          "name": "CWE-798",
-          "description": "CWE mapping from source data."
-        }
-      ],
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.71,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64069",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix cancellation of a DIO and single read subrequests When the preparation of a new subrequest for a read fails, if the subrequest has already been added to the stream->subrequests list, it can't simply be put and abandoned as the collector may see it. Also, if it hasn't been queued yet, it has two outstanding refs that both need to be put. Both DIO read and single-read dispatch fail at this; further, both differ in the order they do things to the way buffered read works. Fix cancellation of both DIO-read and single-read subrequests that failed preparation by the following steps: (1) Harmonise all three reads (buffered, dio, single) to queue the subreq before prepping it. (2) Make all three call netfs_queue_read() to do the queuing. (3) Set NETFS_RREQ_ALL_QUEUED independently of the queuing as we don't know the length of the subreq at this point. (4) In all cases, set the error and NETFS_SREQ_FAILED flag on the subreq and then call netfs_read_subreq_terminated() to deal with it. This will pass responsibility off to the collector for dealing with it.",
+      "published": "2026-07-19T16:17:47.483Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00442,
+      "epssPercentile": 0.36679,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
@@ -5876,9 +5922,9 @@
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 4.7,
+      "priorityScore": 4.71,
       "tags": [
-        "CWE-798"
+        "Linux"
       ]
     },
     {
@@ -6308,50 +6354,6 @@
       "priorityScore": 4.63,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-51380",
-      "summary": "Buffer Overflow vulnerability in Tenda AC10 v3 (firmware V03.03.16.09) allows attackers to cause a permanent Denial of Service (DoS) or potentially execute remote code via the /cgi-bin/UploadCfg endpoint",
-      "published": "2026-07-15T21:16:54.437Z",
-      "lastModified": "2026-07-16T16:19:12.127Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00411,
-      "epssPercentile": 0.34076,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-120",
-          "name": "CWE-120",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.62,
-      "tags": [
-        "CWE-120"
       ]
     },
     {
@@ -6845,6 +6847,44 @@
       "tags": [
         "CWE-284",
         "CWE-639"
+      ]
+    },
+    {
+      "id": "CVE-2026-64068",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix missing locking around retry adding new subreqs Fix netfs_retry_read_subrequests() and netfs_retry_write_stream() to take the appropriate lock when adding extra subrequests into stream->subrequests.",
+      "published": "2026-07-19T16:17:47.390Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0038,
+      "epssPercentile": 0.31007,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.52,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -11781,56 +11821,6 @@
       "priorityScore": 3.95,
       "tags": [
         "CWE-94"
-      ]
-    },
-    {
-      "id": "CVE-2026-54052",
-      "summary": "n8n-MCP is an MCP server that provides AI assistants access to n8n node documentation, properties, and operations. Prior to 2.56.1, in HTTP mode with multi-tenancy enabled through ENABLE_MULTI_TENANT=true, n8n-mcp's local workflow version history backups were not isolated per tenant, allowing an authenticated tenant to read workflow version snapshots belonging to other tenants and delete or destroy other tenants' stored backups, including full node definitions, credential references, and authorization headers. This issue is fixed in version 2.56.1.",
-      "published": "2026-07-15T21:16:54.797Z",
-      "lastModified": "2026-07-18T03:16:37.000Z",
-      "severity": "Critical",
-      "cvssScore": 9.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "Low"
-      },
-      "epssScore": 0.00228,
-      "epssPercentile": 0.137,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.94,
-      "tags": [
-        "CWE-639",
-        "CWE-862"
       ]
     },
     {
@@ -17204,50 +17194,6 @@
       ]
     },
     {
-      "id": "CVE-2026-55410",
-      "summary": "NocoBase is an AI-powered no-code/low-code platform for building business applications and enterprise solutions. Prior to 2.1.19, NocoBase @nocobase/plugin-backups restored PostgreSQL backups by interpolating the database.schema value from _metadata.json into shell command strings executed with Node.js child_process.exec(), allowing a backup-management user restoring a crafted backup to execute commands as the NocoBase server process. This vulnerability is fixed in 2.1.19.",
-      "published": "2026-07-15T21:16:55.183Z",
-      "lastModified": "2026-07-18T02:17:10.037Z",
-      "severity": "Medium",
-      "cvssScore": 6.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:L/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0037,
-      "epssPercentile": 0.30041,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.4,
-      "tags": [
-        "CWE-78"
-      ]
-    },
-    {
       "id": "CVE-2026-50182",
       "summary": "WWBN AVideo is an open source video platform. Versions prior to 29.0 contain an unauthenticated Reflected XSS vulnerability through AVideo YouTubeAPI Gallery Pagination. The $_GET['search'] query parameter is concatenated directly into the href attribute of two pagination links in plugin/YouTubeAPI/gallerySection.php (lines 67 and 74) with no htmlspecialchars, no urlencode, and no allow-list check. An injected element is then extracted by the AVideo Layout plugin and concatenated into a single trailing inline script block at the bottom of the page, where the browser executes it. Any unauthenticated attacker can lure a victim into following a crafted URL to execute arbitrary JavaScript under the AVideo origin, which can read non-HttpOnly cookies and issue authenticated AJAX requests as the victim, and when the victim is an administrator, it can perform any cookie-authenticated admin action (create user, promote to admin, change configuration, install plugin), escalating a single click into full administrative takeover. This issue has been patched by this commit: https://github.com/WWBN/AVideo/commit/f50fc033b7adb36f1ffd6640e7826468bdafdec3.",
       "published": "2026-07-15T22:16:54.507Z",
@@ -18575,50 +18521,6 @@
       "tags": [
         "WordPress",
         "CWE-89"
-      ]
-    },
-    {
-      "id": "CVE-2026-33684",
-      "summary": "WWBN AVideo is an open source video platform. Prior to version 29.0, Privilege Escalation is possible through unguarded permission parameters in signUp API, which allows any user who can solve a CAPTCHA to self-grant elevated permissions during account registration. The set_api_signUp method in the API plugin accepts emailVerified, canUpload, canStream, and canCreateMeet parameters from user-supplied input and applies them to newly created accounts without verifying that the request was authenticated with a valid APISecret. By self-granting account attributes, attackers can mark their own accounts as email-verified without owning the address (bypassing email-gated functionality) and award themselves upload, streaming, and meeting-creation permissions, circumventing administrator access controls that intentionally restrict these capabilities for new users. This issue has been fixed in version 29.0",
-      "published": "2026-07-15T21:16:36.323Z",
-      "lastModified": "2026-07-16T14:16:50.530Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00208,
-      "epssPercentile": 0.11134,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.24,
-      "tags": [
-        "CWE-862"
       ]
     },
     {
@@ -19962,50 +19864,6 @@
       ]
     },
     {
-      "id": "CVE-2026-49353",
-      "summary": "9Router is an AI router & token saver. In 0.4.45 and earlier, 9Router's src/dashboardGuard.js local-only access gate used Host and Origin headers in isLocalRequest() to protect /api/mcp/*, /api/tunnel/*, and /api/cli-tools/*, allowing header spoofing in reverse proxy or tunnel deployments to reach MCP child process stdin paths.",
-      "published": "2026-07-15T21:16:53.870Z",
-      "lastModified": "2026-07-16T16:19:10.110Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00231,
-      "epssPercentile": 0.14014,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-290",
-          "name": "CWE-290",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.12,
-      "tags": [
-        "CWE-290"
-      ]
-    },
-    {
       "id": "CVE-2026-12393",
       "summary": "The WPS Bookings for WooCommerce WordPress plugin before 3.11.7 does not verify that a booking order belongs to the requesting user before cancelling it, allowing any authenticated user, such as a Subscriber or Customer, to cancel and void other customers' booking orders.",
       "published": "2026-07-17T07:16:38.023Z",
@@ -21011,56 +20869,6 @@
       ]
     },
     {
-      "id": "CVE-2026-52888",
-      "summary": "NocoBase is an AI-powered no-code/low-code platform for building business applications and enterprise solutions. In 2.0.59 and earlier, NocoBase @nocobase/plugin-collection-sql used the checkSQL() function in packages/plugins/@nocobase/plugin-collection-sql/src/server/utils.ts with an incomplete keyword blacklist that did not restrict PostgreSQL system catalog tables such as pg_shadow, pg_roles, and pg_stat_activity, allowing an admin-role user to read password hashes and database metadata through the SQL Collection feature. This vulnerability is fixed in 2.1.0-alpha.46.",
-      "published": "2026-07-15T21:16:54.673Z",
-      "lastModified": "2026-07-16T16:19:12.290Z",
-      "severity": "Medium",
-      "cvssScore": 6.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00269,
-      "epssPercentile": 0.19029,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-184",
-          "name": "CWE-184",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.05,
-      "tags": [
-        "CWE-184",
-        "CWE-200"
-      ]
-    },
-    {
       "id": "CVE-2026-45795",
       "summary": "The Janssen Project is an open-source identity and access management (IAM) platform. Prior to 2.0.0, jans-auth-server accepts unsigned JWE request objects because JwtAuthorizationRequest skips inner signature validation when jwe.getSignedJWTPayload() returns null, and AuthzRequestService.processRequestObject() does not reject the unrecognized RSA-OAEP algorithm when forceSignedRequestObject=true. This issue is fixed in version 2.0.0.",
       "published": "2026-07-16T17:16:56.820Z",
@@ -21412,56 +21220,6 @@
         "F5",
         "Linux",
         "CWE-401"
-      ]
-    },
-    {
-      "id": "CVE-2026-59950",
-      "summary": "The MCP Python SDK, called mcp on PyPI, is a Python implementation of the Model Context Protocol (MCP). Prior to 1.28.1, the deprecated mcp.server.websocket.websocket_server transport accepted WebSocket handshakes without applying Host or Origin header validation, leaving no SDK-level way to restrict which origins could connect to applications that exposed that transport. This issue is fixed in version 1.28.1.",
-      "published": "2026-07-15T21:16:55.683Z",
-      "lastModified": "2026-07-17T18:07:38.087Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00149,
-      "epssPercentile": 0.04652,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-346",
-          "name": "CWE-346",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-1385",
-          "name": "CWE-1385",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3,
-      "tags": [
-        "CWE-346",
-        "CWE-1385"
       ]
     },
     {
@@ -22237,50 +21995,6 @@
       "priorityScore": 2.94,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-55399",
-      "summary": "CVE-2026-55399 is a resource exhaustion vulnerability in the Secure Access publisher prior to 14.55. Attackers with valid credentials to the Secure Access tunnel can create a non-persistent DoS against the publisher.",
-      "published": "2026-07-15T21:16:55.083Z",
-      "lastModified": "2026-07-16T16:25:48.123Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00217,
-      "epssPercentile": 0.12275,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.93,
-      "tags": [
-        "CWE-400"
       ]
     },
     {
@@ -25138,6 +24852,82 @@
       ]
     },
     {
+      "id": "CVE-2026-64053",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: block: don't overwrite bip_vcnt in bio_integrity_copy_user() bio_integrity_add_page() already sets bip_vcnt to 1 for the bounce segment. Overwriting it with nr_vecs breaks bip_vcnt <= bip_max_vcnt on WRITE (bip_max_vcnt is 1), so the gap-merge checks in block/blk.h read past the bip_vec[] flex array. On READ the read is in bounds but lands on a saved user bvec instead of the bounce. The line was added for split propagation, but bio_integrity_clone() doesn't copy bip_vcnt and BIP_CLONE_FLAGS excludes BIP_COPY_USER.",
+      "published": "2026-07-19T16:17:45.730Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00129,
+      "epssPercentile": 0.02931,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.83,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64058",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix netfs_read_folio() to wait on writeback Fix netfs_read_folio() to wait for an ongoing writeback to complete so that it can trust the dirty flag and whatever is attached to folio->private (folio->private may get cleaned up by the collector before it clears the writeback flag).",
+      "published": "2026-07-19T16:17:46.290Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00127,
+      "epssPercentile": 0.02789,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.83,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-14371",
       "summary": "The Lenovo XClarity Integrator for Windows Admin Center plugin version 5.1.1 and below running on the WAC Gateway is vulnerable to Powershell Command Injection when establishing remote PowerShell commands.",
       "published": "2026-07-16T17:16:55.423Z",
@@ -26185,6 +25975,44 @@
       "exploitAvailable": false,
       "patchAvailable": true,
       "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.81,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64057",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: afs: Fix the locking used by afs_get_link() The afs filesystem in the kernel doesn't do locking correctly for symbolic links. There are a number of problems: (1) It doesn't do any locking around afs_read_single() to prevent races between multiple ->get_link() calls, thereby allowing the possibility of leaks. (2) It doesn't use RCU barriering when accessing the buffer pointers during RCU pathwalk. (3) It can race with another thread updating the contents of the symlink if a third party updated it on the server. Fix this by the following means: (0) Move symlink handling into its own file as this makes it more complicated. (1) Take the validate_lock around afs_read_single() to prevent races between multiple ->get_link() calls. (2) Keep a separate copy of the symlink contents with an rcu_head. This is always going to be a lot smaller than a page, so it can be kmalloc'd and save quite a bit of memory. It also needs a refcount for non-RCU pathwalk. (3) Split the symlink read and write-to-cache routines in afs from those for directories. (4) Discard the I/O buffer as soon as the write-to-cache completes as this is a full page (plus a folio_queue). (5) If there's no cache, discard the I/O buffer immediately after reading and copying if there is no cache.",
+      "published": "2026-07-19T16:17:46.187Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0012,
+      "epssPercentile": 0.02198,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
@@ -28481,50 +28309,6 @@
       ]
     },
     {
-      "id": "CVE-2026-33445",
-      "summary": "CVE-2026-33445 is a memory management vulnerability in Secure Access servers prior to 14.55. Attackers with an intimate knowledge of and total control over the tunnel protocol can create a persistent DoS against the server.",
-      "published": "2026-07-15T21:16:36.227Z",
-      "lastModified": "2026-07-16T16:28:04.287Z",
-      "severity": "Medium",
-      "cvssScore": 5.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00236,
-      "epssPercentile": 0.14719,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.58,
-      "tags": [
-        "CWE-400"
-      ]
-    },
-    {
       "id": "CVE-2026-15652",
       "summary": "The Easy Accordion – AI-Powered FAQ & Accordion Blocks, Product FAQ plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'align' Block Attribute in all versions up to, and including, 3.1.6 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
       "published": "2026-07-16T04:17:25.463Z",
@@ -29533,56 +29317,6 @@
       ]
     },
     {
-      "id": "CVE-2026-56678",
-      "summary": "9Router is an AI router & token saver. Prior to 0.5.6, the Kiro API-key validation endpoint POST /api/oauth/kiro/api-key builds an upstream URL using a user-controlled region value, allowing an authenticated attacker to supply a crafted region such as kiro-canary.local:8443# and cause 9Router to send the Kiro validation request to an attacker-controlled host while forwarding the submitted Kiro API key as an Authorization header. This issue is fixed in version 0.5.6.",
-      "published": "2026-07-15T21:16:55.430Z",
-      "lastModified": "2026-07-16T14:16:55.057Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00171,
-      "epssPercentile": 0.06817,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-20",
-          "name": "CWE-20",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.48,
-      "tags": [
-        "CWE-20",
-        "CWE-918"
-      ]
-    },
-    {
       "id": "CVE-2026-58317",
       "summary": "Unsigned to Signed Conversion Error (CWE-196) vulnerability exists in TTSSH2 plugin of Tera Term provided by TeraTerm Project. When Tera Term attempts to establish an SSH connection to a server set up by an attacker, out-of-bounds read/write may occur. As a result, the contents of adjacent memory regions may be transmitted to the server, and Tera Term may behave unexpected or terminate abnormally.",
       "published": "2026-07-17T05:16:40.180Z",
@@ -29758,50 +29492,6 @@
       "tags": [
         "Windows",
         "CWE-277"
-      ]
-    },
-    {
-      "id": "CVE-2026-62361",
-      "summary": "listmonk is a standalone, self-hosted, newsletter and mailing list manager. Prior to 6.2.0, listmonk’s GET /api/subscribers/export endpoint injects the user-controlled query parameter into QuerySubscribersForExport in internal/core/subscribers.go without calling validateQueryTables, unlike GET /api/subscribers, allowing an authenticated user with subscribers:sql_query and subscribers:get_all to read arbitrary database tables such as users and settings and execute data-modifying PostgreSQL CTEs. This issue is fixed in version 6.2.0.",
-      "published": "2026-07-15T21:16:55.933Z",
-      "lastModified": "2026-07-16T16:19:16.103Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00239,
-      "epssPercentile": 0.15136,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.45,
-      "tags": [
-        "CWE-89"
       ]
     },
     {
@@ -34583,56 +34273,6 @@
       ]
     },
     {
-      "id": "CVE-2026-33444",
-      "summary": "CVE-2026-33444 is a memory management vulnerability in Secure Access servers prior to 14.55. Attackers with intimate knowledge of and total control over the tunnel protocol can create a non-persistent DoS against the server.",
-      "published": "2026-07-15T21:16:36.113Z",
-      "lastModified": "2026-07-16T16:28:29.230Z",
-      "severity": "Low",
-      "cvssScore": 3.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00258,
-      "epssPercentile": 0.17484,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-119",
-          "name": "CWE-119",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.91,
-      "tags": [
-        "CWE-119",
-        "CWE-400"
-      ]
-    },
-    {
       "id": "CVE-2026-16104",
       "summary": "A flaw was found in the authentication configuration endpoint of the keycloak-services component, which is the core engine for Red Hat Build of Keycloak identity and access management. The issue occurs because the system fails to mask sensitive configuration values, such as reCAPTCHA secret keys, when they are requested by administrators with view-only permissions. This can lead to the exposure of third-party service credentials to unauthorized personnel or through administrative logs.",
       "published": "2026-07-17T17:17:14.393Z",
@@ -34949,50 +34589,6 @@
       ]
     },
     {
-      "id": "CVE-2026-56679",
-      "summary": "9Router is an AI router & token saver. Prior to 0.5.4, the PATCH /api/settings endpoint writes the entire request body to persistent settings without a field whitelist, allowing an authenticated user to set security-critical fields such as requireLogin and disable authentication for the whole application, exposing protected routes such as /api/keys and /api/providers to unauthenticated access. This issue is reported as fixed in version 0.5.4.",
-      "published": "2026-07-15T21:16:55.560Z",
-      "lastModified": "2026-07-16T14:16:55.167Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00324,
-      "epssPercentile": 0.25122,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-915",
-          "name": "CWE-915",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.88,
-      "tags": [
-        "CWE-915"
-      ]
-    },
-    {
       "id": "CVE-2026-46686",
       "summary": "Emlog is an open source website building system. In 2.6.13 and earlier, the admin backend user search module's keyword parameter from admin/user.php is processed with addslashes but not HTML-escaped before being rendered into the value attribute in admin/views/user.php, allowing reflected cross-site scripting in an administrator's backend session. No fixed version is currently identified.",
       "published": "2026-07-16T18:16:44.063Z",
@@ -35078,50 +34674,6 @@
       "priorityScore": 1.88,
       "tags": [
         "CWE-770"
-      ]
-    },
-    {
-      "id": "CVE-2026-38753",
-      "summary": "A use-after-free in the awk_sub() function (editors/awk.c) of Busybox v1.38.0 allows attackers to cause a Denial of Service (DoS) via supplying a crafted AWK script.",
-      "published": "2026-07-15T21:16:36.677Z",
-      "lastModified": "2026-07-20T16:16:58.763Z",
-      "severity": "Medium",
-      "cvssScore": 4.9,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00145,
-      "epssPercentile": 0.04315,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.87,
-      "tags": [
-        "CWE-416"
       ]
     },
     {
@@ -36658,106 +36210,6 @@
       "tags": [
         "CWE-352",
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-55398",
-      "summary": "CVE-2026-55398 is a memory management vulnerability in Secure Access clients and servers prior to 14.55. Attackers with intimate knowledge of and total control over the tunnel protocol can create a non-persistent DoS against the server.",
-      "published": "2026-07-15T21:16:54.980Z",
-      "lastModified": "2026-07-16T16:27:38.407Z",
-      "severity": "Low",
-      "cvssScore": 3.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00209,
-      "epssPercentile": 0.11272,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-119",
-          "name": "CWE-119",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.69,
-      "tags": [
-        "CWE-119",
-        "CWE-400"
-      ]
-    },
-    {
-      "id": "CVE-2026-55608",
-      "summary": "n8n-MCP is an MCP server that provides AI assistants access to n8n node documentation, properties, and operations. Prior to 2.57.4, multi-tenant HTTP mode with ENABLE_MULTI_TENANT=true could allow an authenticated tenant to access default-scope workflow_versions backups instead of being confined to the tenant scope, exposing or deleting workflow-version backups from prior single-tenant deployments or migrations. This issue is fixed in version 2.57.4.",
-      "published": "2026-07-15T21:16:55.307Z",
-      "lastModified": "2026-07-17T17:11:08.290Z",
-      "severity": "Medium",
-      "cvssScore": 4.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00164,
-      "epssPercentile": 0.06035,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.68,
-      "tags": [
-        "CWE-200",
-        "CWE-863"
       ]
     },
     {
@@ -38946,6 +38398,44 @@
       "priorityScore": 1.19,
       "tags": [
         "CWE-200"
+      ]
+    },
+    {
+      "id": "CVE-2026-64070",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: powerpc/hv-gpci: fix preempt count leak in sysfs show paths Four sysfs show() callbacks in hv-gpci take get_cpu_var(hv_gpci_reqb) (which calls preempt_disable()) but only call the matching put_cpu_var() on the error path under the 'out:' label. Every successful read leaks one preempt_disable(): processor_bus_topology_show() processor_config_show() affinity_domain_via_virtual_processor_show() affinity_domain_via_domain_show() (affinity_domain_via_partition_show() was already correct.) On a CONFIG_PREEMPT=y kernel, repeated reads raise preempt_count and eventually return to userspace with preemption still disabled. The next user-mode page fault then hits faulthandler_disabled() == 1, gets forced to SIGSEGV, and the resulting coredump trips 'BUG: scheduling while atomic' in call_usermodehelper_exec -> wait_for_completion_state -> schedule: BUG: scheduling while atomic: / /0x00000004 ... __schedule_bug+0x6c/0x90 __schedule+0x58c/0x13a0 schedule+0x48/0x1a0 schedule_timeout+0x104/0x170 wait_for_completion_state+0x16c/0x330 call_usermodehelper_exec+0x254/0x2d0 vfs_coredump+0x1050/0x2590 get_signal+0xb9c/0xc80 do_notify_resume+0xf8/0x470 Add an out_success label that calls put_cpu_var() before returning the byte count, mirroring affinity_domain_via_partition_show().",
+      "published": "2026-07-19T16:17:47.583Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00155,
+      "epssPercentile": 0.05228,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.18,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -41988,6 +41478,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64071",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nvme-pci: fix use-after-free in nvme_free_host_mem() nvme_free_host_mem() frees dev->hmb_sgt via dma_free_noncontiguous() but never clears the pointer afterward. This leads to a use-after-free if nvme_free_host_mem() is called twice in the same error path. This can happen during nvme_probe() when nvme_setup_host_mem() succeeds in allocating the HMB (setting dev->hmb_sgt) but nvme_set_host_mem() fails with an I/O error: nvme_setup_host_mem() nvme_alloc_host_mem_single() -> sets dev->hmb_sgt nvme_set_host_mem() -> fails with -EIO nvme_free_host_mem() -> frees hmb_sgt, but does NOT NULL it return error nvme_probe() error path: nvme_free_host_mem() -> dev->hmb_sgt is stale, use-after-free The second call dereferences the freed sgt, causing a NULL pointer dereference in iommu_dma_free_noncontiguous() when it accesses sgt->sgl->dma_address (the backing memory has been freed and zeroed). This is reproducible on Thunderbolt-attached NVMe devices (e.g., OWC Envoy Express behind a Dell WD22TB4 dock) where the device intermittently returns I/O errors during HMB setup due to PCIe link instability. BUG: kernel NULL pointer dereference, address: 0000000000000010 RIP: 0010:iommu_dma_free_noncontiguous+0x22/0x80 Call Trace: dma_free_noncontiguous+0x3b/0x130 nvme_free_host_mem+0x30/0xf0 [nvme] nvme_probe.cold+0xcc/0x275 [nvme] local_pci_probe+0x43/0xa0 pci_device_probe+0xeea/0x290 really_probe+0xf9/0x3b0 __driver_probe_device+0x8b/0x170 driver_probe_device+0x24/0xd0 __driver_attach_async_helper+0x6b/0x110 async_run_entry_fn+0x37/0x170 process_one_work+0x1ac/0x3d0 worker_thread+0x1b8/0x360 kthread+0xf7/0x130 ret_from_fork+0x2d8/0x3a0 ret_from_fork_asm+0x1a/0x30 Fix this by setting dev->hmb_sgt to NULL after freeing it, so the second call takes the multi-descriptor path which safely handles the already-cleaned-up state.",
+      "published": "2026-07-19T16:17:47.687Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00173,
+      "epssPercentile": 0.0702,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.25,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-63826",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: fbdev: fix use-after-free in store_modes() store_modes() replaces a framebuffer's modelist with modes from userspace. On success it frees the old modelist with fb_destroy_modelist(). Two fields still point into that freed list. One pointer is fb_display[i].mode, the mode a console is using. fbcon_new_modelist() moves these pointers to the new list. It only does so for consoles still mapped to the framebuffer. An unmapped console is skipped and keeps its stale pointer. Unbinding fbcon, for example, sets con2fb_map[i] to -1 but leaves fb_display[i].mode set. An FBIOPUT_VSCREENINFO ioctl with FB_ACTIVATE_INV_MODE later reaches fbcon_mode_deleted(). That function reads the stale fb_display[i].mode through fb_mode_is_equal(). The read is a use-after-free. The other pointer is fb_info->mode, the current mode. It is set through the mode sysfs attribute. store_modes() does not update fb_info->mode, so it is left pointing into the freed list. show_mode(), the attribute's read handler, dereferences the stale fb_info->mode through mode_string(). The read is a use-after-free. Clear both pointers before freeing the list. Commit a1f305893074 (\"fbcon: Set fb_display[i]->mode to NULL when the mode is released\") added the helper fbcon_delete_modelist(). It clears every fb_display[i].mode that points into a given list. So far it is called only from the unregister path. Call it from store_modes() too, and set fb_info->mode to NULL.",
       "published": "2026-07-19T12:16:55.833Z",
@@ -42214,6 +41742,238 @@
       "priorityScore": 0.23,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64052",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: block: bio-integrity: Fix null-ptr-deref in bio_integrity_map_user() pin_user_pages_fast() can partially succeed and return the number of pages that were actually pinned. However, the bio_integrity_map_user() does not handle this partial pinning. This leads to a general protection fault since bvec_from_pages() dereferences an unpinned page address, which is 0. To fix this, add a check to verify that all requested memory is pinned. If partial pinning occurs, unpin the memory and return -EFAULT. Kernel Oops: Oops: general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] SMP KASAN NOPTI KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f] CPU: 0 UID: 0 PID: 1061 Comm: nvme-passthroug Not tainted 7.0.0-11783-g90957f9314e8-dirty #16 PREEMPT(lazy) Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.17.0-0-gb52ca86e094d-prebuilt.qemu.org 04/01/2014 RIP: 0010:bio_integrity_map_user.cold+0x1b0/0x9d6",
+      "published": "2026-07-19T16:17:45.623Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.06455,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.23,
+      "tags": [
+        "Linux",
+        "iOS"
+      ]
+    },
+    {
+      "id": "CVE-2026-64059",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix folio->private handling in netfs_perform_write() Under some circumstances, netfs_perform_write() doesn't correctly manipulate folio->private between NULL, NETFS_FOLIO_COPY_TO_CACHE, pointing to a group and pointing to a netfs_folio struct, leading to potential multiple attachments of private data with associated folio ref leaks and also leaks of netfs_folio structs or netfs_group refs. Fix this by consolidating the place at which a folio is marked uptodate in one place and having that look at what's attached to folio->private and decide how to clean it up and then set the new group. Also, the content shouldn't be flushed if group is NULL, even if a group is specified in the netfs_group parameter, as that would be the case for a new folio. A filesystem should always specify netfs_group or never specify netfs_group. The Sashiko auto-review tool noted that it was theoretically possible that the fpos >= ctx->zero_point section might leak if it modified a streaming write folio. This is unlikely, but with a network filesystem, third party changes can happen. It also pointed out that __netfs_set_group() would leak if called multiple times on the same folio from the \"whole folio modify section\".",
+      "published": "2026-07-19T16:17:46.407Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.06456,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.23,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64062",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix potential deadlock in write-through mode Fix netfs_advance_writethrough() to always unlock the supplied folio and to mark it dirty if it isn't yet written to the end. Unfortunately, it can't be marked for writeback until the folio is done with as that may cause a deadlock against mmapped reads and writes. Even though it has been marked dirty, premature writeback can't occur as the caller is holding both inode->i_rwsem (which will prevent concurrent truncation, fallocation, DIO and other writes) and ictx->wb_lock (which will cause flushing to wait and writeback to skip or wait). Note that this may be easier to deal with once the queuing of folios is split from the generation of subrequests.",
+      "published": "2026-07-19T16:17:46.720Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.0646,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.23,
+      "tags": [
+        "Linux",
+        "iOS"
+      ]
+    },
+    {
+      "id": "CVE-2026-64063",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix streaming write being overwritten In order to avoid reading whilst writing, netfslib will allow \"streaming writes\" in which dirty data is stored directly into folios without reading them first. Such folios are marked dirty but may not be marked uptodate. If a folio is entirely written by a streaming write, uptodate will be set, otherwise it will have a netfs_folio struct attached to ->private recording the dirty region. In the event that a partially written streaming write page is to be overwritten entirely by a single write(), netfs_perform_write() will try to copy over it, but doesn't discard the netfs_folio if it succeeds; further, it doesn't correctly handle a partial copy that overwrites some of the dirty data. Fix this by the following: (1) If the folio is successfully overwritten, free the netfs_folio struct before marking the page uptodate. (2) If the copy to the folio partially fails, but short of the dirty data, just ignore the copy. (3) If the copy partially fails and overwrites some of the dirty data, accept the copy, update the netfs_folio struct to record the new data. If the folio is now filled, free the netfs_folio and set uptodate, otherwise return a partial write. Found with: fsx -q -N 1000000 -p 10000 -o 128000 -l 600000 \\ /xfstest.test/junk --replay-ops=junk.fsxops using the following as junk.fsxops: truncate 0x0 0 0x927c0 write 0x63fb8 0x53c8 0 copy_range 0xb704 0x19b9 0x24429 0x79380 write 0x2402b 0x144a2 0x90660 * write 0x204d5 0x140a0 0x927c0 * copy_range 0x1f72c 0x137d0 0x7a906 0x927c0 * read 0x00000 0x20000 0x9157c read 0x20000 0x20000 0x9157c read 0x40000 0x20000 0x9157c read 0x60000 0x20000 0x9157c read 0x7e1a0 0xcfb9 0x9157c on cifs with the default cache option. It shows folio 0x24 misbehaving if the FMODE_READ check is commented out in netfs_perform_write(): if (//(file->f_mode & FMODE_READ) || netfs_is_cache_enabled(ctx)) { and no fscache. This was initially found with the generic/522 xfstest.",
+      "published": "2026-07-19T16:17:46.820Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.0646,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.23,
+      "tags": [
+        "Linux",
+        "iOS"
+      ]
+    },
+    {
+      "id": "CVE-2026-64064",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix netfs_invalidate_folio() to clear dirty bit if all changes gone If a streaming write is made, this will leave the relevant modified folio in a not-uptodate, but dirty state with a netfs_folio struct hung off of folio->private indicating the dirty range. Subsequently truncating the file such that the dirty data in the folio is removed, but the first part of the folio theoretically remains will cause the netfs_folio struct to be discarded... but will leave the dirty flag set. If the folio is then read via mmap(), netfs_read_folio() will see that the page is dirty and jump to netfs_read_gaps() to fill in the missing bits. netfs_read_gaps(), however, expects there to be a netfs_folio struct present and can oops because truncate removed it. Fix this by calling folio_cancel_dirty() in netfs_invalidate_folio() in the event that all the dirty data in the folio is erased (as nfs does). Also add some tracepoints to log modifications to a dirty page. This can be reproduced with something like: dd if=/dev/zero of=/xfstest.test/foo bs=1M count=1 umount /xfstest.test mount /xfstest.test xfs_io -c \"w 0xbbbf 0xf96c\" \\ -c \"truncate 0xbbbf\" \\ -c \"mmap -r 0xb000 0x11000\" \\ -c \"mr 0xb000 0x11000\" \\ /xfstest.test/foo with fscaching disabled (otherwise streaming writes are suppressed) and a change to netfs_perform_write() to disallow streaming writes if the fd is open O_RDWR: if (//(file->f_mode & FMODE_READ) || <--- comment this out netfs_is_cache_enabled(ctx)) { It should be reproducible even without this change, but if prevents the above trivial xfs_io command from reproducing it. Note that the initial dd is important: the file must start out sufficiently large that the zero-point logic doesn't just clear the gaps because it knows there's nothing in the file to read yet. Unmounting and mounting is needed to clear the pagecache (there are other ways to do that that may also work). This was initially reproduced with the generic/522 xfstest on some patches that remove the FMODE_READ restriction.",
+      "published": "2026-07-19T16:17:46.937Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.06461,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.23,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64065",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: fix VM_BUG_ON_FOLIO() issue in netfs_write_begin() call The multiple runs of generic/013 test-case is capable to reproduce a kernel BUG at mm/filemap.c:1504 with probability of 30%. while true; do sudo ./check generic/013 done [ 9849.452376] page: refcount:3 mapcount:0 mapping:00000000e58ff252 index:0x10781 pfn:0x1c322 [ 9849.452412] memcg:ffff8881a1915800 [ 9849.452417] aops:ceph_aops ino:1000058db9e dentry name(?):\"f9XXXXXX\" [ 9849.452432] flags: 0x17ffffc0000000(node=0|zone=2|lastcpupid=0x1fffff) [ 9849.452441] raw: 0017ffffc0000000 0000000000000000 dead000000000122 ffff88816110d248 [ 9849.452445] raw: 0000000000010781 0000000000000000 00000003ffffffff ffff8881a1915800 [ 9849.452447] page dumped because: VM_BUG_ON_FOLIO(!folio_test_locked(folio)) [ 9849.452474] ------------[ cut here ]------------ [ 9849.452476] kernel BUG at mm/filemap.c:1504! [ 9849.478635] Oops: invalid opcode: 0000 [#1] SMP KASAN NOPTI [ 9849.481772] CPU: 2 UID: 0 PID: 84223 Comm: fsstress Not tainted 7.0.0-rc1+ #18 PREEMPT(full) [ 9849.482881] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.17.0-9.fc43 06/1 0/2025 [ 9849.484539] RIP: 0010:folio_unlock+0x85/0xa0 [ 9849.485076] Code: 89 df 31 f6 e8 1c f3 ff ff 48 8b 5d f8 c9 31 c0 31 d2 31 f6 31 ff c3 cc cc cc cc 48 c7 c6 80 6c d9 a7 48 89 df e8 4b b3 10 00 0b 48 89 df e8 21 e6 2c 00 eb 9d 0f 1f 40 00 66 66 2e 0f 1f 84 [ 9849.493818] RSP: 0018:ffff8881bb8076b0 EFLAGS: 00010246 [ 9849.495740] RAX: 0000000000000000 RBX: ffffea00070c8980 RCX: 0000000000000000 [ 9849.498678] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000 [ 9849.500559] RBP: ffff8881bb8076b8 R08: 0000000000000000 R09: 0000000000000000 [ 9849.501097] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000010782000 [ 9849.502108] R13: ffff8881935de738 R14: ffff88816110d010 R15: 0000000000001000 [ 9849.502516] FS: 00007e36cbe94740(0000) GS:ffff88824a899000(0000) knlGS:0000000000000000 [ 9849.502996] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033 [ 9849.503810] CR2: 000000c0002b0000 CR3: 000000011bbf6004 CR4: 0000000000772ef0 [ 9849.504459] PKRU: 55555554 [ 9849.504626] Call Trace: [ 9849.505242] [ 9849.505379] netfs_write_begin+0x7c8/0x10a0 [ 9849.505877] ? __kasan_check_read+0x11/0x20 [ 9849.506384] ? __pfx_netfs_write_begin+0x10/0x10 [ 9849.507178] ceph_write_begin+0x8c/0x1c0 [ 9849.507934] generic_perform_write+0x391/0x8f0 [ 9849.508503] ? __pfx_generic_perform_write+0x10/0x10 [ 9849.509062] ? file_update_time_flags+0x19a/0x4b0 [ 9849.509581] ? ceph_get_caps+0x63/0xf0 [ 9849.510259] ? ceph_get_caps+0x63/0xf0 [ 9849.510530] ceph_write_iter+0xe79/0x1ae0 [ 9849.511282] ? __pfx_ceph_write_iter+0x10/0x10 [ 9849.511839] ? lock_acquire+0x1ad/0x310 [ 9849.512334] ? ksys_write+0xf9/0x230 [ 9849.512582] ? lock_is_held_type+0xaa/0x140 [ 9849.513128] vfs_write+0x512/0x1110 [ 9849.513634] ? __fget_files+0x33/0x350 [ 9849.513893] ? __pfx_vfs_write+0x10/0x10 [ 9849.514143] ? mutex_lock_nested+0x1b/0x30 [ 9849.514394] ksys_write+0xf9/0x230 [ 9849.514621] ? __pfx_ksys_write+0x10/0x10 [ 9849.514887] ? do_syscall_64+0x25e/0x1520 [ 9849.515122] ? __kasan_check_read+0x11/0x20 [ 9849.515366] ? trace_hardirqs_on_prepare+0x178/0x1c0 [ 9849.515655] __x64_sys_write+0x72/0xd0 [ 9849.515885] ? trace_hardirqs_on+0x24/0x1c0 [ 9849.516130] x64_sys_call+0x22f/0x2390 [ 9849.516341] do_syscall_64+0x12b/0x1520 [ 9849.516545] ? do_syscall_64+0x27c/0x1520 [ 9849.516783] ? do_syscall_64+0x27c/0x1520 [ 9849.517003] ? lock_release+0x318/0x480 [ 9849.517220] ? __x64_sys_io_getevents+0x143/0x2d0 [ 9849.517479] ? percpu_ref_put_many.constprop.0+0x8f/0x210 [ 9849.517779] ? entry_SYSCALL_64_after_hwframe+0x76/0x7e [ 9849.518073] ? do_syscall_64+0x25e/0x1520 [ 9849.518291] ? __kasan_check_read+0x11/0x20 [ 9849.518519] ? trace_hardirqs_on_prepare+0x178/0x1c0 [ 9849.518799] ? do_syscall_64+0x27c/0x1520 [ 9 ---truncated---",
+      "published": "2026-07-19T16:17:47.053Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.06461,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.23,
+      "tags": [
+        "Linux",
+        "iOS"
       ]
     },
     {
@@ -42715,6 +42475,82 @@
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.22,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64054",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: shaper: reject duplicate leaves in GROUP request net_shaper_nl_group_doit() does not deduplicate NET_SHAPER_A_LEAVES entries. When userspace supplies the same leaf handle twice, the same old-parent pointer lands twice in old_nodes[]. The cleanup loop double frees the parent. Of course the same parent may still be in old_nodes[] twice if we are moving multiple of its leaves. Note that this patch also implicitly fixes the fact that the i >= leaves_count path forgets to set ret.",
+      "published": "2026-07-19T16:17:45.830Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00166,
+      "epssPercentile": 0.06275,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.22,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64060",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix leak of request in netfs_write_begin() error handling Fix netfs_write_begin() to not leak our ref on the request in the event that we get an error from netfs_wait_for_read().",
+      "published": "2026-07-19T16:17:46.513Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00166,
+      "epssPercentile": 0.06278,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
