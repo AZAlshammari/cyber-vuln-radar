@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-13T23:59:43.990Z",
+  "generatedAt": "2026-08-14T02:35:54.983Z",
   "count": 1000,
   "items": [
     {
@@ -12987,50 +12987,6 @@
       ]
     },
     {
-      "id": "CVE-2026-9770",
-      "summary": "Kasa EC71 v4 and EC70 v4 firmware contains a static cryptographic private key stored in a read-only filesystem that is shared across devices. An attacker with access to the firmware image can extract the embedded key. Successful exploitation may allow an unauthenticated attacker on the same network to use this key in the web management service, compromising the confidentiality of encrypted communications. This may enable passive decryption of traffic or active man-in-the-middle (MITM) attacks",
-      "published": "2026-07-15T01:17:10.387Z",
-      "lastModified": "2026-08-06T18:20:49.317Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00363,
-      "epssPercentile": 0.29248,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-321",
-          "name": "CWE-321",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.88,
-      "tags": [
-        "CWE-321"
-      ]
-    },
-    {
       "id": "CVE-2025-51678",
       "summary": "An issue was discovered in RISC-V PicoRV32 commit 87c89a. A mismatch in the PCPI INSN and memory address can lead to unexpected behavior.",
       "published": "2026-07-17T20:17:13.887Z",
@@ -18791,50 +18747,6 @@
       ]
     },
     {
-      "id": "CVE-2026-13230",
-      "summary": "An information disclosure vulnerability was identified in TP-Link Kasa EC70 v4 and EC71 v4 in the local discovery mechanism, which exposes sensitive geolocation information without requiring authentication. This issue allows an attacker on the same local network to retrieve geolocation-related data through crafted responses. The vulnerability impacts confidentiality only, with no evidence of integrity of availability impact.",
-      "published": "2026-07-15T01:16:14.620Z",
-      "lastModified": "2026-08-06T18:21:08.780Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00382,
-      "epssPercentile": 0.31193,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.37,
-      "tags": [
-        "CWE-200"
-      ]
-    },
-    {
       "id": "CVE-2026-53517",
       "summary": "Better Auth is an authentication and authorization library for TypeScript. From 1.4.8-beta.7 until 1.6.11, the @better-auth/oauth-provider POST /oauth2/token endpoint on the refresh_token grant performs a non-atomic read, validate, revoke, and mint sequence on the oauthRefreshToken row, allowing concurrent requests with the same parent refresh token to pass the revoked check and create forked refresh-token families; the vulnerable range also includes embedded better-auth plugin versions before 1.6.0. This issue is fixed in version 1.6.11.",
       "published": "2026-07-15T18:16:48.107Z",
@@ -22564,6 +22476,82 @@
       ]
     },
     {
+      "id": "CVE-2026-63815",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: f2fs: bound i_inline_xattr_size for non-inline-xattr inodes When the flexible_inline_xattr feature is enabled, do_read_inode() loads the on-disk i_inline_xattr_size unconditionally: if (f2fs_sb_has_flexible_inline_xattr(sbi)) fi->i_inline_xattr_size = le16_to_cpu(ri->i_inline_xattr_size); but sanity_check_inode() only range-checks it when the inode also has the FI_INLINE_XATTR flag set. An inode that carries an inline dentry or inline data but not FI_INLINE_XATTR -- the normal layout for an inline directory -- therefore keeps a fully attacker-controlled i_inline_xattr_size from a crafted image. get_inline_xattr_addrs() returns that value with no flag gating, so it feeds the inode geometry: MAX_INLINE_DATA() = 4 * (CUR_ADDRS_PER_INODE - i_inline_xattr_size - 1) NR_INLINE_DENTRY() = MAX_INLINE_DATA() * BITS_PER_BYTE / (...) addrs_per_page() = CUR_ADDRS_PER_INODE - i_inline_xattr_size A large i_inline_xattr_size drives MAX_INLINE_DATA() and NR_INLINE_DENTRY() negative, so make_dentry_ptr_inline() sets d->max (int) to a negative value. The inline directory walk then compares an unsigned long bit_pos against that negative d->max, which is promoted to a huge unsigned bound, and reads far past the inline area: while (bit_pos max) /* fs/f2fs/dir.c */ ... test_bit_le(bit_pos, d->bitmap) / d->dentry[bit_pos] ... Mounting a crafted image and reading such a directory triggers an out-of-bounds read in f2fs_fill_dentries(); the same underflow also corrupts ADDRS_PER_INODE for regular files. Validate i_inline_xattr_size against MAX_INLINE_XATTR_SIZE whenever the flexible_inline_xattr feature is enabled -- i.e. whenever the value is loaded from disk and consumed -- and keep the lower MIN_INLINE_XATTR_SIZE bound gated on inodes that actually carry an inline xattr, so legitimate inodes with i_inline_xattr_size == 0 are still accepted.",
+      "published": "2026-07-19T12:16:54.527Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 8.4,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00139,
+      "epssPercentile": 0.03747,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.07,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-63818",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: f2fs: validate orphan inode entry count f2fs_recover_orphan_inodes() trusts the orphan block entry_count when replaying orphan inodes from the checkpoint pack. A corrupted entry_count larger than F2FS_ORPHANS_PER_BLOCK makes the recovery loop read past the ino[] array and interpret footer or following data as inode numbers. On a crafted image, mounting an unpatched kernel can drive orphan recovery into f2fs_bug_on() and panic the kernel. Validate entry_count before consuming entries so corrupted checkpoint data fails the mount with -EFSCORRUPTED and requests fsck instead. Set ERROR_INCONSISTENT_ORPHAN as well, so the corruption reason can be recorded in the superblock s_errors[] field. This gives fsck a persistent hint even though mount-time orphan recovery failure may leave no chance to persist SBI_NEED_FSCK through a checkpoint.",
+      "published": "2026-07-19T12:16:54.873Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 8.4,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0014,
+      "epssPercentile": 0.03795,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.07,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-62205",
       "summary": "OpenClaw versions 2026.4.12-beta.1 before 2026.6.6 contain a missing-authorization vulnerability in the MS Teams message actions feature. When the affected feature is enabled and reachable, a lower-trust caller or a configured input path can perform actions that should have required a stronger authorization or policy check. Practical impact depends on the operator's configuration and whether lower-trust input can reach that path. The issue is fixed in 2026.6.6.",
       "published": "2026-07-17T02:18:06.747Z",
@@ -24995,6 +24983,44 @@
       ]
     },
     {
+      "id": "CVE-2026-63817",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: f2fs: validate compress cache inode only when enabled F2FS_COMPRESS_INO() uses NM_I(sbi)->max_nid as the synthetic inode number for the compressed page cache inode. That inode only exists when the compress_cache mount option is enabled. When compress_cache is disabled, max_nid is outside the valid inode range. A corrupted directory entry that points to ino == max_nid should therefore be rejected by f2fs_check_nid_range(). However, is_meta_ino() currently treats F2FS_COMPRESS_INO() as a meta inode unconditionally, so f2fs_iget() bypasses do_read_inode() and its nid range check, and instantiates a fake internal inode instead. Gate the compressed cache inode case on COMPRESS_CACHE, matching f2fs_init_compress_inode(). With compress_cache disabled, ino == max_nid now follows the normal inode path and is rejected as an out-of-range nid.",
+      "published": "2026-07-19T12:16:54.757Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00134,
+      "epssPercentile": 0.03308,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-53411",
       "summary": "A time-of-check to time-of-use (TOCTOU) race condition in the installation and uninstallation process of certain Zoom Clients for Windows could allow an authenticated local user to escalate privileges.",
       "published": "2026-07-16T22:17:31.267Z",
@@ -25031,7 +25057,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 2.84,
       "tags": [
@@ -25590,6 +25616,44 @@
       ]
     },
     {
+      "id": "CVE-2026-63816",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: f2fs: atomic: fix UAF issue on f2fs_inode_info.atomic_inode - ioctl(F2FS_IOC_GARBAGE_COLLECT_RANGE) - shrink - f2fs_gc - gc_data_segment - ra_data_block(cow_inode) - mapping = F2FS_I(inode)->atomic_inode->i_mapping : f2fs_is_cow_file(cow_inode) is true - f2fs_evict_inode(atomic_inode) - clear_inode_flag(fi->cow_inode, FI_COW_FILE) - F2FS_I(fi->cow_inode)->atomic_inode = NULL ... - truncate_inode_pages_final(atomic_inode) - f2fs_grab_cache_folio(mapping) : create folio in atomic_inode->mapping - clear_inode(atomic_inode) - BUG_ON(atomic_inode->i_data.nrpages) We need to add a reference on fi->atomic_inode before using its mapping field during garbage collection, otherwise, it will cause UAF issue.",
+      "published": "2026-07-19T12:16:54.643Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00126,
+      "epssPercentile": 0.02718,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.83,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-54562",
       "summary": "Cloudreve is a self-hosted file management and sharing system. Prior to 4.16.1, Cloudreve's remote download workflow accepts user-supplied URLs at POST /api/v4/workflow/download and passes them to the configured downloader without blocking loopback, localhost, IPv6 localhost, or redirect-to-loopback targets, allowing a non-admin user with remote download permission to fetch internal-only URLs and read the response after it is imported into the user's own files. This issue is fixed in version 4.16.1.",
       "published": "2026-07-15T15:16:44.977Z",
@@ -25765,6 +25829,44 @@
       "tags": [
         "Linux",
         "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-63823",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: keys: Pin request_key_auth payload in instantiate paths A: request_key() B: KEYCTL_INSTANTIATE_IOV ================ ========================= create auth key store rka in auth key wait for helper get auth key load rka from auth key copy user payload sleep on #PF helper completed detach and free rka destroy auth key wake up use rka->target_key **USE-AFTER-FREE** Give request_key_auth payloads a refcount. Take a payload reference while authkey->sem stabilizes the payload and revocation state. Hold that reference across the instantiate and reject paths. Drop the auth key owning reference from revoke and destroy. [jarkko: Replaced the first two paragraphs of text with an actual concurrency scenario.]",
+      "published": "2026-07-19T12:16:55.457Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00124,
+      "epssPercentile": 0.02524,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.82,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -26160,6 +26262,45 @@
       "priorityScore": 2.8,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-63819",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: f2fs: fix to do sanity check on f2fs_get_node_folio_ra() kernel BUG at fs/f2fs/file.c:845! Oops: invalid opcode: 0000 [#1] SMP KASAN NOPTI CPU: 0 UID: 0 PID: 5336 Comm: syz.0.0 Not tainted syzkaller #0 PREEMPT(full) Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014 RIP: 0010:f2fs_do_truncate_blocks+0x1115/0x1140 fs/f2fs/file.c:845 Code: fc fc 90 0f 0b e8 8b 9d 9a fd 90 0f 0b e8 83 9d 9a fd 48 89 df 48 c7 c6 60 d1 1a 8c e8 54 f1 fc fc 90 0f 0b e8 6c 9d 9a fd 90 0b e8 64 9d 9a fd 90 0f 0b 90 e9 93 fd ff ff e8 56 9d 9a fd 90 RSP: 0018:ffffc9000e4474c0 EFLAGS: 00010283 RAX: ffffffff842b1d34 RBX: 0000000000000003 RCX: 0000000000100000 RDX: ffffc9000f03a000 RSI: 0000000000035503 RDI: 0000000000035504 RBP: ffffc9000e447608 R08: ffff8880123b0000 R09: 0000000000000002 R10: 00000000fffffffe R11: 0000000000000002 R12: 0000000000000001 R13: 0000000000000000 R14: 1ffff92001c88ea0 R15: 00000000ffff039c FS: 00007f7e02ee36c0(0000) GS:ffff88808c887000(0000) knlGS:0000000000000000 CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033 CR2: 00007ff0305c4000 CR3: 0000000012d4c000 CR4: 0000000000352ef0 Call Trace: f2fs_truncate_blocks+0x10a/0x300 fs/f2fs/file.c:882 f2fs_truncate+0x471/0x7c0 fs/f2fs/file.c:940 f2fs_evict_inode+0xa3f/0x1ac0 fs/f2fs/inode.c:907 evict+0x61e/0xb10 fs/inode.c:841 f2fs_fill_super+0x5f43/0x78f0 fs/f2fs/super.c:5224 get_tree_bdev_flags+0x431/0x4f0 fs/super.c:1694 vfs_get_tree+0x92/0x2a0 fs/super.c:1754 fc_mount fs/namespace.c:1193 [inline] do_new_mount_fc fs/namespace.c:3758 [inline] do_new_mount+0x341/0xd30 fs/namespace.c:3834 do_mount fs/namespace.c:4167 [inline] __do_sys_mount fs/namespace.c:4383 [inline] __se_sys_mount+0x31d/0x420 fs/namespace.c:4360 do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline] do_syscall_64+0x15f/0xf80 arch/x86/entry/syscall_64.c:94 entry_SYSCALL_64_after_hwframe+0x77/0x7f count = ADDRS_PER_PAGE(dn.node_folio, inode); count -= dn.ofs_in_node; f2fs_bug_on(sbi, count check whether it is inode|xnode",
+      "published": "2026-07-19T12:16:54.980Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00119,
+      "epssPercentile": 0.02035,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.8,
+      "tags": [
+        "Linux",
+        "iOS"
       ]
     },
     {
@@ -34075,50 +34216,6 @@
       ]
     },
     {
-      "id": "CVE-2026-11851",
-      "summary": "Improper Neutralization of Special Elements used in an SQL Command (\"SQL Injection\") in the web management interface of certain ASUS router models allows a remote authenticated user to disclose confidential information via a crafted request that bypasses existing input validation Refer to the ' Security Update for ASUS Router Firmware ' section on the ASUS Security Advisory for more information.",
-      "published": "2026-07-15T02:18:04.743Z",
-      "lastModified": "2026-07-15T16:24:31.140Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00368,
-      "epssPercentile": 0.29761,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.04,
-      "tags": [
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-53382",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: media: vidtv: fix NULL pointer dereference in vidtv_mux_push_si syzbot reported a general protection fault in vidtv_psi_ts_psi_write_into [1]. vidtv_mux_get_pid_ctx() can return NULL, but vidtv_mux_push_si() does not check for this before dereferencing the returned pointer to access the continuity counter. This leads to a general protection fault when accessing a near-NULL address. The root cause is that vidtv_mux_pid_ctx_init() does not check the return value of vidtv_mux_create_pid_ctx_once() for PMT section PIDs. If the allocation fails, the PID context is never created, but init returns success. The subsequent vidtv_mux_push_si() call then gets NULL from vidtv_mux_get_pid_ctx() and crashes. Fix both the root cause (add error check in vidtv_mux_pid_ctx_init for PMT PIDs) and add defensive NULL checks in vidtv_mux_push_si for all vidtv_mux_get_pid_ctx() calls. [1] Oops: general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] SMP KASAN PTI KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007] Workqueue: events vidtv_mux_tick RIP: 0010:vidtv_psi_ts_psi_write_into+0x54a/0xbc0 drivers/media/test-drivers/vidtv/vidtv_psi.c:197 Call Trace: vidtv_psi_table_header_write_into drivers/media/test-drivers/vidtv/vidtv_psi.c:799 [inline] vidtv_psi_pmt_write_into+0x3b2/0xa70 drivers/media/test-drivers/vidtv/vidtv_psi.c:1231 vidtv_mux_push_si+0x932/0xe80 drivers/media/test-drivers/vidtv/vidtv_mux.c:196 vidtv_mux_tick+0xe9b/0x1480 drivers/media/test-drivers/vidtv/vidtv_mux.c:408",
       "published": "2026-07-19T12:16:48.970Z",
@@ -37102,56 +37199,6 @@
       "priorityScore": 1.83,
       "tags": [
         "CWE-863"
-      ]
-    },
-    {
-      "id": "CVE-2026-13585",
-      "summary": "Allocation of Resources Without Limits and Throttling and Sensitive Information in Resource Not Removed Before Reuse in the ASUS System Control Interface driver and ASUS Business Manager allow a local administrator to disclose sensitive information via crafted IOCTL requests, which, in severe cases, may lead to a Denial of Service (DoS) on the system. Refer to the ' Security Update for ASUS System Control Interface ' section on the ASUS Security Advisory for more information.",
-      "published": "2026-07-15T02:18:12.213Z",
-      "lastModified": "2026-07-21T09:16:52.490Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00307,
-      "epssPercentile": 0.23131,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-226",
-          "name": "CWE-226",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-770",
-          "name": "CWE-770",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.81,
-      "tags": [
-        "CWE-226",
-        "CWE-770"
       ]
     },
     {
@@ -41727,50 +41774,6 @@
       ]
     },
     {
-      "id": "CVE-2026-15029",
-      "summary": "Untrusted Pointer Dereference in ASUS System Control Interface v3, ASUS System Control Interface, and ASUS Business Manager allows a local administrator to perform arbitrary physical memory read and write operations via crafted IOCTL requests to the driver, bypassing OS-enforced memory protections. Refer to the ' Security Update for ASUS System Control Interface ' section on the ASUS Security Advisory for more information.",
-      "published": "2026-07-15T02:18:13.033Z",
-      "lastModified": "2026-07-15T16:24:31.140Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00135,
-      "epssPercentile": 0.03372,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-822",
-          "name": "CWE-822",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.12,
-      "tags": [
-        "CWE-822"
-      ]
-    },
-    {
       "id": "CVE-2026-46421",
       "summary": "The SAP Cloud Application Programming Model is a tool for building enterprise-grade cloud applications, and cap-js/cds-dbs is the monorepo for SQL database services for that tool. On April 29, 2026, compromised versions of `@cap-js/sqlite@2.2.2`, `@cap-js/postgres@2.2.2`, and `@cap-js/db-service@2.10.1` were published. The malicious packages harvested credentials and attempted self-propagation. If a compromised version was installed, all credentials accessible on that machine (npm tokens, cloud provider credentials, SSH keys, GitHub PATs) should be considered compromised. User should upgrade to `@cap-js/sqlite` >= 2.4.0, `@cap-js/postgres` >= 2.3.0, `@cap-js/db-service` >= 2.11.0. If a compromised version was ever installed, rotate all affected credentials. No known workarounds are available.",
       "published": "2026-07-15T19:17:17.523Z",
@@ -42660,50 +42663,6 @@
       ]
     },
     {
-      "id": "CVE-2026-8919",
-      "summary": "Permissive Cross-domain Security Policy with Untrusted Domains in ASUS GameSDK allows a remote user to obtain a local user’s NTLM hash by convincing the user to visit a crafted web page that sends a request containing a UNC path to the application’s local service endpoint. This can result in information disclosure or data tampering, may cause GameSDK to become unavailable, and may also enable access to the victim’s information on other services. Refer to the ' Security Update for ASUS GameSDK ' section on the ASUS Security Advisory for more information.",
-      "published": "2026-07-15T02:22:57.653Z",
-      "lastModified": "2026-07-15T16:24:31.140Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.003,
-      "epssPercentile": 0.22466,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-942",
-          "name": "CWE-942",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.79,
-      "tags": [
-        "CWE-942"
-      ]
-    },
-    {
       "id": "CVE-2026-59249",
       "summary": "Inconsistent interpretation of HTTP requests (HTTP response smuggling) vulnerability in elixir-mint mint allows a malicious HTTP/1 server to desynchronize a strict intermediary and the Mint client on the same pooled connection, enabling response-queue poisoning against subsequent requests that share the connection. The Mint.HTTP1.decode_body/5 function in lib/mint/http1.ex parses the chunk-size line of a Transfer-Encoding: chunked response with Integer.parse(data, 16). RFC 7230 defines chunk-size = 1*HEXDIG and forbids any sign prefix, but Integer.parse/2 accepts an optional leading + or -. A chunk-size line of +5 is accepted as a five-byte chunk; lines of +0 and -0 are accepted as the terminating zero-length chunk and end the message body early. An RFC-strict intermediary in the response path rejects these forms, so the intermediary and the Mint client disagree on where one response ends and the next begins. On a pooled keep-alive connection, an attacker-influenced origin can inject bytes that the client attributes to the next legitimate response on the same connection, poisoning the response queue and corrupting the responses returned to unrelated in-flight requests. This issue affects mint: from 0.1.0 before 1.9.3.",
       "published": "2026-07-16T12:18:07.170Z",
@@ -43519,6 +43478,44 @@
       ]
     },
     {
+      "id": "CVE-2026-63822",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: ath11k: fix warning when unbinding If there is an error during some initialization related to firmware, the buffers dp->tx_ring[i].tx_status are released. However this is released again when the device is unbinded (ath11k_pci), and we get: WARNING: CPU: 0 PID: 6231 at mm/slub.c:4368 free_large_kmalloc+0x57/0x90 Call Trace: free_large_kmalloc ath11k_dp_free ath11k_core_deinit ath11k_pci_remove ... The issue is always reproducible from a VM because the MSI addressing initialization is failing. In order to fix the issue, just set the buffers to NULL after releasing in order to avoid the double free.",
+      "published": "2026-07-19T12:16:55.330Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00174,
+      "epssPercentile": 0.07043,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.25,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-53712",
       "summary": "SCRAM (Salted Challenge Response Authentication Mechanism) is part of the family of Simple Authentication and Security Layer (SASL, RFC 4422) authentication mechanisms. Prior to 3.3, a flaw in com.ongres.scram:scram-client and com.ongres.scram:scram-common allows an attacker capable of a TLS man-in-the-middle attack to silently downgrade a connection from SCRAM-SHA-256-PLUS with channel binding to standard SCRAM-SHA-256 without channel binding when TlsServerEndpoint processes an X.509 certificate using a modern signature algorithm such as Ed25519; getChannelBindingData() can return an empty byte array after NoSuchAlgorithmException, and the ScramClient builder treats that as absent channel-binding data. This issue is fixed in version 3.3.",
       "published": "2026-07-17T19:17:16.880Z",
@@ -43566,6 +43563,45 @@
       "tags": [
         "CWE-636",
         "CWE-757"
+      ]
+    },
+    {
+      "id": "CVE-2026-63821",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: rtw88: usb: fix memory leaks on USB write failures When rtw_usb_write_port() fails to submit a USB Request Block (URB) (e.g., due to device disconnect or ENOMEM), the completion callback is never executed. Currently, the driver ignores the return value of rtw_usb_write_port() in rtw_usb_write_data() and rtw_usb_tx_agg_skb(). Because these functions rely on the completion callback to free the socket buffers (skbs) and the transaction control block (txcb), a submission failure results in: 1. A memory leak of the allocated skb in rtw_usb_write_data(). 2. A memory leak of the txcb structure and all aggregated skbs in rtw_usb_tx_agg_skb(). Fix this by checking the return value of rtw_usb_write_port(). If it fails, explicitly free the skb in rtw_usb_write_data(), and properly purge the tx_ack_queue and free the txcb in rtw_usb_tx_agg_skb(). The issue was discovered in practice during device disconnect/reconnect scenarios and memory pressure conditions. Tested by verifying normal TX operation continues after the fix without regressions.",
+      "published": "2026-07-19T12:16:55.203Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00157,
+      "epssPercentile": 0.05336,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.19,
+      "tags": [
+        "Linux",
+        "iOS"
       ]
     },
     {
@@ -43671,10 +43707,10 @@
       ]
     },
     {
-      "id": "CVE-2026-13385",
-      "summary": "An Improper Validation of Integrity Check Value and Improper Certificate Validation in certain ASUS router models allows a remote man-in-the-middle(MITM) user to make the router download and execute arbitrary command via a spoofed server. Refer to the ' Security Update for ASUS Router Firmware ' section on the ASUS Security Advisory for more information.",
-      "published": "2026-07-15T02:18:12.090Z",
-      "lastModified": "2026-07-29T20:17:00.940Z",
+      "id": "CVE-2026-63820",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: f2fs: fix missing read bio submission on large folio error f2fs_read_data_large_folio() can keep a read bio across multiple readahead folios. If a later folio hits an error before any of its blocks are added to the bio, folio_in_bio is false and the current error path returns immediately after ending that folio. This can leave the bio accumulated for earlier folios unsubmitted. Those folios then never receive read completion, and readers can wait indefinitely on the locked folios. Route errors through the common out path so any pending bio is submitted before returning. Stop consuming more readahead folios once an error is seen, and only wait on and clear the current folio when it was actually added to the bio.",
+      "published": "2026-07-19T12:16:55.103Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
       "severity": "Unknown",
       "cvssScore": 0,
       "cvssVector": null,
@@ -43688,36 +43724,25 @@
         "integrity": null,
         "availability": null
       },
-      "epssScore": 0.00142,
-      "epssPercentile": 0.04021,
+      "epssScore": 0.00145,
+      "epssPercentile": 0.04289,
       "isKev": false,
       "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-295",
-          "name": "CWE-295",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-354",
-          "name": "CWE-354",
-          "description": "CWE mapping from source data."
-        }
-      ],
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 0.14,
+      "priorityScore": 0.15,
       "tags": [
-        "CWE-295",
-        "CWE-354"
+        "Linux",
+        "iOS"
       ]
     },
     {
@@ -43956,50 +43981,6 @@
       "priorityScore": 0.07,
       "tags": [
         "CWE-269"
-      ]
-    },
-    {
-      "id": "CVE-2026-15030",
-      "summary": "Out-of-bounds Read in ASUS System Control Interface v3, ASUS System Control Interface, and ASUS Business Manager allows a local administrator to read memory regions beyond the intended firmware boundary by supplying a crafted IOCTL request that bypasses the validation. Refer to the ' Security Update for ASUS System Control Interface ' section on the ASUS Security Advisory for more information.",
-      "published": "2026-07-15T02:18:13.173Z",
-      "lastModified": "2026-07-15T16:24:31.140Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00112,
-      "epssPercentile": 0.01561,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.05,
-      "tags": [
-        "CWE-125"
       ]
     },
     {
@@ -44265,56 +44246,6 @@
       "priorityScore": 0.04,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-8920",
-      "summary": "Improper Restriction of Communication Channel to Intended Endpoints and External Control of File Name or Path in Aura Wallpaper Service allow a local user to perform file operations by sending crafted commands containing an arbitrary file path and bypassing the service’s path restrictions . On specific models , this can also cause a single feature to become unavailable . Refer to the ' Security Update for Aura Wallpaper Service ' section on the ASUS Security Advisory for more information.",
-      "published": "2026-07-15T02:22:57.790Z",
-      "lastModified": "2026-07-15T16:24:31.140Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.001,
-      "epssPercentile": 0.00964,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-73",
-          "name": "CWE-73",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-923",
-          "name": "CWE-923",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.03,
-      "tags": [
-        "CWE-73",
-        "CWE-923"
       ]
     },
     {
