@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-14T14:41:48.347Z",
+  "generatedAt": "2026-08-14T15:34:51.409Z",
   "count": 1000,
   "items": [
     {
@@ -404,52 +404,6 @@
       "priorityScore": 7.05,
       "tags": [
         "CWE-94"
-      ]
-    },
-    {
-      "id": "CVE-2026-42533",
-      "summary": "A vulnerability exists in NGINX Plus and NGINX Open Source when a map directive uses regex matching and a string expression references the map's regex capture variables before referencing the map output variable. Alternatively, the same result could be achieved by using a non-cacheable variable in a string expression under certain conditions. An unauthenticated attacker along with conditions beyond their control can exploit this vulnerability by sending crafted HTTP requests. This may cause a heap buffer overflow in the NGINX worker process leading to a restart. Additionally, attackers can execute code on systems with Address Space Layout Randomization (ASLR) disabled or when the attacker can bypass ASLR. Impact: This vulnerability may allow remote attackers to cause a denial-of-service (DoS) on the NGINX system or to possibly trigger a code execution. There is no control plane exposure; this is a data plane issue only. Note: Software versions which have reached End of Technical Support (EoTS) are not evaluated.",
-      "published": "2026-07-15T15:16:33.480Z",
-      "lastModified": "2026-08-10T15:28:01.940Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.03506,
-      "epssPercentile": 0.88146,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-122",
-          "name": "CWE-122",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 6.92,
-      "tags": [
-        "F5",
-        "Nginx",
-        "CWE-122"
       ]
     },
     {
@@ -1817,6 +1771,44 @@
         "Linux",
         "Windows",
         "CWE-306"
+      ]
+    },
+    {
+      "id": "CVE-2026-63913",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: conntrack: tcp: do not force CLOSE on invalid-seq RST without direction check An unintended behavior in the TCP conntrack state machine allows a connection to be forced into the CLOSE state using an RST packet with an invalid sequence number. Specifically, after a SYN packet is observed, an RST with an invalid SEQ can transition the conntrack entry to TCP_CONNTRACK_CLOSE, regardless of whether the RST corresponds to the expected reply direction. The relevant code path assumes the RST is a response to an outgoing SYN, but does not validate packet direction or ensure that a matching SYN was actually sent in the opposite direction. As a result, a crafted packet sequence consisting of a SYN followed by an invalid-sequence RST can prematurely terminate an active NAT entry. This makes connection teardown easier than intended. So, tighten the state transition logic to ensure that RST-triggered CLOSE transitions only occur when the RST is a valid response to a previously observed SYN in the correct direction.",
+      "published": "2026-07-19T16:17:09.237Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 8.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "High"
+      },
+      "epssScore": 0.00618,
+      "epssPercentile": 0.46612,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.5,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -3351,6 +3343,44 @@
       ]
     },
     {
+      "id": "CVE-2026-63912",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfrm: esp: restore combined single-frag length gate The ESP out-of-place fast path appends the trailer in esp_output_head() before esp_output_tail() allocates the destination page frag. The head-side gate currently checks skb->data_len and tailen separately, but the tail code allocates a single destination frag from the combined post-trailer skb->data_len. Reject the page-frag fast path when the combined aligned length exceeds a page. Otherwise skb_page_frag_refill() may fall back to a single page while the destination sg still spans the combined skb->data_len. Restore this combined-length page gate for both IPv4 and IPv6.",
+      "published": "2026-07-19T16:17:09.097Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00704,
+      "epssPercentile": 0.50158,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.19,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-53390",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: fix out-of-bounds read in smb_check_perm_dacl() The permission-check ACE walk in smb_check_perm_dacl() validates the ACE header size and caps sid.num_subauth at SID_MAX_SUB_AUTHORITIES, but it never checks that ace->size is actually large enough to contain num_subauth sub-authorities before compare_sids() dereferences them. CIFS_SID_BASE_SIZE covers the SID header up to but excluding the sub_auth[] array, and offsetof(struct smb_ace, sid) is the ACE header, so the existing guards only guarantee the 8-byte SID base, i.e. zero sub-authorities. compare_sids() then reads ace->sid.sub_auth[i] for i num_subauth, ace->sid.num_subauth). The local comparison SIDs (sid_everyone, sid_unix_NFS_mode, and the id_to_sid() result) always have at least one sub-authority, and an attacker controls the ACE revision and authority bytes (which lie within the in-bounds SID base), so they can match one of those SIDs and force the sub_auth read. A crafted ACE with size == 16 and num_subauth >= 1 placed at the tail of the security descriptor therefore causes a heap out-of-bounds read of up to SID_MAX_SUB_AUTHORITIES * sizeof(__le32) bytes past the pntsd allocation. The security descriptor is loaded by ksmbd_vfs_get_sd_xattr() into a buffer sized exactly to the on-disk data (kzalloc(sd_size) in ndr_decode_v4_ntacl()), so the read lands past the allocation. The malformed descriptor can be stored verbatim via SMB2_SET_INFO (the DACL is not normalised before being written to the security.NTACL xattr) and the read fires on a subsequent SMB2_CREATE access check, making this reachable by an authenticated client on a share that uses ACL xattrs. Add the missing num_subauth-versus-ace_size check, mirroring the identical guards already present in the sibling parsers parse_dacl() and smb_inherit_dacl().",
       "published": "2026-07-19T12:16:50.000Z",
@@ -3394,6 +3424,44 @@
         "F5",
         "Linux",
         "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-63922",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ipv6: exthdrs: refresh nh after handling HAO option ip6_parse_tlv() caches skb_network_header(skb) in nh while walking IPv6 TLVs. ipv6_dest_hao() may call pskb_expand_head() for a cloned skb, which can move the skb head and invalidate the cached network header pointer. Refresh nh after ipv6_dest_hao() returns so any trailing padding or TLVs are parsed from the current skb head. This matches the existing pattern used in ip6_parse_tlv() after helpers that can modify skb header storage.",
+      "published": "2026-07-19T16:17:10.440Z",
+      "lastModified": "2026-07-28T14:16:39.443Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00695,
+      "epssPercentile": 0.49831,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.17,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -4287,52 +4355,6 @@
         "Microsoft",
         "CWE-400",
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-59762",
-      "summary": "When an HTTP/2 profile is configured on a virtual server, undisclosed requests can cause an increase in memory resource utilization. Impact: System performance can degrade until the TMM process is either forced to restart or is manually restarted. This vulnerability allows a remote, unauthenticated attacker to cause a degradation of service that can lead to a denial-of-service (DoS) on the BIG-IP system. There is no control plane exposure; this is a data plane issue only. Note: Software versions which have reached End of Technical Support (EoTS) are not evaluated.",
-      "published": "2026-07-15T15:16:46.200Z",
-      "lastModified": "2026-08-06T18:20:20.020Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.0046,
-      "epssPercentile": 0.37888,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": "Kubernetes",
-      "cwe": [
-        {
-          "id": "CWE-770",
-          "name": "CWE-770",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.95,
-      "tags": [
-        "F5",
-        "Kubernetes",
-        "CWE-770"
       ]
     },
     {
@@ -5732,6 +5754,44 @@
       ]
     },
     {
+      "id": "CVE-2026-63919",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfrm: input: hold netns during deferred transport reinjection Transport-mode reinjection stores a struct net pointer in skb->cb and uses it later from xfrm_trans_reinject(). That pointer must stay valid until the deferred callback runs. Take a netns reference when queueing deferred reinjection work and drop it after the callback completes. Use maybe_get_net() so the queueing path does not revive a namespace that is already being torn down. This keeps the existing workqueue design and fixes the netns lifetime handling in one place for all users of xfrm_trans_queue_net().",
+      "published": "2026-07-19T16:17:10.030Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00633,
+      "epssPercentile": 0.47291,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.74,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-49352",
       "summary": "9Router is an AI router & token saver. From 0.2.21 until 0.4.44, 9Router used the hardcoded fallback JWT secret 9router-default-secret-change-me in src/app/api/auth/login/route.js, src/middleware.js, and later src/lib/auth/dashboardSession.js, allowing attackers to forge an auth_token cookie when JWT_SECRET was unset. This issue is fixed in version 0.4.44",
       "published": "2026-07-15T21:16:53.743Z",
@@ -5929,53 +5989,6 @@
         "CWE-284",
         "CWE-287",
         "CWE-602"
-      ]
-    },
-    {
-      "id": "CVE-2026-55723",
-      "summary": "When NGINX Ingress Controller is configured with Custom Resource Definitions (CRDs) or Ingress annotations, an injection vulnerability exists in the configuration generator of NGINX Ingress Controller. Multiple user-controllable fields are written into the generated NGINX configuration without sanitization. An authenticated attacker with permission to create or modify these CRDs or annotations may craft values that inject arbitrary NGINX configuration directives. Impact: An authenticated attacker granted write access to NGINX Ingress Controller CRDs or Ingress annotations through the Kubernetes API may be able to inject arbitrary NGINX configuration directives, create or delete files, or disable services. There is no data plane exposure; this is a control plane issue only. Note: Software versions which have reached End of Technical Support (EoTS) are not evaluated.",
-      "published": "2026-07-15T15:16:45.327Z",
-      "lastModified": "2026-07-16T14:02:51.580Z",
-      "severity": "High",
-      "cvssScore": 8.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "Low"
-      },
-      "epssScore": 0.00293,
-      "epssPercentile": 0.21678,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-76",
-          "name": "CWE-76",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.66,
-      "tags": [
-        "F5",
-        "Nginx",
-        "Kubernetes",
-        "CWE-76"
       ]
     },
     {
@@ -6412,52 +6425,6 @@
       "priorityScore": 4.59,
       "tags": [
         "CWE-1104"
-      ]
-    },
-    {
-      "id": "CVE-2026-56434",
-      "summary": "NGINX Plus and NGINX Open Source have a vulnerability in the ngx_http_ssi_module module. This vulnerability may exist when the Server-Side Includes (SSI), proxy_pass, and proxy_buffering off directives are configured. With this configuration, an unauthenticated attacker with man-in-the-middle (MITM) ability to control responses from an upstream server may be able to cause a use-after-free in the NGINX worker process. This issue may lead to limited modification of memory or a restart of the NGINX worker process. Impact: This vulnerability may allow remote attackers to have limited control to modify memory contents or restart the NGINX worker process. There is no control plane exposure; this is a data plane issue only. Note: Software versions which have reached End of Technical Support (EoTS) are not evaluated.",
-      "published": "2026-07-15T15:16:45.700Z",
-      "lastModified": "2026-08-10T15:27:56.373Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "High"
-      },
-      "epssScore": 0.0045,
-      "epssPercentile": 0.37292,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.58,
-      "tags": [
-        "F5",
-        "Nginx",
-        "CWE-416"
       ]
     },
     {
@@ -7270,6 +7237,44 @@
       ]
     },
     {
+      "id": "CVE-2026-63909",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: OOB read regression in smb_check_perm_dacl() ACE-walk loops Commit d07b26f39246 (\"ksmbd: require minimum ACE size in smb_check_perm_dacl()\") introduced a transposed bounds check: if (offsetof(struct smb_ace, sid) + aces_size size` (offset 2) even when `aces_size` is 0-3 bytes. This re-opens a 2-byte heap out-of-bounds (OOB) read past the pntsd allocation during subsequent SMB2_CREATE operations. Fix this by properly transposing the comparison to require at least 16 bytes (8-byte offset + 8-byte SID base), matching the correct form used in smb_inherit_dacl().",
+      "published": "2026-07-19T16:17:08.747Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 8.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00628,
+      "epssPercentile": 0.47068,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.48,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-63801",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: tipc: fix slab-use-after-free Read in tipc_aead_decrypt_done tipc_aead_decrypt() goes straight from tipc_bearer_hold(b) to crypto_aead_decrypt(req) without taking a reference on the netns, unlike the encrypt path. When crypto_aead_decrypt() is offloaded asynchronously (e.g. the SIMD aead wrapper queuing to cryptd), the cryptd worker runs tipc_aead_decrypt_done() later. If the bearer's netns is torn down in the meantime, cleanup_net() -> tipc_exit_net() -> tipc_crypto_stop() frees the per-netns tipc_crypto, and the completion then reads it: tipc_aead_decrypt_done() dereferences aead->crypto->stats and aead->crypto->net, and tipc_crypto_rcv_complete() dereferences aead->crypto->aead[] and the node table -- reading freed memory. Decoded KASAN splat (v7.1-rc7, CONFIG_KASAN_INLINE + TIPC + TIPC_CRYPTO): BUG: KASAN: slab-use-after-free in tipc_aead_decrypt_done (net/tipc/crypto.c:999) Read of size 8 at addr ffff8881056258a8 by task kworker/u16:2/51 Workqueue: events_unbound Call Trace: tipc_aead_decrypt_done (net/tipc/crypto.c:999) process_one_work (kernel/workqueue.c:3314) worker_thread (kernel/workqueue.c:3397 kernel/workqueue.c:3478) kthread (kernel/kthread.c:436) ret_from_fork (arch/x86/kernel/process.c:158) ret_from_fork_asm (arch/x86/entry/entry_64.S:245) Allocated by task 169: __kasan_kmalloc (mm/kasan/common.c:398 mm/kasan/common.c:415) tipc_crypto_start (net/tipc/crypto.c:1502) tipc_init_net (net/tipc/core.c:72) ops_init (net/core/net_namespace.c:137) setup_net (net/core/net_namespace.c:446) copy_net_ns (net/core/net_namespace.c:579) create_new_namespaces (kernel/nsproxy.c:132) __x64_sys_unshare (kernel/fork.c:3316) do_syscall_64 (arch/x86/entry/syscall_64.c:63) entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121) Freed by task 8: kfree (mm/slub.c:6566) tipc_exit_net (net/tipc/core.c:119) cleanup_net (net/core/net_namespace.c:704) process_one_work (kernel/workqueue.c:3314) kthread (kernel/kthread.c:436) This is the same class of bug that commit e279024617134 (\"net/tipc: fix slab-use-after-free Read in tipc_aead_encrypt_done\") fixed for the encrypt side. The encrypt path takes maybe_get_net(aead->crypto->net) before crypto_aead_encrypt() and drops it with put_net() on the synchronous return paths and in tipc_aead_encrypt_done(); the -EINPROGRESS/-EBUSY return keeps the reference for the async callback to release. The decrypt path was left without the equivalent guard. Mirror the encrypt-side fix on the decrypt path: take a net reference before crypto_aead_decrypt() (failing with -ENODEV and the matching bearer put if it cannot be acquired), keep it across the -EINPROGRESS/-EBUSY async return, and drop it with put_net() on the synchronous success/error return and at the end of tipc_aead_decrypt_done(). Reproduced under KASAN on v7.1-rc7: a UDP bearer with a cluster key is flooded with crafted encrypted frames from an unknown peer (driving the cluster-key decrypt path) while the bearer's netns is repeatedly torn down. The completion must run asynchronously to outlive tipc_crypto_stop(); on x86 the stock aesni gcm(aes) now decrypts synchronously, so the async path was exercised via cryptd offload. The unguarded aead->crypto dereference in tipc_aead_decrypt_done() is the unpatched upstream path; tipc_aead_decrypt() still lacks maybe_get_net(aead->crypto->net), so the completion can outlive the free on any config where crypto_aead_decrypt() goes async. Found by 0sec automated security-research tooling (https://0sec.ai).",
       "published": "2026-07-19T12:16:52.680Z",
@@ -8034,7 +8039,7 @@
       "id": "CVE-2026-63093",
       "summary": "Cursor for Windows version 3.2.16 contains a binary planting vulnerability that allows remote attackers to achieve arbitrary code execution by placing a malicious git.exe file in the repository root directory. When a developer clones and opens a crafted repository, Cursor automatically resolves and executes the workspace-resident git.exe during IDE startup and on a recurring timed cadence without any user interaction, running the malicious binary under the privileges of the current user.",
       "published": "2026-07-17T15:16:47.817Z",
-      "lastModified": "2026-07-17T18:28:53.707Z",
+      "lastModified": "2026-08-14T14:47:37.050Z",
       "severity": "High",
       "cvssScore": 8.8,
       "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
@@ -8052,7 +8057,7 @@
       "epssPercentile": 0.37465,
       "isKev": false,
       "kev": null,
-      "vendor": null,
+      "vendor": "Microsoft",
       "product": "Windows",
       "cwe": [
         {
@@ -8067,10 +8072,11 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 4.39,
       "tags": [
+        "Microsoft",
         "Windows",
         "CWE-426"
       ]
@@ -10913,50 +10919,6 @@
       ]
     },
     {
-      "id": "CVE-2026-61736",
-      "summary": "LightRAG provides simple and fast retrieval-augmented generation. Prior to 1.5.4, the server defaults to CORS_ORIGINS=* combined with allow_credentials=True in lightrag/api/lightrag_server.py, causing Starlette CORSMiddleware to effectively whitelist every origin for credentialed cross-origin requests. Any malicious website visited by an authenticated LightRAG user can silently make authenticated API requests, exfiltrating documents and knowledge graph data or performing destructive actions such as deleting the document store. This vulnerability is fixed in 1.5.4.",
-      "published": "2026-07-15T15:16:48.217Z",
-      "lastModified": "2026-07-15T18:15:13.373Z",
-      "severity": "Critical",
-      "cvssScore": 9.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00305,
-      "epssPercentile": 0.23028,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-942",
-          "name": "CWE-942",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.06,
-      "tags": [
-        "CWE-942"
-      ]
-    },
-    {
       "id": "CVE-2026-62378",
       "summary": "RustFS Console is a web management console for the RustFS distributed file system. From 0.1.7 until 0.1.10, the RustFS Console components/object/preview-modal.tsx and components/object/pdf-viewer.tsx extension-based PDF preview path can render HTML content uploaded as .pdf, allowing stored cross-site scripting in the management console and exposure of administrator AccessKeyId, SecretAccessKey, and SessionToken values. This is caused by a regression of CVE-2026-27822. This vulnerability is fixed in 0.1.10.",
       "published": "2026-07-15T17:16:53.020Z",
@@ -11269,6 +11231,82 @@
       ]
     },
     {
+      "id": "CVE-2026-63915",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nfc: hci: fix out-of-bounds read in HCP header parsing Both nfc_hci_recv_from_llc() and nci_hci_data_received_cb() read packet->header from skb->data at function entry without first checking that the buffer holds at least one byte. A malicious NFC peer can send a 0-byte HCP frame that passes through the SHDLC layer and reaches these functions, causing an out-of-bounds heap read of packet->header. The same 0-byte frame, if queued as a non-final fragment, also causes the reassembly loop to underflow msg_len to UINT_MAX, triggering skb_over_panic() when the reassembled skb is written. Fix this by adding a pskb_may_pull() check at the entry of each function before packet->header is first accessed. The existing pskb_may_pull() checks before the reassembled hcp_skb is cast to struct hcp_packet remain in place to guard the 2-byte HCP message header.",
+      "published": "2026-07-19T16:17:09.517Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00345,
+      "epssPercentile": 0.27393,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.04,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-63916",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: HID: wacom: Fix OOB write in wacom_hid_set_device_mode() wacom_hid_set_device_mode() currently assumes that the HID_DG_INPUTMODE usage is always located in the first field (field[0]) of the feature report. However, a device can specify HID_DG_INPUTMODE in a different field. If HID_DG_INPUTMODE is in a field other than the first one and the first field has a report_count smaller than the usage_index of HID_DG_INPUTMODE, this leads to an out-of-bounds write to r->field[0]->value. Fix this by storing the field index of HID_DG_INPUTMODE in 'struct hid_data' during feature mapping. In wacom_hid_set_device_mode(), use this stored field index to access the correct field and add bounds checks to ensure both the field index and the value index are within valid ranges before writing.",
+      "published": "2026-07-19T16:17:09.657Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00345,
+      "epssPercentile": 0.27393,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.04,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-45367",
       "summary": "HAPI FHIR is a complete implementation of the HL7 FHIR standard for healthcare interoperability in Java. Prior to 6.9.7, the FHIRPathEngine implementation passes user-controlled regular expressions from matches(), matchesFull(), and replaceMatches() to Java regex operations without effective timeouts, allowing catastrophic backtracking and denial of service. This issue is fixed in version 6.9.7.",
       "published": "2026-07-16T17:16:56.293Z",
@@ -11399,52 +11437,6 @@
       "tags": [
         "Linux",
         "CWE-401"
-      ]
-    },
-    {
-      "id": "CVE-2026-52865",
-      "summary": "When NGINX Ingress Controller processes Ingress or TransportServer resources, an authenticated, remote attacker with permission to create or modify Ingress or TransportServer resources can cause the NGINX Ingress Controller process to terminate. Impact: The NGINX Ingress Controller control plane process terminates and enters a persistent crash loop while the malformed Ingress or TransportServer resource remains in the cluster. This vulnerability allows a remote, authenticated attacker with at least Ingress or TransportServer resource write access to cause a denial-of-service (DoS) on the NGINX Ingress Controller system. There is no data plane exposure; this is a control plane issue only. Note: Software versions which have reached End of Technical Support (EoTS) are not evaluated.",
-      "published": "2026-07-15T15:16:44.587Z",
-      "lastModified": "2026-07-16T14:02:35.633Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00286,
-      "epssPercentile": 0.20986,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.01,
-      "tags": [
-        "F5",
-        "Nginx",
-        "CWE-476"
       ]
     },
     {
@@ -14899,56 +14891,6 @@
       "tags": [
         "CWE-287",
         "CWE-306"
-      ]
-    },
-    {
-      "id": "CVE-2026-61836",
-      "summary": "Directus is a real-time API and App dashboard for managing SQL database content. Prior to 12.0.0, when response caching is enabled, the cache-key derivation in api/src/utils/get-cache-key.ts includes version, path, query, and accountability.user but omits authorization context such as share, role, roles, admin, app, and policies. Directus share tokens and anonymous requests can both reduce to user null, so different shares or anonymous clients requesting the same URL and query can receive a permission-filtered cached response without permission re-evaluation. This issue is fixed in version 12.0.0.",
-      "published": "2026-07-15T15:16:48.603Z",
-      "lastModified": "2026-07-28T15:46:30.503Z",
-      "severity": "High",
-      "cvssScore": 8.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00272,
-      "epssPercentile": 0.19491,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-524",
-          "name": "CWE-524",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.69,
-      "tags": [
-        "CWE-524",
-        "CWE-639"
       ]
     },
     {
@@ -18460,6 +18402,44 @@
       ]
     },
     {
+      "id": "CVE-2026-63921",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ip6: vti: Use ip6_tnl.net in vti6_siocdevprivate(). After patch 1/2 in this series, vti6_update() unlinks and relinks the tunnel through t->net. vti6_siocdevprivate() still uses dev_net(dev) for the collision lookup. For a tunnel moved through IFLA_NET_NS_FD, dev_net(dev) is the new netns, not t->net. SIOCCHGTUNNEL on a migrated tunnel then runs: net = dev_net(dev) /* migrated netns */ t = vti6_locate(net, &p1, false) /* misses target in t->net */ ... t = netdev_priv(dev) vti6_update(t, &p1, false) /* mutates t->net's hash */ A caller in the migrated netns picks params that match a tunnel in the creation netns. The lookup in dev_net(dev) finds nothing. vti6_update() prepends the migrated tunnel at the head of the creation netns hash bucket for those params. Later lookups in the creation netns resolve to the migrated device. xfrm receive delivers the matched packets through a device the caller controls. Reachable from an unprivileged user namespace (unshare --user --map-root-user --net). Cross tenant scope on container hosts. Switch the SIOCCHGTUNNEL path on a non fallback device to use t->net for the lookup. The lookup now matches the netns vti6_update() operates on. Also add ns_capable(self->net->user_ns, CAP_NET_ADMIN) before the lookup. The check at the top of the case is against dev_net(dev)->user_ns, which after migration is the attacker's netns. A caller there can pick params absent from self->net, the lookup returns NULL, t becomes self, and vti6_update() inserts the device into the creation netns hash. The new check requires CAP_NET_ADMIN in the creation netns user_ns too. SIOCADDTUNNEL and SIOCCHGTUNNEL on the fallback device keep dev_net(dev), which equals init_net there.",
+      "published": "2026-07-19T16:17:10.300Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00176,
+      "epssPercentile": 0.07356,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.34,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-14961",
       "summary": "Pegatron `Tdelo64.sys` exposes a privileged device interface, `\\\\.\\TdeIo`, that fails to properly restrict access to sensitive IOCTL functionality. The driver's IOCTL dispatcher does not validate caller privileges or verify user-supplied kernel memory addresses before performing memory operations. By sending crafted requests to IOCTL, a local attacker can achieve arbitrary kernel memory read and write operations, leading to privilege escalation to `NT AUTHORITY\\SYSTEM`, security product bypass, credential theft, or complete system compromise.",
       "published": "2026-07-15T18:16:44.640Z",
@@ -19210,6 +19190,44 @@
       ]
     },
     {
+      "id": "CVE-2026-63917",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ip6: vti: Use ip6_tnl.net in vti6_changelink(). ip netns add ns1 ip netns add ns2 ip -n ns1 link add vti6_test type vti6 remote ::1 local ::2 key 7 ip -n ns1 link set vti6_test netns ns2 ip -n ns2 link set vti6_test type vti6 remote ::3 local ::4 key 9 ip netns del ns2 ip netns del ns1 [ 132.495484] ------------[ cut here ]------------ [ 132.497609] kernel BUG at net/core/dev.c:12376! Commit 61220ab34948 (\"vti6: Enable namespace changing\") dropped NETIF_F_NETNS_LOCAL from vti6 devices. A vti6 tunnel can then move through IFLA_NET_NS_FD. After the move dev_net(dev) points at the new netns while t->net stays at the creation netns. vti6_changelink() and vti6_update() still use dev_net(dev) and dev_net(t->dev). They unlink from one per netns hash and relink into another. The creation netns is left with a stale entry. cleanup_net() of that netns later walks freed memory. Reachable from an unprivileged user namespace (unshare --user --map-root-user --net). Cross tenant scope on container hosts.",
+      "published": "2026-07-19T16:17:09.783Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00164,
+      "epssPercentile": 0.06078,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.29,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-63885",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/gem: fix race between change_handle and handle_delete drm_gem_change_handle_ioctl leaves the old handle live in the IDR during the window between spin_unlock(table_lock) and the final spin_lock(table_lock). A concurrent drm_gem_handle_delete on the old handle succeeds in this window, decrements handle_count to 0, and frees the GEM object while the new handle's IDR entry still references it. NULL the old handle's IDR entry before dropping table_lock so that any concurrent GEM_CLOSE on the old handle sees NULL and returns -EINVAL. Restore the old entry on the prime-bookkeeping error path.",
       "published": "2026-07-19T16:17:05.623Z",
@@ -19238,6 +19256,44 @@
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.28,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-63923",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: octeontx2-af: validate body pcifunc in rvu_mbox_handler_rep_event_notify rvu_mbox_handler_rep_event_notify() in drivers/net/ethernet/marvell/ octeontx2/af/rvu_rep.c queues a sender-controlled REP_EVENT_NOTIFY request body verbatim, and rvu_rep_up_notify() then forwards event->pcifunc (the nested body field, distinct from the AF-normalised header pcifunc) into rvu_get_pfvf(), rvu_get_pf() and the AF->PF mailbox device index without any bounds check. A VF attached to a PF that has been put into switchdev representor mode reaches this path: the VF mailbox handler otx2_pfvf_mbox_handler() forwards every message id including MBOX_MSG_REP_EVENT_NOTIFY to AF without an allowlist, and the AF dispatcher rewrites only msg->pcifunc, leaving struct rep_event::pcifunc attacker-controlled. The sibling rvu_mbox_handler_esw_cfg() refuses requests whose header pcifunc is not rvu->rep_pcifunc; this handler has no equivalent gate. An out-of-range body pcifunc selects an &rvu->pf[]/&rvu->hwvf[] element past the allocated array and, for RVU_EVENT_MAC_ADDR_CHANGE, turns into a six-byte attacker-chosen OOB ether_addr_copy() target inside the queued worker; KASAN reports a slab-out-of-bounds write in rvu_rep_wq_handler. Reject malformed requests at the handler entry by gating on is_pf_func_valid(), which is already the canonical PF/VF range check in this driver; expose it via rvu.h so callers in rvu_rep.c can use it instead of open-coding the same range arithmetic.",
+      "published": "2026-07-19T16:17:10.560Z",
+      "lastModified": "2026-08-03T10:16:32.130Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00162,
+      "epssPercentile": 0.05849,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
@@ -19378,50 +19434,6 @@
       "tags": [
         "WordPress",
         "CWE-89"
-      ]
-    },
-    {
-      "id": "CVE-2026-61644",
-      "summary": "FastGPT is a knowledge-based AI application platform. From 4.14.17 until 4.15.0-beta5, the POST /api/core/chat/record/getCollectionQuote endpoint authenticates the caller's chat and collection context, but the initialId center-node lookup is not bound to that authorized context. A low-privileged tenant user can call the endpoint with valid attacker-owned appId, chatId, chatItemDataId, and collectionId values while supplying another tenant's dataset data id as initialId, causing the response to include foreign dataset quote or full-text content. This issue is fixed in version 4.15.0-beta5.",
-      "published": "2026-07-15T15:16:47.833Z",
-      "lastModified": "2026-07-15T19:50:11.367Z",
-      "severity": "High",
-      "cvssScore": 7.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00243,
-      "epssPercentile": 0.15655,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.24,
-      "tags": [
-        "CWE-863"
       ]
     },
     {
@@ -19598,50 +19610,6 @@
       "priorityScore": 3.24,
       "tags": [
         "CWE-200"
-      ]
-    },
-    {
-      "id": "CVE-2026-54560",
-      "summary": "Cloudreve is a self-hosted file management and sharing system. From 4.12.0 until 4.16.1, Cloudreve's OAuth access tokens are issued without the OAuth client_id claim, so the JWT verifier does not load token scopes into request context and RequiredScopes treats the request like non-scoped session authentication, allowing a low-scope OAuth access token to call APIs requiring higher scopes such as file, share, workflow, user setting, WebDAV account, and potentially admin scopes. This issue is fixed in version 4.16.1.",
-      "published": "2026-07-15T15:16:44.840Z",
-      "lastModified": "2026-07-15T18:15:13.373Z",
-      "severity": "High",
-      "cvssScore": 7.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "Low"
-      },
-      "epssScore": 0.00247,
-      "epssPercentile": 0.16096,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.22,
-      "tags": [
-        "CWE-863"
       ]
     },
     {
@@ -19868,51 +19836,6 @@
         "Linux",
         "Windows",
         "CWE-639"
-      ]
-    },
-    {
-      "id": "CVE-2026-61835",
-      "summary": "Directus is a real-time API and App dashboard for managing SQL database content. Prior to 12.0.0, the SSRF protection on Directus's file-import-from-URL feature can be bypassed using the address 0.0.0.0 because api/src/request/is-denied-ip.ts treats 0.0.0.0 as a keyword for local interfaces but never blocks the literal address itself. On Linux and macOS, connecting to 0.0.0.0 reaches localhost, so an authenticated user with file-upload rights can make the server fetch internal services through the /files/import endpoint and retrieve the response as a downloadable file. This issue is fixed in version 12.0.0.",
-      "published": "2026-07-15T15:16:48.470Z",
-      "lastModified": "2026-07-28T15:47:21.380Z",
-      "severity": "High",
-      "cvssScore": 7.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00234,
-      "epssPercentile": 0.14415,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.2,
-      "tags": [
-        "Linux",
-        "CWE-918"
       ]
     },
     {
@@ -20326,6 +20249,44 @@
         "Linux",
         "iOS",
         "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-63906",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: usb: musb: omap2430: Fix use-after-free in omap2430_probe() In omap2430_probe(), of_node_put(np) is called prematurely before the last access to np, leading to a use-after-free if the node's reference count drops to zero. Move the of_node_put() calls after the last use of np in both the success and error paths.",
+      "published": "2026-07-19T16:17:08.400Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 8.4,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00175,
+      "epssPercentile": 0.07238,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.19,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -23124,52 +23085,6 @@
       ]
     },
     {
-      "id": "CVE-2026-60065",
-      "summary": "When NGINX Plus is configured to use the Message Queuing Telemetry Transport (MQTT) filter module (ngx_stream_mqtt_filter_module), unauthenticated attackers can send requests with conditions beyond the attacker's control to cause a heap buffer over-read in the NGINX worker process, leading to a restart. Impact: This vulnerability may allow remote unauthenticated attackers to have limited control to restart the NGINX worker process. There is no control plane exposure; this is a data plane issue only. Note: Software versions which have reached End of Technical Support (EoTS) are not evaluated.",
-      "published": "2026-07-15T15:16:47.320Z",
-      "lastModified": "2026-08-10T15:27:53.560Z",
-      "severity": "Low",
-      "cvssScore": 3.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00265,
-      "epssPercentile": 0.18351,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.94,
-      "tags": [
-        "F5",
-        "Nginx",
-        "CWE-125"
-      ]
-    },
-    {
       "id": "CVE-2026-47703",
       "summary": "AdGuard Home is a network-wide software for blocking ads and tracking. Prior to 0.107.75, AdGuard Home's client-triggered DoQ forwarding path to a udp:// upstream reduced backend UDP DNS state by producing dns_id=0 or txid=0 and exposed a quoted-port ICMP source-port oracle, weakening DNS response matching for forwarded queries. This issue is fixed in version 0.107.75.",
       "published": "2026-07-15T17:16:48.540Z",
@@ -23492,6 +23407,82 @@
       ]
     },
     {
+      "id": "CVE-2026-63911",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfrm: iptfs: reset runtime state when cloning SAs iptfs_clone_state() clones the IPTFS mode data with kmemdup(). This copies runtime objects which must not be shared with the original SA, including the embedded sk_buff_head, hrtimers, spinlock, and in-flight reassembly/reorder state. If xfrm_state_migrate() fails after clone_state() but before the later init_state() call has reinitialized those fields, the cloned state can be destroyed by xfrm_state_gc_task() with list and timer state copied from the original SA. With queued packets this lets the clone splice and free skbs owned by the original IPTFS queue, leading to use-after-free and double-free reports in iptfs_destroy_state() and skb release paths. Reinitialize the clone's runtime state before publishing it through x->mode_data. Because clone_state() now publishes a destroyable mode_data object before init_state(), take the mode callback module reference there. Avoid taking it again from __iptfs_init_state() for the same object.",
+      "published": "2026-07-19T16:17:08.987Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00157,
+      "epssPercentile": 0.05372,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.92,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-63918",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: l2tp: use refcount_inc_not_zero in l2tp_session_get_by_ifname A reader in l2tp_session_get_by_ifname() can return a pointer to a session whose refcount has reached zero. The getter takes its reference with plain refcount_inc(), but every other session getter in the same file (l2tp_v2_session_get, l2tp_v3_session_get, and the corresponding _get_next variants) uses refcount_inc_not_zero() because the IDR/RCU lookup can race with refcount_dec_and_test() -> l2tp_session_free() -> kfree_rcu(). The ifname getter is the only outlier; the inconsistency was raised on-list after 979c017803c4 (\"l2tp: use list_del_rcu in l2tp_session_unhash\"). A reader inside rcu_read_lock_bh() that matches session->ifname can be preempted between the strcmp() and the refcount_inc(). If the last reference drops on another CPU in that window, the reader's refcount_inc() runs on a counter that has reached zero. refcount_t catches the addition-on-zero, prints \"refcount_t: addition on 0; use-after-free\", saturates the counter, and returns the saturated pointer to the caller. Session memory is held live by the in-flight RCU read section, but the kfree_rcu() callback queued from l2tp_session_free() will free it once the grace period closes; a caller that dereferences the returned session past that point hits a slab-use-after-free. On PREEMPT_RT local_bh_disable() is a per-CPU sleeping lock and the preemption window is real; on stock PREEMPT kernels local_bh_disable() is a preempt_count increment that closes the cross-CPU race in practice (see below). Use refcount_inc_not_zero() and continue the list walk on failure, matching the other session getters in the file. The ifname getter is the only session getter in net/l2tp/ that still uses the bare refcount_inc() pattern; this change restores file-internal consistency. The success path is unchanged.",
+      "published": "2026-07-19T16:17:09.917Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00159,
+      "epssPercentile": 0.05547,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.92,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-48799",
       "summary": "Postiz is an AI social media scheduling tool. Prior to 2.21.8, Postiz fails to verify Nowpayments IPN callback authenticity against the payment provider shared secret and reads the target subscription identifier from the untrusted request body, allowing a low-privileged account to grant arbitrary organizations lifetime PRO subscriptions without payment. This issue is fixed in version 2.21.8.",
       "published": "2026-07-15T17:16:48.667Z",
@@ -23666,6 +23657,44 @@
       "tags": [
         "Linux",
         "iOS"
+      ]
+    },
+    {
+      "id": "CVE-2026-63910",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dma-buf: fix UAF in dma_buf_fd() tracepoint Once FD_ADD() returns, the fd is live in the file descriptor table and a thread sharing that table can close() it before DMA_BUF_TRACE() runs. The close drops the last reference, __fput() frees the dma_buf, and the tracepoint then dereferences dmabuf to take dmabuf->name_lock -- slab-use-after-free. Split FD_ADD() back into get_unused_fd_flags() + fd_install() and emit the tracepoint between them. While the fdtable slot is reserved with a NULL file pointer, a racing close() returns -EBADF without entering __fput(), so the dma_buf stays alive across the trace. Same approach as commit 2d76319c4cbb (\"dma-buf: fix UAF in dma_buf_put() tracepoint\"). This undoes the FD_ADD() conversion done in commit 34dfce523c90 (\"dma: convert dma_buf_fd() to FD_ADD()\"); FD_ADD() has no place to hook the tracepoint safely.",
+      "published": "2026-07-19T16:17:08.857Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00154,
+      "epssPercentile": 0.05096,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.91,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -25561,50 +25590,6 @@
       ]
     },
     {
-      "id": "CVE-2026-54562",
-      "summary": "Cloudreve is a self-hosted file management and sharing system. Prior to 4.16.1, Cloudreve's remote download workflow accepts user-supplied URLs at POST /api/v4/workflow/download and passes them to the configured downloader without blocking loopback, localhost, IPv6 localhost, or redirect-to-loopback targets, allowing a non-admin user with remote download permission to fetch internal-only URLs and read the response after it is imported into the user's own files. This issue is fixed in version 4.16.1.",
-      "published": "2026-07-15T15:16:44.977Z",
-      "lastModified": "2026-07-15T18:15:13.373Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00244,
-      "epssPercentile": 0.15703,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.82,
-      "tags": [
-        "CWE-918"
-      ]
-    },
-    {
       "id": "CVE-2026-14371",
       "summary": "The Lenovo XClarity Integrator for Windows Admin Center plugin version 5.1.1 and below running on the WAC Gateway is vulnerable to Powershell Command Injection when establishing remote PowerShell commands.",
       "published": "2026-07-16T17:16:55.423Z",
@@ -26762,50 +26747,6 @@
       ]
     },
     {
-      "id": "CVE-2026-54563",
-      "summary": "Cloudreve is a self-hosted file management and sharing system. Prior to 4.16.1, a Cloudreve WebDAV account rooted at a configured folder can send paths such as /dav/%2e%2e/outside.txt because stripPrefix in pkg/webdav/webdav.go joins the decoded request suffix to the account root with fs.URI.JoinRaw without checking containment, allowing the scoped credential to read and list files outside the configured folder and writable credentials to create, overwrite, move, or delete them. This issue is reported as fixed in version 4.16.1.",
-      "published": "2026-07-15T15:16:45.100Z",
-      "lastModified": "2026-07-15T18:15:13.373Z",
-      "severity": "High",
-      "cvssScore": 7.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00186,
-      "epssPercentile": 0.08424,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.78,
-      "tags": [
-        "CWE-863"
-      ]
-    },
-    {
       "id": "CVE-2026-56687",
       "summary": "Dell ThinOS 10, versions prior to 2605_10.2100, contain an Obsolete Feature in UI vulnerability. A low privileged attacker with local access could potentially exploit this vulnerability, leading to Unauthorized access.",
       "published": "2026-07-15T18:16:48.493Z",
@@ -27110,6 +27051,44 @@
       "tags": [
         "Windows",
         "CWE-122"
+      ]
+    },
+    {
+      "id": "CVE-2026-63914",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfrm: route MIGRATE notifications to caller's netns xfrm_send_migrate() in net/xfrm/xfrm_user.c and pfkey_send_migrate() in net/key/af_key.c both hardcode &init_net for the multicast that announces a successful XFRM_MSG_MIGRATE / SADB_X_MIGRATE. XFRM_MSG_MIGRATE arrives on a per-netns NETLINK_XFRM socket, and the rest of the xfrm/af_key netlink path was made netns-aware in 2008. The other 14 multicast paths in xfrm_user.c route their event using xs_net(x), xp_net(xp) or sock_net(skb->sk); only the migrate path was missed. Two consequences of the init_net hardcoding: 1. The notification (selector, old/new endpoint addresses, and the km_address) is delivered to listeners on init_net's XFRMNLGRP_MIGRATE / pfkey BROADCAST_ALL groups rather than on the issuing netns. An IKE daemon running in init_net therefore receives migration notifications originating from any other netns on the host. 2. An IKE daemon running inside a non-init netns and subscribed to its own XFRMNLGRP_MIGRATE / pfkey groups never receives the notification of its own migration. IKEv2 MOBIKE / address-update handling inside a netns is silently broken. Thread struct net through km_migrate() and the xfrm_mgr.migrate function pointer, drop the &init_net override in xfrm_send_migrate() and pfkey_send_migrate(), and pass the caller's net (already in scope in xfrm_migrate() via sock_net(skb->sk)) all the way down. struct xfrm_mgr is in-tree only and not exported as a stable API, so the function-pointer signature change is internal. pfkey_broadcast() is already netns-aware via net_generic(net, pfkey_net_id) since the pernet conversion. The five other pfkey_broadcast() callers in af_key.c already pass xs_net(x), sock_net(sk) or a per-netns net, so this only removes the &init_net outlier.",
+      "published": "2026-07-19T16:17:09.373Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 7.3,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00156,
+      "epssPercentile": 0.0523,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.74,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -27476,6 +27455,44 @@
       "tags": [
         "CWE-119",
         "CWE-787"
+      ]
+    },
+    {
+      "id": "CVE-2026-63920",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ipv6: validate extension header length before copying to cmsg ip6_datagram_recv_specific_ctl() builds IPV6_{HOPOPTS,DSTOPTS,RTHDR} cmsgs (and their IPV6_2292* legacy counterparts) by trusting the on-wire hdrlen byte (ptr[1]) when computing the put_cmsg() length. The length was validated only at parse time (ipv6_parse_hopopts(), etc.). An nftables payload-write expression can rewrite hdrlen after parsing and before the skb reaches recvmsg; the write itself is in-bounds but put_cmsg() then reads up to ((hdrlen+1) << 3) = 2040 bytes from an 8-byte header. nftables is reachable from an unprivileged user namespace, so this is an unprivileged slab-out-of-bounds read: BUG: KASAN: slab-out-of-bounds in put_cmsg+0x3ac/0x540 put_cmsg+0x3ac/0x540 udpv6_recvmsg+0xca0/0x1250 sock_recvmsg+0xdf/0x190 ____sys_recvmsg+0x1b1/0x620 Add ipv6_get_exthdr_len() which validates that at least two bytes are accessible before reading the hdrlen field, then checks the computed length against skb_tail_pointer(skb), returning 0 on failure. Extension headers are kept in the linear skb area by pskb_may_pull() during input, so skb_tail_pointer() is the correct bound. Use ipv6_get_exthdr_len() at all non-AH call sites: the five standalone cmsg blocks (HbH, 2292HbH, 2292DSTOPTS x2, 2292RTHDR) and the three standard cases in the extension-header walk loop (DSTOPTS, ROUTING, default). AH retains an inline bounds check because its length formula differs ((ptr[1]+2)<<2). The walk loop also gets a pre-read bounds check at the top to validate ptr before any case accesses ptr[0] or ptr[1]. When the walk loop detects a corrupted header, return from the function instead of continuing to process later socket options.",
+      "published": "2026-07-19T16:17:10.153Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00159,
+      "epssPercentile": 0.05611,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.68,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -28433,52 +28450,6 @@
         "F5",
         "Linux",
         "CWE-125"
-      ]
-    },
-    {
-      "id": "CVE-2026-60062",
-      "summary": "The NGINX Agent config_dirs directive allows a low-privileged attacker to gain limited read and write access to files outside of the designated secure directory. The config_dirs directive required for this issue can also be configured through NGINX Instance Manager. A successful exploit may allow an attacker to cross a security boundary. Impact: A remotely authenticated low-privileged attacker could gain limited read and write access outside of the list of directories specified in the NGINX Agent configuration. Note: Software versions which have reached End of Technical Support (EoTS) are not evaluated.",
-      "published": "2026-07-15T15:16:47.190Z",
-      "lastModified": "2026-08-06T18:19:57.493Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00201,
-      "epssPercentile": 0.10285,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": "Nginx",
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.6,
-      "tags": [
-        "F5",
-        "Nginx",
-        "CWE-22"
       ]
     },
     {
@@ -30731,50 +30702,6 @@
       ]
     },
     {
-      "id": "CVE-2026-33213",
-      "summary": "Redash is a package for data visualization and sharing. From 5.0.2 to 26.3.0, the get_next_path() function in Redash's authentication module stripped the scheme and netloc from user-supplied next parameters but did not normalize multiple leading slashes, allowing a crafted login URL such as /login?next=////evil.com to redirect users to an external attacker-controlled site after authentication.",
-      "published": "2026-07-15T15:16:31.530Z",
-      "lastModified": "2026-07-15T20:52:04.320Z",
-      "severity": "Medium",
-      "cvssScore": 6.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00178,
-      "epssPercentile": 0.07551,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-601",
-          "name": "CWE-601",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.4,
-      "tags": [
-        "CWE-601"
-      ]
-    },
-    {
       "id": "CVE-2026-56456",
       "summary": "HCL DFXAnalytics is affected by an Internal File Path Disclosure vulnerability. The application dashboard inadvertently leaks sensitive information regarding its internal file structure and directory paths through unhandled error messages, system logs, or debugging output, which could allow a remote attacker to map the underlying server environment and identify targets for further exploitation.",
       "published": "2026-07-16T14:16:54.943Z",
@@ -32830,56 +32757,6 @@
       ]
     },
     {
-      "id": "CVE-2026-61740",
-      "summary": "LightRAG provides simple and fast retrieval-augmented generation. Prior to 1.5.4, when LightRAG is deployed with LIGHTRAG_API_KEY set but AUTH_ACCOUNTS unset, X-API-Key protection can be bypassed because lightrag/api/auth.py falls back to a hardcoded DEFAULT_TOKEN_SECRET, /auth-status and /login can mint guest JWTs, and combined_dependency in lightrag/api/utils_api.py accepts a valid guest token before checking the API key. A remote unauthenticated attacker can call endpoints guarded by combined_auth, including document read, upload, deletion, graph mutation, and query endpoints. This vulnerability is fixed in 1.5.4.",
-      "published": "2026-07-15T15:16:48.350Z",
-      "lastModified": "2026-07-15T18:15:13.373Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00402,
-      "epssPercentile": 0.33358,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-287",
-          "name": "Improper Authentication",
-          "description": "Authentication is missing or can be bypassed."
-        },
-        {
-          "id": "CWE-798",
-          "name": "CWE-798",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.17,
-      "tags": [
-        "CWE-287",
-        "CWE-798"
-      ]
-    },
-    {
       "id": "CVE-2026-55445",
       "summary": "Qinglong is a timed task management platform supporting Python3, JavaScript, Shell, and Typescript. Prior to 2.20.1, the init guard middleware in back/loaders/express.ts checks /api/user/init but not /open/user/init, while rewrite('/open/*', '/api/$1') rewrites the whitelisted /open/* path after JWT authentication and the guard have passed; an unauthenticated attacker can send PUT /open/user/init to reset administrator credentials on an initialized instance. This issue is fixed in 2.20.1.",
       "published": "2026-07-15T22:17:26.020Z",
@@ -33318,51 +33195,6 @@
       "priorityScore": 2.12,
       "tags": [
         "CWE-347"
-      ]
-    },
-    {
-      "id": "CVE-2026-61613",
-      "summary": "Cursor is a code editor built for programming with AI. Prior to the Cloud Agent fix on 03/31/2026, browser-enabled Cursor Cloud Agent sessions allowed attacker-controlled web content to connect from inside the agent container to an unauthenticated local agent endpoint, enabling code execution within the affected Cloud Agent sandbox or session and access to files, repository contents, environment variables, credentials, and GitHub App access tokens available to that session. This issue was fixed on 03/31/2026 by requiring authentication for the relevant agent endpoint.",
-      "published": "2026-07-15T15:16:47.700Z",
-      "lastModified": "2026-07-21T15:16:38.030Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00388,
-      "epssPercentile": 0.31839,
-      "isKev": false,
-      "kev": null,
-      "vendor": "GitHub",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.11,
-      "tags": [
-        "GitHub",
-        "CWE-306"
       ]
     },
     {
@@ -37114,50 +36946,6 @@
       "priorityScore": 1.78,
       "tags": [
         "CWE-804"
-      ]
-    },
-    {
-      "id": "CVE-2026-61684",
-      "summary": "FastGPT is a knowledge-based AI application platform. In 4.15.0-beta4, FastGPT plugin invoke reverse-call endpoints under /api/invoke/* authenticate only by verifying a JWT signed with INVOKE_TOKEN_SECRET, which defaults to the constant string token and was not set in official deployment templates. An unauthenticated attacker can self-sign an HS256 JWT and reach /api/invoke/userInfo to disclose cross-tenant user PII by attacker-supplied tmbId values, or /api/invoke/fileUpload to write attacker-controlled content into chat files. This issue is fixed in version 4.15.0-beta5.",
-      "published": "2026-07-15T15:16:48.100Z",
-      "lastModified": "2026-07-15T19:50:11.367Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00295,
-      "epssPercentile": 0.21907,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-798",
-          "name": "CWE-798",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.77,
-      "tags": [
-        "CWE-798"
       ]
     },
     {
@@ -41889,51 +41677,6 @@
       ]
     },
     {
-      "id": "CVE-2026-61646",
-      "summary": "FastGPT is a knowledge-based AI application platform. Prior to 4.15.0-beta5, FastGPT's shared SSRF guard validates only the initial request URL before handing the request to axios, and axios follows redirects by default. An authenticated workflow user can configure an HTTP request node to call an attacker-controlled public URL that redirects to cloud metadata, loopback, or internal services that the guard would block on direct request, and the HTTP node returns the response body to the workflow caller. This issue is fixed in version 4.15.0-beta5.",
-      "published": "2026-07-15T15:16:47.973Z",
-      "lastModified": "2026-07-15T19:50:11.367Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00248,
-      "epssPercentile": 0.16304,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "iOS",
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.57,
-      "tags": [
-        "iOS",
-        "CWE-918"
-      ]
-    },
-    {
       "id": "CVE-2026-63895",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: usb: gadget: f_fs: copy only received bytes on short ep0 read ffs_ep0_read() allocates its control-OUT data buffer with kmalloc() (not kzalloc) at the Length value from the Setup packet, then copies that full len to userspace regardless of how many bytes were actually received: data = kmalloc(len, GFP_KERNEL); ... ret = __ffs_ep0_queue_wait(ffs, data, len); if ((ret > 0) && (copy_to_user(buf, data, len))) ret = -EFAULT; __ffs_ep0_queue_wait() returns req->actual, which on a short control OUT transfer is strictly less than len. The copy_to_user() call still copies len bytes, so on a short OUT the last (len - ret) bytes of the kmalloc() buffer -- uninitialised slab residue -- are delivered to the FunctionFS daemon. Short ep0 OUT completions are specified USB control-transfer behavior and are produced by in-tree UDCs: * dwc2 continues on req->actual length for ep0 DATA OUT (short-not-ok is the only ep0-OUT stall path). * aspeed_udc ends ep0 OUT on rx_len ep.maxpacket. * renesas_usbf logs \"ep0 short packet\" and completes the request. * dwc3 stalls on short IN but not on short OUT. A short ep0 OUT is therefore not evidence of a broken UDC; it is a normal condition f_fs has to cope with. The sibling gadgetfs implementation in drivers/usb/gadget/legacy/inode.c already does this correctly via min(len, dev->req->actual) before copy_to_user(). This patch brings f_fs.c to the same safe pattern rather than trimming at a defensive layer. The bug is reached from the FunctionFS device node, which in real deployments is owned by the privileged gadget daemon (adbd, UMS, composite gadget services, etc.); it is not reachable from unprivileged userspace. Linux host stacks normally reject short-wLength control OUTs before they reach the gadget, so reproducing this required a build that bypasses that host-side check. With the bypass in place, a 1-byte payload on a 64-byte Setup produces 63 bytes of non-canary slab residue in the daemon's read buffer. Fix by copying only ret (actually received) bytes to userspace.",
       "published": "2026-07-19T16:17:06.990Z",
@@ -42514,6 +42257,120 @@
       ]
     },
     {
+      "id": "CVE-2026-63904",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: usb: usbtmc: check URB actual_length for interrupt-IN notifications USBTMC devices can use an optional interrupt endpoint for notification messages. These typically contain two-byte headers indicating the payload format, but the driver does not check if these headers are present before accessing the data buffers. In cases where the URB actual_length is not enough to fit these headers, the driver will either cause an out-of-bounds read, or consume stale leftover data from a previous notification. Fix by checking if actual_data contains enough bytes for the headers, otherwise resubmit URB to the interrupt endpoint.",
+      "published": "2026-07-19T16:17:08.130Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00211,
+      "epssPercentile": 0.11472,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.4,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-63905",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: usbip: vudc: Fix use after free bug in vudc_remove due to race condition This patch follows up Zheng Wang's 2023 report of a use-after-free in vudc_remove(). The original thread stalled on Shuah Khan's request for runtime testing of the unplug/unbind path. This patch supplies that testing and keeps Zheng's original fix shape. In vudc_probe(), v_init_timer() binds udc->tr_timer.timer to v_timer(). usbip_sockfd_store() starts the timer via v_start_timer()/v_kick_timer(). vudc_remove() can then free the containing struct vudc while the timer is still pending or executing. KASAN confirms the race on an unpatched x86_64 QEMU guest with CONFIG_KASAN=y, CONFIG_USBIP_VUDC=y, CONFIG_USB_ZERO=y, and a tight loop that repeatedly writes a socket fd to usbip_sockfd, closes the socket pair, and unbinds/rebinds usbip-vudc.0: BUG: KASAN: slab-use-after-free in __run_timer_base.part.0+0x8ba/0x8e0 Write of size 8 at addr ffff888001b80740 by task trigger_and_unb/239 Allocated by task 239: vudc_probe+0x4d/0xaa0 Freed by task 239: kfree+0x18f/0x520 device_release_driver_internal+0x388/0x540 unbind_store+0xd9/0x100 This lands in the timer core rather than v_timer() itself because the embedded timer_list is being walked after its containing struct vudc has already been freed. The underlying lifetime bug is the same one Zheng reported. With v_stop_timer() called from vudc_remove() and the timer deleted synchronously, the same harness completed 5000 bind/unbind iterations with no KASAN report.",
+      "published": "2026-07-19T16:17:08.260Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00211,
+      "epssPercentile": 0.11473,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.4,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-63908",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: Input: atmel_mxt_ts - fix boundary check in mxt_prepare_cfg_mem When a configuration file provides an object size that is larger than the driver's known mxt_obj_size(object), the driver intends to discard the extra bytes. The loop iterates using for (i = 0; i mxt_obj_size(object)) continue; Since i is a 0-based index, the valid indices for the object are 0 through mxt_obj_size(object) - 1. When i == mxt_obj_size(object), the condition evaluates to false, and the code processes the byte instead of discarding it. This causes the code to calculate byte_offset = reg + i - cfg->start_ofs and writes the byte there, overwriting exactly one byte of the adjacent instance or object. Update the boundary check to skip extra bytes correctly by using >=.",
+      "published": "2026-07-19T16:17:08.620Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00211,
+      "epssPercentile": 0.11467,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.4,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-63882",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/amdkfd: fix NULL pointer bug in svm_range_set_attr The process_info could be NULL if user doesn't call kfd_ioctl_acquire_vm before calling kfd_ioctl_svm. (cherry picked from commit 83a26c812e0529eb040d31a76f73e33e637243d4)",
       "published": "2026-07-19T16:17:05.230Z",
@@ -42587,6 +42444,44 @@
       "priorityScore": 0.34,
       "tags": [
         "F5",
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-63907",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: uio: uio_pci_generic_sva: fix double free of devm_kzalloc() memory uio_pci_sva allocates struct uio_pci_sva_dev with devm_kzalloc() in probe(), but then calls kfree(udev) both on the probe() error path (label out_free) and again in remove(). Because devm_kzalloc() allocations are devres-managed and are freed automatically when the device is detached (including after a failing probe() and during driver unbind), the explicit kfree() can lead to a double free. If probe() fails after devm_kzalloc(), the error path frees udev and devres cleanup will free it again when the core unwinds the partially bound device. On normal driver removal, remove() frees udev and devres will free it again when the device is detached. This issue was identified by a static analysis tool I developed and confirmed by manual review. Fix by removing the manual kfree() calls and dropping the now-unused label.",
+      "published": "2026-07-19T16:17:08.517Z",
+      "lastModified": "2026-07-27T17:44:23.777Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00189,
+      "epssPercentile": 0.08845,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.31,
+      "tags": [
         "Linux"
       ]
     },
@@ -43722,56 +43617,6 @@
       "priorityScore": 0.05,
       "tags": [
         "CWE-758"
-      ]
-    },
-    {
-      "id": "CVE-2026-62294",
-      "summary": "Flameshot is powerful yet simple to use screenshot software. Prior to 14.0.0, the Open With feature wrote screenshots to a predictable temporary path and followed symlinks, creating a time-of-check to time-of-use race that allowed a local unprivileged attacker on the same machine to pre-plant a symlink and cause Flameshot to write PNG data through it, overwriting any file the victim user could write. This issue is fixed in version 14.0.0.",
-      "published": "2026-07-15T15:16:49.010Z",
-      "lastModified": "2026-07-15T20:56:21.653Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00101,
-      "epssPercentile": 0.01034,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-362",
-          "name": "CWE-362",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-377",
-          "name": "CWE-377",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.04,
-      "tags": [
-        "CWE-362",
-        "CWE-377"
       ]
     },
     {
