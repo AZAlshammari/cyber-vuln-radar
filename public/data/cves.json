@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-15T09:03:10.993Z",
+  "generatedAt": "2026-08-15T09:42:14.276Z",
   "count": 1000,
   "items": [
     {
@@ -1607,51 +1607,6 @@
       "tags": [
         "Kubernetes",
         "CWE-284"
-      ]
-    },
-    {
-      "id": "CVE-2026-15008",
-      "summary": "The Uncanny Automator – Easy Automation, Integration, Webhooks & Workflow Builder Plugin plugin for WordPress is vulnerable to arbitrary file deletion due to insufficient file path validation in the fr_token function in all versions up to, and including, 7.3.1.4. This makes it possible for unauthenticated attackers to delete arbitrary files on the server, which can easily lead to remote code execution when the right file is deleted (such as wp-config.php). Exploitation requires a Forminator form connected to an Uncanny Automator recipe configured for 'Everyone', allowing unauthenticated form submissions to supply the malicious serialized payload; a gadget chain is present within the plugin via the Action_Helpers_Email __destruct() method, meaning no external gadget library is required.",
-      "published": "2026-07-16T09:16:17.200Z",
-      "lastModified": "2026-07-17T13:17:57.280Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00594,
-      "epssPercentile": 0.45447,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-502",
-          "name": "Deserialization of Untrusted Data",
-          "description": "Untrusted serialized data can alter control flow or objects."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.43,
-      "tags": [
-        "WordPress",
-        "CWE-502"
       ]
     },
     {
@@ -3995,51 +3950,6 @@
       ]
     },
     {
-      "id": "CVE-2026-15103",
-      "summary": "The WPFunnels – Funnel Builder for WooCommerce with Checkout & One Click Upsell plugin for WordPress is vulnerable to Privilege Escalation via arbitrary option update in all versions up to, and including, 3.12.8. This is due to the `update_settings()` REST callback failing to validate the `group_id` path parameter against an allowlist of permitted option names before passing it directly to `get_option()` and `update_option()`, allowing the built-in `wp_user_roles` option — which satisfies the route's loose `[\\w-]+` regex — to be targeted. This makes it possible for authenticated attackers with the `wpf_manage_funnels` capability and above to elevate their privileges to administrator by writing a crafted role definition containing arbitrary capabilities into the `wp_user_roles` option, thereby granting any WordPress role full site administrator access. The `wpf_manage_funnels` capability is typically assigned to the Funnel Manager custom role created by the plugin, meaning this role is the minimum required to exploit the vulnerability.",
-      "published": "2026-07-16T09:16:17.677Z",
-      "lastModified": "2026-07-16T16:19:00.640Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0031,
-      "epssPercentile": 0.23549,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-269",
-          "name": "Improper Privilege Management",
-          "description": "Privileges are assigned, modified, or checked incorrectly."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.9,
-      "tags": [
-        "WordPress",
-        "CWE-269"
-      ]
-    },
-    {
       "id": "CVE-2026-63994",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: tunnels: load network headers after skb_cow() in iptunnel_pmtud_build_icmp[v6]() Sashiko found that iptunnel_pmtud_build_icmp() and iptunnel_pmtud_build_icmpv6() were caching ip_hdr() and ipv6_hdr() before an skb_cow() call which can reallocate skb->head. Fix this possible UAF by initializing the local variables after the skb_cow() call. Remove skb_reset_network_header() calls which were not needed.",
       "published": "2026-07-19T16:17:38.943Z",
@@ -5041,6 +4951,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64142",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: close durable scavenger races against m_fp_list lookups ksmbd_durable_scavenger() has two related races against any walker that iterates f_ci->m_fp_list, including ksmbd_lookup_fd_inode() (used by ksmbd_vfs_rename) and the share-mode checks in fs/smb/server/smb_common.c. (1) fp->node list-head reuse. Durable-preserved handles can remain linked on f_ci->m_fp_list after session teardown so share-mode checks still see them while the handle is reconnectable. The scavenger collected expired handles by adding fp->node to a local scavenger_list after removing them from the global durable idr. Because fp->node is the same list_head used by m_fp_list, list_add(&fp->node, &scavenger_list) overwrites the m_fp_list links and corrupts both lists. CONFIG_DEBUG_LIST can report this on the share-mode walk path. (2) Refcount race against m_fp_list walkers. The scavenger qualifies an expired durable handle with atomic_read(&fp->refcount) > 1 and fp->conn under global_ft.lock, removes fp from global_ft, then drops global_ft.lock before unlinking fp from m_fp_list and freeing it. During that gap fp is still linked on m_fp_list with f_state == FP_INITED. ksmbd_lookup_fd_inode() under m_lock read calls ksmbd_fp_get() (atomic_inc_not_zero on refcount that is still 1) and takes a live reference; the scavenger then unlinks and frees fp while the holder owns a reference, leading to UAF on the holder's subsequent ksmbd_fd_put() and on any field reads performed by a concurrent share-mode walker that iterates m_fp_list without taking ksmbd_fp_get() (smb_check_perm_dleases-like paths). Fix both: * Stop reusing fp->node as a scavenger-private list node. Remove one expired handle from global_ft under global_ft.lock, take an explicit transient reference, drop the lock, unlink fp->node from m_fp_list under f_ci->m_lock, then drop both the durable lifetime and transient references with atomic_sub_and_test(2, &fp->refcount). If the scavenger is the last putter the close runs there; otherwise an in-flight holder that already raced through the m_fp_list lookup owns the final close via its ksmbd_fd_put() path. The one-at-a-time disposal can rescan the durable idr when multiple handles expire in the same pass, but durable scavenging is a background expiration path and the final full scan recomputes min_timeout before the next wait. * Clear fp->persistent_id inside __ksmbd_remove_durable_fd() right after idr_remove(), so a delayed final close from a holder that snatched fp does not re-issue idr_remove() on a persistent id that idr_alloc_cyclic() in ksmbd_open_durable_fd() may have already handed out to a brand-new durable handle. * Bypass the per-conn open_files_count decrement in __put_fd_final() when fp is detached from any session table (fp->conn cleared by session_fd_check() at durable preserve -- paired with the volatile_id clear at unpublish, so checking fp->conn alone is sufficient). The walker that owns the final close runs from an unrelated work->conn whose stats.open_files_count never tracked this durable fp; without this guard the holder would underflow that unrelated counter. The two races are folded into one patch because patch (1) alone cleans up the corrupted list but leaves a deterministic UAF window for m_fp_list walkers that the transient-reference and persistent_id discipline in (2) close; bisecting onto an intermediate state would land on a UAF that pre-patch chaos merely made less reproducible. Validation: * CONFIG_DEBUG_LIST coverage for the list_head reuse path. * KASAN-enabled direct SMB2 durable-handle coverage that exercised ksmbd_durable_scavenger() and non-NULL ksmbd_lookup_fd_inode() returns while durable handles expired under concurrent rename lookups, with no KASAN, UAF, list-corruption, ODEBUG, or WARNING reports. ---truncated---",
+      "published": "2026-07-19T16:17:56.103Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0048,
+      "epssPercentile": 0.39227,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.8,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-52199",
       "summary": "An issue in Generic OEM UZ801_v2.1 4G LTE Router V3.4.3 allows a remote attacker to execute arbitrary code via the sbin/adbd component",
       "published": "2026-07-17T20:17:25.100Z",
@@ -5806,6 +5754,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64150",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: nft_inner: release local_lock before re-enabling softirqs Quoting sashiko: In the error path, local_bh_enable() is called before local_unlock_nested_bh().",
+      "published": "2026-07-19T16:17:56.970Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00442,
+      "epssPercentile": 0.36678,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.71,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-48062",
       "summary": "CodeIgniter is a PHP full-stack web framework. Prior to 4.7.3, the ext_in upload validation rule in system/Validation/StrictRules/FileRules.php checked the MIME-derived guessed extension instead of the client-provided filename extension. As a result, an uploaded file named shell.php containing GIF-like content could pass validation such as uploaded[avatar]|is_image[avatar]|mime_in[avatar,image/gif]|ext_in[avatar,gif] because the detected MIME type maps to gif, even though the uploaded filename extension is php. Applications are impacted if they accept user-controlled uploads, rely on ext_in to validate the uploaded filename extension, save uploaded files using the original client filename with $file->move($path), store uploads in a web-accessible directory, and allow PHP or other executable files to run from that directory. In those conditions, this may lead to arbitrary code execution. This issue is fixed in version 4.7.3.",
       "published": "2026-07-17T21:17:06.787Z",
@@ -6075,51 +6061,6 @@
       "tags": [
         "CWE-74",
         "CWE-77"
-      ]
-    },
-    {
-      "id": "CVE-2026-13741",
-      "summary": "The Digits: WordPress Mobile Number Signup and Login plugin for WordPress is vulnerable to Privilege Escalation in all versions up to, and including, 9.1.0.5. This is due to missing authorization and role validation in the `dig_update_wpwc_custom_fields()` function. This makes it possible for authenticated attackers, with Subscriber-level access and above, to escalate their privileges to Administrator by submitting a forged `digits_reg_userrole` value during profile update, granted the site administrator has configured the built-in DIGITS User Role field.",
-      "published": "2026-07-16T09:16:16.553Z",
-      "lastModified": "2026-07-16T14:16:48.570Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00246,
-      "epssPercentile": 0.15977,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-269",
-          "name": "Improper Privilege Management",
-          "description": "Privileges are assigned, modified, or checked incorrectly."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.64,
-      "tags": [
-        "WordPress",
-        "CWE-269"
       ]
     },
     {
@@ -6807,51 +6748,6 @@
         "Linux",
         "Windows",
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-15005",
-      "summary": "The Loco Translate plugin for WordPress is vulnerable to Cross-Site Request Forgery in all versions up to, and including, 2.8.5. This is due to missing or incorrect nonce validation on the execTemplate function. This makes it possible for unauthenticated attackers to execute arbitrary PHP code on the server by supplying a php://filter stream wrapper URI as the 'template' parameter, which bypasses path validation and is passed directly to the include sink in execTemplate() via a forged request granted they can trick a site administrator into performing an action such as clicking on a link.",
-      "published": "2026-07-16T09:16:17.060Z",
-      "lastModified": "2026-07-16T13:38:53.050Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00211,
-      "epssPercentile": 0.11576,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-352",
-          "name": "Cross-Site Request Forgery",
-          "description": "A web request may execute without user intent."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.49,
-      "tags": [
-        "WordPress",
-        "CWE-352"
       ]
     },
     {
@@ -8652,6 +8548,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64138",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: validate SID in parent security descriptor during ACL inheritance Introduce smb_validate_ntsd_sid() helper to safely validate Owner SID and Group SID inside the NT Security Descriptor (smb_ntsd) retrieved from the parent directory.",
+      "published": "2026-07-19T16:17:55.680Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00415,
+      "epssPercentile": 0.34474,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.29,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-62231",
       "summary": "The Grav API plugin (getgrav/grav-plugin-api) before 1.0.6 contains an authorization bypass: API keys can be created with a restricted scopes array, but the ApiKeyAuthenticator class never reads or enforces these scopes. It loads and returns the owning user's full account object, so a key created with limited scopes (e.g. read-only) can perform any write, delete, or administrative operation the owning user is authorized for. Fixed in 1.0.6.",
       "published": "2026-07-17T02:18:10.587Z",
@@ -9096,51 +9030,6 @@
       "tags": [
         "Docker",
         "CWE-122"
-      ]
-    },
-    {
-      "id": "CVE-2026-15022",
-      "summary": "The Tutor LMS – eLearning and online course solution plugin for WordPress is vulnerable to generic SQL Injection via Stored Quiz Answer Array in all versions up to, and including, 4.0.0 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers, with custom-level access and above, to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. The payload is stored at quiz-attempt time via the wp_ajax_tutor_quiz_abandon handler, but the injected SQL executes only when a privileged user or Tutor REST API key holder requests the /wp-json/tutor/v1/quiz-attempt-details/{id} endpoint, making this a second-order (stored) injection chain.",
-      "published": "2026-07-16T09:16:17.440Z",
-      "lastModified": "2026-07-18T03:16:34.913Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00341,
-      "epssPercentile": 0.26974,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.22,
-      "tags": [
-        "WordPress",
-        "CWE-89"
       ]
     },
     {
@@ -11244,6 +11133,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64148",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: pds_core: fix error handling in pdsc_devcmd_wait Fix two cases where pdsc_devcmd_wait() returns stale success from the completion register instead of an error: 1. FW crash: If firmware stops running, the wait loop breaks early with running=false. The condition \"if ((!done || timeout) && running)\" is false, so error handling is bypassed and stale status is returned. Check !running first and return -ENXIO. 2. Timeout: If a command times out, err is set to -ETIMEDOUT but then overwritten by pdsc_err_to_errno(status) which reads stale status. Return -ETIMEDOUT immediately after cleaning up. Both errors now propagate to pdsc_devcmd_locked() which queues health_work for recovery.",
+      "published": "2026-07-19T16:17:56.753Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00475,
+      "epssPercentile": 0.38896,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.99,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2024-58370",
       "summary": "SurrealDB versions before 1.1.0 fail to enforce recursion depth limits when parsing nested SurrealQL statements including IF, RELATE, and attribute access idioms. Authorized attackers can submit queries with excessive nesting depth to cause stack overflow and crash the server.",
       "published": "2026-07-18T14:17:10.140Z",
@@ -12056,6 +11983,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64141",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: fix null pointer dereference in compare_guid_key() session_fd_check() walks the per-inode m_op_list during durable-handle session teardown and sets op->conn = NULL for every opinfo whose conn matched the closing session's connection. The matching opinfo, however, stays linked in its per-ClientGuid lease_table_list entry's lb->lease_list because destroy_lease_table() only runs on full TCP-connection teardown, not on SESSION_LOGOFF. If the same TCP connection then negotiates a fresh session with the same ClientGuid (ClientGuid is bound to NEGOTIATE, not the session, and is unchanged across LOGOFF + SETUP) and issues a SMB2 CREATE with a lease context on a different inode, find_same_lease_key() walks lb->lease_list, reaches the stale opinfo, and calls compare_guid_key(), which unconditionally dereferences opinfo->conn->ClientGUID. The conn pointer is NULL and the kernel panics. Reproducer requires only a successful SMB2 SESSION_SETUP and a share configured with 'durable handles = yes'. KASAN report on mainline 70390501d194: general protection fault, probably for non-canonical address 0xdffffc0000000069: 0000 [#1] SMP KASAN PTI KASAN: null-ptr-deref in range [0x0000000000000348-0x000000000000034f] Workqueue: ksmbd-io handle_ksmbd_work RIP: 0010:bcmp+0x5b/0x230 Call Trace: compare_guid_key+0x4b/0xd0 find_same_lease_key+0x324/0x690 smb2_open+0x6aea/0x8e60 handle_ksmbd_work+0x796/0xee0 ... Faulting address 0x348 is the offset of ClientGUID within struct ksmbd_conn, confirming opinfo->conn was NULL. Read opinfo->conn once and bail out if it has been cleared by a concurrent session_fd_check(). A half-detached opinfo cannot be the owner of an active lease, so returning 0 is the correct match result.",
+      "published": "2026-07-19T16:17:55.983Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00441,
+      "epssPercentile": 0.36526,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.9,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2024-58360",
       "summary": "stoatchat versions before 0.7.8 fail to enforce account creation restrictions including invite-only mode, email verification, captcha, and shield verification. Attackers can create unlimited accounts with unverified email addresses, increasing denial-of-service risk and compromising service integrity.",
       "published": "2026-07-16T13:16:23.000Z",
@@ -12427,96 +12392,6 @@
       ]
     },
     {
-      "id": "CVE-2026-13754",
-      "summary": "The Tickera – Sell Tickets & Manage Events plugin for WordPress is vulnerable to generic SQL Injection via the 's' parameter in all versions up to, and including, 3.6.0.0 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers, with custom-level access and above, to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.",
-      "published": "2026-07-16T09:16:16.693Z",
-      "lastModified": "2026-07-18T03:16:34.813Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00249,
-      "epssPercentile": 0.16352,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.85,
-      "tags": [
-        "WordPress",
-        "CWE-89"
-      ]
-    },
-    {
-      "id": "CVE-2026-13767",
-      "summary": "The Quiz Master Next plugin for WordPress is vulnerable to SQL Injection via stored quiz page data in versions up to, and including, 11.2.0. This is due to insufficient escaping on the user-supplied 'pages' parameter persisted by the qsm_ajax_save_pages() AJAX handler (sanitize_text_field only) and lack of sufficient preparation on the existing SQL query built in qsm_options_questions_tab_content() at line 143, where the stored page IDs are interpolated into an IN() clause via implode() with no $wpdb->prepare() and no integer casting. This makes it possible for authenticated attackers, with Author-level access and above (who can own a quiz they are entitled to edit), to plant a SQL payload that is executed second-order whenever any user (including an administrator) views the quiz's Questions tab, allowing them to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.",
-      "published": "2026-07-16T09:16:16.943Z",
-      "lastModified": "2026-07-16T16:19:00.120Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00249,
-      "epssPercentile": 0.16353,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.85,
-      "tags": [
-        "WordPress",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-11324",
       "summary": "The WooCommerce Placetopay Gateway and PlacetoPay/AvalPay gateway plugins for WordPress are vulnerable to Reflected Cross-Site Scripting via the 'redirect-url' parameter in versions up to, and including, 3.2.2 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link.",
       "published": "2026-07-17T04:16:50.177Z",
@@ -12653,51 +12528,6 @@
         "Linux",
         "Docker",
         "CWE-125"
-      ]
-    },
-    {
-      "id": "CVE-2026-7543",
-      "summary": "The Breakdance plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'fields' parameter in versions up to, and including, 2.7.1 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
-      "published": "2026-07-16T09:16:19.527Z",
-      "lastModified": "2026-07-17T13:19:01.623Z",
-      "severity": "High",
-      "cvssScore": 7.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.0019,
-      "epssPercentile": 0.08922,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.83,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -13665,51 +13495,6 @@
       "priorityScore": 3.72,
       "tags": [
         "CWE-918"
-      ]
-    },
-    {
-      "id": "CVE-2026-15727",
-      "summary": "The WP Bulk Delete plugin for WordPress is vulnerable to generic SQL Injection via the 'delete_user_roles' parameter in all versions up to, and including, 1.4.2 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers, with administrator-level access and above, to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. wp_unslash() is applied to the raw POST body before parse_str() decomposes it, stripping WordPress magic-quotes protection and leaving attacker-controlled values fully unescaped prior to reaching the SQL sink.",
-      "published": "2026-07-16T09:16:18.510Z",
-      "lastModified": "2026-07-16T13:38:53.050Z",
-      "severity": "Medium",
-      "cvssScore": 4.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00355,
-      "epssPercentile": 0.28541,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.71,
-      "tags": [
-        "WordPress",
-        "CWE-89"
       ]
     },
     {
@@ -14749,6 +14534,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64140",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: fix null pointer dereference in proc_show_files() When a SMB2 client opens a file with a durable v2 handle and then issues SMB2 SESSION_LOGOFF, session_fd_check() clears fp->tcon = NULL on the reconnectable file pointer but leaves the fp registered in global_ft.idr until the durable scavenger fires (up to fp->durable_timeout seconds later). During that window any read of /proc/fs/ksmbd/files (mode 0400) panics the kernel because proc_show_files() walks global_ft.idr and unconditionally dereferences fp->tcon->id with no NULL guard. Reproducer requires only a successful SMB2 SESSION_SETUP and a share configured with 'durable handles = yes'. KASAN report on mainline 70390501d194: general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] SMP KASAN PTI KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007] RIP: 0010:proc_show_files+0x118/0x740 Call Trace: proc_show_files+0x118/0x740 seq_read_iter+0x4ef/0xe10 proc_reg_read_iter+0x1b7/0x280 ... Guard the dereference. A durable-disconnected fp legitimately has no tcon; report its tree id as 0 rather than oopsing.",
+      "published": "2026-07-19T16:17:55.887Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00359,
+      "epssPercentile": 0.2889,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.64,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-62764",
       "summary": "Improper Handling of Insufficient Privileges vulnerability in Apache Accumulo. An authenticated, but low-privileged user without system permissions may issue a remote command to gracefully shutdown system components (compaction-coordinator, compactor, gc, manager, monitor, tserver, or sserver), leading to a denial of service. This issue affects Apache Accumulo 2.1.4 and 2.1.5. Users are recommended to upgrade to version 2.1.6, which fixes the issue.",
       "published": "2026-07-17T09:16:41.853Z",
@@ -15448,51 +15271,6 @@
       ]
     },
     {
-      "id": "CVE-2026-15106",
-      "summary": "The WPBot – AI ChatBot for Live Support, Lead Generation, AI Services plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 8.5.6. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for unauthenticated attackers to delete arbitrary chat session records from the wpbot_user and wpbot_conversation tables, including chat history and conversation logs, by supplying a crafted userid value.",
-      "published": "2026-07-16T09:16:17.800Z",
-      "lastModified": "2026-07-16T13:38:53.050Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00273,
-      "epssPercentile": 0.19539,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.54,
-      "tags": [
-        "WordPress",
-        "CWE-862"
-      ]
-    },
-    {
       "id": "CVE-2026-45703",
       "summary": "Pimcore is an Open Source Data & Experience Management Platform. Prior to 11.5.17 (LTS) and 12.3.7, the WordExport export flow in bundles/WordExportBundle/src/Controller/TranslationController.php only checks the word_export feature permission and directly resolves attacker-controlled type/id input without enforcing view permission on page, snippet, email, or object elements, allowing a low-privileged backend user to export document content the user is not allowed to view. This issue is fixed in versions 11.5.17 (LTS) and 12.3.7.",
       "published": "2026-07-17T19:17:14.790Z",
@@ -16038,51 +15816,6 @@
       "priorityScore": 3.47,
       "tags": [
         "CWE-804"
-      ]
-    },
-    {
-      "id": "CVE-2026-15651",
-      "summary": "The WP TripAdvisor Review Slider plugin for WordPress is vulnerable to generic SQL Injection via the 'filtersource' parameter in all versions up to, and including, 14.6 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers, with administrator-level access and above, to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.",
-      "published": "2026-07-16T09:16:18.393Z",
-      "lastModified": "2026-07-16T16:19:00.867Z",
-      "severity": "Medium",
-      "cvssScore": 4.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00288,
-      "epssPercentile": 0.21157,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.46,
-      "tags": [
-        "WordPress",
-        "CWE-89"
       ]
     },
     {
@@ -18053,6 +17786,44 @@
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.21,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64153",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/msm: Fix iommu_map_sgtable() return value check and avoid WARN Commit \"iommu: return full error code from iommu_map_sg[_atomic]()\" changed iommu_map_sgtable() to return an ssize_t and negative values in error cases, rather than a size_t and a zero. Store the return value in the appropriate type and in case of error, return it rather than WARNing. Patchwork: https://patchwork.freedesktop.org/patch/719685/",
+      "published": "2026-07-19T16:17:57.270Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00139,
+      "epssPercentile": 0.03717,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
@@ -20707,6 +20478,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64151",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: iommupt: Check for missing PAGE_SIZE in the pgsize_bitmap Sashiko pointed out that the driver could drop PAGE_SIZE from the pgsize_bitmap. That is technically allowed but nothing does it, and such an iommu_domain would not be used with the DMA API today. Still, it is against the design and it is trivial to fix up. Lift the PT_WARN_ON to the if branch and just skip the fast path.",
+      "published": "2026-07-19T16:17:57.070Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "High",
+      "cvssScore": 8.4,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00119,
+      "epssPercentile": 0.02059,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.01,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-54733",
       "summary": "The Microsoft 365 and Microsoft Entra ID Plugins for Moodle provide Office 365 and Azure Active Directory integration for Moodle. Prior to 4.5.6, 5.0.5, and 5.1.1, the Microsoft Office 365 Integration plugin local_o365 Teams SSO endpoint sso_login.php base64-decodes a JWT payload and authenticates users from the upn claim without verifying the JWT signature, allowing an unauthenticated attacker to forge a token and obtain a Moodle session as an O365-authenticated user. This issue is fixed in versions 4.5.6, 5.0.5, and 5.1.1.",
       "published": "2026-07-16T16:19:13.360Z",
@@ -21486,51 +21295,6 @@
       "priorityScore": 2.94,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-15324",
-      "summary": "The SysBasics Customize My Account for WooCommerce – Live My Account Customizer plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'row_type' parameter in all versions up to, and including, 4.4.14 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with shop manager-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
-      "published": "2026-07-16T09:16:17.920Z",
-      "lastModified": "2026-07-17T14:17:20.417Z",
-      "severity": "Medium",
-      "cvssScore": 4.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00208,
-      "epssPercentile": 0.1109,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.93,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -26312,6 +26076,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64152",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: iommu: Handle unmap error when iommu_debug is enabled Sashiko noticed a latent bug where the map error flow called iommu_unmap() which calls iommu_debug_unmap_begin()/iommu_debug_unmap_end() however since this is an error path the map flow never actually established the original iommu_debug_map() it will malfunction. Lift the unmap error handling into iommu_map_nosync() and reorder it so the trace_map()/iommu_debug_map() records the partial mapping and then immediately unmaps it. This avoid creating the unbalanced tracking and provides saner tracing instead of a unmap unmatched to any map.",
+      "published": "2026-07-19T16:17:57.170Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00108,
+      "epssPercentile": 0.01396,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.78,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-2594",
       "summary": "The Smart Custom Fields plugin for WordPress is vulnerable to Stored Cross-Site Scripting in versions up to, and including, 5.0.7. This is due to insufficient input sanitization and output escaping of uploaded image attachment titles. This makes it possible for authenticated attackers, with Author-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. NOTE: This vulnerability was partially patched in 5.0.7.",
       "published": "2026-07-17T02:18:05.607Z",
@@ -26697,51 +26499,6 @@
       "priorityScore": 2.73,
       "tags": [
         "CWE-863"
-      ]
-    },
-    {
-      "id": "CVE-2026-13755",
-      "summary": "The Tickera – Sell Tickets & Manage Events plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'price_wrapper' Shortcode Attribute in all versions up to, and including, 3.6.0.0 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Successful execution of the injected script is limited to victims who have the referenced ticket ID present in their cart cookie, meaning the payload only fires for users who have previously added that ticket to their cart.",
-      "published": "2026-07-16T09:16:16.827Z",
-      "lastModified": "2026-07-16T13:38:53.050Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00225,
-      "epssPercentile": 0.13221,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.7,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -27475,51 +27232,6 @@
       "tags": [
         "F5",
         "CWE-757"
-      ]
-    },
-    {
-      "id": "CVE-2026-15021",
-      "summary": "The wpForo Forum plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'location' Profile Field in all versions up to, and including, 3.1.1 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with subscriber-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The sanitize_text_field() function applied at input does not encode double quotes, allowing attribute breakout via a payload that escapes the href attribute context and injects event handler attributes.",
-      "published": "2026-07-16T09:16:17.323Z",
-      "lastModified": "2026-07-16T14:16:48.777Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00206,
-      "epssPercentile": 0.10831,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.62,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -28598,48 +28310,42 @@
       ]
     },
     {
-      "id": "CVE-2026-15099",
-      "summary": "The Delicious Recipes plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'steps' block attribute in versions up to, and including, 1.10.2. This is due to insufficient input sanitization and output escaping in the wrap_direction_text() function, which interpolates the user-supplied href value from nested link nodes ($node['props']['href']) directly into an anchor tag via sprintf() at line 1627 without esc_url() or any URL scheme validation. This makes it possible for authenticated attackers, with Contributor-level access and above, to inject arbitrary web scripts (including javascript: URIs) in pages that will execute whenever a user (such as an editor or administrator previewing the pending post) accesses an injected page and clicks the malicious link.",
-      "published": "2026-07-16T09:16:17.557Z",
-      "lastModified": "2026-07-16T13:38:53.050Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+      "id": "CVE-2026-64158",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix write streaming disablement if fd open O_RDWR In netfs_perform_write(), \"write streaming\" (the caching of dirty data in dirty but !uptodate folios) is performed to avoid the need to read data that is just going to get immediately overwritten. However, this is/will be disabled in three circumstances: if the fd is open O_RDWR, if fscache is in use (as we need to round out the blocks for DIO) or if content encryption is enabled (again for rounding out purposes). The idea behind disabling it if the fd is open O_RDWR is that we'd need to flush the write-streaming page before we could read the data, particularly through mmap. But netfs now fills in the gaps if ->read_folio() is called on the page, so that is unnecessary. Further, this doesn't actually work if a separate fd is open for reading. Fix this by removing the check for O_RDWR, thereby allowing streaming writes even when we might read. This caused a number of problems with the generic/522 xfstest, but those are now fixed.",
+      "published": "2026-07-19T16:17:57.807Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "High",
+      "cvssScore": 7.3,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:L",
       "cvssBreakdown": {
-        "attackVector": "Network",
+        "attackVector": "Local",
         "attackComplexity": "Low",
         "privilegesRequired": "Low",
         "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "Low"
       },
-      "epssScore": 0.00193,
-      "epssPercentile": 0.09271,
+      "epssScore": 0.00085,
+      "epssPercentile": 0.00365,
       "isKev": false,
       "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
-      "patchAvailable": false,
+      "patchAvailable": true,
       "workaroundAvailable": true,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 2.56,
+      "priorityScore": 2.57,
       "tags": [
-        "WordPress",
-        "CWE-79"
+        "Linux",
+        "iOS"
       ]
     },
     {
@@ -30704,51 +30410,6 @@
       "priorityScore": 2.27,
       "tags": [
         "CWE-353"
-      ]
-    },
-    {
-      "id": "CVE-2026-15407",
-      "summary": "The Themify Builder plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 7.7.7. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for authenticated attackers, with subscriber-level access and above, to overwrite or delete the generated CSS stylesheet file of arbitrary posts, including private and draft posts owned by other users, and modify plugin-scoped font options. The required CSRF nonce (tf_nonce) is emitted on public front-end builder pages via wp_localize_script, making it trivially obtainable by any authenticated user visiting such a page.",
-      "published": "2026-07-16T09:16:18.163Z",
-      "lastModified": "2026-07-18T03:16:35.023Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00288,
-      "epssPercentile": 0.21144,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.25,
-      "tags": [
-        "WordPress",
-        "CWE-862"
       ]
     },
     {
@@ -33220,51 +32881,6 @@
       ]
     },
     {
-      "id": "CVE-2026-15610",
-      "summary": "The WPBot – AI ChatBot for Live Support, Lead Generation, AI Services plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 8.5.6. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for authenticated attackers, with subscriber-level access and above, to trigger arbitrary re-embedding of stored RAG documents, modifying the rag_documents table and consuming the site owner's paid third-party AI API credits (OpenAI, Gemini, OpenRouter, or xAI).",
-      "published": "2026-07-16T09:16:18.280Z",
-      "lastModified": "2026-07-16T13:38:53.050Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00232,
-      "epssPercentile": 0.14201,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2,
-      "tags": [
-        "WordPress",
-        "CWE-862"
-      ]
-    },
-    {
       "id": "CVE-2026-53379",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: media: i2c: ov8856: free control handler on error in ov8856_init_controls() The control handler wasn't freed if adding controls failed, add an error exit label and convert the existing error return to use it.",
       "published": "2026-07-19T11:16:39.060Z",
@@ -33435,6 +33051,44 @@
       "tags": [
         "Linux",
         "CWE-908"
+      ]
+    },
+    {
+      "id": "CVE-2026-64156",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs, afs: Fix write skipping in dir/link writepages Fix netfs_write_single() and afs_single_writepages() to better handle a write that would be skipped due to lock contention and WB_SYNC_NONE by returning 1 from netfs_write_single() if it skipped and making afs_single_writepages() skip also. If a skip occurs, the inode must be re-marked as the VFS may have cleared the mark. This is really only theoretical for directories in netfs_write_single() as the only path to that is through afs_single_writepages() that takes the ->validate_lock around it, thereby serialising it.",
+      "published": "2026-07-19T16:17:57.603Z",
+      "lastModified": "2026-08-13T15:12:39.070Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00121,
+      "epssPercentile": 0.02233,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -33823,51 +33477,6 @@
       "priorityScore": 1.97,
       "tags": [
         "CWE-362"
-      ]
-    },
-    {
-      "id": "CVE-2026-15350",
-      "summary": "The The Cache Purger plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 2.3.20. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for authenticated attackers, with subscriber-level access and above, to permanently truncate the plugin's cache-purge audit log (wp-content/purge.log), destroying the entire cache-purge audit history. The tcp_log_purge nonce is rendered in the admin bar on frontend pages accessible to all authenticated users including subscribers, meaning any authenticated user possesses the nonce required to trigger the deletion.",
-      "published": "2026-07-16T09:16:18.047Z",
-      "lastModified": "2026-07-16T14:16:48.880Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00222,
-      "epssPercentile": 0.12864,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.96,
-      "tags": [
-        "WordPress",
-        "CWE-862"
       ]
     },
     {
@@ -36616,50 +36225,6 @@
       ]
     },
     {
-      "id": "CVE-2026-58078",
-      "summary": "Joomla Extension - themexpert.com - Unauthenticated SQL injection in Quix Page Builder Pro < 6.2.1 - The Joomla extension Quix Page Builder Pro is vulnerable to an unauthenticated SQL injection.",
-      "published": "2026-07-16T09:16:19.140Z",
-      "lastModified": "2026-07-23T16:17:29.180Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00237,
-      "epssPercentile": 0.14789,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.52,
-      "tags": [
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-54728",
       "summary": "bunkerweb is an Open-source and next-generation Web Application Firewall (WAF). Prior to BunkerWeb 1.6.12 and BunkerWeb PRO 0.57, authenticated Host header handling in the BunkerWeb UI and API improperly validated and neutralized user-controlled input in a configuration-dependent path, allowing a low-privileged authenticated user to escalate privileges and affect confidentiality, integrity, and availability of the BunkerWeb instance. This issue is fixed in BunkerWeb version 1.6.12 and BunkerWeb PRO version 0.57.",
       "published": "2026-07-16T20:16:45.427Z",
@@ -37851,6 +37416,82 @@
       ]
     },
     {
+      "id": "CVE-2026-64149",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: dma-mapping: move dma_map_resource() sanity check into debug code dma_map_resource() uses pfn_valid() to ensure the range is not RAM. However, pfn_valid() only checks for availability of the memory map for a PFN but it does not ensure that the PFN is actually backed by RAM. On ARM64 with SPARSEMEM (128MB section granularity), MMIO addresses that share a section with RAM will falsely trigger the WARN_ON_ONCE and cause dma_map_resource() to return DMA_MAPPING_ERROR. This causes a WARNING on Raspberry Pi 4 during spi_bcm2835 probe because the SPI FIFO register (0xfe204004) falls in the same sparsemem section as the end of RAM (0xf8000000-0xfbffffff), both in section 31 (0xf8000000-0xffffffff). Move the sanity check from dma_map_resource() into debug_dma_map_phys() and replace the unreliable pfn_valid() with pfn_valid() && !PageReserved(), which correctly identifies actual usable RAM without false positives for MMIO regions that happen to have struct pages. Since dma_map_resource() is dma_map_phys(DMA_ATTR_MMIO), the check applies equally to both APIs. Any non-reserved page represents kernel memory to a sufficient degree that using DMA_ATTR_MMIO on it is almost certainly wrong and risks breaking coherency on non-coherent platforms. ZONE_DEVICE pages used for PCI P2P DMA (MEMORY_DEVICE_PCI_P2PDMA) have PageReserved set, so they will not trigger a false positive. The check no longer blocks the mapping and uses err_printk() to integrate with dma-debug filtering.",
+      "published": "2026-07-19T16:17:56.860Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00173,
+      "epssPercentile": 0.0702,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.25,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64143",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: platform/x86: uniwill-laptop: Do not enable the charging limit even when forced It seems that on some older models (~2020) the battery charging limit can permanently damage the battery. Prevent users from enabling this feature thru the \"force\" module parameter to avoid causing permanent hardware damage on such devices.",
+      "published": "2026-07-19T16:17:56.243Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00162,
+      "epssPercentile": 0.05937,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.21,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-21764",
       "summary": "HCL DevOps Loop is affected by insufficient input validation that allows special characters where they should be restricted. This may result in unintended application behavior under certain conditions.",
       "published": "2026-07-17T17:17:15.123Z",
@@ -38074,50 +37715,6 @@
       "tags": [
         "CWE-310",
         "CWE-312"
-      ]
-    },
-    {
-      "id": "CVE-2026-6423",
-      "summary": "A local privilege escalation vulnerability in ESET Inspect Connector. The vulnerability was caused by improper authentication in an IPC channel.",
-      "published": "2026-07-16T09:16:19.273Z",
-      "lastModified": "2026-07-16T13:49:40.270Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00145,
-      "epssPercentile": 0.04223,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-269",
-          "name": "Improper Privilege Management",
-          "description": "Privileges are assigned, modified, or checked incorrectly."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.15,
-      "tags": [
-        "CWE-269"
       ]
     },
     {
@@ -40777,6 +40374,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64139",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: fix SID memory leak in set_posix_acl_entries_dacl() on overflow Commit 299f962c0b02 (\"ksmbd: use check_add_overflow() to prevent u16 DACL size overflow\") added check_add_overflow() guards that break out of the ACE-building loops in set_posix_acl_entries_dacl() when the accumulated DACL size would wrap past 65535. However, each iteration allocates a struct smb_sid via kmalloc_obj() at the top of the loop and relies on the kfree(sid) call at the end of the loop body (the 'pass_same_sid' label in the first loop, and the explicit kfree at the tail of the second loop) to release it. The newly introduced 'break' statements bypass those kfree() calls, leaking the sid buffer every time an overflow is detected. A malicious or malformed file with enough POSIX ACL entries to trip the overflow check will leak one or more struct smb_sid allocations on every request that touches the file's DACL, providing a trivial kernel memory exhaustion vector. Free sid before breaking out of the loops to plug the leak.",
+      "published": "2026-07-19T16:17:55.780Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00184,
+      "epssPercentile": 0.08223,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.29,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-63810",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: block: Avoid mounting the bdev pseudo-filesystem in userspace The bdev pseudo-filesystem is an internal kernel filesystem with which userspace should not interfere. Unregister it so that userspace cannot even attempt to mount it. This fixes a bug [1] that occurs when attempting to access files, because the system call move_mount() uses pointers declared in the inode_operations structure, which for the bdev pseudo-filesystem are always equal to 0. `inode->i_op = &empty_iops;` [1] BUG: kernel NULL pointer dereference, address: 0000000000000000 #PF: supervisor instruction fetch in kernel mode #PF: error_code(0x0010) - not-present page PGD 23380067 P4D 23380067 PUD 23381067 PMD 0 Oops: 0010 [#1] PREEMPT SMP KASAN NOPTI CPU: 2 PID: 17125 Comm: syz-executor.0 Not tainted 6.1.155-syzkaller-00350-g84221fde2681 #0 Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014 RIP: 0010:0x0 Call Trace: lookup_open.isra.0+0x700/0x1180 fs/namei.c:3460 open_last_lookups fs/namei.c:3550 [inline] path_openat+0x953/0x2700 fs/namei.c:3780 do_filp_open+0x1c5/0x410 fs/namei.c:3810 do_sys_openat2+0x171/0x4d0 fs/open.c:1318 do_sys_open fs/open.c:1334 [inline] __do_sys_openat fs/open.c:1350 [inline] __se_sys_openat fs/open.c:1345 [inline] __x64_sys_openat+0x13c/0x1f0 fs/open.c:1345 do_syscall_x64 arch/x86/entry/common.c:51 [inline] do_syscall_64+0x35/0x80 arch/x86/entry/common.c:81 entry_SYSCALL_64_after_hwframe+0x6e/0xd8 Found by Linux Verification Center (linuxtesting.org) with Syzkaller.",
       "published": "2026-07-19T12:16:53.910Z",
@@ -41160,6 +40795,82 @@
       ]
     },
     {
+      "id": "CVE-2026-64144",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: btmtk: fix urb->setup_packet leak in error paths The setup_packet of control urb is not freed if usb_submit_urb fails or the submitted urb is killed. Add free in these two paths.",
+      "published": "2026-07-19T16:17:56.347Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00175,
+      "epssPercentile": 0.07272,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.25,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64147",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: pds_core: fix debugfs_lookup dentry leak and error handling debugfs_lookup() returns a dentry with an elevated reference count that must be released with dput(). The current code discards the returned dentry without calling dput(), causing a reference leak on every firmware reset recovery. Additionally, when CONFIG_DEBUG_FS is disabled, debugfs_lookup() returns ERR_PTR(-ENODEV), not NULL. The current check passes for error pointers and would call dput() on an invalid pointer, causing a crash.",
+      "published": "2026-07-19T16:17:56.643Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00175,
+      "epssPercentile": 0.07273,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.25,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-63826",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: fbdev: fix use-after-free in store_modes() store_modes() replaces a framebuffer's modelist with modes from userspace. On success it frees the old modelist with fb_destroy_modelist(). Two fields still point into that freed list. One pointer is fb_display[i].mode, the mode a console is using. fbcon_new_modelist() moves these pointers to the new list. It only does so for consoles still mapped to the framebuffer. An unmapped console is skipped and keeps its stale pointer. Unbinding fbcon, for example, sets con2fb_map[i] to -1 but leaves fb_display[i].mode set. An FBIOPUT_VSCREENINFO ioctl with FB_ACTIVATE_INV_MODE later reaches fbcon_mode_deleted(). That function reads the stale fb_display[i].mode through fb_mode_is_equal(). The read is a use-after-free. The other pointer is fb_info->mode, the current mode. It is set through the mode sysfs attribute. store_modes() does not update fb_info->mode, so it is left pointing into the freed list. show_mode(), the attribute's read handler, dereferences the stale fb_info->mode through mode_string(). The read is a use-after-free. Clear both pointers before freeing the list. Commit a1f305893074 (\"fbcon: Set fb_display[i]->mode to NULL when the mode is released\") added the helper fbcon_delete_modelist(). It clears every fb_display[i].mode that points into a given list. So far it is called only from the unregister path. Call it from store_modes() too, and set fb_info->mode to NULL.",
       "published": "2026-07-19T12:16:55.833Z",
@@ -41255,6 +40966,44 @@
       },
       "epssScore": 0.00171,
       "epssPercentile": 0.06811,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.24,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64155",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: ath11k: fix error path leaks in some WMI WOW calls Fix two instances where we used to directly return the result of ath11k_wmi_cmd_send(...). Because we did not check the return value, we also did not free the skb in the error path.",
+      "published": "2026-07-19T16:17:57.483Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00173,
+      "epssPercentile": 0.06984,
       "isKev": false,
       "kev": null,
       "vendor": "Linux",
@@ -41618,6 +41367,44 @@
       "tags": [
         "Linux",
         "iOS"
+      ]
+    },
+    {
+      "id": "CVE-2026-64157",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix partial invalidation of streaming-write folio In netfs_invalidate_folio(), if the region of a partial invalidation overlaps the front (but not all) of a dirty write cached in a streaming write page (dirty, but not uptodate, with the dirty region tracked by a netfs_folio struct), the function modifies the dirty region - but incorrectly as it moves the region forward by setting the start to the start, not the end, of the invalidation region. Fix this by setting finfo->dirty_offset to the end of the invalidation region (iend).",
+      "published": "2026-07-19T16:17:57.703Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.06456,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.23,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -42238,6 +42025,120 @@
       "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 0.22,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64145",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: wilc1000: fix dma_buffer leak on bus acquire failure wilc_wlan_firmware_download() allocates dma_buffer with kmalloc() at the top of the function and uses a 'fail:' label to free it via kfree(dma_buffer) on error. All later error paths correctly use 'goto fail' to route through this cleanup. However, the early failure path after the first acquire_bus() call uses a bare 'return ret;', which leaks dma_buffer whenever the bus acquire fails. Replace the early return with goto fail so the existing cleanup path runs. Found via a custom Coccinelle semantic patch hunting for kmalloc'd locals leaked on early-return error paths in driver firmware-download code.",
+      "published": "2026-07-19T16:17:56.443Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00166,
+      "epssPercentile": 0.06279,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.22,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64154",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/msm/adreno: Fix a reference leak in a6xx_gpu_init() In a6xx_gpu_init(), node is obtained via of_parse_phandle(). While there was a manual of_node_put() at the end of the common path, several early error returns would bypass this call, resulting in a reference leak. Fix this by using the __free(device_node) cleanup handler to release the reference when the variable goes out of scope. Patchwork: https://patchwork.freedesktop.org/patch/700661/",
+      "published": "2026-07-19T16:17:57.390Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00165,
+      "epssPercentile": 0.06171,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.22,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64146",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: erofs: fix metabuf leak in inode xattr initialization commit bb88e8da0025 (\"erofs: use meta buffers for xattr operations\") converted xattr operations to use on-stack erofs_buf instances. erofs_init_inode_xattrs() uses such a metabuf while reading the inline xattr header and shared xattr id array. Some error paths after erofs_read_metabuf() leave through out_unlock without dropping the metabuf, so the folio reference can leak. Consolidate the cleanup at out_unlock. erofs_put_metabuf() is a no-op if no folio has been acquired, and this keeps all paths after taking EROFS_I_BL_XATTR_BIT covered by a single cleanup site.",
+      "published": "2026-07-19T16:17:56.547Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00162,
+      "epssPercentile": 0.05937,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.21,
       "tags": [
         "Linux"
       ]
@@ -42898,51 +42799,6 @@
       "priorityScore": 0.07,
       "tags": [
         "CWE-269"
-      ]
-    },
-    {
-      "id": "CVE-2026-6424",
-      "summary": "Use-after-free vulnerability in ESET Linux products potentially allowed an attacker to trigger kernel panic on the system",
-      "published": "2026-07-16T09:16:19.403Z",
-      "lastModified": "2026-07-16T13:49:40.270Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00112,
-      "epssPercentile": 0.01562,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.05,
-      "tags": [
-        "Linux",
-        "CWE-416"
       ]
     },
     {
