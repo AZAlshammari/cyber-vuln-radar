@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-15T13:53:00.326Z",
+  "generatedAt": "2026-08-15T14:24:50.047Z",
   "count": 1000,
   "items": [
     {
@@ -14031,6 +14031,51 @@
       ]
     },
     {
+      "id": "CVE-2026-64178",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: bnep: Fix UAF read of dev->name bnep_add_connection() needs to keep holding the bnep_session_sem while reading dev->name (just like bnep_get_connlist() does); otherwise the bnep_session() thread can concurrently free the net_device, which can for example be triggered by a concurrent bnep_del_connection(). (This UAF is fairly uninteresting from a security perspective; calling bnep_add_connection() requires passing a capable(CAP_NET_ADMIN) check. It also requires completely tearing down a netdev during a fairly tight race window.)",
+      "published": "2026-07-19T16:18:00.147Z",
+      "lastModified": "2026-08-12T15:31:35.053Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00249,
+      "epssPercentile": 0.16387,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.65,
+      "tags": [
+        "Linux",
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-62217",
       "summary": "OpenClaw 2026.5.14-beta.1 before 2026.5.27 contain an authorization flaw in the QQBot exec approvals feature. When the feature is enabled and reachable, a lower-trust caller or configured input path could execute or persist actions beyond the caller's intended authorization, allowing non-allowlisted senders to perform unauthorized operations.",
       "published": "2026-07-17T02:18:08.553Z",
@@ -15182,50 +15227,6 @@
       "priorityScore": 3.53,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-56455",
-      "summary": "HCL DFXAnalytics is affected by a Buffer Overflow vulnerability that can lead to a Denial of Service (DoS). The application fails to properly validate input sizes, allowing an attacker to pass an excessive amount of information into a memory container, which can cause the system to crash or become unresponsive. To mitigate this flaw, comprehensive input length checks must be implemented and enforced on both the client and server sides.",
-      "published": "2026-07-16T14:16:54.797Z",
-      "lastModified": "2026-07-17T19:10:42.027Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00267,
-      "epssPercentile": 0.18774,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-121",
-          "name": "CWE-121",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.51,
-      "tags": [
-        "CWE-121"
       ]
     },
     {
@@ -17252,47 +17253,41 @@
       ]
     },
     {
-      "id": "CVE-2026-56453",
-      "summary": "HCL DFXAnalytics is affected by an Account Takeover via Response Manipulation vulnerability. A remote attacker can intercept and alter the contents of the server's HTTP responses before they reach the client application, allowing them to manipulate the authentication or authorization logic to bypass controls and gain unauthorized access to targeted user accounts.",
-      "published": "2026-07-16T14:16:54.497Z",
-      "lastModified": "2026-07-17T19:09:35.767Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:C/C:L/I:L/A:L",
+      "id": "CVE-2026-64176",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: iwlwifi: mvm: fix driver-set TX rates on old devices On old devices such as 7265D, rates are still encoded in version 1 format, which doesn't use the CCK/OFDM rate index (0-3/0-7) but rather their PLCP value (e.g. 10 for 1 Mbps CCK rate.) While introducing v3 rates, I changed the driver from internally handling v1 rates and converting to v2, to internally handling v3 and converting to v1 or v2 according to the firmware. I accordingly changed the code in iwl_mvm_mac80211_idx_to_hwrate() to no longer have different values for different APIs. This was correct. However, I later reverted this part of the change, because it was reported that I had broken beacon rates, causing a FW assert/crash. This caused TX_CMD rates to be set incorrectly, potentially causing a warning when reported back from the device as having been used. Fix this (hopefully correctly now) by handling beacon rates in the TX_CMD that's embedded in the beacon template command separately. Restore iwl_mvm_mac80211_idx_to_hwrate() to return only the rate index, not PLCP value, fixing the real TX_CMD.",
+      "published": "2026-07-19T16:17:59.853Z",
+      "lastModified": "2026-08-13T15:32:39.783Z",
+      "severity": "High",
+      "cvssScore": 8.1,
+      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
       "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
+        "attackVector": "Adjacent",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
       },
-      "epssScore": 0.00187,
-      "epssPercentile": 0.08529,
+      "epssScore": 0.00209,
+      "epssPercentile": 0.11296,
       "isKev": false,
       "kev": null,
-      "vendor": null,
+      "vendor": "Linux",
       "product": null,
-      "cwe": [
-        {
-          "id": "CWE-294",
-          "name": "CWE-294",
-          "description": "CWE mapping from source data."
-        }
-      ],
+      "cwe": [],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
-      "priorityScore": 3.22,
+      "priorityScore": 3.23,
       "tags": [
-        "CWE-294"
+        "Linux"
       ]
     },
     {
@@ -17598,50 +17593,6 @@
       ]
     },
     {
-      "id": "CVE-2026-56454",
-      "summary": "HCL DFXAnalytics is affected by a Deprecated Protocol vulnerability due to the use of TLS 1.0 and TLS 1.1. These legacy protocols contain numerous cryptographic design flaws that expose data to interception and decryption. To remediate this risk, the application must disable all support for TLS 1.0 and TLS 1.1, and exclusively enable support for secure protocols, specifically TLS 1.2 and TLS 1.3.",
-      "published": "2026-07-16T14:16:54.643Z",
-      "lastModified": "2026-07-17T19:10:04.607Z",
-      "severity": "Medium",
-      "cvssScore": 5.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00137,
-      "epssPercentile": 0.03587,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-327",
-          "name": "CWE-327",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.19,
-      "tags": [
-        "CWE-327"
-      ]
-    },
-    {
       "id": "CVE-2026-15349",
       "summary": "The ERP: Complete HR, Accounting & CRM Suite Built for WooCommerce plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 1.17.6. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for authenticated attackers, with subscriber-level access and above, to create arbitrary company locations in the ERP database.",
       "published": "2026-07-17T05:16:38.197Z",
@@ -17907,50 +17858,6 @@
       "priorityScore": 3.19,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-5674",
-      "summary": "A flaw was found in PipeWire, a multimedia server. This vulnerability allows an attacker to escape sandboxed applications, such as Flatpak, by exploiting PipeWire's PulseAudio compatibility layer. An attacker with minimal permissions within a sandboxed environment can load a malicious library, leading to arbitrary code execution outside the sandbox and potential compromise of the user's system.",
-      "published": "2026-07-16T14:16:56.070Z",
-      "lastModified": "2026-08-06T22:18:10.437Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00127,
-      "epssPercentile": 0.02747,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-427",
-          "name": "CWE-427",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.18,
-      "tags": [
-        "CWE-427"
       ]
     },
     {
@@ -24300,6 +24207,45 @@
       ]
     },
     {
+      "id": "CVE-2026-64181",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: mm: fix __vm_normal_page() to handle missing support for pmd_special()/pud_special() On x86 32-bit with THP enabled, zap_huge_pmd() is seen to generate a \"WARNING: mm/memory.c:735 at __vm_normal_page+0x6a/0x7d\", from the VM_WARN_ON_ONCE(is_zero_pfn(pfn) || is_huge_zero_pfn(pfn)); followed by \"BUG: Bad rss-counter state\"s, then later \"BUG: Bad page state\"s when reclaim gets to call shrink_huge_zero_folio_scan(). It's as if the _PAGE_SPECIAL bit never got set in the huge_zero pmd: and indeed, whereas pte_special() and pte_mkspecial() are subject to a dedicated CONFIG_ARCH_HAS_PTE_SPECIAL, pmd_special() and pmd_mkspecial() are subject to CONFIG_ARCH_SUPPORTS_PMD_PFNMAP, which is never enabled on any 32-bit architecture. While the problem was exposed through commit d80a9cb1a64a (\"mm/huge_memory: add and use normal_or_softleaf_folio_pmd()\"), it was an oversight in commit af38538801c6 (\"mm/memory: factor out common code from vm_normal_page_*()\") and would result in other problems: * huge zero folio accounted in smaps, pagemap (PAGE_IS_FILE) and numamaps as file-backed THP * folio_walk_start() returning the folio even without FW_ZEROPAGE set. Callers seem to tolerate that, though. ... and triggering the VM_WARN_ON_ONE(), although never reported so far. To fix it, teach vm_normal_page_pmd()/vm_normal_page_pud() to consider whether pmd_special/pud_special is actually implemented.",
+      "published": "2026-07-19T16:18:00.493Z",
+      "lastModified": "2026-08-11T20:07:31.217Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00128,
+      "epssPercentile": 0.02832,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.83,
+      "tags": [
+        "F5",
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-14371",
       "summary": "The Lenovo XClarity Integrator for Windows Admin Center plugin version 5.1.1 and below running on the WAC Gateway is vulnerable to Powershell Command Injection when establishing remote PowerShell commands.",
       "published": "2026-07-16T17:16:55.423Z",
@@ -29113,50 +29059,6 @@
       ]
     },
     {
-      "id": "CVE-2026-56456",
-      "summary": "HCL DFXAnalytics is affected by an Internal File Path Disclosure vulnerability. The application dashboard inadvertently leaks sensitive information regarding its internal file structure and directory paths through unhandled error messages, system logs, or debugging output, which could allow a remote attacker to map the underlying server environment and identify targets for further exploitation.",
-      "published": "2026-07-16T14:16:54.943Z",
-      "lastModified": "2026-07-17T19:11:30.197Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.0024,
-      "epssPercentile": 0.15283,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.39,
-      "tags": [
-        "CWE-200"
-      ]
-    },
-    {
       "id": "CVE-2026-49208",
       "summary": "Symfony UX is a JavaScript ecosystem for Symfony. From 2.8.0 until 2.36.0 and 3.1.0, when a #[LiveProp] is typed as DateTimeInterface and no explicit format is configured, Symfony\\UX\\LiveComponent\\LiveComponentHydrator::hydrateObjectValue() falls back to new $className($value), allowing client-supplied relative strings such as now, tomorrow, or +10 years to move a writable, format-less date prop past time-based business logic checks. This issue is fixed in versions 2.36.0 and 3.1.0.",
       "published": "2026-07-17T17:17:15.380Z",
@@ -30079,94 +29981,6 @@
       "priorityScore": 2.27,
       "tags": [
         "CWE-353"
-      ]
-    },
-    {
-      "id": "CVE-2026-35140",
-      "summary": "HCL DFXAnalytics is affected by a Missing Secure Attribute in Encrypted Session (SSL) Cookie vulnerability. The application fails to set the \"secure\" attribute on session cookies generated during authentication, which could allow a remote attacker to intercept network traffic and capture sensitive cookies, session tokens, or credentials sent in cleartext over unencrypted channels.",
-      "published": "2026-07-16T14:16:50.633Z",
-      "lastModified": "2026-07-17T17:00:19.947Z",
-      "severity": "Low",
-      "cvssScore": 3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:C/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00161,
-      "epssPercentile": 0.05817,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.25,
-      "tags": [
-        "CWE-200"
-      ]
-    },
-    {
-      "id": "CVE-2026-35141",
-      "summary": "HCL DFXAnalytics is affected by a Login Replay Attack vulnerability. The application allows a remote attacker to intercept, delay, or fraudulently retransmit valid authentication data to achieve unauthorized access. To mitigate this risk, the application must implement a mechanism to include timestamps with every message, ensuring that messages exceeding a specific age threshold are automatically rejected by the recipient system.",
-      "published": "2026-07-16T14:16:50.747Z",
-      "lastModified": "2026-07-17T16:44:13.810Z",
-      "severity": "Low",
-      "cvssScore": 2.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:R/S:C/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00192,
-      "epssPercentile": 0.09118,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-294",
-          "name": "CWE-294",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.23,
-      "tags": [
-        "CWE-294"
       ]
     },
     {
@@ -32884,6 +32698,52 @@
       ]
     },
     {
+      "id": "CVE-2026-64183",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: efi: Allocate runtime workqueue before ACPI init Since commit 5894cf571e14 (\"acpi/prmt: Use EFI runtime sandbox to invoke PRM handlers\") ACPI PRM calls are delegated to a workqueue which runs in a kernel thread, making it easier to detect and mitigate faulting memory accesses performed by the firmware. Rafael reports that such PRM accesses may occur before efisubsys_init() executes, which is where the workqueue is allocated, leading to NULL pointer dereferences. Since acpi_init() [which triggers the early PRM accesses] executes as a subsys_initcall() as well, and has its own dependencies that may be sensitive to initcall ordering, deferring acpi_init() is not an option. So instead, split off the workqueue allocation into its own postcore initcall, as this is the only missing piece to allow EFI runtime calls to be made. This ensures that EFI runtime call (including PRM calls) are accessible to all code running at subsys_initcall() level.",
+      "published": "2026-07-19T16:18:00.703Z",
+      "lastModified": "2026-08-11T20:05:55.917Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00119,
+      "epssPercentile": 0.02091,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-476"
+      ]
+    },
+    {
       "id": "CVE-2026-64164",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: btrfs: tracepoints: fix sleep while in atomic context in btrfs_sync_file() The trace event btrfs_sync_file() is called in an atomic context (all trace events are) and its call to dput(), which is needed due to the call to dget_parent(), can sleep, triggering a kernel splat. This can be reproduced by enabling the trace event and running btrfs/056 from fstests for example. The splat shown in dmesg is the following: [53.919] BUG: sleeping function called from invalid context at fs/dcache.c:970 [53.947] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 32773, name: xfs_io [53.988] preempt_count: 2, expected: 0 [53.967] RCU nest depth: 0, expected: 0 [53.943] Preemption disabled at: [53.944] [ ] 0x0 [54.078] CPU: 0 UID: 0 PID: 32773 Comm: xfs_io Tainted: G W 7.1.0-rc1-btrfs-next-232+ #1 PREEMPT(full) [54.070] Tainted: [W]=WARN [54.071] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.2-0-gea1b7a073390-prebuilt.qemu.org 04/01/2014 [54.072] Call Trace: [54.074] [54.076] dump_stack_lvl+0x56/0x80 [54.079] __might_resched.cold+0xd6/0x10f [54.072] dput.part.0+0x24/0x110 [54.078] trace_event_raw_event_btrfs_sync_file+0x75/0x140 [btrfs] [54.089] btrfs_sync_file+0x1ed/0x530 [btrfs] [54.087] ? __handle_mm_fault+0x8ae/0xed0 [54.089] btrfs_do_write_iter+0x172/0x210 [btrfs] [54.091] vfs_write+0x21f/0x450 [54.094] __x64_sys_pwrite64+0x8d/0xc0 [54.096] ? do_user_addr_fault+0x20c/0x670 [54.099] do_syscall_64+0x60/0xf20 [54.092] ? clear_bhb_loop+0x60/0xb0 [54.094] entry_SYSCALL_64_after_hwframe+0x76/0x7e So stop using dget_parent() and dput() and access the parent dentry directly as dentry->d_parent. This is also what ext4 is doing in its equivalent trace event ext4_sync_file_enter().",
       "published": "2026-07-19T16:17:58.450Z",
@@ -33051,6 +32911,242 @@
       "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.99,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64177",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: phonet/pep: disable BH around forwarded sk_receive_skb() The networking receive path is usually run from softirq context, but protocols that take the socket lock may have packets stored in the backlog and processed later from process context. In that case release_sock() -> __release_sock() drops the slock with spin_unlock_bh() and then calls sk->sk_backlog_rcv() with bottom halves enabled. Typical sk_backlog_rcv handlers process the socket whose backlog is being drained, so the BH state at entry is irrelevant for the slocks they touch. pep_do_rcv() is different: when the inbound skb targets an existing PEP pipe, it forwards the skb to a different *child* socket via sk_receive_skb(). That helper takes the child slock with bh_lock_sock_nested(), which is just spin_lock_nested() and assumes BH is already off. The same child slock therefore ends up acquired with BH on (process path) and with BH off (softirq path): process context softirq context --------------- --------------- release_sock(listener) __netif_receive_skb() __release_sock() phonet_rcv() spin_unlock_bh() __sk_receive_skb(listener) [BH now ENABLED] [BH already disabled] sk_backlog_rcv: sk_backlog_rcv: pep_do_rcv() pep_do_rcv() sk_receive_skb(child) sk_receive_skb(child) bh_lock_sock_nested(child) bh_lock_sock_nested(child) => SOFTIRQ-ON-W => IN-SOFTIRQ-W Lockdep flags this as inconsistent lock state, and it can become a real self-deadlock if a softirq on the same CPU tries to receive to the same child socket while its slock is held in the BH-enabled path: WARNING: inconsistent lock state inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage. (slock-AF_PHONET/1){+.?.}-{3:3}, at: __sk_receive_skb+0x1cf/0x900 __sk_receive_skb net/core/sock.c:563 sk_receive_skb include/net/sock.h:2022 [inline] pep_do_rcv net/phonet/pep.c:675 sk_backlog_rcv include/net/sock.h:1190 __release_sock net/core/sock.c:3216 release_sock net/core/sock.c:3815 pep_sock_accept net/phonet/pep.c:879 Wrap the forwarded sk_receive_skb() in local_bh_disable() / local_bh_enable() so the child slock is always acquired with BH off. local_bh_disable() nests safely on the softirq path. Discovered via in-house syzkaller fuzzing; the same root cause also on the linux-6.1.y syzbot dashboard as extid 44f0626dd6284f02663c. Reproduced under KASAN + LOCKDEP + PROVE_LOCKING, reproducer: https://pastebin.com/A3t8xzCR",
+      "published": "2026-07-19T16:17:59.977Z",
+      "lastModified": "2026-08-13T15:32:45.440Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00114,
+      "epssPercentile": 0.01753,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.99,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64179",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: wwan: iosm: fix potential memory leaks in ipc_imem_init() The memory allocated in ipc_protocol_init() is not freed on the error paths that follow in ipc_imem_init(). Fix that by calling the corresponding release function ipc_protocol_deinit() in the error path.",
+      "published": "2026-07-19T16:18:00.277Z",
+      "lastModified": "2026-08-12T15:30:09.310Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00115,
+      "epssPercentile": 0.01783,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.99,
+      "tags": [
+        "Linux",
+        "iOS",
+        "CWE-401"
+      ]
+    },
+    {
+      "id": "CVE-2026-64180",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: mm/memory_hotplug: fix memory block reference leak on remove Patch series \"mm: Fix memory block leaks and locking\", v2. This series fixes two memory block device reference leaks and one locking issue around the per-memory_block hwpoison counter. This patch (of 2): remove_memory_blocks_and_altmaps() looks up each memory block with find_memory_block(), which acquires a reference to the memory block device. That reference is never dropped on this path, resulting in a leaked device reference when removing memory blocks and their altmaps. Drop the reference after retrieving mem->altmap and clearing mem->altmap, before removing the memory block device.",
+      "published": "2026-07-19T16:18:00.397Z",
+      "lastModified": "2026-08-12T15:28:41.917Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00114,
+      "epssPercentile": 0.01733,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.99,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64182",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drivers/base/memory: fix memory block reference leak in poison accounting memblk_nr_poison_inc() and memblk_nr_poison_sub() look up a memory block via find_memory_block_by_id(), which acquires a reference to the memory block device. Both helpers use the returned memory block without dropping that reference, leaking the device reference on each successful lookup. Drop the reference after updating nr_hwpoison.",
+      "published": "2026-07-19T16:18:00.600Z",
+      "lastModified": "2026-08-11T20:06:47.897Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00114,
+      "epssPercentile": 0.01732,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.99,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64184",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: mm/damon/sysfs-schemes: call missing mem_cgroup_iter_break() damon_sysfs_memcg_path_to_id() breaks mem_cgroup_iter() loop without calling mem_cgroup_iter_break(). This leaks the cgroup reference. Fix the issue by calling mem_cgroup_iter_break() before the break. The issue was discovered [1] by Sashiko.",
+      "published": "2026-07-19T16:18:00.817Z",
+      "lastModified": "2026-08-11T20:05:15.660Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00114,
+      "epssPercentile": 0.01734,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.99,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64185",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: sysfs: don't remove existing directory on update failure When sysfs_update_group() is called for a named group and create_files() fails (e.g. -ENOMEM), internal_create_group() calls kernfs_remove(kn) on the group directory. In the update path, kn was obtained via kernfs_find_and_get() and refers to a directory that already existed before this call. Removing it silently destroys a sysfs group that the caller did not create. Only remove the directory if we created it ourselves. On update failure the directory remains as it is left empty by remove_files() inside create_files(), but can be repopulated by a retry.",
+      "published": "2026-07-19T16:18:00.917Z",
+      "lastModified": "2026-08-11T20:04:07.203Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00117,
+      "epssPercentile": 0.0192,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 1.99,
       "tags": [
@@ -37036,50 +37132,6 @@
       ]
     },
     {
-      "id": "CVE-2026-35145",
-      "summary": "HCL DFXAnalytics is affected by a Missing HTTP Strict-Transport-Security Header vulnerability. The application fails to implement the HTTP Strict Transport Security (HSTS) policy within its responses, which could allow a remote attacker to downgrade the communication channel to an unencrypted connection (HTTP) and conduct man-in-the-middle (MitM) attacks. To remediate this, the application must include the \"Strict-Transport-Security\" header in all web application responses.",
-      "published": "2026-07-16T14:16:51.123Z",
-      "lastModified": "2026-07-17T19:03:57.607Z",
-      "severity": "Low",
-      "cvssScore": 3.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00173,
-      "epssPercentile": 0.06958,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.33,
-      "tags": [
-        "CWE-200"
-      ]
-    },
-    {
       "id": "CVE-2026-55629",
       "summary": "Whistle is an HTTP, HTTP2, HTTPS, and WebSocket debugging proxy. Prior to 2.10.3, lib/service/service.js handles GET /cgi-bin/temp/get by reading req.query.filename, joining it to TEMP_FILES_PATH only when it matches the temporary file pattern, and otherwise passing the user-supplied filename directly to getFile, allowing a remote attacker to read arbitrary files such as /etc/passwd. This issue is reported as fixed in version 2.10.3.",
       "published": "2026-07-16T20:16:45.577Z",
@@ -37599,50 +37651,6 @@
       ]
     },
     {
-      "id": "CVE-2026-35142",
-      "summary": "HCL DFXAnalytics is affected by an Internal IP Address Disclosure vulnerability. The application includes internal IP address details within its generated server responses, which could allow a remote attacker to gather sensitive network topology information and use it to map the internal infrastructure for further targeted attacks.",
-      "published": "2026-07-16T14:16:50.863Z",
-      "lastModified": "2026-07-17T16:27:03.640Z",
-      "severity": "Low",
-      "cvssScore": 2.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:R/S:C/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00183,
-      "epssPercentile": 0.08139,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.19,
-      "tags": [
-        "CWE-200"
-      ]
-    },
-    {
       "id": "CVE-2026-64070",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: powerpc/hv-gpci: fix preempt count leak in sysfs show paths Four sysfs show() callbacks in hv-gpci take get_cpu_var(hv_gpci_reqb) (which calls preempt_disable()) but only call the matching put_cpu_var() on the error path under the 'out:' label. Every successful read leaks one preempt_disable(): processor_bus_topology_show() processor_config_show() affinity_domain_via_virtual_processor_show() affinity_domain_via_domain_show() (affinity_domain_via_partition_show() was already correct.) On a CONFIG_PREEMPT=y kernel, repeated reads raise preempt_count and eventually return to userspace with preemption still disabled. The next user-mode page fault then hits faulthandler_disabled() == 1, gets forced to SIGSEGV, and the resulting coredump trips 'BUG: scheduling while atomic' in call_usermodehelper_exec -> wait_for_completion_state -> schedule: BUG: scheduling while atomic: / /0x00000004 ... __schedule_bug+0x6c/0x90 __schedule+0x58c/0x13a0 schedule+0x48/0x1a0 schedule_timeout+0x104/0x170 wait_for_completion_state+0x16c/0x330 call_usermodehelper_exec+0x254/0x2d0 vfs_coredump+0x1050/0x2590 get_signal+0xb9c/0xc80 do_notify_resume+0xf8/0x470 Add an out_success label that calls put_cpu_var() before returning the byte count, mirroring affinity_domain_via_partition_show().",
       "published": "2026-07-19T16:17:47.583Z",
@@ -37728,56 +37736,6 @@
       "tags": [
         "CWE-310",
         "CWE-312"
-      ]
-    },
-    {
-      "id": "CVE-2026-35143",
-      "summary": "HCL DFXAnalytics is affected by a Missing SameSite Attribute vulnerability. The application fails to set the \"SameSite\" attribute on session cookies generated during authentication, which could allow a remote attacker to execute Cross-Site Request Forgery (CSRF) attacks if additional mitigations, such as Anti-CSRF tokens, are not implemented.",
-      "published": "2026-07-16T14:16:50.973Z",
-      "lastModified": "2026-07-17T16:22:20.560Z",
-      "severity": "Low",
-      "cvssScore": 3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:C/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00108,
-      "epssPercentile": 0.01393,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-352",
-          "name": "Cross-Site Request Forgery",
-          "description": "A web request may execute without user intent."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.1,
-      "tags": [
-        "CWE-200",
-        "CWE-352"
       ]
     },
     {
