@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-15T21:46:38.051Z",
+  "generatedAt": "2026-08-15T22:23:41.948Z",
   "count": 1000,
   "items": [
     {
@@ -572,52 +572,6 @@
       ]
     },
     {
-      "id": "CVE-2026-53412",
-      "summary": "Improper Input Validation in Zoom Desktop Client for Windows, Zoom VDI Client for Windows, and Zoom Meeting SDK for Windows may allow an unauthenticated user to conduct an account takeover via network access.",
-      "published": "2026-07-16T22:17:31.380Z",
-      "lastModified": "2026-08-11T23:59:07.277Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00647,
-      "epssPercentile": 0.4802,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-20",
-          "name": "CWE-20",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 6.11,
-      "tags": [
-        "F5",
-        "Windows",
-        "CWE-20"
-      ]
-    },
-    {
       "id": "CVE-2026-63978",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net/handshake: Drain pending requests at net namespace exit The arguments to list_splice_init() in handshake_net_exit() are reversed. The call moves the local empty \"requests\" list onto hn->hn_requests, leaving the local list empty, so the subsequent drain loop runs zero iterations. Pending handshake requests that had not yet been accepted are not torn down when the net namespace is destroyed; each one keeps a reference on a socket file and on the handshake_req allocation. Pass the source and destination in the documented order (list_splice_init(list, head) moves list onto head) so the pending list is transferred to the local scratch list and drained through handshake_complete(). Fixing the splice direction exposes a list-corruption race. After the splice each req->hr_list still has non-empty link pointers, threading the stack-local scratch list rather than hn_requests. A concurrent handshake_req_cancel() -- for example, from sunrpc's TLS timeout on a kernel socket whose netns reference was not taken -- finds the request through the rhashtable, calls remove_pending(), and sees !list_empty(&req->hr_list). __remove_pending_locked() then list_del_init()s an entry off the scratch list while the drain iterates, corrupting it. The same call arriving after the drain loop has run list_del() on an entry hits LIST_POISON instead. Have remove_pending() check HANDSHAKE_F_NET_DRAINING under hn_lock and report not-found when drain is in progress. The drain has already taken ownership; handshake_complete()'s existing test_and_set on HANDSHAKE_F_REQ_COMPLETED still arbitrates between drain and cancel for who calls the consumer's hp_done. Use list_del_init() rather than list_del() in the drain so req->hr_list does not carry LIST_POISON after drain releases the entry. The DRAINING guard in remove_pending() makes cancel return false, but cancel still falls through to test_and_set_bit on HANDSHAKE_F_REQ_COMPLETED and drops the request's hr_file reference. Without another pin, if that is the last reference, sk_destruct frees the request while it is still linked on the drain loop's local list. Pin each request's hr_file under hn_lock before releasing the list, and drop that drain pin after the loop finishes with the request.",
       "published": "2026-07-19T16:17:16.957Z",
@@ -653,6 +607,50 @@
       "priorityScore": 6.06,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-41252",
+      "summary": "xrdp is an open source RDP server. Versions 0.10.6 and prior contain a missing bounds check in xrdp, which allows a heap-based buffer overflow when operating in vnc-any mode. The issue occurs during the handling of RFB protocol color map messages from a VNC server, where incoming color indices are not properly validated. A malicious VNC server can exploit this flaw by sending crafted messages with out-of-range values, leading to an out-of-bounds write on the heap. This memory corruption can result in a denial of service (DoS) or potentially allow remote code execution (RCE) prior to authentication. This issue has been fixed in version 0.10.6.1.",
+      "published": "2026-07-20T17:17:08.310Z",
+      "lastModified": "2026-07-23T05:16:30.397Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00609,
+      "epssPercentile": 0.46258,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-122",
+          "name": "CWE-122",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.05,
+      "tags": [
+        "CWE-122"
       ]
     },
     {
@@ -1250,6 +1248,50 @@
       ]
     },
     {
+      "id": "CVE-2026-44178",
+      "summary": "xrdp is an open source RDP server. Versions 0.10.6 and prior contain a heap-based buffer overflow vulnerability within the virtual channel forwarding mechanism. When forwarding data from a remote client to the internal channel server, the xrdp process utilizes a fixed-size buffer without adequate bounds checking on the incoming payload. An authenticated remote attacker can exploit this flaw by sending a specially crafted virtual channel message that exceeds the buffer capacity, leading to heap memory corruption. This may result in a denial of service or the execution of arbitrary code with the privileges of the xrdp process. This issue has been fixed in version 0.10.6.1.",
+      "published": "2026-07-20T17:17:09.060Z",
+      "lastModified": "2026-07-23T05:16:31.087Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00512,
+      "epssPercentile": 0.41247,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-122",
+          "name": "CWE-122",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.52,
+      "tags": [
+        "CWE-122"
+      ]
+    },
+    {
       "id": "CVE-2026-63913",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: netfilter: conntrack: tcp: do not force CLOSE on invalid-seq RST without direction check An unintended behavior in the TCP conntrack state machine allows a connection to be forced into the CLOSE state using an RST packet with an invalid sequence number. Specifically, after a SYN packet is observed, an RST with an invalid SEQ can transition the conntrack entry to TCP_CONNTRACK_CLOSE, regardless of whether the RST corresponds to the expected reply direction. The relevant code path assumes the RST is a response to an outgoing SYN, but does not validate packet direction or ensure that a matching SYN was actually sent in the opposite direction. As a result, a crafted packet sequence consisting of a SYN followed by an invalid-sequence RST can prematurely terminate an active NAT entry. This makes connection teardown easier than intended. So, tighten the state transition logic to ensure that RST-triggered CLOSE transitions only occur when the RST is a valid response to a previously observed SYN in the correct direction.",
       "published": "2026-07-19T16:17:09.237Z",
@@ -1734,6 +1776,50 @@
       "tags": [
         "VMware",
         "CWE-94"
+      ]
+    },
+    {
+      "id": "CVE-2026-35048",
+      "summary": "The Piwigo installer in versions 16.3.0 and earlier accepts POST parameters for database configuration and writes them directly into a PHP configuration file without proper sanitization. On PHP 8+, the `addslashes()` protection is bypassed because it checks for `get_magic_quotes_gpc()`, a function removed in PHP 8.0. This allows raw user input to be interpolated directly into PHP source code. An unauthenticated attacker can inject arbitrary PHP code through POST parameters (prefix, dbpasswd, dbhost, dbname, or dbuser), which gets written to `local/config/database.inc.php` and executed on every page load.",
+      "published": "2026-07-20T17:17:06.840Z",
+      "lastModified": "2026-07-21T20:27:18.523Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00322,
+      "epssPercentile": 0.24992,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-20",
+          "name": "CWE-20",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.3,
+      "tags": [
+        "CWE-20"
       ]
     },
     {
@@ -2994,6 +3080,50 @@
       ]
     },
     {
+      "id": "CVE-2026-41521",
+      "summary": "xrdp is an open source RDP server. Versions 0.10.6 and prior contain an integer overflow vulnerability when processing screen update messages within the vnc-any connection mode. A malicious remote VNC server can send crafted image dimensions that cause an integer overflow during memory buffer size calculation, resulting in an undersized allocation. Subsequent processing of the incoming image data using the original oversized parameters leads to an out-of-bounds read. An unauthenticated remote attacker could exploit this flaw to disclose sensitive information from the heap memory or cause a denial of service (DoS) via a process crash. This issue has been fixed in version 0.10.6.1.",
+      "published": "2026-07-20T17:17:08.460Z",
+      "lastModified": "2026-07-22T20:07:10.620Z",
+      "severity": "High",
+      "cvssScore": 8.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00392,
+      "epssPercentile": 0.32335,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-190",
+          "name": "CWE-190",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5,
+      "tags": [
+        "CWE-190"
+      ]
+    },
+    {
       "id": "CVE-2026-12701",
       "summary": "A path traversal vulnerability was found in pulpcore. The relative_path_validator function only verifies that content paths do not begin with \"/\" but fails to block directory traversal sequences such as \"../\" anywhere in the path. An authenticated administrator can craft a relative_path containing embedded traversal sequences (e.g., \"looking/normal/../../../../etc/shadow\") that escapes the intended export directory during FilesystemExport operations. Because the file content is also user-controlled (uploaded artifact), this allows arbitrary file write to any location writable by the Pulp service user, potentially leading to service compromise or further system exploitation.",
       "published": "2026-07-20T15:16:34.333Z",
@@ -3074,53 +3204,6 @@
       "tags": [
         "Linux",
         "GitHub"
-      ]
-    },
-    {
-      "id": "CVE-2026-44180",
-      "summary": "Jupyter Enterprise Gateway launches remote Jupyter Notebook kernels across distributed clusters like Apache Spark, Kubernetes, and Docker Swarm. Versions 2.0.0rc1 and above prior to 3.3.0 have a prohibited UID and GID feature that by default prevents launching kernels with UID or GID 0 (root), and this restriction can be bypassed using a specially crafted KERNEL_UID or KERNEL_GID value. This input validation vulnerability allows running Jupyter kernels as root, which can be dangerous as it allows more attack surface, and may lead to container escapes, compromising the worker node and all workloads running on it. Repeated exploitation can compromise all worker nodes, and thus the entire Kubernetes cluster. It is possible to specify volume mounts, so one vector for a container escape is to use a hostPath R/W volume mount, use this UID/GID bypass to run as root, and then gain code execution in the underlying worker node by creating a crontab entry in the mounted host file system. This issue has been fixed in version 3.0.0.",
-      "published": "2026-07-16T22:17:02.237Z",
-      "lastModified": "2026-08-05T15:55:52.833Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00552,
-      "epssPercentile": 0.43544,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Apache",
-      "product": "Apache",
-      "cwe": [
-        {
-          "id": "CWE-20",
-          "name": "CWE-20",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.95,
-      "tags": [
-        "Apache",
-        "Kubernetes",
-        "Docker",
-        "CWE-20"
       ]
     },
     {
@@ -7808,6 +7891,50 @@
       ]
     },
     {
+      "id": "CVE-2026-32825",
+      "summary": "dataCycle is a data management system for centrally storing, managing, searching, finding, and distributing data. In dataCycle-CORE, the module handling core processing and framework rules, before and including version 25.07.3, the application accepts unlimited password guesses against both the browser login flow and the JSON login endpoint. The source code enables Devise's `:lockable` module on the user model but explicitly disables both lock and unlock strategies, and no request throttling or rate-limiting layer was identified in the Rails code. This creates a direct online password-guessing risk: - valid user accounts can be attacked continuously without temporary lockout - the same weakness is reachable through both `/users/sign_in` and `/api/v4/auth/login` - successful guessing yields a normal session cookie in the HTML flow or a fresh JWT in the API flow - the API endpoint is especially attractive for automation because it requires no CSRF token This has been patched in version 26.06.08.",
+      "published": "2026-07-20T17:17:06.140Z",
+      "lastModified": "2026-07-21T19:35:17.130Z",
+      "severity": "High",
+      "cvssScore": 7.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00296,
+      "epssPercentile": 0.2217,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-307",
+          "name": "CWE-307",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.33,
+      "tags": [
+        "CWE-307"
+      ]
+    },
+    {
       "id": "CVE-2026-62201",
       "summary": "OpenClaw versions before 2026.6.6 contain a network policy bypass vulnerability in the sandbox exec-server that allows lower-trust callers to reach internal network destinations blocked by OpenClaw policy. Attackers can send HTTP requests through the exec-server to access network resources that should have been restricted by configured policies.",
       "published": "2026-07-17T02:18:06.170Z",
@@ -8435,50 +8562,6 @@
       "tags": [
         "CWE-74",
         "CWE-89"
-      ]
-    },
-    {
-      "id": "CVE-2026-57075",
-      "summary": "YAML::Syck versions before 1.47 for Perl allow an out-of-bounds read via a signed-char lookup-table index in syck_base64dec. The base64 decoder in the bundled libsyck indexes the 256-entry static table b64_xtable with a signed char, so any !!binary byte >= 0x80 sign-extends to a negative index and reads before the table. The decoder receives the raw bytes of any !!binary node, a standard YAML type not gated by $LoadBlessed or $LoadCode, so it is reached on the default Load path. Any caller that runs Load or LoadFile on an untrusted document containing a !!binary scalar with a high-bit byte triggers the read, and the value read can surface in the decoded result.",
-      "published": "2026-07-16T22:17:43.447Z",
-      "lastModified": "2026-07-17T15:07:41.947Z",
-      "severity": "Critical",
-      "cvssScore": 9.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00374,
-      "epssPercentile": 0.30582,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.26,
-      "tags": [
-        "CWE-125"
       ]
     },
     {
@@ -9423,6 +9506,50 @@
       "priorityScore": 4.12,
       "tags": [
         "CWE-770"
+      ]
+    },
+    {
+      "id": "CVE-2026-46701",
+      "summary": "Network-AI is a TypeScript/Node.js multi-agent orchestrator. Prior to version 5.4.5, the MCP SSE server defaults to an empty secret (`process.env['NETWORK_AI_MCP_SECRET'] ?? ''` at `bin/mcp-server.ts:89`), which causes `_isAuthorized` (`lib/mcp-transport-sse.ts:254`) to return `true` unconditionally for every request — no `Authorization` header is required. Simultaneously, `_handleRequest` sets `Access-Control-Allow-Origin: *` (`lib/mcp-transport-sse.ts:272`) on every response, so a cross-origin browser fetch can read the result without restriction. An unauthenticated attacker who can lure a user to a malicious web page can invoke all 22 exposed MCP tools — including `config_set`, `agent_spawn`, and `blackboard_write` — against a default-configured localhost server. Version 5.4.5 patches the issue.",
+      "published": "2026-07-20T17:17:09.990Z",
+      "lastModified": "2026-08-13T15:33:56.003Z",
+      "severity": "High",
+      "cvssScore": 7.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:H/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "High",
+        "availability": "Low"
+      },
+      "epssScore": 0.00223,
+      "epssPercentile": 0.13205,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-346",
+          "name": "CWE-346",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.12,
+      "tags": [
+        "CWE-346"
       ]
     },
     {
@@ -10808,6 +10935,64 @@
       ]
     },
     {
+      "id": "CVE-2026-46555",
+      "summary": "WhatsApp MCP Server is a Model Context Protocol (MCP) server for WhatsApp, enabling Claude to read and send WhatsApp messages. Prior to version 0.2.1, the `whatsapp-bridge` HTTP API listens on `127.0.0.1:8080` without authentication and without Host header validation, and the `/api/send` endpoint accepts an absolute `media_path` parameter without confining it to a safe directory. Combined, these issues allow any local process running as the same user as the bridge to send WhatsApp messages from the paired account without authorization; the same caller to read arbitrary files readable by the user (e.g. SSH private keys, browser session data, source code, dotfiles) and exfiltrate them as WhatsApp document attachments; and/or a remote attacker to trigger the same operations via DNS rebinding from a webpage the user visits, since no Host header validation is performed. In MCP environments, \"local caller\" extends beyond processes the user explicitly launched — sibling MCP servers, IDE extensions, and tool-triggered flows running in the user's session can act as the effective caller. This issue is fixed in whatsapp-mcp v0.2.1 and corresponding Docker images / release artifacts. Users should upgrade immediately. The fix introduces bearer token authentication on the bridge HTTP API (configured via environment variable, required on all requests, validated with constant-time comparison); host header allow-list validation to prevent DNS rebinding; and confinement of `media_path` to a configured directory, with rejection of absolute paths outside the root and path traversal sequences. This is a breaking change for clients of the bridge API. For users who cannot immediately upgrade: Stop the bridge, or block loopback access to port 8080, when the bridge is not actively in use; avoid running the bridge alongside untrusted MCP servers, browser extensions, or other untrusted local processes; avoid browsing untrusted sites while the bridge is running (DNS rebinding mitigation); and/or run the bridge under a dedicated user account or in a sandbox/container with no access to sensitive files.",
+      "published": "2026-07-20T17:17:09.820Z",
+      "lastModified": "2026-07-23T18:04:42.997Z",
+      "severity": "High",
+      "cvssScore": 7.7,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00187,
+      "epssPercentile": 0.08629,
+      "isKev": false,
+      "kev": null,
+      "vendor": "SAP",
+      "product": "Docker",
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        },
+        {
+          "id": "CWE-306",
+          "name": "CWE-306",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-346",
+          "name": "CWE-346",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4,
+      "tags": [
+        "SAP",
+        "Docker",
+        "CWE-22",
+        "CWE-306",
+        "CWE-346"
+      ]
+    },
+    {
       "id": "CVE-2026-63884",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/i915: Fix potential UAF in TTM object purge TLDR: The bo->ttm object might be changed by calling ttm_bo_validate(), move casting it to an i915_tt object later to actually get the right pointer. A user reported hitting the following bug under heavy use on DG2: [26620.095550] Oops: general protection fault, probably for non-canonical address 0xa56b6b6b6b6b6b8b: 0000 1 SMP NOPTI [26620.095556] CPU: 2 UID: 0 PID: 631 Comm: Xorg Not tainted 6.18.8 #1 PREEMPT(lazy) [26620.095558] Hardware name: ASRock B850M Steel Legend WiFi/B850M Steel Legend WiFi, BIOS 3.50 09/18/2025 [26620.095559] RIP: 0010:i915_ttm_purge+0x84/0x100 [i915] [26620.095604] Code: 00 00 00 48 8d 54 24 10 48 89 e6 48 89 fb e8 83 aa ae ff 85 c0 75 6f 48 83 bb a8 01 00 00 00 74 2c 48 8b 45 78 48 85 c0 74 23 8b 78 20 48 c7 c2 ff ff ff ff 31 f6 e8 7a 73 e3 e0 48 8b 7d 78 [26620.095605] RSP: 0018:ffffc90005fd7430 EFLAGS: 00010282 [26620.095607] RAX: a56b6b6b6b6b6b6b RBX: ffff8881f46c3dc0 RCX: 0000000000000000 [26620.095608] RDX: 0000000000000000 RSI: 0000000000000246 RDI: 00000000ffffffff [26620.095609] RBP: ffff888289610f00 R08: 0000000000000001 R09: ffff88823b022000 [26620.095609] R10: ffff888103029b28 R11: ffff8881fc7f3800 R12: ffff88810b6150d0 [26620.095609] R13: ffff888289610f00 R14: 0000000000000000 R15: ffff8881f46c3dc0 [26620.095610] FS: 00007f1004d86900(0000) GS:ffff88901c858000(0000) knlGS:0000000000000000 [26620.095611] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033 [26620.095611] CR2: 00007f0fdf489000 CR3: 000000035b0c1000 CR4: 0000000000750ef0 [26620.095612] PKRU: 55555554 [26620.095612] Call Trace: [26620.095615] [26620.095615] i915_ttm_move+0x2b9/0x420 [i915] [26620.095642] ? ttm_tt_init+0x65/0x80 [ttm] [26620.095644] ? i915_ttm_tt_create+0xc6/0x150 [i915] [26620.095667] ttm_bo_handle_move_mem+0xb6/0x160 [ttm] [26620.095669] ttm_bo_evict+0x100/0x150 [ttm] [26620.095671] ? preempt_count_add+0x64/0xa0 [26620.095673] ? _raw_spin_lock+0xe/0x30 [26620.095675] ? _raw_spin_unlock+0xd/0x30 [26620.095675] ? i915_gem_object_evictable+0xb7/0xd0 [i915] [26620.095704] ttm_bo_evict_cb+0x6e/0xd0 [ttm] [26620.095705] ttm_lru_walk_for_evict+0xa6/0x200 [ttm] [26620.095708] ttm_bo_alloc_resource+0x185/0x4f0 [ttm] [26620.095709] ? init_object+0x62/0xd0 [26620.095712] ttm_bo_validate+0x7a/0x180 [ttm] [26620.095713] ? _raw_spin_unlock_irqrestore+0x16/0x30 [26620.095714] __i915_ttm_get_pages+0xb0/0x170 [i915] [26620.095737] i915_ttm_get_pages+0x9f/0x150 [i915] [26620.095759] ? i915_gem_do_execbuffer+0xedc/0x2b40 [i915] [26620.095786] ? alloc_debug_processing+0xd0/0x100 [26620.095787] ? _raw_spin_unlock_irqrestore+0x16/0x30 [26620.095788] ? i915_vma_instance+0xa0/0x4e0 [i915] [26620.095822] __i915_gem_object_get_pages+0x2f/0x40 [i915] [26620.095848] i915_vma_pin_ww+0x706/0x980 [i915] [26620.095875] ? i915_gem_do_execbuffer+0xedc/0x2b40 [i915] [26620.095904] eb_validate_vmas+0x170/0xa00 [i915] [26620.095930] i915_gem_do_execbuffer+0x1201/0x2b40 [i915] [26620.095953] ? alloc_debug_processing+0xd0/0x100 [26620.095954] ? _raw_spin_unlock_irqrestore+0x16/0x30 [26620.095955] ? i915_gem_execbuffer2_ioctl+0xc9/0x240 [i915] [26620.095977] ? __wake_up_sync_key+0x32/0x50 [26620.095979] ? i915_gem_execbuffer2_ioctl+0xc9/0x240 [i915] [26620.096001] ? __slab_alloc.isra.0+0x67/0xc0 [26620.096003] i915_gem_execbuffer2_ioctl+0x11a/0x240 [i915] Results from decode_stacktrace.sh pointed to dereference of a file pointer field of a i915 TTM page vector container associated with an object being purged on eviction. That path is taken when the object is marked as no longer needed. Code analysis revealed a possibility of the i915 TTM page vector container being replaced with a new instance inside a function that purges content of the object, should it be still busy. That function is called, indirectly via a more general function that changes the object's placement and caching policy, ---truncated---",
       "published": "2026-07-19T16:17:05.463Z",
@@ -11480,52 +11665,6 @@
       "priorityScore": 3.92,
       "tags": [
         "CWE-269"
-      ]
-    },
-    {
-      "id": "CVE-2026-59117",
-      "summary": "Integer overflow or wraparound in Windows Terminal allows an unauthorized attacker to execute code over a network.",
-      "published": "2026-07-16T22:17:52.597Z",
-      "lastModified": "2026-07-30T19:18:33.460Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00442,
-      "epssPercentile": 0.3678,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Microsoft",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-190",
-          "name": "CWE-190",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.91,
-      "tags": [
-        "Microsoft",
-        "Windows",
-        "CWE-190"
       ]
     },
     {
@@ -13024,58 +13163,6 @@
       ]
     },
     {
-      "id": "CVE-2026-58598",
-      "summary": "Concurrent execution using shared resource with improper synchronization ('race condition') in Windows Backup Engine allows an authorized attacker to elevate privileges locally.",
-      "published": "2026-07-16T22:17:50.330Z",
-      "lastModified": "2026-07-22T18:19:14.430Z",
-      "severity": "High",
-      "cvssScore": 7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00188,
-      "epssPercentile": 0.0871,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Microsoft",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-362",
-          "name": "CWE-362",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.75,
-      "tags": [
-        "Microsoft",
-        "Windows",
-        "CWE-362",
-        "CWE-416"
-      ]
-    },
-    {
       "id": "CVE-2026-16209",
       "summary": "A vulnerability has been found in Gerapy up to 0.9.13. The impacted element is an unknown function of the file gerapy/server/core/views.py of the component Project Upload Endpoint. Such manipulation leads to missing authentication. The attack may be launched remotely. The exploit has been disclosed to the public and may be used. The name of the patch is bd4891c60315f17611a3b7a651ffe0fba7cfe71e. Applying a patch is advised to resolve this issue.",
       "published": "2026-07-19T04:17:03.983Z",
@@ -13299,6 +13386,51 @@
       "priorityScore": 3.72,
       "tags": [
         "CWE-918"
+      ]
+    },
+    {
+      "id": "CVE-2026-39879",
+      "summary": "Due to a missing sanitization call in [`afsql_dd_run_query`](https://github.com/syslog-ng/syslog-ng/blob/649e6e18e3459fb4467000a88dfb12fa97f9719c/modules/afsql/afsql.c#L219), syslog-ng before 4.12 are vulnerable to SQL injection from an untrusted source. This is not part of the default configuration, the SQL driver has to be manually configured. Fixes are in syslog-ng 4.12, syslog-ng Premium Edition 8.2 and syslog-ng Store Box 7.8",
+      "published": "2026-07-20T17:17:07.550Z",
+      "lastModified": "2026-07-23T16:04:11.740Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "High"
+      },
+      "epssScore": 0.00172,
+      "epssPercentile": 0.06842,
+      "isKev": false,
+      "kev": null,
+      "vendor": "GitHub",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-150",
+          "name": "CWE-150",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.72,
+      "tags": [
+        "GitHub",
+        "CWE-150"
       ]
     },
     {
@@ -13571,6 +13703,56 @@
       "priorityScore": 3.7,
       "tags": [
         "CWE-22"
+      ]
+    },
+    {
+      "id": "CVE-2026-44978",
+      "summary": "xrdp is an open source RDP server. Versions 0.10.6 and prior contain a heap out-of-bounds read vulnerability within the FIPS-specific receive paths. This vulnerability does not affect the default configuration of xrdp. The vulnerability is only exploitable when the security layer is set to security_layer=negotiate or security_layer=rdp, and the crypto level is changed to crypt_level=fips in xrdp.ini. In this specific non-default mode, the server fails to validate the FIPS padding length field, leading to a pointer underflow and a subsequent negative length calculation. An unauthenticated remote attacker can exploit this by sending a crafted FIPS-protected PDU, causing a heap out-of-bounds read that results in a process crash and denial of service (DoS). However, since xrdp forks a new process for each connection by default, an out-of-bounds read causing a process crash is unlikely to bring down the entire xrdp service. This issue has been fixed in version 0.10.6.1.",
+      "published": "2026-07-20T17:17:09.370Z",
+      "lastModified": "2026-07-22T20:08:31.313Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00314,
+      "epssPercentile": 0.242,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-20",
+          "name": "CWE-20",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.7,
+      "tags": [
+        "CWE-20",
+        "CWE-125"
       ]
     },
     {
@@ -15945,6 +16127,50 @@
       ]
     },
     {
+      "id": "CVE-2026-42218",
+      "summary": "xrdp is an open source RDP server. Versions 0.10.6 and prior contain a timing side-channel vulnerability in the login interface. Due to a discrepancy in response processing times, a remote attacker can infer the existence of a username on the system, leading to unauthorized information disclosure via username enumeration. This issue has been fixed in version 0.10.6.1.",
+      "published": "2026-07-20T17:17:08.733Z",
+      "lastModified": "2026-07-22T20:07:40.953Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.0025,
+      "epssPercentile": 0.16666,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-204",
+          "name": "CWE-204",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.44,
+      "tags": [
+        "CWE-204"
+      ]
+    },
+    {
       "id": "CVE-2026-48015",
       "summary": "Shopware is an open commerce platform. Prior to 6.6.10.18 and 6.7.10.1, SVG files are in the allowed_extensions whitelist in src/Core/Framework/Resources/config/packages/shopware.yaml and can be uploaded via the media manager without SVG content sanitization in the upload pipeline from MediaUploadController to FileSaver to TypeDetector, allowing malicious SVG JavaScript such as onload, , and to execute in the Shopware domain when the uploaded SVG is viewed. This issue is fixed in versions 6.6.10.18 and 6.7.10.1.",
       "published": "2026-07-17T18:17:16.323Z",
@@ -17331,51 +17557,6 @@
       "priorityScore": 3.26,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-14782",
-      "summary": "The Booking for Appointments and Events Calendar – Amelia plugin for WordPress is vulnerable to SQL Injection via the Customer Import in all versions up to, and including, 2.4.3 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers, with wpamelia-manager role, to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.",
-      "published": "2026-07-16T22:16:59.753Z",
-      "lastModified": "2026-07-17T14:59:38.667Z",
-      "severity": "Medium",
-      "cvssScore": 4.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.0024,
-      "epssPercentile": 0.15338,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.25,
-      "tags": [
-        "WordPress",
-        "CWE-89"
       ]
     },
     {
@@ -20495,6 +20676,56 @@
       ]
     },
     {
+      "id": "CVE-2026-40187",
+      "summary": "In egroupware version 26.0 and earlier, an authenticated administrator can achieve OS-level Remote Code Execution (RCE) by uploading a malicious eTemplate XML file (`.xet`) to the VFS `/etemplates` mount. The `Widget::expand_name()` method passes template widget attribute values directly into a PHP `eval()` call with only double-quote escaping applied - **backtick characters are not escaped**. In PHP, backticks inside a double-quoted `eval()` string execute shell commands. This allows an admin-level user to escalate from web application access to arbitrary OS command execution on the server.",
+      "published": "2026-07-20T17:17:07.690Z",
+      "lastModified": "2026-07-23T18:04:31.947Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00933,
+      "epssPercentile": 0.57722,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-78",
+          "name": "OS Command Injection",
+          "description": "Improper neutralization of special elements used in OS commands."
+        },
+        {
+          "id": "CWE-95",
+          "name": "CWE-95",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.02,
+      "tags": [
+        "CWE-78",
+        "CWE-95"
+      ]
+    },
+    {
       "id": "CVE-2026-64151",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: iommupt: Check for missing PAGE_SIZE in the pgsize_bitmap Sashiko pointed out that the driver could drop PAGE_SIZE from the pgsize_bitmap. That is technically allowed but nothing does it, and such an iommu_domain would not be used with the DMA API today. Still, it is against the design and it is trivial to fix up. Lift the PT_WARN_ON to the if branch and just skip the fast path.",
       "published": "2026-07-19T16:17:57.070Z",
@@ -22804,51 +23035,6 @@
       ]
     },
     {
-      "id": "CVE-2026-53411",
-      "summary": "A time-of-check to time-of-use (TOCTOU) race condition in the installation and uninstallation process of certain Zoom Clients for Windows could allow an authenticated local user to escalate privileges.",
-      "published": "2026-07-16T22:17:31.267Z",
-      "lastModified": "2026-08-12T00:03:23.660Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00132,
-      "epssPercentile": 0.03165,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-20",
-          "name": "CWE-20",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.84,
-      "tags": [
-        "Windows",
-        "CWE-20"
-      ]
-    },
-    {
       "id": "CVE-2026-16008",
       "summary": "A security vulnerability has been detected in sagold json-schema-library 11.5.0/11.5.1. This impacts the function parsePropertyDependencies of the file src/keywords/propertyDependencies.ts. The manipulation leads to improperly controlled modification of object prototype attributes. The attack can be initiated remotely. Upgrading to version 11.6.0 will fix this issue. The identifier of the patch is 432287ee6f68a02ce6f015354618486ec427a32d. It is advisable to upgrade the affected component.",
       "published": "2026-07-17T11:17:13.080Z",
@@ -23072,50 +23258,6 @@
       "priorityScore": 2.84,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-57077",
-      "summary": "YAML::Syck versions before 1.47 for Perl allow an out-of-bounds read via an unbounded newline scan in newline_len. In the bundled libsyck newline_len and is_newline dereference the scan pointer, and the following byte for a \"\\r\\n\" pair, with no NUL-terminator or bounds check. During block-scalar lexing at a document boundary the scan runs one byte past the heap lexer buffer. This is an incomplete fix of CVE-2025-11683, on a lexer path the earlier fix did not cover. Any caller that runs Load or LoadFile on an untrusted document with a block scalar at a document boundary reaches the over-read.",
-      "published": "2026-07-16T22:17:43.650Z",
-      "lastModified": "2026-07-17T15:07:41.947Z",
-      "severity": "High",
-      "cvssScore": 7.7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00141,
-      "epssPercentile": 0.03942,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.83,
-      "tags": [
-        "CWE-125"
       ]
     },
     {
@@ -24760,50 +24902,6 @@
       "tags": [
         "F5",
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-57076",
-      "summary": "YAML::Syck versions before 1.47 for Perl allow a heap use-after-free via an anchor name reused as an anchors-table key in syck_hdlr_add_anchor. In the bundled libsyck an anchor name allocated by syck_strndup is stored both as node->anchor, freed when the node is freed, and as the key in the parser's anchors table. Freeing the node frees the shared key, and a later anchor redefinition makes st_delete compare against the freed key, so st_strcmp reads freed heap memory. Anchors are a standard YAML feature and need no special flags, so this is reached on the default Load path. Any caller that runs Load or LoadFile on an untrusted document that redefines an anchor reaches the read of freed memory.",
-      "published": "2026-07-16T22:17:43.550Z",
-      "lastModified": "2026-07-17T15:07:41.947Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00125,
-      "epssPercentile": 0.02581,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.82,
-      "tags": [
-        "CWE-416"
       ]
     },
     {
@@ -27177,52 +27275,6 @@
       ]
     },
     {
-      "id": "CVE-2026-58643",
-      "summary": "Improper neutralization of input during web page generation ('cross-site scripting') in Windows Admin Center allows an unauthorized attacker to perform spoofing over a network.",
-      "published": "2026-07-16T22:17:52.370Z",
-      "lastModified": "2026-08-14T17:19:23.847Z",
-      "severity": "Medium",
-      "cvssScore": 6.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00235,
-      "epssPercentile": 0.14658,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Microsoft",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": true,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.65,
-      "tags": [
-        "Microsoft",
-        "Windows",
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-44452",
       "summary": "h2o is an HTTP server with support for HTTP/1.x, HTTP/2 and HTTP/3. Prior to commit 8dc37cb, when h2o receives a ClientHello message over TLS or QUIC and it contains a zero-length SNI extension, the h2o server runs over the zero-length hostname while trying to copy the hostname, assuming that it is NULL-terminated. This is a potential denial-of-service attack vector in sense that it might trigger segmentation violation. This issue has been fixed by commit 8dc37cb.",
       "published": "2026-07-16T23:16:17.280Z",
@@ -28432,6 +28484,50 @@
       ]
     },
     {
+      "id": "CVE-2026-35217",
+      "summary": "NanoMQ contains a protocol-semantics flaw in its MQTT v5 `SUBSCRIBE` handling: if a subscription entry is missing the final 1-byte `Subscription Options` field, the broker may still accept the malformed packet and install the subscription into internal broker state. Under a specific packet-length construction, the same parser flaw also causes a 1-byte out-of-bounds read that crosses the real heap allocation boundary and is detected by ASAN as a `heap-buffer-overflow`. If the consumed byte happens to look acceptable, NanoMQ may continue and append the malformed subscription entry into its internal `subinfol` state. In that case, a `SUBSCRIBE` packet that should be rejected by MQTT rules is instead treated as a successful subscription. Whether ASAN reports the bug does not depend on MQTT's logical `remain` boundary; it depends on whether the read crosses the real heap allocation boundary of the underlying message buffer. In other words, these are not two unrelated issues. They are two manifestations of the same parsing defect: by default, it appears as a semantic vulnerability, and under suitable input conditions, it also becomes a verifiable out-of-bounds read vulnerability.",
+      "published": "2026-07-20T17:17:06.980Z",
+      "lastModified": "2026-07-23T15:52:06.097Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "High"
+      },
+      "epssScore": 0.00194,
+      "epssPercentile": 0.09368,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.6,
+      "tags": [
+        "CWE-125"
+      ]
+    },
+    {
       "id": "CVE-2026-53387",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: iio: light: veml6075: add bounds check to veml6075_it_ms index veml6075_it_ms has 5 elements but VEML6075_CONF_IT can yield values 0-7. If it returns a value >= 5, this causes an out-of-bounds array access. Add a bounds check and return -EINVAL if the index is out of range. The problem values are reserved so should never be read from the register. Hence this is hardening against fault device, missprogramming or bus corruption.",
       "published": "2026-07-19T12:16:49.650Z",
@@ -29464,53 +29560,6 @@
       ]
     },
     {
-      "id": "CVE-2026-62826",
-      "summary": "Improper neutralization of input during web page generation ('cross-site scripting') in Microsoft Office SharePoint allows an authorized attacker to perform spoofing over a network.",
-      "published": "2026-07-16T22:17:52.720Z",
-      "lastModified": "2026-07-22T11:15:03.833Z",
-      "severity": "Medium",
-      "cvssScore": 4.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00331,
-      "epssPercentile": 0.26006,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Microsoft",
-      "product": "SharePoint",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.52,
-      "tags": [
-        "Microsoft",
-        "F5",
-        "SharePoint",
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-63743",
       "summary": "SurrealDB before 3.1.0 contains a capability bypass vulnerability in HTTP redirect handling that allows authenticated users to circumvent port-scoped --deny-net rules. Attackers can chain an HTTP redirect from an allowed hostname to a denied host:port combination, and the redirect is followed because the port information is dropped during redirect policy evaluation.",
       "published": "2026-07-20T12:19:43.713Z",
@@ -30235,56 +30284,6 @@
       ]
     },
     {
-      "id": "CVE-2026-44177",
-      "summary": "Kirby is an open-source content management system. In versions 5.3.0 and above but prior to 5.4.1, Kirby did not correctly validate the provided user ID, resulting in a path traversal vulnerability. Version 5.3.0 introduced a performance improvement to the Users collection that loaded user objects lazily when first needed. Users were queried by their ID, which was then used to locate the corresponding account directory under site/accounts. This affected the authentication API (accessible to unauthenticated requests), the users API (accessible only to authenticated users), and any other place that uses $users->find() to look up an individual user by a request-provided email or ID. As a result, an attacker could trigger arbitrary PHP file inclusion of files named index.php (for example, the main PHP files of plugins), the impact of which depends on the logic those files contain. It also allowed probing for the existence of arbitrary directories on the server, letting attackers fingerprint the server and site setup, including installed plugins and the content structure. This issue has been fixed in version 5.4.1.",
-      "published": "2026-07-16T22:17:02.103Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00454,
-      "epssPercentile": 0.37665,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        },
-        {
-          "id": "CWE-98",
-          "name": "CWE-98",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.32,
-      "tags": [
-        "CWE-22",
-        "CWE-98"
-      ]
-    },
-    {
       "id": "CVE-2026-51081",
       "summary": "A cross-site scripting (XSS) vulnerability in Proxmox Virtual Environment (PVE) 9.x 5.1.8 and Proxmox Virtual Environment (PVE) 8.x 4.3.16 allows attackers to execute arbitrary web scripts or HTML via injecting a crafted payload.",
       "published": "2026-07-17T15:16:46.753Z",
@@ -30370,56 +30369,6 @@
       "priorityScore": 2.3,
       "tags": [
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-13713",
-      "summary": "YAML::Syck versions before 1.47 for Perl allow a use-after-free and double-free via an anchor node freed while still on the parser value stack. In the bundled libsyck, when an anchor name is redefined or removed, syck_hdlr_add_anchor and syck_hdlr_remove_anchor free the node stored under that name with syck_free_node. That node can still be live on the parser's value stack, so syck_hdlr_add_node reaches it again and frees it a second time. On a normal build the 48-byte node chunk is freed twice and the interpreter aborts. Anchors need no special flags, so this is reached on the default Load path, and a 7-byte document that redefines an anchor triggers it. Any caller that runs Load or LoadFile on an untrusted document that redefines an anchor mid-parse crashes the interpreter, a denial of service.",
-      "published": "2026-07-16T22:16:59.640Z",
-      "lastModified": "2026-07-17T15:07:41.947Z",
-      "severity": "Medium",
-      "cvssScore": 6.2,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00134,
-      "epssPercentile": 0.03333,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-415",
-          "name": "CWE-415",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.29,
-      "tags": [
-        "CWE-415",
-        "CWE-416"
       ]
     },
     {
@@ -34345,50 +34294,6 @@
       ]
     },
     {
-      "id": "CVE-2026-45368",
-      "summary": "Kirby is an open-source content management system. In versions prior to 4.9.1 and 5.4.1, the underlying URL methods for the KirbyTags and image blocks components did not filter out malicious URL values that resolve to script execution. The vulnerability affects four first-party Kirby renderers that produce ` ` output from editor-supplied field values: the (`link: …)` KirbyTag, the `link`: parameter of the `(image: …)` KirbyTag when it does not resolve to a known file or `self`, the `link` field of the built-in image block, and the HTML importer for the `blocks` field (which accepted the same malicious input as the image block `link` field). While simple `avascript:` URLs were already deactivated by treating them as a relative path and prepending a single slash to the URL, the use of URLs of the format `javascript://x%0A…` bypasses this protection. The `vbscript:`, `data:`, `livescript:`, `mocha:` and `jar:` schemes are affected by the same underlying gap. This issue has been fixed in versions 4.9.1 and 5.4.1.",
-      "published": "2026-07-16T22:17:02.680Z",
-      "lastModified": "2026-07-18T05:16:53.790Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00334,
-      "epssPercentile": 0.26337,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.92,
-      "tags": [
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-62236",
       "summary": "grav-plugin-login before 3.8.11 contains a cross-site request forgery (CSRF) vulnerability in the login.regenerate2FASecret frontend task, which regenerates and persists a new TOTP secret for the authenticated session user without any anti-CSRF nonce or Origin/Referer check. Because Grav core dispatches the task from the GET 'task:' URI parameter and the default session cookie is SameSite=Lax, an attacker can lure a logged-in victim to an off-site page that performs a top-level GET navigation, rotating the victim's TOTP secret so their enrolled authenticator no longer matches the server, effectively forcing 2FA re-enrollment. Sites configured with session.samesite: Strict are not affected.",
       "published": "2026-07-17T02:18:11.327Z",
@@ -35737,50 +35642,6 @@
       ]
     },
     {
-      "id": "CVE-2026-44174",
-      "summary": "Kirby is an open-source content management system. Prior to 4.9.1 and 5.4.1, Kirby did not validate the model attributes that were used in its collection queries, allowing attackers to include arbitrary model methods in their queries. This includes methods with sensitive data such as password() (disclosing the password hash) or root() (disclosing the absolute filesystem path on the server) as well as methods that perform impactful actions such as loginPasswordless() (causing a privilege escalation to another user) or delete() (deleting all queried models in one go if the authenticated user has appropriate permissions). This issue has been fixed in versions 4.9.1 and 5.4.1.",
-      "published": "2026-07-16T22:17:01.650Z",
-      "lastModified": "2026-07-18T05:16:53.543Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.0028,
-      "epssPercentile": 0.20525,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-470",
-          "name": "CWE-470",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.72,
-      "tags": [
-        "CWE-470"
-      ]
-    },
-    {
       "id": "CVE-2024-23570",
       "summary": "HCL Aftermarket EPC is affected by clickjacking vulnerability Cross-Frame Scripting is an attack technique where an attacker loads a vulnerable application in an iFrame on his malicious site. The attacker can then launch a Clickjacking attack, which may lead to Phishing, Cross-Site Request Forgery, sensitive information leakage and more.",
       "published": "2026-07-17T14:17:17.223Z",
@@ -36278,50 +36139,6 @@
       ]
     },
     {
-      "id": "CVE-2026-44175",
-      "summary": "Kirby is an open-source content management system. In versions prior to 4.9.1 and 5.4.1, Kirby did not securely sanitize the contents of the list field on save, leaving it vulnerable to cross-site scripting (XSS). Kirby's list field stores its formatted content as HTML, and unlike other field types, its HTML special characters cannot be escaped without losing the formatting. Sanitization was only enforced client-side in the Panel, while the server did not sanitize the content on save. As a result, an attacker could bypass the Panel and send malicious HTML directly to Kirby's API, storing unsanitized markup in the content file. That markup would then be rendered on the site frontend and executed in the browsers of site visitors and logged-in users browsing the site, resulting in persistent XSS. This issue has been fixed in versions 4.9.1 and 5.4.1.",
-      "published": "2026-07-16T22:17:01.833Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00254,
-      "epssPercentile": 0.1711,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.6,
-      "tags": [
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-41993",
       "summary": "Improper Access Control vulnerability in the Removable Media Validation function of TXOne Networks products allows a local attacker with administrator privileges to bypass the file lockdown mechanism, resulting in unauthorized file transfer to the victim device. The attacker needs to deploy unauthorized file on the removable media in advance. This issue affects SafePortAgent: before 3.2.5024; StellarProtect: from 3.2.4011 before 5.0.1083.",
       "published": "2026-07-17T05:16:39.007Z",
@@ -36630,10 +36447,10 @@
       ]
     },
     {
-      "id": "CVE-2026-44176",
-      "summary": "Kirby is an open-source content management system. Versions prior to 4.9.1 and 5.4.1 do not check the `pages.access` permission during page draft rendering. Permissions are defined for each user role in the user blueprint (site/blueprints/users/...). It is also possible to customize the permissions for each target model in the model blueprints (such as in site/blueprints/pages/...) using the options feature. The permissions and options together control the authorization of user actions. Kirby provides the pages.access and pages.list permissions (among others). The list permission controls whether affected models appear in lists throughout the Panel and REST API. The access permission has the same effect but also disables direct access to the affected models. This vulnerability affects the path resolver for the main CMS router. The resolver takes an input path from the requested URL and determines which model (page or file) should be rendered. When a path is requested that points to a page draft, the resolver checks that the request either contains a valid preview token or is authenticated by a valid user. In affected releases, Kirby allowed page drafts to be rendered if any valid user was authenticated, even if that user did not have access to the specific page model. Authenticated attackers with knowledge of the full path to an existing page draft could then access the rendered frontend page. This could lead to the disclosure of sensitive information, e.g. ahead of the launch of a new product or post. This issue has been fixed in versions 4.9.1 and 5.4.1.",
-      "published": "2026-07-16T22:17:01.967Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
+      "id": "CVE-2026-39385",
+      "summary": "Frappe LMS is an open source learning management system. In version 2.51.0 and earlier, a user could bypass payment validation for courses by using unrelated batch. This has been patched in 2.52.0 with enrollment now validating that the batch is linked to course.",
+      "published": "2026-07-20T17:17:07.417Z",
+      "lastModified": "2026-07-22T20:50:36.493Z",
       "severity": "Unknown",
       "cvssScore": 0,
       "cvssVector": null,
@@ -36647,60 +36464,16 @@
         "integrity": null,
         "availability": null
       },
-      "epssScore": 0.00215,
-      "epssPercentile": 0.12199,
+      "epssScore": 0.0022,
+      "epssPercentile": 0.12762,
       "isKev": false,
       "kev": null,
       "vendor": null,
       "product": null,
       "cwe": [
         {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.43,
-      "tags": [
-        "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-45334",
-      "summary": "Kirby is an open-source content management system. In versions prior to 4.9.1 and 5.4.1, the content-locking feature returned lock information without checking the requesting user's access permissions. Kirby's Panel includes a content-locking feature that records which user currently has a model open for editing. This lock prevents conflicting edits by multiple users and displays the locking user's identity in the Panel UI so other users know who to contact. Internally, the locking user's email address and identifier are included in every Panel view payload and in error responses returned when a user attempts to edit a model that is currently locked by another user. This allowed a low-privilege authenticated Panel user, whose role was configured with users.access: false or users.list: false, to learn the email address and identifier of any user who currently had a model open for editing in the Panel, including administrators and other higher-privilege users. Content locks are active for a configurable window (10 minutes by default). The email address can allow admin account enumeration, target phishing, and feed credential-stuffing attacks against the Kirby installation or other sites. The internal user ID can be cross-referenced with other endpoints once the requester has obtained a higher privilege through unrelated means. This issue has been fixed in versions 4.9.1 and 5.4.1.",
-      "published": "2026-07-16T22:17:02.550Z",
-      "lastModified": "2026-07-17T19:17:14.577Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00215,
-      "epssPercentile": 0.12233,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
+          "id": "CWE-288",
+          "name": "CWE-288",
           "description": "CWE mapping from source data."
         }
       ],
@@ -36712,9 +36485,9 @@
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 1.43,
+      "priorityScore": 1.45,
       "tags": [
-        "CWE-862"
+        "CWE-288"
       ]
     },
     {
@@ -37408,6 +37181,50 @@
       "priorityScore": 1.25,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-42210",
+      "summary": "Webmin is a web-based system administration tool for Unix-like servers. Prior to version 2.640, for Webmin accounts that require a second authentication factor (typically TOTP), an attacker with knowledge of the username and password can bypass the 2FA requirement by using Basic authentication. Webmin is a web-based system administration tool for Unix-like servers. As a workaround, apply the patch from commit da18a16c84ae5c0b78cad79609cb0efb174000ec manually.",
+      "published": "2026-07-20T17:17:08.597Z",
+      "lastModified": "2026-07-23T18:04:31.947Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00418,
+      "epssPercentile": 0.34859,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-287",
+          "name": "Improper Authentication",
+          "description": "Authentication is missing or can be bypassed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.22,
+      "tags": [
+        "CWE-287"
       ]
     },
     {
@@ -42522,6 +42339,94 @@
       ]
     },
     {
+      "id": "CVE-2026-33327",
+      "summary": "libvips is a fast image processing library with low memory needs. The `vipsload` operation in versions before and including 8.18.0 could incorrectly determine image dimensions leading to an integer overflow and a subsequent heap-based buffer overflow. This has been patched in version 8.18.1.",
+      "published": "2026-07-20T17:17:06.283Z",
+      "lastModified": "2026-07-23T15:57:13.590Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00132,
+      "epssPercentile": 0.03191,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-190",
+          "name": "CWE-190",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.11,
+      "tags": [
+        "CWE-190"
+      ]
+    },
+    {
+      "id": "CVE-2026-35591",
+      "summary": "libvips is a fast image processing library with low memory needs. The `tiffload` operation in libvips versions before and including 8.18.1 could incorrectly determine the number of channels in a JPEG or JPEG2000-encoded tile within a TIFF image, leading to a possible buffer overflow. This has been patched in version 8.18.2.",
+      "published": "2026-07-20T17:17:07.277Z",
+      "lastModified": "2026-07-23T15:57:13.590Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00132,
+      "epssPercentile": 0.03191,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-122",
+          "name": "CWE-122",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.11,
+      "tags": [
+        "CWE-122"
+      ]
+    },
+    {
       "id": "CVE-2026-15380",
       "summary": "A non-administrator interactive user can obtain full SYSTEM code execution through a DCOM/task scheduler logic chain — no network access, no memory corruption required (ITMS 8.7.3)",
       "published": "2026-07-17T08:16:58.913Z",
@@ -42563,6 +42468,94 @@
       "priorityScore": 0.07,
       "tags": [
         "CWE-269"
+      ]
+    },
+    {
+      "id": "CVE-2026-33328",
+      "summary": "libvips is a fast image processing library with low memory needs. On 32-bit systems in versions before and including 8.18.0, the `gifload` operation could incorrectly determine dimensions leading to an integer overflow. This has been patched in version 8.18.1.",
+      "published": "2026-07-20T17:17:06.430Z",
+      "lastModified": "2026-07-23T15:57:13.590Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.0012,
+      "epssPercentile": 0.0212,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-190",
+          "name": "CWE-190",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.07,
+      "tags": [
+        "CWE-190"
+      ]
+    },
+    {
+      "id": "CVE-2026-35590",
+      "summary": "libvips is a fast image processing library with low memory needs. The EXIF decoder within libvips versions before and including 8.18.1 was not verifying the range of EXIF tag groups before passing data to libexif, leading to a possible null pointer dereference and crash. This has been patched in version 8.18.2.",
+      "published": "2026-07-20T17:17:07.133Z",
+      "lastModified": "2026-07-23T15:57:13.590Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.0012,
+      "epssPercentile": 0.0212,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-122",
+          "name": "CWE-122",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.07,
+      "tags": [
+        "CWE-122"
       ]
     },
     {
