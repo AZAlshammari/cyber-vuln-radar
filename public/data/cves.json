@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-15T10:00:54.019Z",
+  "generatedAt": "2026-08-15T10:33:07.253Z",
   "count": 1000,
   "items": [
     {
@@ -1349,50 +1349,6 @@
       "priorityScore": 5.67,
       "tags": [
         "CWE-306"
-      ]
-    },
-    {
-      "id": "CVE-2026-22752",
-      "summary": "Authentication bypass by primary weakness vulnerability in Spring Security Spring Authorization Server. This issue affects Spring Authorization Server: from 7.0.0 through 7.0.4, from 1.5.0 through 1.5.6, from 1.4.0 through 1.4.9, from 1.3.0 through 1.3.10.",
-      "published": "2026-07-16T10:16:24.767Z",
-      "lastModified": "2026-07-21T15:16:33.793Z",
-      "severity": "Critical",
-      "cvssScore": 9.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00445,
-      "epssPercentile": 0.36922,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-287",
-          "name": "Improper Authentication",
-          "description": "Authentication is missing or can be bypassed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.65,
-      "tags": [
-        "CWE-287"
       ]
     },
     {
@@ -42550,6 +42506,44 @@
       },
       "epssScore": 0.00155,
       "epssPercentile": 0.05229,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.18,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64159",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix zeropoint update where i_size > remote_i_size Fix the update of the zero point[*] by netfs_release_folio() when there is uncommitted data in the pagecache beyond the folio being released but the on-server EOF is in this folio (ie. i_size > remote_i_size). The update needs to limit zero_point to remote_i_size, not i_size as i_size is a local phenomenon reflecting updates made locally to the pagecache, not stuff written to the server. remote_i_size tracks the server's i_size. [*] The zero point is the file position from which we can assume that the server will just return zeros, so we can avoid generating reads. Note that netfs_invalidate_folio() probably doesn't need fixing as zero_point should be updated by setattr after truncation or fallocate. Found with: fsx -q -N 1000000 -p 10000 -o 128000 -l 600000 \\ /xfstest.test/junk --replay-ops=junk.fsxops using the following as junk.fsxops: truncate 0x0 0x1bbae 0x82864 write 0x3ef2e 0xf9c8 0x1bbae write 0x67e05 0xcb5a 0x4e8f6 mapread 0x57781 0x85b6 0x7495f copy_range 0x5d3d 0x10329 0x54fac 0x7495f write 0x64710 0x1c2b 0x7495f mapread 0x64000 0x1000 0x7495f on cifs with the default cache option. It shows read-gaps on folio 0x64 failing with a short read (ie. it hits EOF) if the FMODE_READ check is commented out in netfs_perform_write(): if (//(file->f_mode & FMODE_READ) || netfs_is_cache_enabled(ctx)) { and no fscache. This was initially found with the generic/522 xfstest.",
+      "published": "2026-07-19T16:17:57.913Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00155,
+      "epssPercentile": 0.05228,
       "isKev": false,
       "kev": null,
       "vendor": "Linux",
