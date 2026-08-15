@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-15T19:57:13.732Z",
+  "generatedAt": "2026-08-15T20:28:47.951Z",
   "count": 1000,
   "items": [
     {
@@ -2478,6 +2478,50 @@
       ]
     },
     {
+      "id": "CVE-2026-28220",
+      "summary": "Wazuh is a free and open source platform used for threat prevention, detection, and response. Prior to version 4.14.5, issues in the Cluster Distributed API (DAPI) handling allow a cluster peer, or any actor able to authenticate to the cluster channel using the shared cluster key, to make the master node deserialize an attacker-controlled callable and execute it under an attacker-controlled RBAC context. The cluster code in `framework/wazuh/core/cluster/common.py` deserializes JSON with `as_wazuh_object()`, which resolves any callable whose top-level package is wazuh or api (an overly broad allowlist controlled only by `ALLOWED_CALLABLES_PACKAGES`), and DAPI requests handled in framework/wazuh/core/cluster/dapi/dapi.py accept a client-supplied rbac_permissions value that `run_local()` applies as the global RBAC context, so supplying an rbac_mode of black causes authorization checks for expose_resources-protected functions to pass without any legitimate permission assignment. Combined, these allow privileged administrative actions on the master node such as arbitrary file writes under WAZUH_PATH, creation of new API users, and tampering with security.yaml, and can be chained into full manager compromise. This issue has been fixed in version 4.14.5.",
+      "published": "2026-07-20T16:16:57.820Z",
+      "lastModified": "2026-07-29T15:37:36.440Z",
+      "severity": "High",
+      "cvssScore": 8.4,
+      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "Low",
+        "privilegesRequired": "High",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00396,
+      "epssPercentile": 0.328,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-502",
+          "name": "Deserialization of Untrusted Data",
+          "description": "Untrusted serialized data can alter control flow or objects."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.09,
+      "tags": [
+        "CWE-502"
+      ]
+    },
+    {
       "id": "CVE-2026-45260",
       "summary": "Pimcore is an Open Source Data & Experience Management Platform. Prior to 11.5.17 (LTS) and 12.3.7, Pimcore's WebDAV asset endpoint exposes a MOVE operation through /asset/webdav{path} without an authentication plugin in bundles/CoreBundle/src/Controller/WebDavController.php, and models/Asset/WebDAV/Tree.php performs asset mutation and deletion through models/Asset.php before checking a current Pimcore user or the rename, delete, create, or publish permissions, allowing unauthorized asset deletion, moves, or overwrites. This issue is fixed in versions 11.5.17 (LTS) and 12.3.7.",
       "published": "2026-07-17T20:17:16.857Z",
@@ -2739,6 +2783,51 @@
       "priorityScore": 5.05,
       "tags": [
         "CWE-400"
+      ]
+    },
+    {
+      "id": "CVE-2026-25039",
+      "summary": "Parsec is a cloud-based application for simple and cryptographically secure file sharing. The application does not sanitize the workspace name, creating a vulnerability if that workspace name is a UNC path. When creating mountpoint in the windows filesystem to mount the workspace of an organization, the application does not sanitize the workspace name. The cause issue if the workspace name evaluate to a UNC path since it's allowed for the name to containt `\\` char. If the UNC path is invalid (or the targeted resource is not available) the application become unresponsive otherwise the system will interact with the mounted UNC path allowing the attacker to retrieve to [`NTLM`] hash.",
+      "published": "2026-07-20T16:16:56.913Z",
+      "lastModified": "2026-07-23T17:58:34.990Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00344,
+      "epssPercentile": 0.275,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": "Windows",
+      "cwe": [
+        {
+          "id": "CWE-40",
+          "name": "CWE-40",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.04,
+      "tags": [
+        "Windows",
+        "CWE-40"
       ]
     },
     {
@@ -4412,56 +4501,6 @@
       ]
     },
     {
-      "id": "CVE-2026-63089",
-      "summary": "WireGuard Easy through 15.3.0, fixed in commit 66b292b, contains a cryptographically weak one-time link token generation vulnerability that allows unauthenticated network attackers to recover WireGuard peer credentials by brute-forcing a keyspace of at most 1000 candidate tokens per client ID, as the token is computed using CRC32 over a random value constrained to 0-999. Attackers can enumerate candidate tokens against the unauthenticated /cnf/:oneTimeLink route, which lacks rate limiting and does not validate token expiration, to obtain a peer's PrivateKey and PresharedKey and impersonate that peer on the VPN network.",
-      "published": "2026-07-16T20:16:47.800Z",
-      "lastModified": "2026-07-18T03:16:37.597Z",
-      "severity": "Critical",
-      "cvssScore": 9.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00238,
-      "epssPercentile": 0.15093,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-338",
-          "name": "CWE-338",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-613",
-          "name": "CWE-613",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.78,
-      "tags": [
-        "CWE-338",
-        "CWE-613"
-      ]
-    },
-    {
       "id": "CVE-2026-44739",
       "summary": "Pimcore is an Open Source Data & Experience Management Platform. Prior to 11.5.17 (LTS) and 12.3.6, the columnConfigAction endpoint in bundles/CustomReportsBundle/src/Controller/Reports/CustomReportController.php passes malicious SQL configuration through CustomReportController:columnConfigAction, SqlAdapter::getColumns, SqlAdapter::buildQueryString, and Db::fetchAssociative(), allowing an attacker with the reports_config permission to use arbitrary SELECT queries, UNION statements, dangerous database functions, and error-based SQL injection to exfiltrate or manipulate database data. This issue is fixed in versions 11.5.17 (LTS) and 12.3.6.",
       "published": "2026-07-17T20:17:16.597Z",
@@ -5384,6 +5423,50 @@
       ]
     },
     {
+      "id": "CVE-2026-35198",
+      "summary": "HeyForm is an open-source form builder. Prior to version 3.0.0-rc.7, a stored cross-site scripting (XSS) vulnerability in the form builder allows a low-privileged team member to inject malicious JavaScript that executes when a team owner views the form, leading to complete account takeover through privilege escalation. Version 3.0.0-rc.7 contains a patch for the issue.",
+      "published": "2026-07-20T16:16:58.440Z",
+      "lastModified": "2026-07-22T20:50:36.493Z",
+      "severity": "Critical",
+      "cvssScore": 9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00234,
+      "epssPercentile": 0.14551,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.66,
+      "tags": [
+        "CWE-79"
+      ]
+    },
+    {
       "id": "CVE-2026-16133",
       "summary": "A flaw has been found in LiuMengxuan04 MiniCode 0.1.0. Affected by this vulnerability is the function child_process.spawn of the file mcp.ts. Executing a manipulation can lead to command injection. The attack can be launched remotely. The attack requires a high level of complexity. The exploitation appears to be difficult. The exploit has been published and may be used. The pull request to fix this issue awaits acceptance.",
       "published": "2026-07-18T19:17:05.687Z",
@@ -5948,6 +6031,50 @@
       ]
     },
     {
+      "id": "CVE-2026-21824",
+      "summary": "HCL Commerce contains an privilege escalation vulnerability that could allow denial of service, disclosure of user personal data, and performing of unauthorized administrative operations.",
+      "published": "2026-07-20T16:16:56.777Z",
+      "lastModified": "2026-07-21T17:09:21.500Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00236,
+      "epssPercentile": 0.14857,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-266",
+          "name": "CWE-266",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.6,
+      "tags": [
+        "CWE-266"
+      ]
+    },
+    {
       "id": "CVE-2026-15094",
       "summary": "The WP Hotel Booking plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the 'check_in_date' parameter in all versions up to, and including, 2.3.2 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link.",
       "published": "2026-07-17T06:16:36.367Z",
@@ -6300,6 +6427,50 @@
         "Google",
         "Exchange",
         "CWE-295"
+      ]
+    },
+    {
+      "id": "CVE-2026-63090",
+      "summary": "ProFTPD before 1.3.9c and 1.3.10rc3 contains a heap-based buffer overflow vulnerability in the mod_sftp module that allows authenticated low-privilege attackers to achieve arbitrary code execution by sending crafted SFTP packet fragments exceeding the 16 KB reassembly buffer in the fxp.c component. Attackers can supply oversized fragments to trigger an incorrectly conditioned reallocation, corrupt pool freelist metadata, overwrite the root_fs BSS global pointer to reference a fake filesystem struct, and redirect pr_fsio_stat() to system() via a crafted RENAME request.",
+      "published": "2026-07-20T15:16:45.213Z",
+      "lastModified": "2026-07-30T17:19:14.403Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00502,
+      "epssPercentile": 0.40693,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-122",
+          "name": "CWE-122",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.5,
+      "tags": [
+        "CWE-122"
       ]
     },
     {
@@ -7218,6 +7389,50 @@
       "priorityScore": 4.37,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-32807",
+      "summary": "dataCycle is a data management system for centrally storing, managing, searching, finding, and distributing data. In dataCycle-CORE, the module handling core processing and framework rules, before and including version 25.07.3, anyone with a DataLink UUID can fetch the attached text file directly, even if the link is expired, the caller is unauthenticated, or the normal show flow would have denied access. Because the route is public and the mailer embeds the direct file URL, any leaked, forwarded, logged, or stale email link can continue to expose the attachment.",
+      "published": "2026-07-20T16:16:57.963Z",
+      "lastModified": "2026-07-21T19:35:17.130Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00287,
+      "epssPercentile": 0.21207,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-285",
+          "name": "CWE-285",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.37,
+      "tags": [
+        "CWE-285"
       ]
     },
     {
@@ -8982,50 +9197,6 @@
       ]
     },
     {
-      "id": "CVE-2026-49998",
-      "summary": "Centrifugo is an open-source scalable real-time messaging server. Prior to 6.8.1, Centrifugo dynamic JWKS endpoint verification could reuse a key for one allowed issuer to verify a JWT for another allowed issuer because the JWKS cache and singleflight lookup were keyed only by JWT header kid, not by the resolved JWKS endpoint, issuer, audience, or trust-domain namespace, affecting client.token.jwks_public_endpoint, client.subscription_token.jwks_public_endpoint, internal/jwks/cache.go, and internal/jwks/manager.go. This issue is fixed in version 6.8.1.",
-      "published": "2026-07-16T20:16:45.290Z",
-      "lastModified": "2026-07-17T18:42:17.740Z",
-      "severity": "High",
-      "cvssScore": 8.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00177,
-      "epssPercentile": 0.07488,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-347",
-          "name": "CWE-347",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.13,
-      "tags": [
-        "CWE-347"
-      ]
-    },
-    {
       "id": "CVE-2026-43977",
       "summary": "wger is a free, open-source workout and fitness manager. In versions prior to 2.6, any authenticated user can read another user's private workout session notes, exercise history, and training statistics by calling the /logs/ and /stats/ actions on a routine they do not own. The vulnerability exists in RoutineViewSet (wger/manager/api/views.py). The view defines two custom actions /logs/ and /stats/ that are intended to return data for the requesting user's own training history within a routine. However, the underlying permission check (RoutinePermission.has_object_permission) grants read access to any authenticated user when the routine has is_template=True, regardless of ownership. When the /logs/ or /stats/ actions are invoked against a routine the attacker does not own, they return the owner's private workout history, not the attacker's. This issue has been fixed in version 2.6.",
       "published": "2026-07-16T23:16:16.167Z",
@@ -10692,50 +10863,6 @@
       ]
     },
     {
-      "id": "CVE-2026-44982",
-      "summary": "CrowdSec offers crowdsourced protection against malicious IPs. From 1.5.0 until 1.7.8, pkg/appsec/request.go NewParsedRequestFromRequest allocated a request body buffer from max(r.ContentLength, 0), so HTTP/1.1 requests using Transfer-Encoding: chunked and HTTP/2 requests without a content-length header produced an empty body and caused WAF rules targeting REQUEST_BODY, BODY_ARGS, ARGS_POST, JSON, or XML to be skipped. This issue is fixed in version 1.7.8.",
-      "published": "2026-07-16T20:16:45.033Z",
-      "lastModified": "2026-07-17T18:44:13.257Z",
-      "severity": "High",
-      "cvssScore": 7.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00217,
-      "epssPercentile": 0.12448,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-693",
-          "name": "CWE-693",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.96,
-      "tags": [
-        "CWE-693"
-      ]
-    },
-    {
       "id": "CVE-2026-16076",
       "summary": "A vulnerability has been found in AstrBotDevs AstrBot up to 4.25.5. This issue affects the function OpenApiRoute.chat_send of the file astrbot/dashboard/routes/open_api.py of the component API. Such manipulation of the argument Username leads to authentication bypass by spoofing. It is possible to launch the attack remotely. The exploit has been disclosed to the public and may be used. The vendor was contacted early about this disclosure but did not respond in any way.",
       "published": "2026-07-18T06:16:35.203Z",
@@ -11598,50 +11725,6 @@
       ]
     },
     {
-      "id": "CVE-2026-15352",
-      "summary": "A vulnerability exists in the Health & Safety (HS) application of NASA's Core Flight System (cFS). The flaw allows the application to crash via segmentation fault when processing a routine Housekeeping Telemetry request, leading to denial of service.",
-      "published": "2026-07-16T20:16:44.040Z",
-      "lastModified": "2026-07-17T18:31:44.140Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00429,
-      "epssPercentile": 0.35792,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.88,
-      "tags": [
-        "CWE-476"
-      ]
-    },
-    {
       "id": "CVE-2025-51678",
       "summary": "An issue was discovered in RISC-V PicoRV32 commit 87c89a. A mismatch in the PCPI INSN and memory address can lead to unexpected behavior.",
       "published": "2026-07-17T20:17:13.887Z",
@@ -11823,6 +11906,51 @@
       "tags": [
         "F5",
         "CWE-476"
+      ]
+    },
+    {
+      "id": "CVE-2026-26199",
+      "summary": "HDF5 is a high-performance library and a file format specification that implements the HDF5 data model. If `H5Iget_name` is invoked on a group id with `0` for the size parameter, it will underflow when trying to place a null terminator in the buffer. This can occur if `H5Iget_name` is invoked in a way where `size` can be forced to zero, and there is important data before the `name` buffer.",
+      "published": "2026-07-20T16:16:57.550Z",
+      "lastModified": "2026-07-29T15:38:17.587Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00256,
+      "epssPercentile": 0.17383,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-124",
+          "name": "CWE-124",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.88,
+      "tags": [
+        "F5",
+        "CWE-124"
       ]
     },
     {
@@ -12906,6 +13034,56 @@
       ]
     },
     {
+      "id": "CVE-2026-45713",
+      "summary": "Mailpit is an email testing tool and API for developers. Prior to version 1.30.0, the Mailpit SMTP server has a Server.MaxSize int field that controls the maximum allowed DATA payload size, but the field is never assigned anywhere outside test code, leaving it at Go's zero value (0 ⇒ \"no limit\"). The same applies to the HTTP /api/v1/send endpoint, whose request body is decoded with json.NewDecoder(r.Body) and no http.MaxBytesReader. Because Mailpit's default listeners bind [::]:1025 (SMTP) and [::]:8025 (HTTP), with no authentication required on either, a single network-reachable attacker can push an arbitrarily large message into Mailpit and watch RAM consumption spike with a ~7-10× amplification factor (raw frame → enmime envelope tree → search-text index → zstd-encoded write to SQLite). Repeating the attack — or running it concurrently from multiple connections — drives the process to OOM-kill. Version 1.30.0 contains a patch.",
+      "published": "2026-07-20T16:17:00.610Z",
+      "lastModified": "2026-07-28T15:24:57.733Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00388,
+      "epssPercentile": 0.32021,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-400",
+          "name": "CWE-400",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-770",
+          "name": "CWE-770",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.75,
+      "tags": [
+        "CWE-400",
+        "CWE-770"
+      ]
+    },
+    {
       "id": "CVE-2026-12694",
       "summary": "Missing Authorization vulnerability in Vimesoft Inc. Enterprise Video Platform allows Accessing Functionality Not Properly Constrained by ACLs. This issue affects Enterprise Video Platform: from 3.11.0.0 before 3.25.0.",
       "published": "2026-07-17T17:17:13.547Z",
@@ -13029,56 +13207,6 @@
       "priorityScore": 3.72,
       "tags": [
         "CWE-918"
-      ]
-    },
-    {
-      "id": "CVE-2026-61718",
-      "summary": "bunkerweb is an Open-source and next-generation Web Application Firewall (WAF). From 1.6.2 until 1.6.12, the BunkerWeb web UI BiscuitMiddleware authorization bypass list included the /cache/ URL prefix, so routes in src/ui/app/routes/cache.py protected only by @login_required, including POST /cache/delete, allowed low-privilege read-only reader accounts to permanently delete job cache files containing blacklist, greylist, DNSBL, CrowdSec, GeoIP, ModSecurity CRS, Let's Encrypt, ACME, and custom configuration data. This issue is fixed in version 1.6.12.",
-      "published": "2026-07-16T20:16:46.420Z",
-      "lastModified": "2026-07-17T19:17:17.670Z",
-      "severity": "Medium",
-      "cvssScore": 5.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00306,
-      "epssPercentile": 0.23297,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-285",
-          "name": "CWE-285",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.71,
-      "tags": [
-        "CWE-285",
-        "CWE-862"
       ]
     },
     {
@@ -13221,50 +13349,6 @@
       ]
     },
     {
-      "id": "CVE-2026-62309",
-      "summary": "CoreDNS is a DNS server written in Go. Prior to 1.14.4, a single 28-byte UDP datagram can crash the CoreDNS process when the proxyproto plugin is enabled because plugin/pkg/proxyproto/proxyproto.go PacketConn.ReadFrom handles a PROXY v2 header with non-UDP transport such as family byte 0x11, reassigns addr from a nil readFrom result after parseProxyProtocol errors, and calls addr.String() in the warning log before ServeDNS recovery applies. This issue is fixed in version 1.14.4.",
-      "published": "2026-07-16T20:16:47.030Z",
-      "lastModified": "2026-07-22T20:17:31.317Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00377,
-      "epssPercentile": 0.30851,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.7,
-      "tags": [
-        "CWE-476"
-      ]
-    },
-    {
       "id": "CVE-2026-51833",
       "summary": "Xenforo 2.3.8 is vulnerable to SSRF. Attackers that have administrator privileges or are able to add/save RSS feeds can enumerate internal services (ports) or expose the original IP address of the server.",
       "published": "2026-07-17T20:17:24.990Z",
@@ -13398,50 +13482,6 @@
       ]
     },
     {
-      "id": "CVE-2026-62299",
-      "summary": "CoreDNS is a DNS server written in Go. Prior to 1.14.5, the CoreDNS rewrite plugin supports edns0 rewrite rules with an optional revert flag, and two response rules, edns0SetResponseRule and edns0ReplaceResponseRule[T] in plugin/rewrite/edns0.go, call res.IsEdns0() and immediately dereference the returned *dns.OPT without a nil check when a downstream plugin returns a response with no OPT record. A remote, unauthenticated client can send a single ordinary DNS query matching a rewrite edns0 ... revert rule, causing ResponseReverter in plugin/rewrite/reverter.go to panic, return SERVFAIL, and degrade availability, or crash the CoreDNS process if the debug directive disables recovery. This issue is fixed in version 1.14.5.",
-      "published": "2026-07-16T20:16:46.693Z",
-      "lastModified": "2026-07-22T20:18:57.970Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00311,
-      "epssPercentile": 0.23871,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-476",
-          "name": "CWE-476",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.69,
-      "tags": [
-        "CWE-476"
-      ]
-    },
-    {
       "id": "CVE-2026-64010",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: nfc: llcp: Fix use-after-free race in nfc_llcp_recv_cc() A race condition exists in the NFC LLCP connection state machine where the connection acceptance packet (CC) can be processed concurrently with socket release. This can lead to a use-after-free of the socket object. When nfc_llcp_recv_cc() moves the socket from the connecting_sockets list to the sockets list, it does so without holding the socket lock. If llcp_sock_release() is executing concurrently, it might have already unlinked the socket and dropped its references, which can result in nfc_llcp_recv_cc() linking a freed socket into the live list. Fix this by holding lock_sock() during the state transition and list movement in nfc_llcp_recv_cc(). After acquiring the lock, check if the socket is still hashed to ensure it hasn't already been unlinked and marked for destruction by the release path. This aligns the locking pattern with recv_hdlc() and recv_disc().",
       "published": "2026-07-19T16:17:40.803Z",
@@ -13522,6 +13562,50 @@
       "tags": [
         "Linux",
         "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-45709",
+      "summary": "Mailpit is an email testing tool and API for developers. The fix for GHSA-6jxm-fv7w-rw5j (CVE-2026-23845, \"Server-Side Request Forgery (SSRF) via HTML Check API\"), shipped in mailpit `v1.28.3`, hardened `internal/htmlcheck/css.go::downloadCSSToBytes` with a 5MB size cap, a `text/css` content-type check, login-info stripping in `isValidURL`, and an opt-in `--block-remote-css-and-fonts` config flag — but did not add the IP-filtering dialer that the same codebase already uses on the two sister SSRF endpoints (the proxy handler and link-check). Prior to version 1.30.0, `internal/htmlcheck/css.go::newSafeHTTPClient` is mis-named — it builds an `http.Client` whose `Transport.DialContext` calls `net.Dialer.DialContext` directly with no IP allowlisting. As a result, the SSRF originally reported by Bao Anh Phan still permits the server to dial loopback, private, link-local, and any other reserved/multicast range, provided the target replies with `HTTP/200` and a content-type beginning with `text/css`. With redirect-following (`CheckRedirect` allows redirects to any `isValidURL` URL with no IP filter), an attacker-controlled public site can redirect mailpit's request into the private network without ever appearing in the email's HTML. In the default mailpit deploy (no UI auth, no SMTP auth, port 1025/8025 exposed), this is an unauthenticated, network-reachable SSRF triggered by sending an HTML email and then issuing one HTTP `GET` to `/api/v1/message/{id}/html-check`. Version 1.30.0 contains an updated fix.",
+      "published": "2026-07-20T16:17:00.190Z",
+      "lastModified": "2026-07-28T15:31:54.323Z",
+      "severity": "Medium",
+      "cvssScore": 5.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00265,
+      "epssPercentile": 0.18528,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-918",
+          "name": "CWE-918",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.68,
+      "tags": [
+        "CWE-918"
       ]
     },
     {
@@ -14450,52 +14534,6 @@
       ]
     },
     {
-      "id": "CVE-2026-62290",
-      "summary": "cert-manager adds certificates and certificate issuers as resource types in Kubernetes clusters, and simplifies the process of obtaining, renewing and using those certificates. From 1.18.0 until 1.19.6 and 1.20.3, Challenge resources under acme.cert-manager.io can be created directly by namespace users without admission validation tying the Challenge to an Order, owner reference, or Issuer-selected solver, allowing attacker-controlled Challenge.spec.solver values referencing a ClusterIssuer to bypass DNS01 solver selectors such as dnsZones, dnsNames, and matchLabels and cause cert-manager to use ClusterIssuer DNS credentials for attacker-selected provider settings and DNS names, including disclosure of X-Api-User and X-Api-Key headers for acme-dns. This issue is fixed in versions 1.19.6 and 1.20.3.",
-      "published": "2026-07-16T20:16:46.550Z",
-      "lastModified": "2026-07-30T14:27:48.843Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00104,
-      "epssPercentile": 0.01179,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": "Kubernetes",
-      "cwe": [
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.6,
-      "tags": [
-        "Linux",
-        "Kubernetes",
-        "CWE-863"
-      ]
-    },
-    {
       "id": "CVE-2026-15759",
       "summary": "The ChatHelp – Click to Chat Button, WooCommerce Chat to Order & Floating Chat Form plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'number' and 'group' Shortcode Attributes in all versions up to, and including, 3.5.1 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
       "published": "2026-07-17T05:16:38.447Z",
@@ -15027,6 +15065,50 @@
       ]
     },
     {
+      "id": "CVE-2026-32822",
+      "summary": "dataCycle is a data management system for centrally storing, managing, searching, finding, and distributing data. In dataCycle-CORE, the module handling core processing and framework rules, before and including version 25.07.3, any unauthenticated attacker can place arbitrary HTML into flash notifications on public routes and rely on the frontend toast component to inject that content into the DOM with `innerHTML`. This creates a reflected DOM XSS that can be delivered with a crafted link to a public page such as `/docs`. Because the vulnerable JavaScript is loaded by the normal application layout, the issue is not limited to a special debug page or an isolated admin-only view.",
+      "published": "2026-07-20T16:16:58.110Z",
+      "lastModified": "2026-07-21T19:35:17.130Z",
+      "severity": "Medium",
+      "cvssScore": 6.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00211,
+      "epssPercentile": 0.11715,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-80",
+          "name": "CWE-80",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.55,
+      "tags": [
+        "CWE-80"
+      ]
+    },
+    {
       "id": "CVE-2026-45703",
       "summary": "Pimcore is an Open Source Data & Experience Management Platform. Prior to 11.5.17 (LTS) and 12.3.7, the WordExport export flow in bundles/WordExportBundle/src/Controller/TranslationController.php only checks the word_export feature permission and directly resolves attacker-controlled type/id input without enforcing view permission on page, snippet, email, or object elements, allowing a low-privileged backend user to export document content the user is not allowed to view. This issue is fixed in versions 11.5.17 (LTS) and 12.3.7.",
       "published": "2026-07-17T19:17:14.790Z",
@@ -15358,94 +15440,6 @@
       "tags": [
         "CWE-22",
         "CWE-23"
-      ]
-    },
-    {
-      "id": "CVE-2026-60063",
-      "summary": "An out-of-bounds write vulnerability in the Productivity Suite allows a local attacker to trigger kernel memory corruption via a crafted IOCTL request, potentially resulting in privilege escalation or system instability.",
-      "published": "2026-07-16T20:16:45.953Z",
-      "lastModified": "2026-07-17T18:31:44.140Z",
-      "severity": "High",
-      "cvssScore": 7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00107,
-      "epssPercentile": 0.01289,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.5,
-      "tags": [
-        "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-61389",
-      "summary": "An out-of-bounds write vulnerability in the Productivity Suite allows a local attacker to trigger kernel memory corruption via a crafted IOCTL request, potentially resulting in privilege escalation or system instability.",
-      "published": "2026-07-16T20:16:46.270Z",
-      "lastModified": "2026-07-17T18:31:44.140Z",
-      "severity": "High",
-      "cvssScore": 7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00107,
-      "epssPercentile": 0.01289,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.5,
-      "tags": [
-        "CWE-787"
       ]
     },
     {
@@ -17086,6 +17080,51 @@
       "priorityScore": 3.29,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-26197",
+      "summary": "HDF5 is a high-performance library and a file format specification that implements the HDF5 data model. If a file is corrupted such that an array datatype's size, the number of elements, and the element size are not in agreement it can trigger an out of bounds read. The array datatype stores the full size of the datatype (`dt->shared->size`) separately from the number of elements (`dt->shared->u.array.nelem`) and the element size (`dt->shared->parent->shared->size`). If any one of these are corrupted so that they don't align with the others (element size * nelem = full size), it can lead to an out of bounds read. Depending on what is corrupted, it can alter the type of out of bounds read triggered. The vulnerability is present only in files that have been maliciously altered, as its generally not possible to independently alter the full size of the datatype, the element count and the element size. As such, this is only present if a malicious actor is altering files, and won't appear in regular usage.",
+      "published": "2026-07-20T16:16:57.400Z",
+      "lastModified": "2026-07-29T15:42:12.557Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00267,
+      "epssPercentile": 0.18933,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.29,
+      "tags": [
+        "F5",
+        "CWE-125"
       ]
     },
     {
@@ -18796,6 +18835,50 @@
       ]
     },
     {
+      "id": "CVE-2026-27823",
+      "summary": "A vulnerability has been identified in EGroupware that may lead to Remote Code Execution (RCE). The issue allows an authenticated attacker to execute arbitrary commands on the server. If user self-registration is enabled, the vulnerability may be exploitable without prior authentication. The vulnerability stems from improper authorization checks combined with a file write primitive and an arbitrary file read vulnerability, which together enable full system compromise. This has been patched in versions 26.2.20260224 and 23.1.20260224.",
+      "published": "2026-07-20T16:16:57.680Z",
+      "lastModified": "2026-07-22T20:52:35.747Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.01028,
+      "epssPercentile": 0.60729,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-285",
+          "name": "CWE-285",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.13,
+      "tags": [
+        "CWE-285"
+      ]
+    },
+    {
       "id": "CVE-2026-12393",
       "summary": "The WPS Bookings for WooCommerce WordPress plugin before 3.11.7 does not verify that a booking order belongs to the requesting user before cancelling it, allowing any authenticated user, such as a Subscriber or Customer, to cancel and void other customers' booking orders.",
       "published": "2026-07-17T07:16:38.023Z",
@@ -19963,6 +20046,56 @@
       "priorityScore": 3.05,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-63091",
+      "summary": "ProFTPD before 1.3.9c and 1.3.10rc3 contains a signed integer overflow vulnerability in the mod_sftp module's SCP size-record parser that allows authenticated low-privilege attackers to bypass ASLR by sending a crafted file size value of UINT64_MAX, which results in a negative off_t value. Attackers can exploit the subsequent conversion to uint32_t, causing an approximately 4 GB requested read length and forcing the server to read beyond the end of the SSH channel data and write overread process memory into the uploaded file. In tested configurations, the disclosed data contains libc, libcrypto, and PIE pointers sufficient to derive their randomized base addresses, thereby bypassing ASLR and enabling reliable exploitation of memory corruption vulnerabilities in the same process.",
+      "published": "2026-07-20T15:16:45.363Z",
+      "lastModified": "2026-07-30T17:18:19.600Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00295,
+      "epssPercentile": 0.22063,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-126",
+          "name": "CWE-126",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-190",
+          "name": "CWE-190",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.05,
+      "tags": [
+        "CWE-126",
+        "CWE-190"
       ]
     },
     {
@@ -21623,6 +21756,56 @@
       ]
     },
     {
+      "id": "CVE-2026-45711",
+      "summary": "Mailpit is an email testing tool and API for developers. Prior to version 1.30.0, the mailpit dump --http sub-command downloads every message from a remote Mailpit instance and writes each one as .eml inside the user-supplied output directory. The message ID field is taken verbatim from the JSON response of the remote server and concatenated into the output path with path.Join, which silently normalizes `..` segments. A malicious HTTP server impersonating Mailpit can therefore make mailpit dump write attacker-controlled bytes to any path the running user can write, fully outside the intended output directory. Version 1.30.0 contains a patch.",
+      "published": "2026-07-20T16:17:00.333Z",
+      "lastModified": "2026-07-28T15:30:44.933Z",
+      "severity": "Medium",
+      "cvssScore": 5.9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:H/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "High",
+        "availability": "Low"
+      },
+      "epssScore": 0.00311,
+      "epssPercentile": 0.23879,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        },
+        {
+          "id": "CWE-829",
+          "name": "CWE-829",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.9,
+      "tags": [
+        "CWE-22",
+        "CWE-829"
+      ]
+    },
+    {
       "id": "CVE-2026-62208",
       "summary": "OpenClaw before 2026.6.5 could forward Authorization headers during MCP SSE redirects. When the affected feature is enabled and reachable, a lower-trust caller or configured input path could execute or persist actions beyond the caller's intended authorization. Impact depends on the operator's configuration and whether lower-trust input can reach the affected path.",
       "published": "2026-07-17T02:18:07.187Z",
@@ -22102,6 +22285,50 @@
       ]
     },
     {
+      "id": "CVE-2026-13724",
+      "summary": "Client-Side Enforcement of Server-Side Security vulnerability in Gobito Informatics Technologies Engineering Industry and Trade Ltd. Co. Corporate Training Management System allows Input Data Manipulation. This issue affects Corporate Training Management System: before dd1a9df64.",
+      "published": "2026-07-20T16:16:55.190Z",
+      "lastModified": "2026-07-21T16:17:05.243Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00202,
+      "epssPercentile": 0.10384,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-602",
+          "name": "CWE-602",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.87,
+      "tags": [
+        "CWE-602"
+      ]
+    },
+    {
       "id": "CVE-2026-53381",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: virtiofs: fix UAF on submount umount iput() called from fuse_release_end() can Oops if the super block has already been destroyed. Normally this is prevented by waiting for num_waiting to go down to zero before commencing with super block shutdown. This only works, however, for the last submount instance, as the wait counter is per connection, not per superblock. Revert to using synchronous release requests for the auto_submounts case, which is virtiofs only at this time.",
       "published": "2026-07-19T12:16:48.807Z",
@@ -22527,50 +22754,6 @@
       "tags": [
         "Linux",
         "CWE-416"
-      ]
-    },
-    {
-      "id": "CVE-2026-63397",
-      "summary": "remorses/genql before version 6.3.4 allows an authenticated attacker with control of the GraphQL schema that is passed to genql to inject arbitrary JavaScript or TypeScript. The malicious code is injected into the generated schema.ts file and executes when the genql client is bundled and imported.",
-      "published": "2026-07-16T20:16:47.950Z",
-      "lastModified": "2026-07-21T18:17:04.170Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00254,
-      "epssPercentile": 0.17152,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-116",
-          "name": "CWE-116",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.84,
-      "tags": [
-        "CWE-116"
       ]
     },
     {
@@ -26365,6 +26548,50 @@
       ]
     },
     {
+      "id": "CVE-2026-26081",
+      "summary": "HAProxy Community Edition 3.0 through 3.3 before 3.3.3 lacks a length check for the NEW_TOKEN format. HAProxy Enterprise and ALOHA are also affected.",
+      "published": "2026-07-20T16:16:57.203Z",
+      "lastModified": "2026-07-21T19:49:44.020Z",
+      "severity": "Medium",
+      "cvssScore": 4.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00363,
+      "epssPercentile": 0.29405,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-130",
+          "name": "CWE-130",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.71,
+      "tags": [
+        "CWE-130"
+      ]
+    },
+    {
       "id": "CVE-2026-10724",
       "summary": "The Reviews Feed WordPress plugin before 2.6.5 does not neutralize WordPress shortcodes contained in third-party review content before rendering it through its dynamic block, allowing unauthenticated attackers to execute arbitrary shortcodes on pages that display the feed by planting a shortcode in a review on the connected source.",
       "published": "2026-07-20T07:16:34.340Z",
@@ -27096,6 +27323,56 @@
       "tags": [
         "WordPress",
         "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-45712",
+      "summary": "Mailpit is an email testing tool and API for developers. Prior to version 1.30.0, the screenshot/print proxy (/proxy?data=…) maintains a package-level assets map[string]MessageAssets cache, but reads the map without holding assetsMutex while a long-running cleanup goroutine and (re-entrant) CSS-rewriting code path concurrently write to it under the lock. When the unsynchronized read coincides with a synchronized write, Go's runtime raises fatal error: concurrent map read and map write — a runtime.throw that is not recoverable by http.Server's handler-panic recover. The whole Mailpit process exits, taking the SMTP, POP3 and HTTP listeners down with it. Version 1.30.0 contains a patch.",
+      "published": "2026-07-20T16:17:00.470Z",
+      "lastModified": "2026-07-28T15:27:36.900Z",
+      "severity": "Medium",
+      "cvssScore": 5.9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00247,
+      "epssPercentile": 0.16323,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-362",
+          "name": "CWE-362",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-770",
+          "name": "CWE-770",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.64,
+      "tags": [
+        "CWE-362",
+        "CWE-770"
       ]
     },
     {
@@ -29142,6 +29419,50 @@
       ]
     },
     {
+      "id": "CVE-2026-26080",
+      "summary": "HAProxy Community Edition 3.2.x through 3.3.x before 3.3.3 can enter a loop or crash because varint is mishandled. HAProxy Enterprise and ALOHA are also affected.",
+      "published": "2026-07-20T16:16:57.057Z",
+      "lastModified": "2026-07-21T19:49:44.020Z",
+      "severity": "Low",
+      "cvssScore": 3.7,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00416,
+      "epssPercentile": 0.34694,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-252",
+          "name": "CWE-252",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.51,
+      "tags": [
+        "CWE-252"
+      ]
+    },
+    {
       "id": "CVE-2026-15415",
       "summary": "AWS HealthOmics is a HIPAA-eligible service that fully manages the compute, storage, and workflow engine infrastructure required to run bioinformatics analyses at scale for clinical diagnostics, drug discovery, and agricultural research. Improper limitation of a pathname to a restricted directory in the linting tools of the AWS HealthOmics MCP Server (aws-healthomics-mcp-server) before version 0.0.36 might allow an actor who can influence the MCP agent to write an actor-controlled content to arbitrary locations outside the intended workflow bundle directory, via directory traversal sequences in the workflow_files input. To remediate this issue, users should upgrade to version 0.0.36 or later.",
       "published": "2026-07-17T20:17:15.923Z",
@@ -29360,56 +29681,6 @@
       "priorityScore": 2.45,
       "tags": [
         "CWE-598"
-      ]
-    },
-    {
-      "id": "CVE-2026-15422",
-      "summary": "The illumos SCTP inbound path performs association lookup for INIT ACK chunks without adequately validating the address parameters carried in the chunk. Since this lookup runs during packet classification (i.e. before SCTP integrity checks or IPsec policy are applied) a remote, unauthenticated attacker can send a crafted SCTP INIT ACK packet with malformed address parameters to cause an out-of-bounds access and kernel heap corruption, which may lead to remote code execution. The flaw has existed since 2010 (illumos-gate commit a5407c02), and affects any illumos distribution prior to illumos-gate commit 53a3efde.",
-      "published": "2026-07-16T20:16:44.190Z",
-      "lastModified": "2026-07-17T18:45:53.333Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00508,
-      "epssPercentile": 0.41006,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-122",
-          "name": "CWE-122",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.44,
-      "tags": [
-        "CWE-122",
-        "CWE-787"
       ]
     },
     {
@@ -30652,50 +30923,6 @@
       ]
     },
     {
-      "id": "CVE-2026-60140",
-      "summary": "An out-of-bounds read vulnerability in the Productivity Suite allows a local attacker to trigger kernel memory corruption by sending a crafted IOCTL request. This can lead to exposing sensitive information or causing the affected product to become unstable or unavailable.",
-      "published": "2026-07-16T20:16:46.110Z",
-      "lastModified": "2026-07-17T18:31:44.140Z",
-      "severity": "Medium",
-      "cvssScore": 6.1,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00106,
-      "epssPercentile": 0.01256,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.18,
-      "tags": [
-        "CWE-125"
-      ]
-    },
-    {
       "id": "CVE-2026-57896",
       "summary": "An out-of-bounds read vulnerability in the Productivity Suite allows a local attacker to trigger kernel memory corruption by sending a crafted IOCTL request. This could lead to limited information disclosure or disruption of the affected product.",
       "published": "2026-07-16T21:17:21.617Z",
@@ -30737,6 +30964,56 @@
       "priorityScore": 2.18,
       "tags": [
         "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-45797",
+      "summary": "HeyForm is an open-source form builder. Prior to version 3.0.0-rc.7, the `/api/upload` endpoint allows unauthenticated file uploads including SVG files. Uploaded SVGs are stored in the static assets directory and served with `Content-Type: image/svg+xml` by Express's serve-static middleware, allowing an attacker to achieve stored cross-site scripting (XSS) on the heyform domain without any authentication. Version 3.0.0-rc.7 contains a patch for the issue.",
+      "published": "2026-07-20T16:17:00.743Z",
+      "lastModified": "2026-07-22T20:50:36.493Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00404,
+      "epssPercentile": 0.33638,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        },
+        {
+          "id": "CWE-434",
+          "name": "CWE-434",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.18,
+      "tags": [
+        "CWE-79",
+        "CWE-434"
       ]
     },
     {
@@ -31268,57 +31545,6 @@
       "priorityScore": 2.08,
       "tags": [
         "CWE-59"
-      ]
-    },
-    {
-      "id": "CVE-2026-62994",
-      "summary": "CoreDNS is a DNS server written in Go. From 1.9.4 until 1.14.5, a network DNS client allowed to request AXFR for a CoreDNS zone can trigger a panic when CoreDNS is configured with k8s_external headless-service zone transfers and Kubernetes contains a headless service endpoint with no declared ports; plugin/kubernetes/object/endpoint.go creates Port: -1, plugin/k8s_external/msg_to_dns.go skips that service, plugin/k8s_external/transfer.go sends an empty []dns.RR batch, and plugin/transfer/transfer.go indexes records[0] without checking the batch is non-empty. This issue is fixed in version 1.14.5.",
-      "published": "2026-07-16T20:16:47.657Z",
-      "lastModified": "2026-07-22T20:14:36.067Z",
-      "severity": "Low",
-      "cvssScore": 3.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00295,
-      "epssPercentile": 0.22078,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Kubernetes",
-      "cwe": [
-        {
-          "id": "CWE-248",
-          "name": "CWE-248",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-755",
-          "name": "CWE-755",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.07,
-      "tags": [
-        "Kubernetes",
-        "CWE-248",
-        "CWE-755"
       ]
     },
     {
@@ -35117,50 +35343,6 @@
       ]
     },
     {
-      "id": "CVE-2026-62963",
-      "summary": "Centrifugo is an open-source scalable real-time messaging server. Prior to 6.8.4, Centrifugo unidirectional WebSocket transport with uni_websocket.compression enabled enforced uni_websocket.message_size_limit against compressed wire-frame length in internal/websocket/conn.go advanceFrame, but ReadMessage used io.ReadAll after decompression without an output cap, allowing unauthenticated requests to /connection/uni_websocket to trigger large memory and CPU consumption. This issue is fixed in version 6.8.4.",
-      "published": "2026-07-16T20:16:47.533Z",
-      "lastModified": "2026-07-17T18:44:13.257Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00301,
-      "epssPercentile": 0.22744,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-409",
-          "name": "CWE-409",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.8,
-      "tags": [
-        "CWE-409"
-      ]
-    },
-    {
       "id": "CVE-2026-62211",
       "summary": "OpenClaw versions before 2026.6.1 contain a credential redaction bypass vulnerability in the trajectory export feature that allows lower-trust callers to access data that should remain within trusted boundaries. Attackers can exploit misconfigured input paths or feature accessibility to expose sensitive credentials and data through the export mechanism.",
       "published": "2026-07-17T02:18:07.620Z",
@@ -35379,50 +35561,6 @@
       "tags": [
         "WordPress",
         "CWE-639"
-      ]
-    },
-    {
-      "id": "CVE-2026-44981",
-      "summary": "CrowdSec offers crowdsourced protection against malicious IPs. From 1.7.0 until 1.7.8, the LAPI router used gin-contrib/gzip with DefaultDecompressHandle globally in pkg/apiserver/controllers/controller.go, causing /v1/watchers and /v1/watchers/login to decompress unauthenticated gzip-compressed JSON request bodies without enforcing a maximum decompressed size and allowing excessive heap allocation that can make LAPI unreachable. This issue is fixed in version 1.7.8.",
-      "published": "2026-07-16T20:16:44.900Z",
-      "lastModified": "2026-07-17T18:44:13.257Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00292,
-      "epssPercentile": 0.21734,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-409",
-          "name": "CWE-409",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.76,
-      "tags": [
-        "CWE-409"
       ]
     },
     {
@@ -36413,56 +36551,6 @@
       ]
     },
     {
-      "id": "CVE-2026-54728",
-      "summary": "bunkerweb is an Open-source and next-generation Web Application Firewall (WAF). Prior to BunkerWeb 1.6.12 and BunkerWeb PRO 0.57, authenticated Host header handling in the BunkerWeb UI and API improperly validated and neutralized user-controlled input in a configuration-dependent path, allowing a low-privileged authenticated user to escalate privileges and affect confidentiality, integrity, and availability of the BunkerWeb instance. This issue is fixed in BunkerWeb version 1.6.12 and BunkerWeb PRO version 0.57.",
-      "published": "2026-07-16T20:16:45.427Z",
-      "lastModified": "2026-07-17T18:44:13.257Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00237,
-      "epssPercentile": 0.14939,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-20",
-          "name": "CWE-20",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.52,
-      "tags": [
-        "CWE-20",
-        "CWE-74"
-      ]
-    },
-    {
       "id": "CVE-2024-23572",
       "summary": "HCL Aftermarket EPC is vulnerable to attack as cookie appears to contain a session token, which may increase the risk associated with this issue. You should review the contents of the cookie to determine its function.",
       "published": "2026-07-17T14:17:17.460Z",
@@ -37120,50 +37208,6 @@
       "priorityScore": 1.35,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-55629",
-      "summary": "Whistle is an HTTP, HTTP2, HTTPS, and WebSocket debugging proxy. Prior to 2.10.3, lib/service/service.js handles GET /cgi-bin/temp/get by reading req.query.filename, joining it to TEMP_FILES_PATH only when it matches the temporary file pattern, and otherwise passing the user-supplied filename directly to getFile, allowing a remote attacker to read arbitrary files such as /etc/passwd. This issue is reported as fixed in version 2.10.3.",
-      "published": "2026-07-16T20:16:45.577Z",
-      "lastModified": "2026-07-17T19:17:17.150Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00456,
-      "epssPercentile": 0.37782,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.32,
-      "tags": [
-        "CWE-22"
       ]
     },
     {
@@ -42692,56 +42736,6 @@
       "priorityScore": 0.04,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-15449",
-      "summary": "A time-of-check to time-of-use (TOCTOU) flaw in the illumos data-link pseudo-driver (dld) affects handling of the DLDIOC_GETMACPROP and DLDIOC_SETMACPROP ioctls on /dev/dld. drv_ioc_prop_common() in usr/src/uts/common/io/dld/dld_drv.c copies the dld_ioc_macprop_t ioctl header in once to read its pr_valsize field, sizes and allocates a kernel heap buffer from that value, and then copies the full request in a second time from the same unprivileged user address. A concurrent thread can enlarge pr_valsize between the two copyins, so the second copyin and the subsequent property handling write beyond the end of the undersized allocation and corrupt the kernel heap. An unprivileged local user, including one confined to a non-global zone that owns a datalink, can trigger this to panic the system. The resulting kernel heap corruption may be usable for further compromise.",
-      "published": "2026-07-16T20:16:44.373Z",
-      "lastModified": "2026-07-17T18:45:53.333Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00084,
-      "epssPercentile": 0.00339,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-122",
-          "name": "CWE-122",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-367",
-          "name": "CWE-367",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.01,
-      "tags": [
-        "CWE-122",
-        "CWE-367"
       ]
     },
     {
