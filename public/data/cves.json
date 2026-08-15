@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-15T04:06:11.044Z",
+  "generatedAt": "2026-08-15T04:48:18.090Z",
   "count": 1000,
   "items": [
     {
@@ -1124,6 +1124,51 @@
         "Linux",
         "Windows",
         "CWE-94"
+      ]
+    },
+    {
+      "id": "CVE-2026-64113",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ixgbevf: fix use-after-free in VEPA multicast source pruning ixgbevf_clean_rx_irq() prunes frames whose source MAC matches the VF's own address (VEPA multicast workaround) by freeing the skb and continuing to the next descriptor: dev_kfree_skb_irq(skb); continue; The skb pointer is declared outside the while loop and persists across iterations. Because the continue skips the \"skb = NULL\" reset at the bottom of the loop, the next iteration enters the \"else if (skb)\" path and calls ixgbevf_add_rx_frag() on the freed skb, dereferencing skb_shinfo(skb)->nr_frags - a use-after-free in NAPI softirq context. The sibling driver iavf already handles this correctly by nulling the pointer before continuing. Apply the same pattern here. I do not have ixgbevf hardware; the bug was found by static analysis (scan_drop_continue_loops.py + semgrep drop_continue_in_loop, multi-tool corroboration with the highest score in the scan). The UAF was confirmed under KASAN by loading a test module that reproduces the exact code pattern (alloc skb, kfree_skb, then read skb_shinfo(skb)->nr_frags): BUG: KASAN: slab-use-after-free in ixgbevf_uaf_test_init+0x100/0x1000 Read of size 8 at addr 000000006163ae78 by task insmod/30 freed 208-byte region [000000006163adc0, 000000006163ae90) QEMU emulates igb (82576) but not ixgbe (82599), and the igbvf VF driver does not include the VEPA source pruning path, so a full end-to-end reproduction with emulated hardware was not possible.",
+      "published": "2026-07-19T16:17:52.680Z",
+      "lastModified": "2026-08-12T15:50:27.320Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.005,
+      "epssPercentile": 0.40418,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.84,
+      "tags": [
+        "Linux",
+        "CWE-416"
       ]
     },
     {
@@ -7083,51 +7128,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12753",
-      "summary": "The Advance Product Search- Voice & Ajax Search for WooCommerce plugin for WordPress is vulnerable to generic SQL Injection via the 's' and 'match' parameter in all versions up to, and including, 1.4.4 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.",
-      "published": "2026-07-16T04:17:16.073Z",
-      "lastModified": "2026-07-18T03:16:34.577Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00304,
-      "epssPercentile": 0.22927,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.43,
-      "tags": [
-        "WordPress",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-35149",
       "summary": "HCL DFXServer is affected by an Authentication Bypass vulnerability via server response manipulation. An unauthorized user without valid credentials can exploit this flaw by intercepting and altering the server's authentication responses, allowing them to gain unauthorized access to the application without verification.",
       "published": "2026-07-16T12:17:35.870Z",
@@ -10492,6 +10492,51 @@
       ]
     },
     {
+      "id": "CVE-2026-64116",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ipv6: ioam: add NULL check for idev in ipv6_hop_ioam() Reported by Sashiko: The function ipv6_hop_ioam() accesses __in6_dev_get(skb->dev)->cnf.ioam6_enabled without validating the returned idev pointer. Because addrconf_ifdown() can concurrently clear dev->ip6_ptr via RCU, __in6_dev_get() can return NULL during interface teardown, which could cause a NULL pointer dereference when processing an IOAM Hop-by-Hop option. Let's add a check and use SKB_DROP_REASON_IPV6DISABLED accordingly.",
+      "published": "2026-07-19T16:17:53.103Z",
+      "lastModified": "2026-08-12T15:50:06.733Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00511,
+      "epssPercentile": 0.41122,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.06,
+      "tags": [
+        "Linux",
+        "CWE-476"
+      ]
+    },
+    {
       "id": "CVE-2026-7754",
       "summary": "IBM Langflow OSS 1.0.0 through 1.10.0 Langflow 1.9.0 could allow server-side request forgery (SSRF) due to insecure default configuration and incomplete enforcement of the SSRF protection mechanism.",
       "published": "2026-07-17T20:17:29.470Z",
@@ -12125,51 +12170,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12941",
-      "summary": "The MultiVendorX – WooCommerce Multivendor Marketplace AI Powered Solutions plugin for WordPress is vulnerable to generic SQL Injection via the 'order_by' parameter in all versions up to, and including, 5.0.9 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers, with subscriber-level access and above, to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. This vulnerability is exploitable by any authenticated subscriber-level user when the plugin's store approval setting is configured to automatically approve store owners (described as the default), as this allows any logged-in user to self-register as a store_owner via the public Stores REST endpoint, thereby obtaining the edit_stores capability required to reach the vulnerable transactions endpoint.",
-      "published": "2026-07-16T04:17:16.247Z",
-      "lastModified": "2026-07-16T14:16:48.467Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00254,
-      "epssPercentile": 0.16967,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.87,
-      "tags": [
-        "WordPress",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-15352",
       "summary": "A vulnerability exists in the Health & Safety (HS) application of NASA's Core Flight System (cFS). The flaw allows the application to crash via segmentation fault when processing a routine Housekeeping Telemetry request, leading to denial of service.",
       "published": "2026-07-16T20:16:44.040Z",
@@ -12627,6 +12627,52 @@
         "Linux",
         "Windows",
         "CWE-94"
+      ]
+    },
+    {
+      "id": "CVE-2026-64114",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ipv4: raw: reject IP_HDRINCL packets with ihl ihl * 4; err = -EINVAL; if (iphlen > length) goto error_free; if (iphlen >= sizeof(*iph)) { /* fix up saddr, tot_len, id, csum, transport_header */ } It does not, however, reject ihl = sizeof(*iph))\" branch is skipped, leaving the crafted iphdr untouched, but the packet is still handed to __ip_local_out() and onward. Downstream consumers that read iph->ihl assume a sane value: net/ipv4/ah4.c:ah_output() in particular subtracts sizeof(struct iphdr) from top_iph->ihl * 4 and passes the (signed-int-negative, then cast to size_t) result to memcpy(), producing an OOB access of length close to SIZE_MAX and a host kernel panic. An IPv4 header with ihl length\" check. This matches the principle that locally constructed packets that re-enter the IP stack must pass the same basic sanity tests that a foreign packet would be subjected to. Once this lands, the \"if (iphlen >= sizeof(*iph))\" wrapper around the fixup branch becomes redundant; left in place to keep the patch minimal and backport-friendly. A follow-up can unwrap it. Note that commit 86f4c90a1c5c (\"ipv4, ipv6: ensure raw socket message is big enough to hold an IP header\") ensures the message buffer is large enough to hold an iphdr, but does not constrain the self-reported iph->ihl. Reachability: the malformed packet source is any caller with CAP_NET_RAW, including an unprivileged process in a user+net namespace on a kernel with CONFIG_USER_NS=y. The reproduced AH crash also requires a matching xfrm AH policy on the outgoing route; a container granted CAP_NET_ADMIN can install that state and policy in its netns. Loopback bypasses xfrm_output, so the trigger uses a real netdev. Reproduced on UML + KASAN: kernel-mode fault at addr 0x0 with memcpy_orig at the crash site. Same shape reproduces inside a rootless Docker container with --cap-add NET_ADMIN on a stock distro kernel.",
+      "published": "2026-07-19T16:17:52.820Z",
+      "lastModified": "2026-08-12T15:50:21.120Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00136,
+      "epssPercentile": 0.03476,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": "Docker",
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.85,
+      "tags": [
+        "Linux",
+        "Docker",
+        "CWE-125"
       ]
     },
     {
@@ -15117,6 +15163,44 @@
       "priorityScore": 3.59,
       "tags": [
         "CWE-639"
+      ]
+    },
+    {
+      "id": "CVE-2026-64117",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mac80211: capture fast-RX rate before mesh reuses skb->cb ieee80211_invoke_fast_rx() reads RX status through IEEE80211_SKB_RXCB(skb), which aliases the same skb->cb storage that ieee80211_rx_mesh_data() reuses as IEEE80211_TX_INFO. In the unicast forward path, mesh_data does: info = IEEE80211_SKB_CB(fwd_skb); memset(info, 0, sizeof(*info)); on the same skb the caller still names via rx->skb, then either queues the skb for TX (success) or kfree_skb()'s it (no-route) before returning RX_QUEUED. The caller's RX_QUEUED arm then calls sta_stats_encode_rate(status) on memory that is either zeroed (success path) or freed (no-route path). The latter is KASAN slab-use-after-free in ieee80211_prepare_and_rx_handle. Fix by encoding the rate from status before invoking ieee80211_rx_mesh_data(), so the RX_QUEUED arm consumes a value captured while status was still backed by valid memory.",
+      "published": "2026-07-19T16:17:53.217Z",
+      "lastModified": "2026-07-30T14:59:47.950Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00234,
+      "epssPercentile": 0.14462,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.59,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -17887,50 +17971,6 @@
       ]
     },
     {
-      "id": "CVE-2026-21729",
-      "summary": "Loki queries with large limits can cause large memory allocations which can impact the availability of the service, depending on its deployment strategy.",
-      "published": "2026-07-16T04:17:29.260Z",
-      "lastModified": "2026-07-16T14:16:49.383Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00263,
-      "epssPercentile": 0.18075,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-770",
-          "name": "CWE-770",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.26,
-      "tags": [
-        "CWE-770"
-      ]
-    },
-    {
       "id": "CVE-2026-63941",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: KVM: arm64: Correctly cap ZCR_EL2 provided by a guest hypervisor ZCR_EL2 can be updated by a VHE guest hypervisor either using ZCR_EL2 (which traps) or ZCR_EL1 (which does not trap). KVM handles both in different way: - on ZCR_EL2 trap, ZCR_EL2.LEN is immediately capped at the VM's own VL limit. This has the potential to break existing SW that relies on the full LEN field to be stateful. - on ZCR_EL1 access, we do absolutely nothing. On restoring the SVE context for an L2 guest, we directly restore the guest hypervisor's view of ZCR_EL2 into the physical ZCR_EL2. If the guest's view of the register was updated using the ZCR_EL2 accessor, the value has already been sanitised (with the caveat mentioned above). But if the guest used ZCR_EL1, the raw value is written into the HW, and the L2 guest can now access VLs that it shouldn't. Fix all the above by moving the VL capping to the restore points, ensuring that: - the HW is always programmed with a capped value, irrespective of the accessor being used, - the ZCR_EL2.LEN field is always completely stateful, irrespective of the accessor being used. Additionally, move ZCR_EL2 to be a sanitised register, ensuring that only the LEN field is actually stateful. This requires some creative construction of the RES0 mask, as the sysreg generation script does not yet generate RAZ/WI fields. [maz: rewrote commit message, tidy up access_zcr_el2()]",
       "published": "2026-07-19T16:17:12.643Z",
@@ -18409,6 +18449,51 @@
       ]
     },
     {
+      "id": "CVE-2026-64115",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: vsock/vmci: fix UAF when peer resets connection during handshake vmci_transport_recv_connecting_server() returned err = 0 for a peer RST in its default switch arm: err = pkt->type == VMCI_TRANSPORT_PACKET_TYPE_RST ? 0 : -EINVAL; That made vmci_transport_recv_listen() skip vsock_remove_pending(), leaving the pending socket on the listener's pending_links with sk_state = TCP_CLOSE while destroy: still dropped the explicit reference taken before schedule_delayed_work(). One second later vsock_pending_work() observed is_pending=true and performed full cleanup: vsock_remove_pending() then the two trailing sock_put(sk) calls -- the first reached refcount 0 and __sk_freed the socket, and the second wrote into the freed object: BUG: KASAN: slab-use-after-free in refcount_warn_saturate Write of size 4 at addr ffff88800b1cac80 by task kworker Workqueue: events vsock_pending_work Treat peer RST like any other unexpected packet type (err = -EINVAL). All destroy: arms now return err 0/100 patched.",
+      "published": "2026-07-19T16:17:52.967Z",
+      "lastModified": "2026-08-12T15:50:13.127Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00135,
+      "epssPercentile": 0.03401,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.2,
+      "tags": [
+        "Linux",
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2026-56454",
       "summary": "HCL DFXAnalytics is affected by a Deprecated Protocol vulnerability due to the use of TLS 1.0 and TLS 1.1. These legacy protocols contain numerous cryptographic design flaws that expose data to interception and decryption. To remediate this risk, the application must disable all support for TLS 1.0 and TLS 1.1, and exclusively enable support for secure protocols, specifically TLS 1.2 and TLS 1.3.",
       "published": "2026-07-16T14:16:54.643Z",
@@ -18850,6 +18935,52 @@
       "priorityScore": 3.18,
       "tags": [
         "CWE-201"
+      ]
+    },
+    {
+      "id": "CVE-2026-64109",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: af_unix: Fix UAF read of tail->len in unix_stream_data_wait() unix_stream_data_wait() does skb_peek_tail(&sk->sk_receive_queue) without holding any lock that prevents SKBs on that queue from being dequeued and freed. This has been the case since commit 79f632c71bea (\"unix/stream: fix peeking with an offset larger than data in queue\"). The first consequence of this is that the pointer comparison `tail != last` can be false even if `last` semantically refers to an already-freed SKB while `tail` is a new SKB allocated at the same address; which can cause unix_stream_data_wait() to wrongly keep blocking after new data has arrived, but only in a weird scenario where a peeking recv() and a normal recv() on the same socket are racing, which is probably not a real problem. But since commit 2b514574f7e8 (\"net: af_unix: implement splice for stream af_unix sockets\"), `tail` is actually dereferenced, which can cause UAF in the following race scenario (where test_setup() runs single-threaded, and afterwards, test_thread1() and test_thread2() run concurrently in two threads: ``` static int socks[2]; void test_setup(void) { socketpair(AF_UNIX, SOCK_STREAM, 0, socks); send(socks[1], \"A\", 1, 0); int peekoff = 1; setsockopt(socks[0], SOL_SOCKET, SO_PEEK_OFF, &peekoff, sizeof(peekoff)); } void test_thread1(void) { char dummy; recv(socks[0], &dummy, 1, MSG_PEEK); } void test_thread2(void) { char dummy; recv(socks[0], &dummy, 1, 0); shutdown(socks[1], SHUT_WR); } ``` when racing like this: ``` thread1 thread2 unix_stream_read_generic mutex_lock(&u->iolock) skb_peek(&sk->sk_receive_queue) skb_peek_next(skb, &sk->sk_receive_queue) mutex_unlock(&u->iolock) unix_stream_read_generic unix_state_lock(sk) skb_peek(&sk->sk_receive_queue) unix_state_unlock(sk) unix_stream_data_wait unix_state_lock(sk) tail = skb_peek_tail(&sk->sk_receive_queue) spin_lock(&sk->sk_receive_queue.lock) __skb_unlink(skb, &sk->sk_receive_queue) spin_unlock(&sk->sk_receive_queue.lock) consume_skb(skb) [frees the SKB] `tail != last`: false `tail`: true `tail->len != last_len` ***UAF*** ``` Fix the UAF by removing the read of tail->len; checking tail->len would only make sense if SKBs in the receive queue of a UNIX socket could grow, which can no longer happen. Kuniyuki explained: > When commit 869e7c62486e (\"net: af_unix: implement stream sendpage > support\") added sendpage() support, data could be appended to the last > skb in the receiver's queue. > > That's why we needed to check if the length of the last skb was changed > while waiting for new data in unix_stream_data_wait(). > > However, commit a0dbf5f818f9 (\"af_unix: Support MSG_SPLICE_PAGES\") and > commit 57d44a354a43 (\"unix: Convert unix_stream_sendpage() to use > MSG_SPLICE_PAGES\") refactored sendmsg(), and now data is always added > to a new skb. That means this fix is not suitable for kernels before 6.5.",
+      "published": "2026-07-19T16:17:52.233Z",
+      "lastModified": "2026-08-12T15:51:01.570Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00129,
+      "epssPercentile": 0.02928,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.18,
+      "tags": [
+        "F5",
+        "Linux",
+        "CWE-416"
       ]
     },
     {
@@ -26385,6 +26516,51 @@
       ]
     },
     {
+      "id": "CVE-2026-64112",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: rbd: eliminate a race in lock_dwork draining on unmap Given how rbd_lock_add_request() and rbd_img_exclusive_lock() are written, lock_dwork may be (re)queued more than it's actually needed: for example in case a new I/O request comes in while we are in the middle of rbd_acquire_lock() on behalf of another I/O request. This is expected and with rbd_release_lock() preemptively canceling lock_dwork is benign under normal operation. A more problematic example is maybe_kick_acquire(): if (have_requests || delayed_work_pending(&rbd_dev->lock_dwork)) { dout(\"%s rbd_dev %p kicking lock_dwork\\n\", __func__, rbd_dev); mod_delayed_work(rbd_dev->task_wq, &rbd_dev->lock_dwork, 0); } It's not unrealistic for lock_dwork to get canceled right after delayed_work_pending() returns true and for mod_delayed_work() to requeue it right there anyway. This is a classic TOCTOU race. When it comes to unmapping the image, there is an implicit assumption of no self-initiated exclusive lock activity past the point of return from rbd_dev_image_unlock() which unlocks the lock if it happens to be held. This unlock is assumed to be final and lock_dwork (as well as all other exclusive lock tasks, really) isn't expected to get queued again. However, lock_dwork is canceled only in cancel_tasks_sync() (i.e. later in the unmap sequence) and on top of that the cancellation can get in effect nullified by maybe_kick_acquire(). This may result in rbd_acquire_lock() executing after rbd_dev_device_release() and rbd_dev_image_release() run and free and/or reset a bunch of things. One of the possible failure modes then is a violated rbd_assert(rbd_image_format_valid(rbd_dev->image_format)); in rbd_dev_header_info() which is called via rbd_dev_refresh() from rbd_post_acquire_action(). Redo exclusive lock task draining to provide saner semantics and try to meet the assumptions around rbd_dev_image_unlock().",
+      "published": "2026-07-19T16:17:52.567Z",
+      "lastModified": "2026-08-12T15:50:34.470Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00099,
+      "epssPercentile": 0.00949,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-367",
+          "name": "CWE-367",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.76,
+      "tags": [
+        "Linux",
+        "CWE-367"
+      ]
+    },
+    {
       "id": "CVE-2026-63883",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: serial: qcom_geni: fix kfifo underflow when flush precedes DMA completion IRQ When uart_flush_buffer() runs before the DMA completion IRQ is delivered, the following race can occur (all steps serialized by uart_port_lock): 1. DMA starts: tx_remaining = N, kfifo contains N bytes 2. DMA completes in hardware; IRQ is pending but not yet delivered 3. uart_flush_buffer() acquires the port lock and calls kfifo_reset(), making kfifo_len() = 0 while tx_remaining remains N 4. uart_flush_buffer() releases the port lock 5. DMA IRQ fires; handle_tx_dma() acquires the port lock and calls uart_xmit_advance(uport, tx_remaining) on an empty kfifo uart_xmit_advance() increments kfifo->out by tx_remaining. Since kfifo_reset() already set both in and out to 0, out wraps past in, causing kfifo_len() to return UART_XMIT_SIZE - tx_remaining. The next start_tx_dma() call then submits a DMA transfer of stale buffer data. Fix this by snapshotting kfifo_len() at the start of handle_tx_dma() and skipping uart_xmit_advance() when fifo_len < tx_remaining, which indicates the kfifo was reset by a preceding flush.",
       "published": "2026-07-19T16:17:05.343Z",
@@ -27327,51 +27503,6 @@
       ]
     },
     {
-      "id": "CVE-2026-14987",
-      "summary": "The GiveWP – Donation Plugin and Fundraising Platform plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'twitter_message' Sequoia Template Setting in all versions up to, and including, 4.16.3 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with give worker-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The injected script executes specifically when a donor clicks the Share on Twitter button on the Sequoia donation confirmation view, as that is when the unescaped twitter_message value is evaluated inside the JavaScript template literal.",
-      "published": "2026-07-16T04:17:19.400Z",
-      "lastModified": "2026-07-16T14:16:48.670Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00206,
-      "epssPercentile": 0.10832,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.62,
-      "tags": [
-        "WordPress",
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-15021",
       "summary": "The wpForo Forum plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'location' Profile Field in all versions up to, and including, 3.1.1 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with subscriber-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The sanitize_text_field() function applied at input does not encode double quotes, allowing attribute breakout via a payload that escapes the href attribute context and injects event handler attributes.",
       "published": "2026-07-16T09:16:17.323Z",
@@ -27549,51 +27680,6 @@
       ]
     },
     {
-      "id": "CVE-2026-12409",
-      "summary": "The Landing Page Builder – Coming Soon page, Maintenance Mode, Lead Page, WordPress Landing Pages plugin for WordPress is vulnerable to Cross-Site Request Forgery in all versions up to, and including, 1.5.3.6. This is due to missing or incorrect nonce validation on the ulpb_admin_ajax function. This makes it possible for unauthenticated attackers to create, update, retitle, or change the post status, slug, and type of arbitrary posts and write ULPB_DATA post meta via a forged request granted they can trick a site administrator into performing an action such as clicking on a link. This attack requires the victim to hold an editor-level or administrator session, as the wp_ajax_ulpb_admin_data action enforces a capability check that the forged request must satisfy by inheriting the logged-in user's session cookies.",
-      "published": "2026-07-16T04:17:14.213Z",
-      "lastModified": "2026-07-17T13:17:55.333Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00129,
-      "epssPercentile": 0.02974,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-352",
-          "name": "Cross-Site Request Forgery",
-          "description": "A web request may execute without user intent."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.61,
-      "tags": [
-        "WordPress",
-        "CWE-352"
-      ]
-    },
-    {
       "id": "CVE-2026-13104",
       "summary": "A potential vulnerability was reported in Lenovo App Store, distributed exclusively in the Chinese market, that could allow a local authenticated user to execute arbitrary code with elevated privileges.",
       "published": "2026-07-16T17:16:55.090Z",
@@ -27725,6 +27811,44 @@
         "F5",
         "Linux",
         "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-64111",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: lsm: hold cred_guard_mutex for lsm_set_self_attr() Just as proc_pid_attr_write() already does before calling the LSM hook. This only matters for SELinux and AppArmor which check whether the process is being ptraced and if so, whether to allow the transition.",
+      "published": "2026-07-19T16:17:52.463Z",
+      "lastModified": "2026-08-12T15:50:39.560Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00135,
+      "epssPercentile": 0.0344,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.61,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -28167,51 +28291,6 @@
       "priorityScore": 2.6,
       "tags": [
         "CWE-613"
-      ]
-    },
-    {
-      "id": "CVE-2026-15652",
-      "summary": "The Easy Accordion – AI-Powered FAQ & Accordion Blocks, Product FAQ plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'align' Block Attribute in all versions up to, and including, 3.1.6 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
-      "published": "2026-07-16T04:17:25.463Z",
-      "lastModified": "2026-07-16T14:16:48.987Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00197,
-      "epssPercentile": 0.09753,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.58,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -31909,51 +31988,6 @@
       ]
     },
     {
-      "id": "CVE-2026-15336",
-      "summary": "The Catch Themes Demo Import plugin for WordPress is vulnerable to Missing Authorization in versions up to, and including, 3.3. This is due to the catch_themes_demo_import_activate_plugin() function, hooked on admin_init when the activate_plugin GET parameter is present, calling Plugin_Upgrader::install() to download and install a plugin from WordPress.org before performing the current_user_can('activate_plugins') capability check. This makes it possible for authenticated attackers, with subscriber-level access and above, to install the hardcoded 'essential-content-types' plugin from the WordPress.",
-      "published": "2026-07-16T04:17:22.073Z",
-      "lastModified": "2026-07-17T13:17:57.593Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.0025,
-      "epssPercentile": 0.16518,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.08,
-      "tags": [
-        "WordPress",
-        "CWE-862"
-      ]
-    },
-    {
       "id": "CVE-2026-16077",
       "summary": "A vulnerability was found in AstrBotDevs AstrBot up to 4.25.5. Impacted is the function _normalize_rw_path of the file astrbot/core/tools/computer_tools/fs.py of the component Filesystem Computer-Use Tool. Performing a manipulation results in link following. The attack is only possible with local access. The exploit has been made public and could be used. The vendor was contacted early about this disclosure but did not respond in any way.",
       "published": "2026-07-18T07:16:39.290Z",
@@ -32493,51 +32527,6 @@
       "priorityScore": 2.04,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-12434",
-      "summary": "The List category posts plugin for WordPress is vulnerable to Sensitive Information Exposure in all versions up to, and including, 0.95.0 via the sanitize_status. This makes it possible for authenticated attackers, with contributor-level access and above, to extract titles, full content, excerpts, dates, authors, and custom-field metadata of other users' pending-review, scheduled, and trashed posts by embedding a crafted [catlist] shortcode in their own draft and previewing it. This vulnerability is a bypass of the incomplete fix introduced for CVE-2025-11377 in version 0.93.0.",
-      "published": "2026-07-16T04:17:15.847Z",
-      "lastModified": "2026-07-16T14:16:48.360Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00239,
-      "epssPercentile": 0.1505,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.03,
-      "tags": [
-        "WordPress",
-        "CWE-862"
       ]
     },
     {
@@ -33258,6 +33247,51 @@
       "tags": [
         "Linux",
         "CWE-908"
+      ]
+    },
+    {
+      "id": "CVE-2026-64110",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: igc: fix potential skb leak in igc_fpe_xmit_smd_frame() When igc_fpe_init_tx_descriptor() fails, no one takes care of an allocated skb, leaking it. [1] Use dev_kfree_skb_any() on failure. Tested on an I226 adapter with the following command, while injecting faults in igc_fpe_init_tx_descriptor() to trigger the error path. # ethtool --set-mm $DEV verify-enabled on tx-enabled on pmac-enabled on [1] unreferenced object 0xffff888113c6cdc0 (size 224): ... backtrace (crc be3d3fda): kmem_cache_alloc_node_noprof+0x3b1/0x410 __alloc_skb+0xde/0x830 igc_fpe_xmit_smd_frame.isra.0+0xad/0x1b0 igc_fpe_send_mpacket+0x37/0x90 ethtool_mmsv_verify_timer+0x15e/0x300",
+      "published": "2026-07-19T16:17:52.370Z",
+      "lastModified": "2026-08-12T15:51:01.650Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00121,
+      "epssPercentile": 0.02248,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2,
+      "tags": [
+        "Linux",
+        "CWE-401"
       ]
     },
     {
@@ -34015,51 +34049,6 @@
       "tags": [
         "CWE-285",
         "CWE-639"
-      ]
-    },
-    {
-      "id": "CVE-2026-13005",
-      "summary": "The MxChat – AI Chatbot & Content Generation for WordPress plugin for WordPress is vulnerable to Stored Cross-Site Scripting via admin settings in all versions up to, and including, 3.2.10 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with administrator-level permissions and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This only affects multi-site installations and installations where unfiltered_html has been disabled.",
-      "published": "2026-07-16T04:17:16.390Z",
-      "lastModified": "2026-07-16T16:19:00.020Z",
-      "severity": "Medium",
-      "cvssScore": 4.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00207,
-      "epssPercentile": 0.11031,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.93,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
