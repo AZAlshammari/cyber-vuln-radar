@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-15T19:04:01.869Z",
+  "generatedAt": "2026-08-15T19:35:07.464Z",
   "count": 1000,
   "items": [
     {
@@ -573,6 +573,51 @@
       ]
     },
     {
+      "id": "CVE-2026-53421",
+      "summary": "Improper Isolation or Compartmentalization vulnerability in Apache Syncope. An administrator with adequate entitlements can achieve remote code execution through the connector subsystem by relying on scripted connectors' (REST and SQL) capability to run Groovy scripts. This issue affects Apache Syncope: from 3.0.0-M0 through 3.0.16, from 4.0.0-M0 Through 4.0.6, from 4.1.0-M0 through 4.1.1. Users are recommended to upgrade to version 4.0.7 / 4.1.2, which fix this issue by hardening the Groovy security sandbox.",
+      "published": "2026-07-20T15:16:43.117Z",
+      "lastModified": "2026-07-27T15:00:13.080Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00678,
+      "epssPercentile": 0.49298,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-653",
+          "name": "CWE-653",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.16,
+      "tags": [
+        "Apache",
+        "CWE-653"
+      ]
+    },
+    {
       "id": "CVE-2026-53412",
       "summary": "Improper Input Validation in Zoom Desktop Client for Windows, Zoom VDI Client for Windows, and Zoom Meeting SDK for Windows may allow an unauthenticated user to conduct an account takeover via network access.",
       "published": "2026-07-16T22:17:31.380Z",
@@ -938,6 +983,51 @@
       ]
     },
     {
+      "id": "CVE-2026-57308",
+      "summary": "Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection') vulnerability in Apache Syncope. An administrator with adequate entitlements can achieve execution of arbitrary SQL via stacked queries, leveraging unsanitized sort parameters. This issue affects Apache Syncope: from 3.0.0-M0 through 3.0.16, from 4.0.0-M0 Through 4.0.6, from 4.1.0-M0 through 4.1.1. Users are recommended to upgrade to version 4.0.7 / 4.1.2, which fix this issue.",
+      "published": "2026-07-20T15:16:44.197Z",
+      "lastModified": "2026-07-27T15:00:04.513Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00496,
+      "epssPercentile": 0.40328,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.84,
+      "tags": [
+        "Apache",
+        "CWE-89"
+      ]
+    },
+    {
       "id": "CVE-2026-8481",
       "summary": "IBM Langflow OSS 1.0.0 through 1.10.0 contain a critical remote code execution vulnerability in the code validation API endpoint. The POST /api/v1/validate/code endpoint accepts user-supplied Python code and executes it directly using Python's built-in exec() function without sandboxing, input validation, or privilege restrictions, enabling any authenticated user to execute arbitrary system commands with the full privileges of the Langflow server process.",
       "published": "2026-07-17T20:17:30.747Z",
@@ -1196,51 +1286,6 @@
       "priorityScore": 5.51,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-54526",
-      "summary": "Argo Workflows is an open source container-native workflow engine for orchestrating parallel jobs on Kubernetes. Prior to 3.7.15 and 4.0.6, the allow-list fix for CVE-2026-31892 is incomplete because workflow/util/merge.go ValidateUserOverrides and SanitizeUserWorkflowSpec walk only the top-level fields of WorkflowSpec via reflection, and WorkflowSpec.ArtifactGC is allow-listed wholesale; the struct behind that field, WorkflowLevelArtifactGC, has a PodSpecPatch sub-field whose contents flow unmodified into util.ApplyPodSpecPatch on the artifact-GC pod, the same sink the original fix closed for WorkflowSpec.PodSpecPatch, so a user submitting a Workflow under templateReferencing: Strict or Secure (against a referenced WorkflowTemplate that declares an output artifact and setting spec.artifactGC.strategy: OnWorkflowCompletion) can still inject an arbitrary strategic merge patch into the artifact-GC pod, including hostPath volumes, privileged: true, arbitrary image and command, and hostNetwork: true, defeating the stated purpose of Strict/Secure reference mode. This issue is fixed in versions 3.7.15 and 4.0.6.",
-      "published": "2026-07-16T19:16:50.373Z",
-      "lastModified": "2026-07-30T14:28:18.717Z",
-      "severity": "Critical",
-      "cvssScore": 9.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00363,
-      "epssPercentile": 0.29415,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Kubernetes",
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.49,
-      "tags": [
-        "Kubernetes",
-        "CWE-284"
       ]
     },
     {
@@ -2858,6 +2903,50 @@
       "priorityScore": 5,
       "tags": [
         "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-12701",
+      "summary": "A path traversal vulnerability was found in pulpcore. The relative_path_validator function only verifies that content paths do not begin with \"/\" but fails to block directory traversal sequences such as \"../\" anywhere in the path. An authenticated administrator can craft a relative_path containing embedded traversal sequences (e.g., \"looking/normal/../../../../etc/shadow\") that escapes the intended export directory during FilesystemExport operations. Because the file content is also user-controlled (uploaded artifact), this allows arbitrary file write to any location writable by the Pulp service user, potentially leading to service compromise or further system exploitation.",
+      "published": "2026-07-20T15:16:34.333Z",
+      "lastModified": "2026-07-22T19:16:54.333Z",
+      "severity": "Critical",
+      "cvssScore": 9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:L/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "High",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00759,
+      "epssPercentile": 0.5218,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.98,
+      "tags": [
+        "CWE-22"
       ]
     },
     {
@@ -4983,6 +5072,51 @@
       ]
     },
     {
+      "id": "CVE-2026-53405",
+      "summary": "Improper Isolation or Compartmentalization vulnerability in Apache Syncope. An administrator with adequate entitlements can import arbitrary BPMN process definitions via the REST API and then start the process. When a BPMN process containing a Groovy scriptTask is imported and started, the Groovy script is executed directly on the server, with no sandbox. This issue affects Apache Syncope: from 3.0.0-M0 through 3.0.16, from 4.0.0-M0 Through 4.0.6, from 4.1.0-M0 through 4.1.1. Users are recommended to upgrade to version 4.0.7 / 4.1.2, which fix this issue by wrapping Flowable's Groovy scriptTasks with security sandbox.",
+      "published": "2026-07-20T15:16:42.987Z",
+      "lastModified": "2026-07-27T15:00:33.227Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00445,
+      "epssPercentile": 0.36984,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-653",
+          "name": "CWE-653",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.72,
+      "tags": [
+        "Apache",
+        "CWE-653"
+      ]
+    },
+    {
       "id": "CVE-2026-48062",
       "summary": "CodeIgniter is a PHP full-stack web framework. Prior to 4.7.3, the ext_in upload validation rule in system/Validation/StrictRules/FileRules.php checked the MIME-derived guessed extension instead of the client-provided filename extension. As a result, an uploaded file named shell.php containing GIF-like content could pass validation such as uploaded[avatar]|is_image[avatar]|mime_in[avatar,image/gif]|ext_in[avatar,gif] because the detected MIME type maps to gif, even though the uploaded filename extension is php. Applications are impacted if they accept user-controlled uploads, rely on ext_in to validate the uploaded filename extension, save uploaded files using the original client filename with $file->move($path), store uploads in a web-accessible directory, and allow PHP or other executable files to run from that directory. In those conditions, this may lead to arbitrary code execution. This issue is fixed in version 4.7.3.",
       "published": "2026-07-17T21:17:06.787Z",
@@ -5024,6 +5158,51 @@
       "priorityScore": 4.71,
       "tags": [
         "CWE-434"
+      ]
+    },
+    {
+      "id": "CVE-2026-63071",
+      "summary": "Improper Isolation or Compartmentalization vulnerability in Apache Syncope. An administrator with adequate entitlements for Implementations can create a malicious Groovy class containing untrusted code bypassing the Groovy security sandbox. This issue affects Apache Syncope: from 3.0.0-M0 through 3.0.16, from 4.0.0-M0 through 4.0.6, from 4.1.0-M0 through 4.1.1. Users are recommended to upgrade to version 4.0.7 / 4.1.2, which fix this issue by tightening the Groovy security sandbox.",
+      "published": "2026-07-20T15:16:45.093Z",
+      "lastModified": "2026-07-27T14:58:11.113Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00439,
+      "epssPercentile": 0.36553,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-653",
+          "name": "CWE-653",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.71,
+      "tags": [
+        "Apache",
+        "CWE-653"
       ]
     },
     {
@@ -5498,6 +5677,96 @@
       "priorityScore": 4.63,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-62183",
+      "summary": "Improper Privilege Management vulnerability in Apache Syncope. When: * the all-Java user workflow adapter is configured, or * the Flowable user workflow adapter is configured, bearing a BPMN definition not requiring admin approval for user self registration of self update requests the following scenario could happen. A REST API call can allow the user to grant themselves one or more of defined Roles, thus gaining their Entitlements and becoming in fact an administrator; the actual Entitlements gained depend on the Roles that are effectively defined on the specific Syncope deployment. This issue affects Apache Syncope: from 3.0.0-M0 through 3.0.16, from 4.0.0-M0 Through 4.0.6, from 4.1.0-M0 through 4.1.1. Users are recommended to upgrade to version 4.0.7 / 4.1.2, which fix this issue.",
+      "published": "2026-07-20T15:16:44.860Z",
+      "lastModified": "2026-07-27T14:59:50.457Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00411,
+      "epssPercentile": 0.34272,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-269",
+          "name": "Improper Privilege Management",
+          "description": "Privileges are assigned, modified, or checked incorrectly."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.63,
+      "tags": [
+        "Apache",
+        "CWE-269"
+      ]
+    },
+    {
+      "id": "CVE-2026-62418",
+      "summary": "Low-privileged authenticated Server-Side Request Forgery (SSRF) vulnerability in Apache Syncope via Connectors and Resources check. This issue affects Apache Syncope: from 3.0.0-M0 through 3.0.16, from 4.0.0-M0 Through 4.0.6, from 4.1.0-M0 through 4.1.1. Users are recommended to upgrade to version 4.0.7 / 4.1.2, which fix this issue.",
+      "published": "2026-07-20T15:16:44.983Z",
+      "lastModified": "2026-07-27T14:58:20.017Z",
+      "severity": "High",
+      "cvssScore": 8.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00301,
+      "epssPercentile": 0.22754,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apache",
+      "product": "Apache",
+      "cwe": [
+        {
+          "id": "CWE-918",
+          "name": "CWE-918",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.63,
+      "tags": [
+        "Apache",
+        "CWE-918"
       ]
     },
     {
@@ -6034,50 +6303,6 @@
       ]
     },
     {
-      "id": "CVE-2026-46353",
-      "summary": "BigBlueButton is an open-source virtual classroom. Prior to 3.0.21, bbb-web checksum validation could be bypassed when a presentationUploadExternalUrl parameter was supplied to API request handling in CreateMeeting.java and ValidationService.java, allowing a user to send valid requests to some endpoints without a checksum. This issue is fixed in version 3.0.21.",
-      "published": "2026-07-16T19:16:46.000Z",
-      "lastModified": "2026-07-17T18:33:28.553Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00266,
-      "epssPercentile": 0.1865,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.49,
-      "tags": [
-        "CWE-284"
-      ]
-    },
-    {
       "id": "CVE-2026-63909",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: OOB read regression in smb_check_perm_dacl() ACE-walk loops Commit d07b26f39246 (\"ksmbd: require minimum ACE size in smb_check_perm_dacl()\") introduced a transposed bounds check: if (offsetof(struct smb_ace, sid) + aces_size size` (offset 2) even when `aces_size` is 0-3 bytes. This re-opens a 2-byte heap out-of-bounds (OOB) read past the pntsd allocation during subsequent SMB2_CREATE operations. Fix this by properly transposing the comparison to require at least 16 bytes (8-byte offset + 8-byte SID base), matching the correct form used in smb_inherit_dacl().",
       "published": "2026-07-19T16:17:08.747Z",
@@ -6203,94 +6428,6 @@
         "F5",
         "Linux",
         "CWE-416"
-      ]
-    },
-    {
-      "id": "CVE-2026-46351",
-      "summary": "BigBlueButton is an open-source virtual classroom. Prior to 3.0.21, bbb-web generated conference sessionToken values with insufficiently secure randomness in bbb-common-web/src/main/java/org/bigbluebutton/api/Util.java and bigbluebutton-web/grails-app/controllers/org/bigbluebutton/web/controllers/ApiController.groovy, allowing a session user to predict other users' conference session tokens and impersonate them. This issue is fixed in version 3.0.21.",
-      "published": "2026-07-16T19:16:45.863Z",
-      "lastModified": "2026-07-17T18:36:41.143Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00258,
-      "epssPercentile": 0.17697,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-330",
-          "name": "CWE-330",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.45,
-      "tags": [
-        "CWE-330"
-      ]
-    },
-    {
-      "id": "CVE-2026-46512",
-      "summary": "Frogman provides headless PBX control through MCP and HTTP API. Prior to 1.6.2, fm_dialplan_apply accepted template parameters including greeting, dest, url, extension, code, and file, and Tools/DialplanApply.php wrote Dialplan/Templates.php output to extensions_custom.conf while only Dialplan/TemplateBase.php:38-42 sanitized contextName(), allowing a PERM_WRITE caller using confirm:true to inject arbitrary Asterisk directives such as System(), Set(SHELL(...)), Goto, or Macro. This issue is fixed in version 1.6.2.",
-      "published": "2026-07-16T19:16:46.510Z",
-      "lastModified": "2026-07-18T03:16:36.113Z",
-      "severity": "Critical",
-      "cvssScore": 9.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00352,
-      "epssPercentile": 0.2828,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.45,
-      "tags": [
-        "CWE-94"
       ]
     },
     {
@@ -6512,6 +6649,56 @@
       "priorityScore": 4.43,
       "tags": [
         "CWE-200"
+      ]
+    },
+    {
+      "id": "CVE-2026-16248",
+      "summary": "A vulnerability was found in Tenda AC10 16.03.10.09_multi_TDE01. This issue affects the function fromAdvSetLanip of the file /goform/AdvSetLanip of the component httpd/netctrl. The manipulation of the argument GetValue/SetValue results in stack-based buffer overflow. The attack may be performed from remote. The exploit has been made public and could be used.",
+      "published": "2026-07-20T13:16:56.190Z",
+      "lastModified": "2026-07-20T15:16:36.400Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00466,
+      "epssPercentile": 0.38436,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-119",
+          "name": "CWE-119",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-121",
+          "name": "CWE-121",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.43,
+      "tags": [
+        "CWE-119",
+        "CWE-121"
       ]
     },
     {
@@ -8530,6 +8717,56 @@
       ]
     },
     {
+      "id": "CVE-2026-16252",
+      "summary": "A security flaw has been discovered in Beijing Shenzhou Shihan Technology Multimedia Integrated Business Display System 8.2.2. Impacted is an unknown function of the file /admin/system/structure/updateStructure/deflate/Insecure/Staffshinel Ds.jsp?Shine ID=aaa. The manipulation of the argument Structure_ID results in sql injection. It is possible to launch the attack remotely. The exploit has been released to the public and may be used for attacks.",
+      "published": "2026-07-20T15:16:36.540Z",
+      "lastModified": "2026-07-20T17:14:14.557Z",
+      "severity": "High",
+      "cvssScore": 7.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00263,
+      "epssPercentile": 0.18284,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-74",
+          "name": "CWE-74",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.19,
+      "tags": [
+        "CWE-74",
+        "CWE-89"
+      ]
+    },
+    {
       "id": "CVE-2026-64124",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net: devmem: reject dma-buf bind with non-page-aligned size or SG length net_devmem_bind_dmabuf() trusts dmabuf->size and sg_dma_len() to be PAGE_SIZE multiples without checking: - tx_vec is sized dmabuf->size / PAGE_SIZE, and net_devmem_get_niov_at() only bounds-checks virt_addr size before indexing tx_vec[virt_addr / PAGE_SIZE]. With size = N*PAGE_SIZE + r (1 area.num_niovs = len / PAGE_SIZE while gen_pool_add_owner() covers the full byte len, so a non-page-multiple non-final sg desyncs num_niovs from the gen_pool region for every later sg, on both RX and TX. dma-buf does not require page-aligned sizes, so the bind path has to enforce what its own indexing assumes. Reject both with -EINVAL. The size check is TX-only (only tx_vec is sized off dmabuf->size); the SG-length check covers both directions.",
       "published": "2026-07-19T16:17:54.030Z",
@@ -10258,50 +10495,6 @@
       ]
     },
     {
-      "id": "CVE-2026-46404",
-      "summary": "BigBlueButton is an open-source virtual classroom. Prior to 3.0.23, the presentation URL validation did not properly restrict access to site local and link local addresses. The redirect following logic now pins resolved IPs. This issue is fixed in version 3.0.23.",
-      "published": "2026-07-16T19:16:46.387Z",
-      "lastModified": "2026-07-17T19:17:14.923Z",
-      "severity": "Medium",
-      "cvssScore": 6.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00256,
-      "epssPercentile": 0.17443,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.99,
-      "tags": [
-        "CWE-918"
-      ]
-    },
-    {
       "id": "CVE-2026-63884",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/i915: Fix potential UAF in TTM object purge TLDR: The bo->ttm object might be changed by calling ttm_bo_validate(), move casting it to an i915_tt object later to actually get the right pointer. A user reported hitting the following bug under heavy use on DG2: [26620.095550] Oops: general protection fault, probably for non-canonical address 0xa56b6b6b6b6b6b8b: 0000 1 SMP NOPTI [26620.095556] CPU: 2 UID: 0 PID: 631 Comm: Xorg Not tainted 6.18.8 #1 PREEMPT(lazy) [26620.095558] Hardware name: ASRock B850M Steel Legend WiFi/B850M Steel Legend WiFi, BIOS 3.50 09/18/2025 [26620.095559] RIP: 0010:i915_ttm_purge+0x84/0x100 [i915] [26620.095604] Code: 00 00 00 48 8d 54 24 10 48 89 e6 48 89 fb e8 83 aa ae ff 85 c0 75 6f 48 83 bb a8 01 00 00 00 74 2c 48 8b 45 78 48 85 c0 74 23 8b 78 20 48 c7 c2 ff ff ff ff 31 f6 e8 7a 73 e3 e0 48 8b 7d 78 [26620.095605] RSP: 0018:ffffc90005fd7430 EFLAGS: 00010282 [26620.095607] RAX: a56b6b6b6b6b6b6b RBX: ffff8881f46c3dc0 RCX: 0000000000000000 [26620.095608] RDX: 0000000000000000 RSI: 0000000000000246 RDI: 00000000ffffffff [26620.095609] RBP: ffff888289610f00 R08: 0000000000000001 R09: ffff88823b022000 [26620.095609] R10: ffff888103029b28 R11: ffff8881fc7f3800 R12: ffff88810b6150d0 [26620.095609] R13: ffff888289610f00 R14: 0000000000000000 R15: ffff8881f46c3dc0 [26620.095610] FS: 00007f1004d86900(0000) GS:ffff88901c858000(0000) knlGS:0000000000000000 [26620.095611] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033 [26620.095611] CR2: 00007f0fdf489000 CR3: 000000035b0c1000 CR4: 0000000000750ef0 [26620.095612] PKRU: 55555554 [26620.095612] Call Trace: [26620.095615] [26620.095615] i915_ttm_move+0x2b9/0x420 [i915] [26620.095642] ? ttm_tt_init+0x65/0x80 [ttm] [26620.095644] ? i915_ttm_tt_create+0xc6/0x150 [i915] [26620.095667] ttm_bo_handle_move_mem+0xb6/0x160 [ttm] [26620.095669] ttm_bo_evict+0x100/0x150 [ttm] [26620.095671] ? preempt_count_add+0x64/0xa0 [26620.095673] ? _raw_spin_lock+0xe/0x30 [26620.095675] ? _raw_spin_unlock+0xd/0x30 [26620.095675] ? i915_gem_object_evictable+0xb7/0xd0 [i915] [26620.095704] ttm_bo_evict_cb+0x6e/0xd0 [ttm] [26620.095705] ttm_lru_walk_for_evict+0xa6/0x200 [ttm] [26620.095708] ttm_bo_alloc_resource+0x185/0x4f0 [ttm] [26620.095709] ? init_object+0x62/0xd0 [26620.095712] ttm_bo_validate+0x7a/0x180 [ttm] [26620.095713] ? _raw_spin_unlock_irqrestore+0x16/0x30 [26620.095714] __i915_ttm_get_pages+0xb0/0x170 [i915] [26620.095737] i915_ttm_get_pages+0x9f/0x150 [i915] [26620.095759] ? i915_gem_do_execbuffer+0xedc/0x2b40 [i915] [26620.095786] ? alloc_debug_processing+0xd0/0x100 [26620.095787] ? _raw_spin_unlock_irqrestore+0x16/0x30 [26620.095788] ? i915_vma_instance+0xa0/0x4e0 [i915] [26620.095822] __i915_gem_object_get_pages+0x2f/0x40 [i915] [26620.095848] i915_vma_pin_ww+0x706/0x980 [i915] [26620.095875] ? i915_gem_do_execbuffer+0xedc/0x2b40 [i915] [26620.095904] eb_validate_vmas+0x170/0xa00 [i915] [26620.095930] i915_gem_do_execbuffer+0x1201/0x2b40 [i915] [26620.095953] ? alloc_debug_processing+0xd0/0x100 [26620.095954] ? _raw_spin_unlock_irqrestore+0x16/0x30 [26620.095955] ? i915_gem_execbuffer2_ioctl+0xc9/0x240 [i915] [26620.095977] ? __wake_up_sync_key+0x32/0x50 [26620.095979] ? i915_gem_execbuffer2_ioctl+0xc9/0x240 [i915] [26620.096001] ? __slab_alloc.isra.0+0x67/0xc0 [26620.096003] i915_gem_execbuffer2_ioctl+0x11a/0x240 [i915] Results from decode_stacktrace.sh pointed to dereference of a file pointer field of a i915 TTM page vector container associated with an object being purged on eviction. That path is taken when the object is marked as no longer needed. Code analysis revealed a possibility of the i915 TTM page vector container being replaced with a new instance inside a function that purges content of the object, should it be still busy. That function is called, indirectly via a more general function that changes the object's placement and caching policy, ---truncated---",
       "published": "2026-07-19T16:17:05.463Z",
@@ -10798,6 +10991,50 @@
       "priorityScore": 3.94,
       "tags": [
         "CWE-787"
+      ]
+    },
+    {
+      "id": "CVE-2026-45139",
+      "summary": "CI4MS is a CodeIgniter 4-based content management system skeleton. Prior to version 0.31.9.0, the Fileeditor module enforces an extension allowlist (`['css','js','html','txt','json','sql','md']`) on content-write operations (`saveFile`, `createFile`), but two destructive endpoints — `deleteFileOrFolder` and `renameFile` — never validate the extension of the *source* path. A backend user with file-editor permissions can therefore unlink or rename any file inside the project root that is not explicitly listed in the small `$hiddenItems` blocklist. Critical framework files such as `app/Config/Routes.php`, `app/Config/App.php`, `app/Config/Database.php`, `app/Config/Filters.php`, `public/index.php`, and `public/.htaccess` all live outside that blocklist and can be destroyed, producing a persistent denial of service that requires filesystem-level redeployment to recover. Version 0.31.9.0 patches the issue.",
+      "published": "2026-07-20T15:16:38.020Z",
+      "lastModified": "2026-07-21T20:27:18.523Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "High",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00267,
+      "epssPercentile": 0.18916,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-73",
+          "name": "CWE-73",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.94,
+      "tags": [
+        "CWE-73"
       ]
     },
     {
@@ -15074,6 +15311,56 @@
       ]
     },
     {
+      "id": "CVE-2026-54910",
+      "summary": "FileBrowser Quantum is a free, self-hosted, web-based file manager. Prior to version 1.4.3-beta, the `subtitlesHandler` endpoint (`GET /api/media/subtitles`) accepts two user-controlled query parameters: `path` and `name`, both of which are used in filesystem operations without sanitization, creating two independent path traversal vectors. The primary vector is the `path` parameter: it is passed directly to `idx.GetRealPath()` without calling `SanitizeUserPath()`, allowing an attacker to escape the storage root and set `parentDir` to any directory on the host. No existing anchor file is required. The secondary vector is the `name` parameter: it is joined with `parentDir` via `filepath.Join(parentDir, name)` without stripping directory components, allowing traversal relative to any resolved `parentDir`. Any authenticated user (regardless of role or permissions) can exploit either vector to read any text file readable by the server process, including `/etc/passwd`, SSH keys, database credentials, and JWT signing keys. Version 1.4.3-beta patches the issue.",
+      "published": "2026-07-20T15:16:43.933Z",
+      "lastModified": "2026-07-23T17:58:34.990Z",
+      "severity": "High",
+      "cvssScore": 7.7,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00307,
+      "epssPercentile": 0.2335,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        },
+        {
+          "id": "CWE-23",
+          "name": "CWE-23",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.51,
+      "tags": [
+        "CWE-22",
+        "CWE-23"
+      ]
+    },
+    {
       "id": "CVE-2026-60063",
       "summary": "An out-of-bounds write vulnerability in the Productivity Suite allows a local attacker to trigger kernel memory corruption via a crafted IOCTL request, potentially resulting in privilege escalation or system instability.",
       "published": "2026-07-16T20:16:45.953Z",
@@ -15651,6 +15938,50 @@
       "priorityScore": 3.43,
       "tags": [
         "CWE-598"
+      ]
+    },
+    {
+      "id": "CVE-2026-45270",
+      "summary": "CI4MS is a CodeIgniter 4-based content management system skeleton. Prior to version 0.31.9.0, the `Pages` backend module registers the `html_purify` validation rule on language-keyed page content but persists the raw, un-purified POST value into the database. The public renderer for pages (`Home::index()` → `app/Views/templates/default/pages.php`) emits `$pageInfo->content` without `esc()`, yielding stored XSS that fires for every public visitor of the affected page — including administrators. Because pages may be promoted to the site home page, the payload can be served at `/` and reach every visitor of the site. Version 0.31.9.0 patches the issue.",
+      "published": "2026-07-20T15:16:38.163Z",
+      "lastModified": "2026-07-21T20:27:18.523Z",
+      "severity": "High",
+      "cvssScore": 8.7,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00207,
+      "epssPercentile": 0.1107,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.43,
+      "tags": [
+        "CWE-79"
       ]
     },
     {
@@ -16374,6 +16705,50 @@
       ]
     },
     {
+      "id": "CVE-2026-52349",
+      "summary": "Directory Traversal vulnerability in Menyoo 2.0 Versions before commit 729aa48: fixed in commit 729aa48 allows a local attacker to execute arbitrary code via the Spooner file management, VehicleSpawner save/folder/rename functionality, WeaponOptions save/folder/rename functionality, PedComponentChanger create folder/createfile/rename functionality.",
+      "published": "2026-07-20T15:16:39.827Z",
+      "lastModified": "2026-07-23T18:28:20.910Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00253,
+      "epssPercentile": 0.16987,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.32,
+      "tags": [
+        "CWE-22"
+      ]
+    },
+    {
       "id": "CVE-2026-64106",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: KVM: arm64: vgic-its: Reject restored DTE with out-of-range num_eventid_bits Userspace can restore an ITS Device Table Entry whose Size field encodes more EventID bits than the virtual ITS supports. The live MAPD path rejects that state, but vgic_its_restore_dte() accepts it and stores the out-of-range value in dev->num_eventid_bits. Reject restored DTEs with num_eventid_bits > VITS_TYPER_IDBITS before allocating the device. This mirrors the MAPD check and prevents the restored state from reaching vgic_its_restore_itt(), where the unchecked value can be converted into an oversized scan_its_table() range.",
       "published": "2026-07-19T16:17:51.887Z",
@@ -17084,50 +17459,6 @@
       "priorityScore": 3.23,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-46513",
-      "summary": "Frogman provides headless PBX control through MCP and HTTP API. Prior to 1.6.2, Frogman stored API tokens generated by Tools/CreateApiToken.php:33-36 as raw bin2hex(random_bytes(32)) strings in oc_api_tokens, and Frogman.class.php:78 authenticated the X-Frogman-Token header by comparing it with the stored raw value, allowing database read access to recover reusable active tokens at their assigned permission level, including admin. This issue is fixed in version 1.6.2.",
-      "published": "2026-07-16T19:16:46.640Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "High",
-      "cvssScore": 7.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00261,
-      "epssPercentile": 0.18009,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-256",
-          "name": "CWE-256",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.22,
-      "tags": [
-        "CWE-256"
       ]
     },
     {
@@ -20061,6 +20392,50 @@
       ]
     },
     {
+      "id": "CVE-2026-16277",
+      "summary": "A stack-based buffer overflow was found in rpcbind's rpcinfo utility. When querying a remote rpcbind service with `rpcinfo -l`, address information returned by the server is copied into a fixed-size buffer without sufficient bounds checking. A malicious or compromised rpcbind server could use this flaw to crash the rpcinfo client, resulting in a denial of service. The highest threat from this vulnerability is to system availability.",
+      "published": "2026-07-20T15:16:36.720Z",
+      "lastModified": "2026-07-21T18:31:51.680Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00278,
+      "epssPercentile": 0.20326,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-121",
+          "name": "CWE-121",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.99,
+      "tags": [
+        "CWE-121"
+      ]
+    },
+    {
       "id": "CVE-2026-63970",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: vsock/virtio: bind uarg before filling zerocopy skb virtio_transport_send_pkt_info() allocates or reuses the zerocopy uarg before entering the send loop, but virtio_transport_alloc_skb() still fills the skb before it inherits that uarg. When fixed-buffer vectored zerocopy hits MAX_SKB_FRAGS, io_sg_from_iter() may partially attach managed frags and return -EMSGSIZE. The rollback path call kfree_skb() to free an skb that carries SKBFL_MANAGED_FRAG_REFS but no uarg, so skb_release_data() falls through to ordinary frag unref. Pass the uarg into virtio_transport_alloc_skb() and bind it immediately before virtio_transport_fill_skb(). This keeps control or no-payload skbs untouched while ensuring success and rollback share one lifetime rule.",
       "published": "2026-07-19T16:17:16.063Z",
@@ -21200,50 +21575,6 @@
       "priorityScore": 2.91,
       "tags": [
         "CWE-863"
-      ]
-    },
-    {
-      "id": "CVE-2026-46514",
-      "summary": "Frogman provides headless PBX control through MCP and HTTP API. Prior to 1.6.2, fm_reset_password in Tools/ResetPassword.php:48-53 returned a plaintext password and fm_add_extension in Tools/AddExtension.php:172 returned a plaintext secret; Frogman.class.php:2207-2211 used auditOutcome to JSON-encode those responses into oc_audit_log.detail, allowing any PERM_READ caller with access to fm_audit_search to recover the stored credentials. This issue is fixed in version 1.6.2.",
-      "published": "2026-07-16T19:16:46.767Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.0026,
-      "epssPercentile": 0.17876,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-532",
-          "name": "CWE-532",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.9,
-      "tags": [
-        "CWE-532"
       ]
     },
     {
@@ -26034,50 +26365,6 @@
       ]
     },
     {
-      "id": "CVE-2026-47084",
-      "summary": "An issue was discovered in cyrus-imapd in Cyrus IMAP through 3.12.2. The LOCALDELETE command bypassed ACL checks. An authenticated but non-admin user could invoke the admin-only LOCALDELETE IMAP command and delete mailboxes for which they had no permissions.",
-      "published": "2026-07-16T19:16:48.987Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00214,
-      "epssPercentile": 0.12042,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.7,
-      "tags": [
-        "CWE-863"
-      ]
-    },
-    {
       "id": "CVE-2026-10724",
       "summary": "The Reviews Feed WordPress plugin before 2.6.5 does not neutralize WordPress shortcodes contained in third-party review content before rendering it through its dynamic block, allowing unauthenticated attackers to execute arbitrary shortcodes on pages that display the feed by planting a shortcode in a review on the connected source.",
       "published": "2026-07-20T07:16:34.340Z",
@@ -28282,56 +28569,6 @@
       ]
     },
     {
-      "id": "CVE-2026-53535",
-      "summary": "Activepieces is an open source AI workflow automation platform. Prior to 0.82.0, the git-sync feature clones a user-configured Git repository into a temporary directory on the server and then writes flow, table, and connection state into it before pushing back, and two separate weaknesses allowed those writes to escape the intended workspace and land on arbitrary paths on the host filesystem: Git's symbolic-link handling was not disabled on the clone, so an attacker who controlled the remote repository could include symlinks that redirected the writes, and several user-supplied identifiers used to build on-disk paths (the repository slug and the externalId of tables, flows, and connections) were not validated against directory-traversal sequences such as ../. On a self-hosted Enterprise Edition deployment, a user authorized to configure or push to a git-sync repository (holding the WRITE_PROJECT_RELEASE permission) could cause the server to overwrite files anywhere the Activepieces process user can write, which depending on host layout can be leveraged for tampering, denial of service, or remote code execution. This issue is fixed in version 0.82.0.",
-      "published": "2026-07-16T19:16:50.097Z",
-      "lastModified": "2026-07-17T19:17:16.763Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00574,
-      "epssPercentile": 0.44662,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        },
-        {
-          "id": "CWE-59",
-          "name": "CWE-59",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.56,
-      "tags": [
-        "CWE-22",
-        "CWE-59"
-      ]
-    },
-    {
       "id": "CVE-2026-63095",
       "summary": "Dendrite through 0.13.8 contains an improper authorization vulnerability in the Matrix Client-Server API that allows any authenticated local user to delete third-party identifier bindings belonging to other users by submitting an arbitrary address and medium to the account deletion endpoint without ownership verification. Attackers can exploit the unverified Forget3PID handler to remove a victim's email or MSISDN binding and subsequently rebind the address through an identity server to hijack the victim's password reset flow.",
       "published": "2026-07-17T16:17:16.467Z",
@@ -28767,6 +29004,50 @@
       "tags": [
         "F5",
         "CWE-287"
+      ]
+    },
+    {
+      "id": "CVE-2026-54685",
+      "summary": "FileBrowser Quantum is a free, self-hosted, web-based file manager. Prior to version 1.3.2-beta, the `/api/auth/login` authentication endpoint does not execute in constant time. When a non-existent username is supplied, the server returns a `401`/`403` response almost immediately. When a valid username is provided, the server performs a bcrypt password comparison, causing a measurable delay in the response time. Version 1.3.2-beta patches the issue.",
+      "published": "2026-07-20T15:16:43.787Z",
+      "lastModified": "2026-07-22T20:50:36.493Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.0027,
+      "epssPercentile": 0.19228,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-208",
+          "name": "CWE-208",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.53,
+      "tags": [
+        "CWE-208"
       ]
     },
     {
@@ -29597,50 +29878,6 @@
       ]
     },
     {
-      "id": "CVE-2026-46338",
-      "summary": "PyMdown Extensions is a set of extensions for the Python-Markdown markdown project. From 10.0.1 until 10.21.3, pymdownx.snippets uses a string-prefix containment check in SnippetPreprocessor.get_snippet_path() in pymdownx/snippets.py when `restrict_base_path: True`, allowing markdown snippet directives to read files from sibling paths that share the same base_path prefix, such as docs and docs_internal. This is a regression of CVE-2023-32309. This issue is fixed in version 10.21.3.",
-      "published": "2026-07-16T19:16:45.733Z",
-      "lastModified": "2026-07-30T14:28:41.347Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.0031,
-      "epssPercentile": 0.23697,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.33,
-      "tags": [
-        "CWE-22"
-      ]
-    },
-    {
       "id": "CVE-2026-21770",
       "summary": "HCL Traveler for Microsoft Outlook (HTMO) is susceptible to a DLL hijacking vulnerability which could allow an attacker to modify or replace the application with malicious content.",
       "published": "2026-07-17T05:16:38.567Z",
@@ -30012,50 +30249,6 @@
       ]
     },
     {
-      "id": "CVE-2026-46377",
-      "summary": "Dasel is a command-line tool and library for querying, modifying, and transforming data structures. From 3.0.0 until 3.10.1, the escape sequence handler in (*Tokenizer).parseCurRune in selector/lexer/tokenize.go increments past a trailing backslash in a quoted string such as \"\\ or '\\ and then reads p.src[pos] without a bounds check, allowing attacker-controlled selector strings to trigger a Go index-out-of-range panic. This issue is fixed in version 3.10.1.",
-      "published": "2026-07-16T19:16:46.127Z",
-      "lastModified": "2026-07-17T18:33:28.553Z",
-      "severity": "Medium",
-      "cvssScore": 6.2,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00128,
-      "epssPercentile": 0.02844,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-129",
-          "name": "CWE-129",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.27,
-      "tags": [
-        "CWE-129"
-      ]
-    },
-    {
       "id": "CVE-2026-15943",
       "summary": "A flaw was found in the Keycloak keycloak-services component, which handles the management of identity providers. The issue occurs when a delegated administrator updates an OIDC identity provider using a masked client secret sentinel value. Due to improper validation, Keycloak reuses the existing real secret even if security-sensitive fields like the token URL have been changed, allowing an attacker to redirect and capture the secret.",
       "published": "2026-07-17T12:17:03.313Z",
@@ -30141,94 +30334,6 @@
       "priorityScore": 2.27,
       "tags": [
         "CWE-353"
-      ]
-    },
-    {
-      "id": "CVE-2026-46378",
-      "summary": "Dasel is a command-line tool and library for querying, modifying, and transforming data structures. From 3.0.0 until 3.10.1, the selector lexer matchRegexPattern closure in (*Tokenizer).parseCurRune in selector/lexer/tokenize.go loops while tokenizing an unterminated regex literal such as r/ because peekRuneEqual returns false after the end of input, allowing attacker-controlled selector strings to consume CPU indefinitely. This issue is fixed in version 3.10.1.",
-      "published": "2026-07-16T19:16:46.260Z",
-      "lastModified": "2026-07-17T18:36:41.143Z",
-      "severity": "Medium",
-      "cvssScore": 6.2,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00112,
-      "epssPercentile": 0.01609,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-835",
-          "name": "CWE-835",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.23,
-      "tags": [
-        "CWE-835"
-      ]
-    },
-    {
-      "id": "CVE-2026-47082",
-      "summary": "An issue was discovered in cyrus-imapd in Cyrus IMAP through 3.12.2. The vacation \"fcc\" feature skips the destination-mailbox ACL. A user whose vacation Sieve script used :fcc (to save a copy of the sent message) could deliver vacation auto-reply copies into any mailbox the script could name, regardless of whether the script owner had insert permissions on the destination mailbox.",
-      "published": "2026-07-16T19:16:48.713Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "Medium",
-      "cvssScore": 5.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00196,
-      "epssPercentile": 0.09665,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.23,
-      "tags": [
-        "CWE-863"
       ]
     },
     {
@@ -31354,6 +31459,50 @@
       "tags": [
         "Android",
         "CWE-926"
+      ]
+    },
+    {
+      "id": "CVE-2026-57311",
+      "summary": "Windu CMS does not validate types of uploaded files. An authenticated attacker can upload arbitrary files, including PHP. This can lead to Remote Code Execution. Because vendor contact attempts were unsuccessful, the vulnerability has only been confirmed in version 4.1 but may also affect other versions.",
+      "published": "2026-07-20T13:16:56.633Z",
+      "lastModified": "2026-07-22T20:50:36.493Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00374,
+      "epssPercentile": 0.30531,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-434",
+          "name": "CWE-434",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.07,
+      "tags": [
+        "CWE-434"
       ]
     },
     {
@@ -34698,6 +34847,50 @@
       ]
     },
     {
+      "id": "CVE-2026-57309",
+      "summary": "A Blind SQL injection vulnerability has been identified in Windu CMS. A remote unauthenticated attacker is able to inject SQL syntax into URL path in HTTP header resulting in Blind SQL Injection. Because vendor contact attempts were unsuccessful, the vulnerability has only been confirmed in version 4.1 but may also affect other versions.",
+      "published": "2026-07-20T13:16:56.367Z",
+      "lastModified": "2026-07-22T20:53:19.510Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00314,
+      "epssPercentile": 0.24146,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.85,
+      "tags": [
+        "CWE-89"
+      ]
+    },
+    {
       "id": "CVE-2026-45704",
       "summary": "Pimcore is an Open Source Data & Experience Management Platform. Prior to 11.5.17 (LTS) and 12.3.6, CustomReports uses inconsistent authorization between the report listing endpoint and the report detail endpoint in bundles/CustomReportsBundle/src/Controller/Reports/CustomReportController.php and bundles/CustomReportsBundle/src/Tool/Config/Listing/Dao.php, allowing a low-privileged backend user with the reports permission to directly request an unshared report such as poc-secret-report by name and read report name, grouping information, display and icon metadata, data source configuration, column configuration, and sharing settings even when shareGlobally is false. This issue is fixed in versions 11.5.17 (LTS) and 12.3.6.",
       "published": "2026-07-17T20:17:18.267Z",
@@ -34789,51 +34982,6 @@
       "tags": [
         "CWE-285",
         "CWE-863"
-      ]
-    },
-    {
-      "id": "CVE-2026-47083",
-      "summary": "An issue was discovered in cyrus-imapd in Cyrus IMAP through 3.12.2. There is an ESEARCH cross-user content oracle. By using the ESEARCH command, an authenticated IMAP user could enumerate folder names under any account they could name. Search would return UIDs of messages matching the search, creating a content oracle (without allowing arbitrary reads of the target's content).",
-      "published": "2026-07-16T19:16:48.850Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00194,
-      "epssPercentile": 0.09346,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Oracle",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-204",
-          "name": "CWE-204",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.83,
-      "tags": [
-        "Oracle",
-        "CWE-204"
       ]
     },
     {
@@ -35189,50 +35337,6 @@
       ]
     },
     {
-      "id": "CVE-2026-47089",
-      "summary": "An issue was discovered in cyrus-imapd in Cyrus IMAP through 3.12.2. LISTRIGHTS os not limited to users with admin access. An authenticated user could call IMAP LISTRIGHTS against any mailbox they could name and learn what principals had what access to it. (This action should have been restricted to users with admin access on the target mailbox.)",
-      "published": "2026-07-16T19:16:49.647Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00178,
-      "epssPercentile": 0.07538,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.77,
-      "tags": [
-        "CWE-862"
-      ]
-    },
-    {
       "id": "CVE-2026-15159",
       "summary": "The Ninja Forms - Excel Export plugin for WordPress is vulnerable to Insecure Direct Object Reference in all versions up to, and including, 3.3.6 via the 'spreadsheet_export_form_id' parameter due to missing validation on a user controlled key. This makes it possible for authenticated attackers, with subscriber-level access and above, to enumerate any Ninja Forms form ID and download all stored submission data — including names, email addresses, phone numbers, physical addresses, and any other PII collected by site forms — as a downloadable XLSX file.",
       "published": "2026-07-17T04:16:50.540Z",
@@ -35495,50 +35599,6 @@
       "priorityScore": 1.76,
       "tags": [
         "CWE-362"
-      ]
-    },
-    {
-      "id": "CVE-2026-47085",
-      "summary": "An issue was discovered in cyrus-imapd in Cyrus IMAP through 3.12.2. URLAUTH token forgery can occur via a missing mboxkey. If an attacker knew a folder name on the victim's account for which the victim had never issued an auth URL, they could forge a working URLAUTH token by computing an HMAC-SHA1 value with a predictable key, giving them read access to the mailbox. (URLAUTH is an obscure feature, meaning that the odds of any user actually being susceptible to this attack are very low. Perhaps no public clients use URLAUTH.)",
-      "published": "2026-07-16T19:16:49.120Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "Medium",
-      "cvssScore": 4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00199,
-      "epssPercentile": 0.10033,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-340",
-          "name": "CWE-340",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.75,
-      "tags": [
-        "CWE-340"
       ]
     },
     {
@@ -36083,6 +36143,50 @@
       ]
     },
     {
+      "id": "CVE-2026-46410",
+      "summary": "FileBrowser Quantum is a free, self-hosted, web-based file manager. Versions prior to 1.3.2-stable and 1.4.1-beta may leak some sensitive info, such as source and path. Versions 1.3.2-stable and 1.4.1-beta fix the issue. No known workarounds are available.",
+      "published": "2026-07-20T15:16:38.673Z",
+      "lastModified": "2026-07-22T20:50:36.493Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00263,
+      "epssPercentile": 0.18207,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-200",
+          "name": "CWE-200",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.64,
+      "tags": [
+        "CWE-200"
+      ]
+    },
+    {
       "id": "CVE-2024-32389",
       "summary": "Buffer Overflow vulnerability in Kerlink Kerlink Wirnet iStation 868 KerOS v.4.3.3_20200803132042 allows a remote attacker to obtain sensitive information via the update URLs component.",
       "published": "2026-07-16T21:17:18.777Z",
@@ -36212,50 +36316,6 @@
       "priorityScore": 1.58,
       "tags": [
         "CWE-284"
-      ]
-    },
-    {
-      "id": "CVE-2026-47087",
-      "summary": "An issue was discovered in cyrus-imapd in Cyrus IMAP through 3.12.2. URLAUTH does not honor revoked authorizer access. A URLAUTH URL minted while the authorizer had access continued to work after that access was revoked.",
-      "published": "2026-07-16T19:16:49.383Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "Low",
-      "cvssScore": 3.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00192,
-      "epssPercentile": 0.09163,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-672",
-          "name": "CWE-672",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.55,
-      "tags": [
-        "CWE-672"
       ]
     },
     {
@@ -36400,50 +36460,6 @@
       "tags": [
         "CWE-20",
         "CWE-74"
-      ]
-    },
-    {
-      "id": "CVE-2026-47086",
-      "summary": "An issue was discovered in cyrus-imapd in Cyrus IMAP through 3.12.2. GENURLAUTH-issued tokens can bypass ACLs. Any authenticated user could mint a URLAUTH token (via the GENURLAUTH command) for any mailbox they could name, even without read access on it. This would allow reading mail from mailboxes despite having no granted permissions.",
-      "published": "2026-07-16T19:16:49.253Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "Low",
-      "cvssScore": 3.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00179,
-      "epssPercentile": 0.07685,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.49,
-      "tags": [
-        "CWE-863"
       ]
     },
     {
@@ -37030,50 +37046,6 @@
       ]
     },
     {
-      "id": "CVE-2026-47088",
-      "summary": "An issue was discovered in cyrus-imapd in Cyrus IMAP through 3.12.2. There is heap exposure in nested MIME comment parsing. An authenticated IMAP user could craft an email message containing an RFC 822 comment ending with a backslash. When parsing the message, the server would read past the message's end in memory, and read into the heap, returning the read content to the user.",
-      "published": "2026-07-16T19:16:49.513Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "Low",
-      "cvssScore": 3.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00178,
-      "epssPercentile": 0.07559,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-126",
-          "name": "CWE-126",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.35,
-      "tags": [
-        "CWE-126"
-      ]
-    },
-    {
       "id": "CVE-2026-63880",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/amdgpu: fix lock leak on ENOMEM in AMDGPU_GEM_OP_GET_MAPPING_INFO The AMDGPU_GEM_OP_GET_MAPPING_INFO branch of amdgpu_gem_op_ioctl() holds three cleanup-tracked resources before calling kvcalloc(): the drm_gem_object reference from drm_gem_object_lookup(), the drm_exec lock on the looked-up GEM via drm_exec_lock_obj(), and the drm_exec lock on the per-process VM root page directory via amdgpu_vm_lock_pd(). All three are released by the out_exec label that every other error path in this function jumps to. The kvcalloc() failure path returns -ENOMEM directly, skipping out_exec and leaking all three. The leaked per-process VM root PD dma_resv lock is the load-bearing leak: any subsequent operation on the same VM (further GEM ops, command-submission, eviction, TTM shrinker callbacks) blocks on the held lock. DRM_IOCTL_AMDGPU_GEM_OP is DRM_AUTH | DRM_RENDER_ALLOW, so this is an unprivileged-local denial of service against the caller's GPU context, reachable by any process with /dev/dri/renderD* access. Route the failure through out_exec so drm_exec_fini() and drm_gem_object_put() run. Reproduced on stock 7.0.0-10, Ryzen 7 5700U / Radeon Vega (Lucienne): the failing ioctl returns -ENOMEM and a second GET_MAPPING_INFO on the same fd then blocks in drm_exec_lock_obj() on the leaked dma_resv. SIGKILL on the caller does not reap the task; the fd-release path during process exit goes through amdgpu_gem_object_close() -> drm_exec_prepare_obj() on the same lock, leaving the task in D state until the box is rebooted. The patched kernel was not rebuilt and re-tested on this hardware; the fix is mechanical. Tested on a single Lucienne / Vega box only. Ziyi Guo posted an independent INT_MAX-bound check for args->num_entries in the same branch [1]; the two patches are complementary and can land in either order. (cherry picked from commit b69d3256d79de15f54c322986ff4da68f1d65b0a)",
       "published": "2026-07-19T16:17:05.007Z",
@@ -37275,102 +37247,6 @@
       "priorityScore": 1.3,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-47081",
-      "summary": "An issue was discovered in cyrus-imapd in Cyrus IMAP through 3.12.2. There is an XAPPLEPUSHSERVICE folder existence oracle and push hijack. An authenticated IMAP user could probe for the existence of arbitrary mailboxes on other users' accounts via the XAPPLEPUSHSERVICE command and then create Apple Push Notification Service notifications for new mail in those mailboxes to their own APNS device. This did not leak any data about the content of mailboxes. Instead, a \"mailbox has changed\" notice would be pushed when the mailbox modseq changed.",
-      "published": "2026-07-16T19:16:48.573Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
-      "severity": "Low",
-      "cvssScore": 3.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00163,
-      "epssPercentile": 0.05982,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Apple",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.29,
-      "tags": [
-        "Apple",
-        "Oracle",
-        "CWE-863"
-      ]
-    },
-    {
-      "id": "CVE-2026-53536",
-      "summary": "Activepieces is an open source AI workflow automation platform. Prior to 0.83.0, the /v1/step-files/signed download endpoint verified the supplied JWT against the shared signing secret but did not check the token's audience, and combined with a missing null-check on the decoded fileId, this allowed any caller holding any valid Activepieces JWT (including a freshly created user's own access token) to receive a step-file belonging to another tenant. The file returned was whatever PostgreSQL happened to scan first for type = FLOW_STEP_FILE, varying over time as the database changed, so an authenticated user could obtain step-file attachments belonging to other tenants on the same instance; the attacker could not target a specific victim or file, and the access was read-only with no integrity or availability impact. This issue is fixed in version 0.83.0.",
-      "published": "2026-07-16T19:16:50.240Z",
-      "lastModified": "2026-07-18T03:16:36.780Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00184,
-      "epssPercentile": 0.08214,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-345",
-          "name": "CWE-345",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.29,
-      "tags": [
-        "CWE-345",
-        "CWE-639"
       ]
     },
     {
@@ -38024,10 +37900,10 @@
       ]
     },
     {
-      "id": "CVE-2026-46515",
-      "summary": "Frogman provides headless PBX control through MCP and HTTP API. Prior to 1.6.3, PERM_READ access was sufficient to call fm_list_managers, fm_list_pinsets, fm_show_context, fm_get_mcp_config, fm_backup_status, fm_whos_calling, fm_run_saved_query, and fm_diagnose_trunk, exposing AMI manager secrets, outbound dial PINs, full Asterisk dialplan context, root SSH connection commands, backup artifact paths, CDR history, arbitrary saved GraphQL query execution, and raw AMI endpoint dumps containing SIP fields such as password, md5_cred, and oauth_secret. This issue is fixed in version 1.6.3.",
-      "published": "2026-07-16T19:16:46.907Z",
-      "lastModified": "2026-07-17T18:04:04.083Z",
+      "id": "CVE-2026-59238",
+      "summary": "Stored Cross-site Scripting (CWE-79) in the client-side report rendering functions (renderPreview, renderEditor, renderAuditData in js/app.js) in maalfer Pentestify before 1.1.0 allows a remote, authenticated attacker to execute arbitrary JavaScript in the browser of any user who views an affected report via a payload stored in a finding's images array or a report's client_logo array, which is interpolated into an src attribute without escaping.",
+      "published": "2026-07-20T15:16:44.707Z",
+      "lastModified": "2026-07-23T18:28:35.280Z",
       "severity": "Unknown",
       "cvssScore": 0,
       "cvssVector": null,
@@ -38041,30 +37917,30 @@
         "integrity": null,
         "availability": null
       },
-      "epssScore": 0.00323,
-      "epssPercentile": 0.25155,
+      "epssScore": 0.00332,
+      "epssPercentile": 0.26093,
       "isKev": false,
       "kev": null,
       "vendor": null,
       "product": null,
       "cwe": [
         {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
         }
       ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
-      "patchAvailable": true,
+      "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 0.88,
+      "priorityScore": 0.91,
       "tags": [
-        "CWE-862"
+        "CWE-79"
       ]
     },
     {
@@ -38331,6 +38207,50 @@
       "tags": [
         "CWE-200",
         "CWE-522"
+      ]
+    },
+    {
+      "id": "CVE-2026-46516",
+      "summary": "Frogman provides headless FreePBX control. Prior to version 1.6.6, Frogman's chat-console markdown formatter (`assets/js/chat.js`'s `formatMarkdown`) inserted regex capture groups as raw HTML in four template patterns: inline code, bold, markdown links, and download links. Tool responses that reflect user-controlled fields — extension names, ring-group descriptions, IVR names, queue descriptions, etc. — could carry an HTML/JavaScript payload that executes when another admin views the response through Frogman chat. The payload runs in the viewer's session, with the viewer's permissions. FreePBX's own admin GUI escapes these same fields via `freepbx_htmlspecialchars()` throughout its view templates. The chat formatter was the leaky side. Version 1.6.6 patches the issue.",
+      "published": "2026-07-20T15:16:38.833Z",
+      "lastModified": "2026-07-22T20:50:36.493Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00261,
+      "epssPercentile": 0.17958,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.63,
+      "tags": [
+        "CWE-79"
       ]
     },
     {
@@ -40768,6 +40688,50 @@
       ]
     },
     {
+      "id": "CVE-2026-57310",
+      "summary": "Windu CMS uses hashing algorithm based on MD5 and SHA1 with static salt to store user passwords. This allows an attacker who obtain password hash to decode user credentials. Because vendor contact attempts were unsuccessful, the vulnerability has only been confirmed in version 4.1 but may also affect other versions.",
+      "published": "2026-07-20T13:16:56.507Z",
+      "lastModified": "2026-07-22T20:50:36.493Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00174,
+      "epssPercentile": 0.07124,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-916",
+          "name": "CWE-916",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.25,
+      "tags": [
+        "CWE-916"
+      ]
+    },
+    {
       "id": "CVE-2026-63821",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: rtw88: usb: fix memory leaks on USB write failures When rtw_usb_write_port() fails to submit a USB Request Block (URB) (e.g., due to device disconnect or ENOMEM), the completion callback is never executed. Currently, the driver ignores the return value of rtw_usb_write_port() in rtw_usb_write_data() and rtw_usb_tx_agg_skb(). Because these functions rely on the completion callback to free the socket buffers (skbs) and the transaction control block (txcb), a submission failure results in: 1. A memory leak of the allocated skb in rtw_usb_write_data(). 2. A memory leak of the txcb structure and all aggregated skbs in rtw_usb_tx_agg_skb(). Fix this by checking the return value of rtw_usb_write_port(). If it fails, explicitly free the skb in rtw_usb_write_data(), and properly purge the tx_ack_queue and free the txcb in rtw_usb_tx_agg_skb(). The issue was discovered in practice during device disconnect/reconnect scenarios and memory pressure conditions. Tested by verifying normal TX operation continues after the fix without regressions.",
       "published": "2026-07-19T12:16:55.203Z",
@@ -42893,6 +42857,42 @@
       "summary": "Rejected reason: This CVE ID has been rejected or withdrawn by its CVE Numbering Authority.",
       "published": "2026-07-19T15:16:54.247Z",
       "lastModified": "2026-08-11T03:18:00.410Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0,
+      "epssPercentile": 0,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0,
+      "tags": []
+    },
+    {
+      "id": "CVE-2026-51386",
+      "summary": "Rejected reason: DO NOT USE THIS CVE RECORD. ConsultIDs: CVE-2026-46409. Reason: This record is a reservation duplicate of CVE-2026-46409. Notes: All CVE users should reference CVE-2026-46409 instead of this record. All references and descriptions in this record have been removed to prevent accidental usage.",
+      "published": "2026-07-20T15:16:39.450Z",
+      "lastModified": "2026-07-20T15:16:39.450Z",
       "severity": "Unknown",
       "cvssScore": 0,
       "cvssVector": null,
