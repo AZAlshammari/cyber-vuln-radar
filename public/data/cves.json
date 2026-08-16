@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-16T17:46:55.868Z",
+  "generatedAt": "2026-08-16T18:31:46.705Z",
   "count": 1000,
   "items": [
     {
@@ -55,59 +55,6 @@
         "F5",
         "WordPress",
         "CWE-436"
-      ]
-    },
-    {
-      "id": "CVE-2026-9198",
-      "summary": "IBM Langflow OSS 1.0.0 through 1.10.0 allows unauthenticated attackers to chain /api/v1/auto_login (mints SUPERUSER tokens to any network caller) with /api/v1/validate/code (executes user code via exec()) to achieve full RCE on default Langflow deployments",
-      "published": "2026-07-17T18:17:17.340Z",
-      "lastModified": "2026-08-05T05:17:15.823Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.17352,
-      "epssPercentile": 0.96849,
-      "isKev": true,
-      "kev": {
-        "vendorProject": "IBM",
-        "product": "Langflow",
-        "vulnerabilityName": "IBM Langflow Code Injection Vulnerability",
-        "dateAdded": "2026-08-04",
-        "dueDate": "2026-08-07",
-        "requiredAction": "Apply mitigations in accordance with vendor instructions, ensuring compliance with CISA’s BOD 26-04 Prioritizing Security Updates Based on Risk (see URL in Notes) guidance and CISA’s “Forensics Triage Requirements” (see URL in Notes). Follow applicable BOD 26-04 guidance for cloud services or discontinue use of the product if mitigations are unavailable. Stakeholders are responsible for evaluating each asset's internet exposure and ensuring adherence to BOD 26-04 patching guidelines.",
-        "knownRansomwareCampaignUse": "Unknown",
-        "notes": "https://www.ibm.com/support/pages/node/7278927 ; BOD 26-04: https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk ; Forensics Triage Requirements: https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk ; https://nvd.nist.gov/vuln/detail/CVE-2026-9198"
-      },
-      "vendor": "IBM",
-      "product": "Langflow",
-      "cwe": [
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": true,
-      "priorityScore": 9.82,
-      "tags": [
-        "CWE-94"
       ]
     },
     {
@@ -2466,50 +2413,6 @@
       ]
     },
     {
-      "id": "CVE-2026-9202",
-      "summary": "IBM Langflow OSS 1.0.0 through 1.10.0 allows unauthenticated attackers to create unlimited user accounts on any Langflow instance; when NEW_USER_IS_ACTIVE=true (documented deployment option), newly created accounts are immediately active and can authenticate to reach RCE endpoints, bypassing the need for AUTO_LOGIN.",
-      "published": "2026-07-17T18:17:17.490Z",
-      "lastModified": "2026-07-24T16:57:00.977Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00279,
-      "epssPercentile": 0.20465,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.15,
-      "tags": [
-        "CWE-306"
-      ]
-    },
-    {
       "id": "CVE-2026-63886",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: scsi: target: iscsi: Validate CHAP_R length before base64 decode chap_server_compute_hash() allocates client_digest as kzalloc(chap->digest_size) and then, for BASE64-encoded responses, passes chap_r directly to chap_base64_decode() without checking whether the input length could produce more than digest_size bytes of output. chap_base64_decode() writes to the destination unconditionally as long as there is input to consume. With MAX_RESPONSE_LENGTH set to 128 and the \"0b\" prefix stripped by extract_param(), up to 127 base64 characters can reach the decoder. 127 characters decode to 95 bytes. For SHA-256 (digest_size=32) this overflows client_digest by 63 bytes; for MD5 (digest_size=16) the overflow is 79 bytes. The length check at line 344 fires after the write has already happened. The HEX branch in the same switch statement already validates the length up front. Apply the same approach to the BASE64 branch: strip trailing base64 padding characters, then reject any input whose data length exceeds DIV_ROUND_UP(digest_size * 4, 3) before calling the decoder. Stripping trailing '=' before the comparison handles both padded and unpadded encodings. chap_base64_decode() already returns early on '=', so the full original string is still passed to the decoder unchanged. The mutual CHAP path decodes CHAP_C into initiatorchg_binhex, which is kzalloc(CHAP_CHALLENGE_STR_LEN). extract_param() caps initiatorchg at CHAP_CHALLENGE_STR_LEN characters, so at most CHAP_CHALLENGE_STR_LEN-1 base64 characters reach the decoder. The maximum decoded size, DIV_ROUND_UP((CHAP_CHALLENGE_STR_LEN-1) * 3, 4), is less than CHAP_CHALLENGE_STR_LEN, so no overflow is possible there. A comment is added at the call site to document this.",
       "published": "2026-07-19T16:17:05.723Z",
@@ -2981,50 +2884,6 @@
       "priorityScore": 5.03,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-50273",
-      "summary": "Datadog .NET Tracer is a client library for Datadog APM for .NET applications. Prior to 3.43.0, Datadog tracing libraries that implement W3C baggage propagation parse incoming baggage HTTP headers without enforcing DD_TRACE_BAGGAGE_MAX_ITEMS or DD_TRACE_BAGGAGE_MAX_BYTES on extraction, allowing a remote unauthenticated attacker to send a baggage header with many comma-separated key-value pairs or one very large value and cause unbounded CPU and memory consumption in services with baggage propagation enabled. This issue is fixed in version 3.43.0.",
-      "published": "2026-07-17T18:17:16.840Z",
-      "lastModified": "2026-07-17T20:17:24.220Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00482,
-      "epssPercentile": 0.3948,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-770",
-          "name": "CWE-770",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.01,
-      "tags": [
-        "CWE-770"
       ]
     },
     {
@@ -5172,6 +5031,100 @@
       ]
     },
     {
+      "id": "CVE-2026-16365",
+      "summary": "Privilege escalation in the DOM: Workers component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:05.037Z",
+      "lastModified": "2026-07-24T21:16:43.503Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00269,
+      "epssPercentile": 0.19145,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-269",
+          "name": "Improper Privilege Management",
+          "description": "Privileges are assigned, modified, or checked incorrectly."
+        },
+        {
+          "id": "CWE-284",
+          "name": "CWE-284",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.75,
+      "tags": [
+        "CWE-269",
+        "CWE-284"
+      ]
+    },
+    {
+      "id": "CVE-2026-16366",
+      "summary": "Privilege escalation in the DOM: Navigation component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:05.140Z",
+      "lastModified": "2026-07-24T21:16:43.670Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00269,
+      "epssPercentile": 0.19145,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-269",
+          "name": "Improper Privilege Management",
+          "description": "Privileges are assigned, modified, or checked incorrectly."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.75,
+      "tags": [
+        "CWE-269"
+      ]
+    },
+    {
       "id": "CVE-2024-58368",
       "summary": "SurrealDB versions before 1.1.0 fail to properly parse the ID, DB, and NS headers in HTTP REST API requests containing special characters. Unauthenticated attackers can send crafted HTTP requests with malformed header values to trigger an uncaught exception that crashes the server.",
       "published": "2026-07-18T14:17:09.867Z",
@@ -5783,6 +5736,102 @@
       "tags": [
         "Apache",
         "CWE-653"
+      ]
+    },
+    {
+      "id": "CVE-2026-16363",
+      "summary": "JIT miscompilation in the JavaScript: WebAssembly component. This vulnerability was fixed in Firefox 153, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:04.840Z",
+      "lastModified": "2026-07-24T15:19:35.233Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00436,
+      "epssPercentile": 0.36354,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-682",
+          "name": "CWE-682",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-843",
+          "name": "CWE-843",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.7,
+      "tags": [
+        "F5",
+        "CWE-682",
+        "CWE-843"
+      ]
+    },
+    {
+      "id": "CVE-2026-16369",
+      "summary": "Integer overflow in the JavaScript: WebAssembly component. This vulnerability was fixed in Firefox 153, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:06.707Z",
+      "lastModified": "2026-07-24T15:19:30.400Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00436,
+      "epssPercentile": 0.36355,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-190",
+          "name": "CWE-190",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.7,
+      "tags": [
+        "F5",
+        "CWE-190"
       ]
     },
     {
@@ -7071,6 +7120,62 @@
       ]
     },
     {
+      "id": "CVE-2026-16367",
+      "summary": "Sandbox escape due to invalid pointer in the Disability Access APIs component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:05.240Z",
+      "lastModified": "2026-07-24T16:35:00.860Z",
+      "severity": "Critical",
+      "cvssScore": 10,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00375,
+      "epssPercentile": 0.30723,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-119",
+          "name": "CWE-119",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        },
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.58,
+      "tags": [
+        "CWE-119",
+        "CWE-416",
+        "CWE-787"
+      ]
+    },
+    {
       "id": "CVE-2026-16351",
       "summary": "Sandbox escape due to use-after-free in the DOM: Navigation component. This vulnerability was fixed in Firefox 153, Firefox ESR 115.38, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
       "published": "2026-07-21T13:17:03.577Z",
@@ -7209,6 +7314,51 @@
         "F5",
         "CWE-416",
         "CWE-693"
+      ]
+    },
+    {
+      "id": "CVE-2026-16368",
+      "summary": "Incorrect boundary conditions in the JavaScript: WebAssembly component. This vulnerability was fixed in Firefox 153, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:05.360Z",
+      "lastModified": "2026-07-24T15:09:35.197Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00388,
+      "epssPercentile": 0.32035,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-119",
+          "name": "CWE-119",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.55,
+      "tags": [
+        "F5",
+        "CWE-119"
       ]
     },
     {
@@ -8824,6 +8974,51 @@
       ]
     },
     {
+      "id": "CVE-2026-16360",
+      "summary": "Memory safety bugs present in Firefox ESR 115.37, Firefox ESR 140.12 and Firefox 152. Some of these bugs showed evidence of memory corruption and we presume that with enough effort some of these could have been exploited to run arbitrary code. This vulnerability was fixed in Firefox 153, Firefox ESR 115.38, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:04.517Z",
+      "lastModified": "2026-07-24T15:07:50.113Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00326,
+      "epssPercentile": 0.25545,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-119",
+          "name": "CWE-119",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.32,
+      "tags": [
+        "F5",
+        "CWE-119"
+      ]
+    },
+    {
       "id": "CVE-2026-11826",
       "summary": "OpenPLC_v3 contains a heap-based buffer overflow in the getData() function in webserver/core/modbus_master.cpp. getData() reads characters between two delimiters into a caller-supplied buffer with no size parameter and no bounds check. In parseConfig() the function is invoked with the 100-byte heap-allocated MB_device.dev_name field. An authenticated attacker with access to the OpenPLC web interface can send a crafted HTTP POST to the /modbus endpoint with an oversized device_name value; the value is persisted to mbconfig.cfg and parsed on load, overflowing dev_name and overwriting adjacent struct fields (protocol at offset 108, dev_address at offset 109, ip_port at offset 210). A 200-byte payload writes 100 bytes past the allocation. The result is heap corruption leading to runtime crash and denial of service of the PLC process control loop, with attacker-controlled overwrite of adjacent configuration fields. The upstream repository was archived on 2026-04-04 and no fix is expected; the vendor has confirmed the issue does not affect OpenPLC Runtime v4.",
       "published": "2026-07-18T14:17:11.480Z",
@@ -9349,6 +9544,51 @@
       "tags": [
         "WordPress",
         "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-16361",
+      "summary": "Memory safety bugs present in Thunderbird ESR 140.12. Some of these bugs showed evidence of memory corruption and we presume that with enough effort some of these could have been exploited to run arbitrary code. This vulnerability was fixed in Firefox ESR 115.38, Firefox ESR 140.13, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:04.637Z",
+      "lastModified": "2026-07-24T15:52:54.023Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00309,
+      "epssPercentile": 0.23609,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-119",
+          "name": "CWE-119",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.26,
+      "tags": [
+        "F5",
+        "CWE-119"
       ]
     },
     {
@@ -10724,50 +10964,6 @@
       ]
     },
     {
-      "id": "CVE-2026-48009",
-      "summary": "Shopware is an open commerce platform. Prior to 6.6.10.18 and 6.7.10.1, a low-privilege admin user with user_recovery:read ACL can take over any admin account by triggering POST /api/_action/user/user-recovery, reading the password recovery hash through POST /api/search/user-recovery, and using PATCH /api/_action/user/user-recovery/password; the root cause is that src/Core/System/User/Recovery/UserRecoveryDefinition.php exposes the hash field through the Admin API without ApiAware(false) or ReadProtection. This issue is fixed in versions 6.6.10.18 and 6.7.10.1.",
-      "published": "2026-07-17T18:17:15.863Z",
-      "lastModified": "2026-07-17T20:17:19.973Z",
-      "severity": "Medium",
-      "cvssScore": 6.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00272,
-      "epssPercentile": 0.19678,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.07,
-      "tags": [
-        "CWE-200"
-      ]
-    },
-    {
       "id": "CVE-2026-64116",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ipv6: ioam: add NULL check for idev in ipv6_hop_ioam() Reported by Sashiko: The function ipv6_hop_ioam() accesses __in6_dev_get(skb->dev)->cnf.ioam6_enabled without validating the returned idev pointer. Because addrconf_ifdown() can concurrently clear dev->ip6_ptr via RCU, __in6_dev_get() can return NULL during interface teardown, which could cause a NULL pointer dereference when processing an IOAM Hop-by-Hop option. Let's add a check and use SKB_DROP_REASON_IPV6DISABLED accordingly.",
       "published": "2026-07-19T16:17:53.103Z",
@@ -11565,6 +11761,56 @@
       ]
     },
     {
+      "id": "CVE-2026-16364",
+      "summary": "Incorrect boundary conditions in the Audio/Video: Playback component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:04.940Z",
+      "lastModified": "2026-07-24T16:33:16.300Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00306,
+      "epssPercentile": 0.23291,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-119",
+          "name": "CWE-119",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-120",
+          "name": "CWE-120",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4,
+      "tags": [
+        "CWE-119",
+        "CWE-120"
+      ]
+    },
+    {
       "id": "CVE-2026-63884",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/i915: Fix potential UAF in TTM object purge TLDR: The bo->ttm object might be changed by calling ttm_bo_validate(), move casting it to an i915_tt object later to actually get the right pointer. A user reported hitting the following bug under heavy use on DG2: [26620.095550] Oops: general protection fault, probably for non-canonical address 0xa56b6b6b6b6b6b8b: 0000 1 SMP NOPTI [26620.095556] CPU: 2 UID: 0 PID: 631 Comm: Xorg Not tainted 6.18.8 #1 PREEMPT(lazy) [26620.095558] Hardware name: ASRock B850M Steel Legend WiFi/B850M Steel Legend WiFi, BIOS 3.50 09/18/2025 [26620.095559] RIP: 0010:i915_ttm_purge+0x84/0x100 [i915] [26620.095604] Code: 00 00 00 48 8d 54 24 10 48 89 e6 48 89 fb e8 83 aa ae ff 85 c0 75 6f 48 83 bb a8 01 00 00 00 74 2c 48 8b 45 78 48 85 c0 74 23 8b 78 20 48 c7 c2 ff ff ff ff 31 f6 e8 7a 73 e3 e0 48 8b 7d 78 [26620.095605] RSP: 0018:ffffc90005fd7430 EFLAGS: 00010282 [26620.095607] RAX: a56b6b6b6b6b6b6b RBX: ffff8881f46c3dc0 RCX: 0000000000000000 [26620.095608] RDX: 0000000000000000 RSI: 0000000000000246 RDI: 00000000ffffffff [26620.095609] RBP: ffff888289610f00 R08: 0000000000000001 R09: ffff88823b022000 [26620.095609] R10: ffff888103029b28 R11: ffff8881fc7f3800 R12: ffff88810b6150d0 [26620.095609] R13: ffff888289610f00 R14: 0000000000000000 R15: ffff8881f46c3dc0 [26620.095610] FS: 00007f1004d86900(0000) GS:ffff88901c858000(0000) knlGS:0000000000000000 [26620.095611] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033 [26620.095611] CR2: 00007f0fdf489000 CR3: 000000035b0c1000 CR4: 0000000000750ef0 [26620.095612] PKRU: 55555554 [26620.095612] Call Trace: [26620.095615] [26620.095615] i915_ttm_move+0x2b9/0x420 [i915] [26620.095642] ? ttm_tt_init+0x65/0x80 [ttm] [26620.095644] ? i915_ttm_tt_create+0xc6/0x150 [i915] [26620.095667] ttm_bo_handle_move_mem+0xb6/0x160 [ttm] [26620.095669] ttm_bo_evict+0x100/0x150 [ttm] [26620.095671] ? preempt_count_add+0x64/0xa0 [26620.095673] ? _raw_spin_lock+0xe/0x30 [26620.095675] ? _raw_spin_unlock+0xd/0x30 [26620.095675] ? i915_gem_object_evictable+0xb7/0xd0 [i915] [26620.095704] ttm_bo_evict_cb+0x6e/0xd0 [ttm] [26620.095705] ttm_lru_walk_for_evict+0xa6/0x200 [ttm] [26620.095708] ttm_bo_alloc_resource+0x185/0x4f0 [ttm] [26620.095709] ? init_object+0x62/0xd0 [26620.095712] ttm_bo_validate+0x7a/0x180 [ttm] [26620.095713] ? _raw_spin_unlock_irqrestore+0x16/0x30 [26620.095714] __i915_ttm_get_pages+0xb0/0x170 [i915] [26620.095737] i915_ttm_get_pages+0x9f/0x150 [i915] [26620.095759] ? i915_gem_do_execbuffer+0xedc/0x2b40 [i915] [26620.095786] ? alloc_debug_processing+0xd0/0x100 [26620.095787] ? _raw_spin_unlock_irqrestore+0x16/0x30 [26620.095788] ? i915_vma_instance+0xa0/0x4e0 [i915] [26620.095822] __i915_gem_object_get_pages+0x2f/0x40 [i915] [26620.095848] i915_vma_pin_ww+0x706/0x980 [i915] [26620.095875] ? i915_gem_do_execbuffer+0xedc/0x2b40 [i915] [26620.095904] eb_validate_vmas+0x170/0xa00 [i915] [26620.095930] i915_gem_do_execbuffer+0x1201/0x2b40 [i915] [26620.095953] ? alloc_debug_processing+0xd0/0x100 [26620.095954] ? _raw_spin_unlock_irqrestore+0x16/0x30 [26620.095955] ? i915_gem_execbuffer2_ioctl+0xc9/0x240 [i915] [26620.095977] ? __wake_up_sync_key+0x32/0x50 [26620.095979] ? i915_gem_execbuffer2_ioctl+0xc9/0x240 [i915] [26620.096001] ? __slab_alloc.isra.0+0x67/0xc0 [26620.096003] i915_gem_execbuffer2_ioctl+0x11a/0x240 [i915] Results from decode_stacktrace.sh pointed to dereference of a file pointer field of a i915 TTM page vector container associated with an object being purged on eviction. That path is taken when the object is marked as no longer needed. Code analysis revealed a possibility of the i915 TTM page vector container being replaced with a new instance inside a function that purges content of the object, should it be still busy. That function is called, indirectly via a more general function that changes the object's placement and caching policy, ---truncated---",
       "published": "2026-07-19T16:17:05.463Z",
@@ -11897,50 +12143,6 @@
       "tags": [
         "CWE-287",
         "CWE-290"
-      ]
-    },
-    {
-      "id": "CVE-2026-9762",
-      "summary": "IBM Db2 11.5.0 through 11.5.9, and 12.1.0 through 12.1.4 is vulnerable to remote code execution when jdbc url is under user control.",
-      "published": "2026-07-17T18:17:17.693Z",
-      "lastModified": "2026-07-24T16:46:46.320Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00165,
-      "epssPercentile": 0.06156,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.95,
-      "tags": [
-        "CWE-94"
       ]
     },
     {
@@ -12301,94 +12503,6 @@
         "Chrome",
         "CWE-125",
         "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-48008",
-      "summary": "Shopware is an open commerce platform. Prior to 6.6.10.18 and 6.7.10.1, a non-admin API user with integration:create ACL privilege can escalate to full administrator by creating an integration with admin: true through the Sync API POST /api/_action/sync; the regular integration endpoint POST /api/integration blocks this, but SyncController::sync() routes writes through SyncService to EntityWriter::upsert(), and src/Core/Framework/Integration/IntegrationDefinition.php lacks WriteProtection on the admin field. This issue is fixed in versions 6.6.10.18 and 6.7.10.1.",
-      "published": "2026-07-17T18:17:15.713Z",
-      "lastModified": "2026-07-17T20:17:19.337Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00264,
-      "epssPercentile": 0.18453,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.92,
-      "tags": [
-        "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-48010",
-      "summary": "Shopware is an open commerce platform. Prior to 6.6.10.18 and 6.7.10.1, UserController::upsertUser() in src/Core/Framework/Api/Controller/UserController.php writes raw user data in SYSTEM_SCOPE without filtering the admin field, so a non-admin API user with user:create or user:update ACL permission can set admin: true on new or existing users; IntegrationController::upsertIntegration() contains an isAdmin() check for the same field, but UserController was missing this check. This issue is fixed in versions 6.6.10.18 and 6.7.10.1.",
-      "published": "2026-07-17T18:17:16.023Z",
-      "lastModified": "2026-07-18T00:16:48.220Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00264,
-      "epssPercentile": 0.18453,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-269",
-          "name": "Improper Privilege Management",
-          "description": "Privileges are assigned, modified, or checked incorrectly."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.92,
-      "tags": [
-        "CWE-269"
       ]
     },
     {
@@ -13664,6 +13778,51 @@
       ]
     },
     {
+      "id": "CVE-2026-16362",
+      "summary": "Use-after-free in the WebRTC: Audio/Video component. This vulnerability was fixed in Firefox 153, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:04.733Z",
+      "lastModified": "2026-07-24T15:31:47.780Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00292,
+      "epssPercentile": 0.21779,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.84,
+      "tags": [
+        "F5",
+        "CWE-416"
+      ]
+    },
+    {
       "id": "CVE-2024-58366",
       "summary": "SurrealDB before 1.1.1 contains a format string vulnerability in the rquickjs Exception::throw_type function when scripting is enabled. Attackers with scripting privileges can supply format string sequences in error inputs to read arbitrary memory or execute code with SurrealDB process privileges.",
       "published": "2026-07-18T14:17:09.600Z",
@@ -13743,6 +13902,51 @@
       "priorityScore": 3.83,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-16359",
+      "summary": "Incorrect boundary conditions in the Audio/Video: GMP component. This vulnerability was fixed in Firefox 153, Firefox ESR 115.38, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:04.413Z",
+      "lastModified": "2026-07-24T15:32:32.330Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00263,
+      "epssPercentile": 0.18332,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-119",
+          "name": "CWE-119",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.83,
+      "tags": [
+        "F5",
+        "CWE-119"
       ]
     },
     {
@@ -14198,50 +14402,6 @@
       "tags": [
         "Linux",
         "CWE-667"
-      ]
-    },
-    {
-      "id": "CVE-2026-48014",
-      "summary": "Shopware is an open commerce platform. Prior to 6.6.10.18 and 6.7.10.1, the order state transition features /api/_action/order/{orderId}/state/{transition} and similar transaction and delivery transition routes in src/Core/Checkout/Order/Api/OrderActionController.php do not declare PlatformRequest::ATTRIBUTE_ACL or perform an explicit privilege check, so AclAnnotationValidator exits when route ACL metadata is absent and low-privileged users without order:update, order_transaction:update, or order_delivery:update can trigger StateMachineRegistry::transition() writes in SYSTEM_SCOPE. This issue is fixed in versions 6.6.10.18 and 6.7.10.1.",
-      "published": "2026-07-17T18:17:16.177Z",
-      "lastModified": "2026-07-21T03:16:41.510Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00233,
-      "epssPercentile": 0.14517,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.78,
-      "tags": [
-        "CWE-862"
       ]
     },
     {
@@ -17311,50 +17471,6 @@
       "priorityScore": 3.44,
       "tags": [
         "CWE-204"
-      ]
-    },
-    {
-      "id": "CVE-2026-48015",
-      "summary": "Shopware is an open commerce platform. Prior to 6.6.10.18 and 6.7.10.1, SVG files are in the allowed_extensions whitelist in src/Core/Framework/Resources/config/packages/shopware.yaml and can be uploaded via the media manager without SVG content sanitization in the upload pipeline from MediaUploadController to FileSaver to TypeDetector, allowing malicious SVG JavaScript such as onload, , and to execute in the Shopware domain when the uploaded SVG is viewed. This issue is fixed in versions 6.6.10.18 and 6.7.10.1.",
-      "published": "2026-07-17T18:17:16.323Z",
-      "lastModified": "2026-07-17T19:17:15.720Z",
-      "severity": "Medium",
-      "cvssScore": 4.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00278,
-      "epssPercentile": 0.20365,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.43,
-      "tags": [
-        "CWE-79"
       ]
     },
     {
@@ -21048,50 +21164,6 @@
       "priorityScore": 3.05,
       "tags": [
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-48016",
-      "summary": "Shopware is an open commerce platform. Prior to 6.6.10.18 and 6.7.10.1, the Store API endpoint /store-api/handle-payment in src/Core/Checkout/Payment/SalesChannel/HandlePaymentMethodRoute.php accepts a user-controlled orderId and forwards it to src/Core/Checkout/Payment/PaymentProcessor.php without verifying order ownership or guest-order authentication, allowing a normal customer or guest context to trigger the payment flow for another user's order while /store-api/order enforces the expected ownership model. This issue is fixed in versions 6.6.10.18 and 6.7.10.1.",
-      "published": "2026-07-17T18:17:16.457Z",
-      "lastModified": "2026-07-20T20:16:43.937Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00238,
-      "epssPercentile": 0.15168,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.04,
-      "tags": [
-        "CWE-639"
       ]
     },
     {
@@ -31095,50 +31167,6 @@
       "priorityScore": 2.17,
       "tags": [
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2025-59866",
-      "summary": "The HCL DFMPro, DFXAnalytics and DFXServer installers are affected by ‘Insecure file permissions Leading to Privilege Escalation’ vulnerability, which enables any logged-in non-administrative user to overwrite or replace the executable file with a malicious binary.",
-      "published": "2026-07-17T18:17:12.643Z",
-      "lastModified": "2026-07-17T18:30:38.987Z",
-      "severity": "Low",
-      "cvssScore": 3.3,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00074,
-      "epssPercentile": 0.00093,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-732",
-          "name": "CWE-732",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.16,
-      "tags": [
-        "CWE-732"
       ]
     },
     {
