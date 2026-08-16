@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-16T19:03:26.242Z",
+  "generatedAt": "2026-08-16T19:34:17.743Z",
   "count": 1000,
   "items": [
     {
@@ -912,54 +912,6 @@
       ]
     },
     {
-      "id": "CVE-2026-9135",
-      "summary": "IBM Langflow OSS 1.0.0 through 1.10.0 Langflow versions up to 1.9.2 (commit 94981c443d4918517b9e8163d70fc598dc33a32d) contain a code injection vulnerability in the Policies component's ToolGuard integration that bypasses the allow_custom_components=false security control. The vulnerability exists because the validation mechanism only checks the main component source code in node_template[\"code\"][\"value\"] but fails to validate dynamic CodeInput fields that store generated ToolGuard Python files. Attackers can embed malicious Python code in these unvalidated dynamic fields, which are persisted in Flow.data and later executed server-side when a guarded tool is invoked through the ToolGuard runtime. This allows authenticated users with flow creation privileges to achieve arbitrary Python code execution on the backend despite custom component restrictions. The vulnerability can be escalated through cross-tenant flow manipulation via the agentic MCP update_flow_component_field tool, which accepts attacker-controlled user_id parameters, enabling attackers to inject malicious code into victim users' flows. When combined with publicly accessible flows and specific misconfigurations (AUTO_LOGIN=true, NEW_USER_IS_ACTIVE=true), the attack can be conducted with reduced authentication requirements.",
-      "published": "2026-07-17T19:17:19.390Z",
-      "lastModified": "2026-07-23T05:16:39.817Z",
-      "severity": "Critical",
-      "cvssScore": 9.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00488,
-      "epssPercentile": 0.39877,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Microsoft",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.86,
-      "tags": [
-        "Microsoft",
-        "Apple",
-        "Linux",
-        "Windows",
-        "CWE-94"
-      ]
-    },
-    {
       "id": "CVE-2026-64113",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ixgbevf: fix use-after-free in VEPA multicast source pruning ixgbevf_clean_rx_irq() prunes frames whose source MAC matches the VF's own address (VEPA multicast workaround) by freeing the skb and continuing to the next descriptor: dev_kfree_skb_irq(skb); continue; The skb pointer is declared outside the while loop and persists across iterations. Because the continue skips the \"skb = NULL\" reset at the bottom of the loop, the next iteration enters the \"else if (skb)\" path and calls ixgbevf_add_rx_frag() on the freed skb, dereferencing skb_shinfo(skb)->nr_frags - a use-after-free in NAPI softirq context. The sibling driver iavf already handles this correctly by nulling the pointer before continuing. Apply the same pattern here. I do not have ixgbevf hardware; the bug was found by static analysis (scan_drop_continue_loops.py + semgrep drop_continue_in_loop, multi-tool corroboration with the highest score in the scan). The UAF was confirmed under KASAN by loading a test module that reproduces the exact code pattern (alloc skb, kfree_skb, then read skb_shinfo(skb)->nr_frags): BUG: KASAN: slab-use-after-free in ixgbevf_uaf_test_init+0x100/0x1000 Read of size 8 at addr 000000006163ae78 by task insmod/30 freed 208-byte region [000000006163adc0, 000000006163ae90) QEMU emulates igb (82576) but not ixgbe (82599), and the igbvf VF driver does not include the VEPA source pruning path, so a full end-to-end reproduction with emulated hardware was not possible.",
       "published": "2026-07-19T16:17:52.680Z",
@@ -1184,54 +1136,6 @@
       "priorityScore": 5.69,
       "tags": [
         "CWE-74"
-      ]
-    },
-    {
-      "id": "CVE-2026-9103",
-      "summary": "IBM Langflow OSS 1.0.0 through 1.10.0 could allow a remote attacker to gain unauthorized access due to improper authentication in the /api/v1/login/auto_login endpoint. The endpoint issues long-lived superuser bearer tokens without requiring authentication when the AUTO_LOGIN configuration is enabled (enabled by default), which may allow an unauthenticated network attacker to obtain full administrative access. Additionally, permissive cross-origin resource sharing (CORS) settings may allow tokens to be exposed to unintended origins, increasing the risk of unauthorized access.",
-      "published": "2026-07-17T19:17:19.277Z",
-      "lastModified": "2026-07-23T05:16:39.700Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00411,
-      "epssPercentile": 0.3427,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Microsoft",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.63,
-      "tags": [
-        "Microsoft",
-        "Apple",
-        "Linux",
-        "Windows",
-        "CWE-306"
       ]
     },
     {
@@ -1535,50 +1439,6 @@
       ]
     },
     {
-      "id": "CVE-2026-58195",
-      "summary": "Agentic-Flow is an AI agent orchestration platform. Prior to 2.0.14, agentic-flow MCP server tools in src/mcp/standalone-stdio.ts, src/mcp/fastmcp/servers/claude-flow-sdk.ts, src/mcp/fastmcp/servers/stdio-full.ts, src/mcp/fastmcp/servers/http-streaming-updated.ts, src/mcp/fastmcp/servers/http-sse.ts, src/mcp/fastmcp/servers/poc-stdio.ts, src/mcp/fastmcp/tools/agent/{execute,list,parallel}.ts, src/mcp/fastmcp/tools/swarm/orchestrate.ts, and src/mcp/fastmcp/tools/hooks/pretrain.ts interpolated attacker-influenceable tool parameters such as agent, task, name, language, and agentdb directly into shell command strings passed to execSync(), allowing arbitrary OS command execution with the privileges of the MCP server user. This issue is fixed in version 2.0.14.",
-      "published": "2026-07-17T19:17:17.410Z",
-      "lastModified": "2026-07-23T16:04:11.740Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00456,
-      "epssPercentile": 0.37837,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.4,
-      "tags": [
-        "CWE-78"
-      ]
-    },
-    {
       "id": "CVE-2026-53383",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: reject non-VALID session in compound request branch smb2_check_user_session() takes a shortcut for any operation that is not the first in a COMPOUND request: it reuses work->sess (the session bound by the first operation) and validates only the SessionId, then returns \"valid\". It never re-checks work->sess->state == SMB2_SESSION_VALID, and a SessionId of 0xFFFFFFFFFFFFFFFF (ULLONG_MAX, the MS-SMB2 related-operation value) skips even the id comparison. The standalone path (ksmbd_session_lookup_all() plus the SESSION_SETUP state machine) does enforce the VALID state; the compound branch bypasses all of it. A SESSION_SETUP carrying only an NTLM Type-1 (NtLmNegotiate) blob publishes a fresh SMB2_SESSION_IN_PROGRESS session whose sess->user is still NULL (->user is assigned later, by ntlm_authenticate()). Used as operation 1 of a COMPOUND with operation 2 = TREE_CONNECT (related, SessionId=ULLONG_MAX, \\\\host\\IPC$), the tree-connect then runs on that IN_PROGRESS session and reaches ksmbd_ipc_tree_connect_request(), which dereferences user_name(sess->user) with sess->user == NULL (transport_ipc.c:687/701/704) -> remote NULL-pointer dereference and a kernel Oops that wedges the ksmbd worker for all clients. Reject any non-first compound operation that lands on a session which is not SMB2_SESSION_VALID, mirroring the validity the standalone lookup path enforces. SESSION_SETUP itself legitimately runs on an IN_PROGRESS session, but it is never carried as a non-first compound operation, so multi-leg authentication is unaffected by this check.",
       "published": "2026-07-19T12:16:49.117Z",
@@ -1622,50 +1482,6 @@
         "F5",
         "Linux",
         "CWE-476"
-      ]
-    },
-    {
-      "id": "CVE-2026-45162",
-      "summary": "Pimcore is an Open Source Data & Experience Management Platform. Prior to 11.5.17 (LTS) and 12.3.7, multiple Pimcore locations call PHP's unserialize() on data from database columns and filesystem files without the allowed_classes restriction, including lib/Tool/Authentication.php, models/Site/Dao.php, models/DataObject/ClassDefinition/CustomLayout/Dao.php, models/Tool/TmpStore/Dao.php, models/Asset/WebDAV/Service.php, and admin-ui-classic-bundle/src/Helper/Dashboard.php, enabling object injection and remote code execution if an attacker can control the serialized data source. This issue is fixed in versions 11.5.17 (LTS) and 12.3.7.",
-      "published": "2026-07-17T19:17:14.167Z",
-      "lastModified": "2026-07-22T20:50:36.493Z",
-      "severity": "High",
-      "cvssScore": 8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00574,
-      "epssPercentile": 0.44664,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-502",
-          "name": "Deserialization of Untrusted Data",
-          "description": "Untrusted serialized data can alter control flow or objects."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.36,
-      "tags": [
-        "CWE-502"
       ]
     },
     {
@@ -4668,6 +4484,96 @@
       ]
     },
     {
+      "id": "CVE-2026-16371",
+      "summary": "Privilege escalation in the DOM: Navigation component. This vulnerability was fixed in Firefox 153, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:12.270Z",
+      "lastModified": "2026-07-24T21:16:43.827Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00278,
+      "epssPercentile": 0.20294,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-269",
+          "name": "Improper Privilege Management",
+          "description": "Privileges are assigned, modified, or checked incorrectly."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.79,
+      "tags": [
+        "F5",
+        "CWE-269"
+      ]
+    },
+    {
+      "id": "CVE-2026-16379",
+      "summary": "Privilege escalation in the DOM: Content Processes component. This vulnerability was fixed in Firefox 153, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:13.067Z",
+      "lastModified": "2026-07-24T21:16:44.130Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00278,
+      "epssPercentile": 0.20294,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-269",
+          "name": "Improper Privilege Management",
+          "description": "Privileges are assigned, modified, or checked incorrectly."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.79,
+      "tags": [
+        "F5",
+        "CWE-269"
+      ]
+    },
+    {
       "id": "CVE-2026-44739",
       "summary": "Pimcore is an Open Source Data & Experience Management Platform. Prior to 11.5.17 (LTS) and 12.3.6, the columnConfigAction endpoint in bundles/CustomReportsBundle/src/Controller/Reports/CustomReportController.php passes malicious SQL configuration through CustomReportController:columnConfigAction, SqlAdapter::getColumns, SqlAdapter::buildQueryString, and Db::fetchAssociative(), allowing an attacker with the reports_config permission to use arbitrary SELECT queries, UNION statements, dangerous database functions, and error-based SQL injection to exfiltrate or manipulate database data. This issue is fixed in versions 11.5.17 (LTS) and 12.3.6.",
       "published": "2026-07-17T20:17:16.597Z",
@@ -4888,6 +4794,50 @@
       "tags": [
         "F5",
         "CWE-639"
+      ]
+    },
+    {
+      "id": "CVE-2026-16372",
+      "summary": "Privilege escalation in the DOM: Content Processes component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:12.377Z",
+      "lastModified": "2026-07-24T21:16:43.980Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00272,
+      "epssPercentile": 0.1963,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-269",
+          "name": "Improper Privilege Management",
+          "description": "Privileges are assigned, modified, or checked incorrectly."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.77,
+      "tags": [
+        "CWE-269"
       ]
     },
     {
@@ -7362,6 +7312,96 @@
       ]
     },
     {
+      "id": "CVE-2026-16377",
+      "summary": "Mitigation bypass in the PDF Viewer component. This vulnerability was fixed in Firefox 153, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:12.870Z",
+      "lastModified": "2026-07-24T15:19:21.707Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00387,
+      "epssPercentile": 0.31907,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-693",
+          "name": "CWE-693",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.55,
+      "tags": [
+        "F5",
+        "CWE-693"
+      ]
+    },
+    {
+      "id": "CVE-2026-16383",
+      "summary": "Mitigation bypass in the DOM: Networking component. This vulnerability was fixed in Firefox 153, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:13.460Z",
+      "lastModified": "2026-07-24T15:19:09.003Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00387,
+      "epssPercentile": 0.31906,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-693",
+          "name": "CWE-693",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.55,
+      "tags": [
+        "F5",
+        "CWE-693"
+      ]
+    },
+    {
       "id": "CVE-2026-16158",
       "summary": "Impact: @fastify/reply-from versions from 8.3.1 up to but not including 12.6.4 build the internal URL cache key by concatenating the destination and source path without a delimiter. Different destination and source pairs can therefore produce the same key while resolving to different upstream URLs. When getUpstream selects an upstream from request data, a URL cached for one upstream can be reused for a request intended for another upstream, causing cross-upstream data access and modification. The default configuration is affected. Setting disableCache to true prevents the behavior. Patches: upgrade to @fastify/reply-from 12.6.4. Workarounds: pass disableCache: true when registering the plugin.",
       "published": "2026-07-18T13:17:06.030Z",
@@ -7485,6 +7525,50 @@
       "priorityScore": 4.52,
       "tags": [
         "CWE-78"
+      ]
+    },
+    {
+      "id": "CVE-2026-16382",
+      "summary": "Mitigation bypass in the DOM: Service Workers component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:13.363Z",
+      "lastModified": "2026-07-24T16:40:10.780Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00378,
+      "epssPercentile": 0.31002,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-693",
+          "name": "CWE-693",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.52,
+      "tags": [
+        "CWE-693"
       ]
     },
     {
@@ -7704,50 +7788,6 @@
       "priorityScore": 4.49,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-9171",
-      "summary": "IBM WebSphere Application Server and WebSphere Application Server Liberty are vulnerable to a denial of service, caused by sending a specially-crafted request. A remote attacker could exploit this vulnerability to cause the server to consume memory resources.",
-      "published": "2026-07-17T19:17:19.520Z",
-      "lastModified": "2026-08-11T23:28:49.447Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00314,
-      "epssPercentile": 0.24162,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.47,
-      "tags": [
-        "CWE-400"
       ]
     },
     {
@@ -8366,51 +8406,6 @@
         "Linux",
         "Windows",
         "CWE-78"
-      ]
-    },
-    {
-      "id": "CVE-2026-49835",
-      "summary": "Sigstore Timestamp Authority is a service for issuing RFC 3161 timestamps. Prior to 2.1.0, the global wrapMetrics middleware records raw HTTP request path r.URL.Path and raw HTTP request method r.Method as Prometheus labels for latency and request count metric vectors before routing, allowing an unauthenticated remote attacker to issue requests with random paths such as /api/v1/timestamp/ or random HTTP methods and create unbounded permanent time-series entries that exhaust memory. This issue is fixed in version 2.1.0.",
-      "published": "2026-07-17T19:17:16.227Z",
-      "lastModified": "2026-07-30T14:14:05.867Z",
-      "severity": "Medium",
-      "cvssScore": 5.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00447,
-      "epssPercentile": 0.37173,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-770",
-          "name": "CWE-770",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.37,
-      "tags": [
-        "Linux",
-        "CWE-770"
       ]
     },
     {
@@ -11574,6 +11569,94 @@
       ]
     },
     {
+      "id": "CVE-2026-16370",
+      "summary": "Mitigation bypass in the DOM: Networking component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:06.860Z",
+      "lastModified": "2026-07-24T16:35:27.003Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00309,
+      "epssPercentile": 0.23566,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-693",
+          "name": "CWE-693",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.01,
+      "tags": [
+        "CWE-693"
+      ]
+    },
+    {
+      "id": "CVE-2026-16380",
+      "summary": "Mitigation bypass in the Networking component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:13.163Z",
+      "lastModified": "2026-07-24T16:39:45.420Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00309,
+      "epssPercentile": 0.23566,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-693",
+          "name": "CWE-693",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.01,
+      "tags": [
+        "CWE-693"
+      ]
+    },
+    {
       "id": "CVE-2026-64048",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net/smc: reject CHID-0 ACCEPT that matches an empty ism_dev slot On the SMC-D client, slot 0 of ini->ism_dev[]/ini->ism_chid[] is reserved for an SMC-Dv1 device. smc_find_ism_v2_device_clnt() populates V2 entries starting at index 1, so when no V1 device is selected slot 0 is left in its kzalloc()'ed state with ism_dev[0] == NULL and ism_chid[0] == 0. smc_v2_determine_accepted_chid() then matches the peer's CHID against the array starting from index 0 using the CHID alone. A malicious peer replying to a SMC-Dv2-only proposal with d1.chid == 0 matches the empty slot, ini->ism_selected becomes 0, and the subsequent ism_dev[0]->lgr_lock dereference in smc_conn_create() faults at offsetof(struct smcd_dev, lgr_lock) == 0x68: BUG: KASAN: null-ptr-deref in _raw_spin_lock_bh+0x79/0xe0 Write of size 4 at addr 0000000000000068 by task exploit/144 Call Trace: _raw_spin_lock_bh smc_conn_create (net/smc/smc_core.c:1997) __smc_connect (net/smc/af_smc.c:1447) smc_connect (net/smc/af_smc.c:1720) __sys_connect __x64_sys_connect do_syscall_64 Require ism_dev[i] to be non-NULL before accepting a CHID match.",
       "published": "2026-07-19T16:17:45.190Z",
@@ -12503,50 +12586,6 @@
         "Chrome",
         "CWE-125",
         "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-45309",
-      "summary": "AsyncSSH is a Python package which provides an asynchronous client and server implementation of the SSHv2 protocol on top of the Python asyncio framework. Prior to 2.23.0, AsyncSSH expands the OpenSSH-compatible AuthorizedKeysFile %u token in asyncssh/config.py, asyncssh/connection.py, asyncssh/auth_keys.py, and asyncssh/misc.py with the raw SSH username during pre-authentication server config reload, allowing a server configured with AuthorizedKeysFile authorized_keys/%u to read an authorized-keys file outside the intended directory when the SSH username contains /, \\, or .. path traversal segments and authenticate with an attacker-selected key file. This issue is fixed in version 2.23.0.",
-      "published": "2026-07-17T19:17:14.333Z",
-      "lastModified": "2026-07-30T14:36:48.647Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.0044,
-      "epssPercentile": 0.36642,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.91,
-      "tags": [
-        "CWE-22"
       ]
     },
     {
@@ -13950,33 +13989,33 @@
       ]
     },
     {
-      "id": "CVE-2026-47183",
-      "summary": "Zeroconf is a pure Python implementation of multicast DNS service discovery. Prior to 0.149.6, DNSIncoming._log_exception_debug and the four QuietLogger exception-dedup methods stored an unbounded _seen_logs dictionary keyed by attacker-influenced IncomingDecodeError messages, retaining sys.exc_info() tracebacks whose frame locals kept raw packet self.data buffers and allowing unauthenticated hosts on the local link over UDP/5353 (224.0.0.251 / ff02::fb) to drive memory growth until mDNS-dependent features degrade or the process is OOM-killed. This issue is fixed in version 0.149.6.",
-      "published": "2026-07-17T19:17:15.303Z",
-      "lastModified": "2026-07-23T16:13:02.287Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "id": "CVE-2026-16375",
+      "summary": "Site isolation issue in the Networking: HTTP component. This vulnerability was fixed in Firefox 153, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:12.677Z",
+      "lastModified": "2026-07-24T15:15:12.170Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
       "cvssBreakdown": {
-        "attackVector": "Adjacent",
+        "attackVector": "Network",
         "attackComplexity": "Low",
         "privilegesRequired": "None",
         "userInteraction": "None",
         "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
+        "confidentiality": "High",
+        "integrity": "High",
         "availability": "High"
       },
-      "epssScore": 0.00241,
-      "epssPercentile": 0.15607,
+      "epssScore": 0.00209,
+      "epssPercentile": 0.11429,
       "isKev": false,
       "kev": null,
-      "vendor": null,
+      "vendor": "F5",
       "product": null,
       "cwe": [
         {
-          "id": "CWE-400",
-          "name": "CWE-400",
+          "id": "CWE-346",
+          "name": "CWE-346",
           "description": "CWE mapping from source data."
         }
       ],
@@ -13988,53 +14027,10 @@
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 3.82,
+      "priorityScore": 3.83,
       "tags": [
-        "CWE-400"
-      ]
-    },
-    {
-      "id": "CVE-2026-47184",
-      "summary": "Zeroconf is a pure Python implementation of multicast DNS service discovery. Prior to 0.149.7, DNSCache._async_add inserted every response record into cache, _expirations, _expire_heap, and service_cache without a cap, allowing unauthenticated hosts on the local link over UDP/5353 (224.0.0.251 / ff02::fb) to multicast valid mDNS responses with unique names and cause memory exhaustion, slower cache lookups, slower async_expire passes, and broken discovery, registration, and ServiceBrowser callbacks. This issue is fixed in version 0.149.7.",
-      "published": "2026-07-17T19:17:15.440Z",
-      "lastModified": "2026-07-23T16:13:02.287Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00241,
-      "epssPercentile": 0.15607,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-770",
-          "name": "CWE-770",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.82,
-      "tags": [
-        "CWE-770"
+        "F5",
+        "CWE-346"
       ]
     },
     {
@@ -14533,94 +14529,6 @@
       ]
     },
     {
-      "id": "CVE-2026-47180",
-      "summary": "Zeroconf is a pure Python implementation of multicast DNS service discovery. Prior to 0.149.5, DNSIncoming._decode_labels_at_offset recurses once per DNS-name compression pointer, and a single mDNS packet carrying chained pointers can trigger a RecursionError that escapes DNSIncoming.__init__, causing sustained CPU burn, log flooding, and degraded mDNS-dependent features for unauthenticated hosts on the local link over UDP/5353 (224.0.0.251 / ff02::fb). This issue is fixed in version 0.149.5.",
-      "published": "2026-07-17T19:17:15.153Z",
-      "lastModified": "2026-07-23T16:13:02.287Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.0023,
-      "epssPercentile": 0.14079,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-674",
-          "name": "CWE-674",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.77,
-      "tags": [
-        "CWE-674"
-      ]
-    },
-    {
-      "id": "CVE-2026-48045",
-      "summary": "Zeroconf is a pure Python implementation of multicast DNS service discovery. Prior to 0.149.12, AsyncListener.handle_query_or_defer retained every truncated TC-bit incoming query, each up to _MAX_MSG_ABSOLUTE = 8966 bytes, in self._deferred[addr] and armed a per-address timer in self._timers[addr] without capping the per-address list or distinct addr keys, allowing unauthenticated hosts on the local link over UDP/5353 (224.0.0.251 / ff02::fb) to spoof sources, grow _deferred and _timers, and cause memory exhaustion and quadratic CPU burn. This issue is fixed in version 0.149.12.",
-      "published": "2026-07-17T19:17:15.820Z",
-      "lastModified": "2026-07-23T16:13:02.287Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.0023,
-      "epssPercentile": 0.14078,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-770",
-          "name": "CWE-770",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.77,
-      "tags": [
-        "CWE-770"
-      ]
-    },
-    {
       "id": "CVE-2026-16209",
       "summary": "A vulnerability has been found in Gerapy up to 0.9.13. The impacted element is an unknown function of the file gerapy/server/core/views.py of the component Project Upload Endpoint. Such manipulation leads to missing authentication. The attack may be launched remotely. The exploit has been disclosed to the public and may be used. The name of the patch is bd4891c60315f17611a3b7a651ffe0fba7cfe71e. Applying a patch is advised to resolve this issue.",
       "published": "2026-07-19T04:17:03.983Z",
@@ -14889,51 +14797,6 @@
       "priorityScore": 3.72,
       "tags": [
         "CWE-918"
-      ]
-    },
-    {
-      "id": "CVE-2026-52746",
-      "summary": "JSONata is a JSON query and transformation language. Prior to 2.2.0 and 1.8.9, malicious non-matching inputs to the $toMillis function can cause superlinear backtracking in the ISO-8601 validation regex, leading to denial of service in applications that evaluate user-provided JSONata expressions. This issue is fixed in version 2.2.0 and 1.8.9.",
-      "published": "2026-07-17T19:17:16.500Z",
-      "lastModified": "2026-08-03T21:16:40.620Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00379,
-      "epssPercentile": 0.31056,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-1333",
-          "name": "CWE-1333",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.71,
-      "tags": [
-        "F5",
-        "CWE-1333"
       ]
     },
     {
@@ -15889,6 +15752,50 @@
       ]
     },
     {
+      "id": "CVE-2026-16376",
+      "summary": "Denial-of-service in the Graphics: WebGPU component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:12.760Z",
+      "lastModified": "2026-07-24T16:38:54.823Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00362,
+      "epssPercentile": 0.2934,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-400",
+          "name": "CWE-400",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.65,
+      "tags": [
+        "CWE-400"
+      ]
+    },
+    {
       "id": "CVE-2026-49284",
       "summary": "SimpleSAMLphp versions before 1.18.6 contain an information disclosure vulnerability. Prior to 2.4.7 and 2.5.2, SimpleSAMLphp's SAML SP ACS path does not enforce the IdP selected for an SP-initiated login when unsigned Response/InResponseTo is combined with a signed assertion lacking SubjectConfirmationData/InResponseTo, allowing a response issued by one trusted IdP to be bound to SP state created for another IdP and bypass flows that route users to a specific IdP, including deployments that set enable_unsolicited to false. This issue is fixed in versions 2.4.7 and 2.5.2.",
       "published": "2026-07-17T20:17:21.830Z",
@@ -16770,50 +16677,6 @@
       ]
     },
     {
-      "id": "CVE-2026-45703",
-      "summary": "Pimcore is an Open Source Data & Experience Management Platform. Prior to 11.5.17 (LTS) and 12.3.7, the WordExport export flow in bundles/WordExportBundle/src/Controller/TranslationController.php only checks the word_export feature permission and directly resolves attacker-controlled type/id input without enforcing view permission on page, snippet, email, or object elements, allowing a low-privileged backend user to export document content the user is not allowed to view. This issue is fixed in versions 11.5.17 (LTS) and 12.3.7.",
-      "published": "2026-07-17T19:17:14.790Z",
-      "lastModified": "2026-07-22T20:50:36.493Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00188,
-      "epssPercentile": 0.08682,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.54,
-      "tags": [
-        "CWE-862"
-      ]
-    },
-    {
       "id": "CVE-2026-63832",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: add wcid publish check in mt76_sta_add Since mt7925_mac_sta_add publishes wcid, add publish check in mt76_sta_add to avoid reinitializing the wcid->poll_list. Found dev->sta_poll_list corruption when using mt7925 and 7.1-rc4. According to the corruption information, prev->next was changed to itself. wlan0: disconnect from AP 90:fb:5d:94:8b:e3 for new auth to 90:fb:5d:94:8b:e2 wlan0: authenticate with 90:fb:5d:94:8b:e2 (local address=84:9e:56:9c:7e:6b) wlan0: send auth to 90:fb:5d:94:8b:e2 (try 1/3) slab kmalloc-8k start ffff8c80958a6000 pointer offset 4160 size 8192 list_add corruption. prev->next should be next (ffff8c808a7488f8), but was ffff8c80958a7040. (prev=ffff8c80958a7040). mt76_wcid_add_poll+0x95/0xd0 [mt76] mt7925_mac_add_txs.part.0+0xa5/0xe0 [mt7925_common] mt7925_rx_check+0xa7/0xc0 [mt7925_common] mt76_dma_rx_poll+0x50d/0x790 [mt76] mt792x_poll_rx+0x52/0xe0 [mt792x_lib]",
       "published": "2026-07-19T12:16:56.600Z",
@@ -17114,6 +16977,51 @@
       ]
     },
     {
+      "id": "CVE-2026-16374",
+      "summary": "Information disclosure in the Framework component in DevTools. This vulnerability was fixed in Firefox 153, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:12.573Z",
+      "lastModified": "2026-07-24T15:19:25.657Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00322,
+      "epssPercentile": 0.25058,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-200",
+          "name": "CWE-200",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.5,
+      "tags": [
+        "F5",
+        "CWE-200"
+      ]
+    },
+    {
       "id": "CVE-2026-6656",
       "summary": "Crypt::Password versions through 0.28 for Perl are susceptible to timing attacks. The check_password method uses the built-in eq operator. This allows discrepancies in timing to be used to guess the underlying hash.",
       "published": "2026-07-20T07:16:42.440Z",
@@ -17289,6 +17197,138 @@
       "priorityScore": 3.46,
       "tags": [
         "CWE-915"
+      ]
+    },
+    {
+      "id": "CVE-2026-16384",
+      "summary": "Information disclosure due to uninitialized memory in the Graphics: WebGPU component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:13.560Z",
+      "lastModified": "2026-07-27T13:49:27.663Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00311,
+      "epssPercentile": 0.23907,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-908",
+          "name": "CWE-908",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.46,
+      "tags": [
+        "CWE-908"
+      ]
+    },
+    {
+      "id": "CVE-2026-16385",
+      "summary": "Information disclosure due to uninitialized memory in the Graphics: WebGPU component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:13.660Z",
+      "lastModified": "2026-07-27T13:49:09.987Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00311,
+      "epssPercentile": 0.23906,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-908",
+          "name": "CWE-908",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.46,
+      "tags": [
+        "CWE-908"
+      ]
+    },
+    {
+      "id": "CVE-2026-16386",
+      "summary": "Information disclosure due to uninitialized memory in the Graphics: WebGPU component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:13.763Z",
+      "lastModified": "2026-07-27T13:47:54.970Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00311,
+      "epssPercentile": 0.23907,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-908",
+          "name": "CWE-908",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.46,
+      "tags": [
+        "CWE-908"
       ]
     },
     {
@@ -17474,6 +17514,50 @@
       ]
     },
     {
+      "id": "CVE-2026-16378",
+      "summary": "Other issue in the DOM: Copy & Paste and Drag & Drop component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
+      "published": "2026-07-21T13:17:12.967Z",
+      "lastModified": "2026-07-24T16:39:21.980Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00306,
+      "epssPercentile": 0.23291,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-20",
+          "name": "CWE-20",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.44,
+      "tags": [
+        "CWE-20"
+      ]
+    },
+    {
       "id": "CVE-2026-15322",
       "summary": "IBM Engineering AI Hub 1.0.0, 1.1.0, and 1.2.0 could allow a remote attacker to obtain sensitive information due to the exposure of session tokens in URLs.",
       "published": "2026-07-17T20:17:15.800Z",
@@ -17559,6 +17643,51 @@
       "priorityScore": 3.43,
       "tags": [
         "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-16381",
+      "summary": "Same-origin policy bypass in the Networking: DNS component. This vulnerability was fixed in Firefox 153, Firefox ESR 140.13, Thunderbird 153, and Thunderbird 140.13.",
+      "published": "2026-07-21T13:17:13.260Z",
+      "lastModified": "2026-07-24T15:19:11.863Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00173,
+      "epssPercentile": 0.07081,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-346",
+          "name": "CWE-346",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.43,
+      "tags": [
+        "F5",
+        "CWE-346"
       ]
     },
     {
@@ -18252,6 +18381,51 @@
       "priorityScore": 3.31,
       "tags": [
         "CWE-79"
+      ]
+    },
+    {
+      "id": "CVE-2026-16373",
+      "summary": "Information disclosure in the Privacy component in Firefox for Android. This vulnerability was fixed in Firefox 153.",
+      "published": "2026-07-21T13:17:12.473Z",
+      "lastModified": "2026-07-24T16:27:12.773Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00272,
+      "epssPercentile": 0.19613,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Android",
+      "product": "Android",
+      "cwe": [
+        {
+          "id": "CWE-200",
+          "name": "CWE-200",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.31,
+      "tags": [
+        "Android",
+        "CWE-200"
       ]
     },
     {
@@ -36207,56 +36381,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16073",
-      "summary": "A security vulnerability has been detected in AstrBotDevs AstrBot up to 4.25.2. Affected by this issue is the function Star.text_to_image/NetworkRenderStrategy.render of the file astrbot/core/star/base.py of the component T2I Feature. The manipulation leads to cross site scripting. The attack is possible to be carried out remotely. The exploit has been disclosed publicly and may be used. The vendor was contacted early about this disclosure but did not respond in any way.",
-      "published": "2026-07-17T19:17:13.103Z",
-      "lastModified": "2026-07-22T16:17:11.100Z",
-      "severity": "Low",
-      "cvssScore": 3.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00191,
-      "epssPercentile": 0.09087,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.54,
-      "tags": [
-        "CWE-79",
-        "CWE-94"
-      ]
-    },
-    {
       "id": "CVE-2026-54244",
       "summary": "Statamic is a Laravel and Git powered content management system (CMS). Prior to 5.74.0 and 6.20.3, the Live Preview endpoint for existing entries and terms in src/Http/Controllers/CP/PreviewController.php only checked view authorization, but it accepts and renders caller-supplied field values. A Control Panel user with view but not edit permission could therefore submit content they were not authorized to author and generate a shareable Live Preview URL rendering it. This issue is fixed in versions 5.74.0 and 6.20.3.",
       "published": "2026-07-17T21:17:08.523Z",
@@ -36622,50 +36746,6 @@
       "priorityScore": 1.39,
       "tags": [
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-48487",
-      "summary": "Zeroconf is a pure Python implementation of multicast DNS service discovery. Prior to 0.149.16, _read_character_string and _read_string in src/zeroconf/_protocol/incoming.py advanced self.offset by attacker-declared RDLENGTH without checking it against self._data_len, allowing unauthenticated hosts on the local link over UDP/5353 (224.0.0.251 / ff02::fb) to send a TXT, HINFO, or A/AAAA record with rdlength=65535 and seed DNSCache and ServiceInfo.properties with truncated, attacker-shaped key/value or address records. This issue is fixed in version 0.149.16.",
-      "published": "2026-07-17T19:17:15.963Z",
-      "lastModified": "2026-07-23T16:13:02.287Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00203,
-      "epssPercentile": 0.10641,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-130",
-          "name": "CWE-130",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.37,
-      "tags": [
-        "CWE-130"
       ]
     },
     {
@@ -41199,56 +41279,6 @@
       ]
     },
     {
-      "id": "CVE-2026-53712",
-      "summary": "SCRAM (Salted Challenge Response Authentication Mechanism) is part of the family of Simple Authentication and Security Layer (SASL, RFC 4422) authentication mechanisms. Prior to 3.3, a flaw in com.ongres.scram:scram-client and com.ongres.scram:scram-common allows an attacker capable of a TLS man-in-the-middle attack to silently downgrade a connection from SCRAM-SHA-256-PLUS with channel binding to standard SCRAM-SHA-256 without channel binding when TlsServerEndpoint processes an X.509 certificate using a modern signature algorithm such as Ed25519; getChannelBindingData() can return an empty byte array after NoSuchAlgorithmException, and the ScramClient builder treats that as absent channel-binding data. This issue is fixed in version 3.3.",
-      "published": "2026-07-17T19:17:16.880Z",
-      "lastModified": "2026-07-23T16:15:11.587Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00167,
-      "epssPercentile": 0.06379,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-636",
-          "name": "CWE-636",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-757",
-          "name": "CWE-757",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.22,
-      "tags": [
-        "CWE-636",
-        "CWE-757"
-      ]
-    },
-    {
       "id": "CVE-2026-63837",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net: ena: PHC: Check return code before setting timestamp output ena_phc_gettimex64() is setting the output parameter regardless of whether ena_com_phc_get_timestamp() succeeded or failed. When ena_com_phc_get_timestamp() returns an error, the timestamp parameter may contain uninitialized stack memory (e.g., when PHC is disabled or in blocked state) or invalid hardware values. Passing these to userspace via the PTP ioctl is both a security issue (information leak) and a correctness bug. Fix by checking the return code after releasing the lock and only setting the output timestamp on success.",
       "published": "2026-07-19T15:16:50.480Z",
@@ -42673,50 +42703,6 @@
       "tags": [
         "Linux",
         "CWE-863"
-      ]
-    },
-    {
-      "id": "CVE-2026-50185",
-      "summary": "RustCrypto CMOV provides conditional move CPU intrinsics which are guaranteed on major platforms to execute in constant-time and not be rewritten as branches by the compiler. From 0.1.1 until 0.5.4, the aarch64 implementations of Cmov and CmovEq in cmov/src/backends/aarch64.rs assume high bits are zero-extended when loading values smaller than a register, so set high bits such as [8..] in a Cmov selector or [16..] of self or other in the u16 and i16 CmovEq implementations can cause left.cmovz(&right, condition) to produce incorrect output. This issue is fixed in version 0.5.4.",
-      "published": "2026-07-17T19:17:16.370Z",
-      "lastModified": "2026-07-23T16:18:40.543Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00112,
-      "epssPercentile": 0.0156,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-758",
-          "name": "CWE-758",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.05,
-      "tags": [
-        "CWE-758"
       ]
     },
     {
