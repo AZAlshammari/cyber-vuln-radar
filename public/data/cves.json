@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-17T20:01:07.149Z",
+  "generatedAt": "2026-08-17T20:37:27.094Z",
   "count": 1000,
   "items": [
     {
@@ -4760,6 +4760,50 @@
       ]
     },
     {
+      "id": "CVE-2026-59144",
+      "summary": "Data::RingBuffer::Shared versions before 0.04 for Perl allow a stack buffer overflow via an unvalidated elem_size in ring_read_seq. The attach-time validator ring_validate_header checks the capacity-overflow and total_size consistency of the header but never caps elem_size against the destination size. ring_read_seq does memcpy(out, ring_slot(h, seq), elem_size) with elem_size read raw from the mmap'd segment, copying into a fixed 8-byte destination scalar. An elem_size larger than 8 bytes writes past the destination. A local peer that can write the backing file can leave the header valid while setting a large elem_size, so the next read copies a file-controlled length into the fixed 8-byte stack buffer, corrupting adjacent stack frames.",
+      "published": "2026-07-21T20:17:03.193Z",
+      "lastModified": "2026-07-22T20:17:02.663Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00459,
+      "epssPercentile": 0.37975,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-121",
+          "name": "CWE-121",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.76,
+      "tags": [
+        "CWE-121"
+      ]
+    },
+    {
       "id": "CVE-2026-16365",
       "summary": "Privilege escalation in the DOM: Workers component. This vulnerability was fixed in Firefox 153 and Thunderbird 153.",
       "published": "2026-07-21T13:17:05.037Z",
@@ -8301,6 +8345,50 @@
       "priorityScore": 4.4,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-59145",
+      "summary": "Data::Intern::Shared versions before 0.02 for Perl allow an out-of-bounds read via unvalidated slot, reverse and arena indices in si_idx_find. The attach-time validator si_validate_header is thorough about the header and layout (magic, version, section offsets, total_size, count and arena_used) but does not validate the three arrays it then trusts. Every lookup in si_idx_find walks a triple indirection read straight from the mmap'd segment, arena[reverse[slots[i].id]], with no bound on slots[i].id against count, on the reverse[id] arena offset against arena_used, or on the arena record's length prefix. A local peer that can write the backing file can leave the header valid while poisoning a slot id, a reverse offset or an arena length prefix, so an id_of, intern or string lookup dereferences the chain out of bounds; because string() returns a file-controlled length of bytes from the arena, adjacent process memory can be disclosed.",
+      "published": "2026-07-21T20:17:03.300Z",
+      "lastModified": "2026-07-22T20:17:02.813Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00416,
+      "epssPercentile": 0.34663,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.4,
+      "tags": [
+        "CWE-125"
       ]
     },
     {
@@ -13294,6 +13382,50 @@
       ]
     },
     {
+      "id": "CVE-2026-56852",
+      "summary": "A norm.Iter can enter an infinite loop when handling input containing invalid UTF-8 bytes.",
+      "published": "2026-07-21T20:17:02.867Z",
+      "lastModified": "2026-07-23T18:27:48.877Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00446,
+      "epssPercentile": 0.37061,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-835",
+          "name": "CWE-835",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.92,
+      "tags": [
+        "CWE-835"
+      ]
+    },
+    {
       "id": "CVE-2026-63980",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net/handshake: Use spin_lock_bh for hn_lock nvmet_tcp_state_change(), a socket callback that runs in BH context, can reach handshake_req_cancel() via nvmet_tcp_schedule_release_queue() and tls_handshake_cancel(). handshake_req_cancel() acquires hn->hn_lock with plain spin_lock(). If a process-context thread on the same CPU holds hn->hn_lock when a softirq invokes the cancel path, the lock attempt deadlocks. This is the only caller that invokes tls_handshake_cancel() from BH context; every other consumer calls it from process context. Deferring the cancel to process context in the NVMe target is not straightforward: nvmet_tcp_schedule_release_queue() must call tls_handshake_cancel() atomically with its state transition to DISCONNECTING. If the cancel were deferred, the handshake completion callback could fire in the window before the cancel runs, observe the unexpected state, and return without dropping its kref on the queue. Reworking that interlock is considerably more invasive than hardening the handshake lock. Convert all hn->hn_lock acquisitions from spin_lock/spin_unlock to spin_lock_bh/spin_unlock_bh so the lock is never taken with softirqs enabled.",
       "published": "2026-07-19T16:17:17.170Z",
@@ -13832,50 +13964,6 @@
         "CWE-401",
         "CWE-789",
         "CWE-1284"
-      ]
-    },
-    {
-      "id": "CVE-2026-53994",
-      "summary": "ProFTPD mod_sftp contains a heap-based buffer overflow reachable by an authenticated SFTP user. The fxp_packet_read() function accepts the attacker-supplied 32-bit big-endian SFTP packet length without a minimum sanity check. A value of 0 causes an unsigned subtraction elsewhere in the read path to underflow to approximately 4 GB. That oversized request reaches the core memory allocator, where the rounded size is computed in size_t but passed to new_block() as a 32-bit int; the low 32 bits of 0x100000000 are 0, so new_block() returns a small (~512-byte) block while the caller is told it received ~4 GB. The subsequent fill loop then streams attacker-controlled bytes past the end of the 544-byte allocation, producing an attacker-controlled heap buffer overflow. An authenticated user can crash the per-connection ProFTPD session child on demand with a single malformed SFTP packet (packet_len=0 followed by a body greater than approximately 544 bytes), producing reliable authenticated remote denial of service. Depending on heap layout and adjacent allocations, heap metadata corruption and further consequences beyond denial of service may be possible, though only denial of service is demonstrated by the supplied proof of concept.",
-      "published": "2026-07-18T20:17:30.283Z",
-      "lastModified": "2026-07-30T18:00:47.060Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00424,
-      "epssPercentile": 0.35361,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-122",
-          "name": "CWE-122",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.86,
-      "tags": [
-        "CWE-122"
       ]
     },
     {
@@ -21291,56 +21379,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16151",
-      "summary": "A vulnerability has been found in CartoDB carto-api-client 0.5.29. This impacts the function addFilter of the file src/filters.ts. Such manipulation of the argument column leads to improperly controlled modification of object prototype attributes. The attack can be executed remotely. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-07-18T20:17:30.107Z",
-      "lastModified": "2026-07-20T14:16:54.493Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.0032,
-      "epssPercentile": 0.24785,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-1321",
-          "name": "CWE-1321",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.07,
-      "tags": [
-        "CWE-94",
-        "CWE-1321"
-      ]
-    },
-    {
       "id": "CVE-2026-63815",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: f2fs: bound i_inline_xattr_size for non-inline-xattr inodes When the flexible_inline_xattr feature is enabled, do_read_inode() loads the on-disk i_inline_xattr_size unconditionally: if (f2fs_sb_has_flexible_inline_xattr(sbi)) fi->i_inline_xattr_size = le16_to_cpu(ri->i_inline_xattr_size); but sanity_check_inode() only range-checks it when the inode also has the FI_INLINE_XATTR flag set. An inode that carries an inline dentry or inline data but not FI_INLINE_XATTR -- the normal layout for an inline directory -- therefore keeps a fully attacker-controlled i_inline_xattr_size from a crafted image. get_inline_xattr_addrs() returns that value with no flag gating, so it feeds the inode geometry: MAX_INLINE_DATA() = 4 * (CUR_ADDRS_PER_INODE - i_inline_xattr_size - 1) NR_INLINE_DENTRY() = MAX_INLINE_DATA() * BITS_PER_BYTE / (...) addrs_per_page() = CUR_ADDRS_PER_INODE - i_inline_xattr_size A large i_inline_xattr_size drives MAX_INLINE_DATA() and NR_INLINE_DENTRY() negative, so make_dentry_ptr_inline() sets d->max (int) to a negative value. The inline directory walk then compares an unsigned long bit_pos against that negative d->max, which is promoted to a huge unsigned bound, and reads far past the inline area: while (bit_pos max) /* fs/f2fs/dir.c */ ... test_bit_le(bit_pos, d->bitmap) / d->dentry[bit_pos] ... Mounting a crafted image and reading such a directory triggers an out-of-bounds read in f2fs_fill_dentries(); the same underflow also corrupts ADDRS_PER_INODE for regular files. Validate i_inline_xattr_size against MAX_INLINE_XATTR_SIZE whenever the flexible_inline_xattr feature is enabled -- i.e. whenever the value is loaded from disk and consumed -- and keep the lower MIN_INLINE_XATTR_SIZE bound gated on inodes that actually carry an inline xattr, so legitimate inodes with i_inline_xattr_size == 0 are still accepted.",
       "published": "2026-07-19T12:16:54.527Z",
@@ -26285,56 +26323,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16150",
-      "summary": "A vulnerability was found in RobinHerbots Inputmask up to 5.0.9. Affected by this issue is the function extendDefaults/extendDefinitions/extendAliases in the library lib/dependencyLibs/extend.js of the component Internal Deep Merge Helper. The manipulation results in improperly controlled modification of object prototype attributes. The attack may be performed from remote. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-07-18T20:17:29.947Z",
-      "lastModified": "2026-07-20T16:16:56.430Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00256,
-      "epssPercentile": 0.17323,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-1321",
-          "name": "CWE-1321",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "CWE-94",
-        "CWE-1321"
-      ]
-    },
-    {
       "id": "CVE-2026-63793",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ntfs: serialize volume label accesses Protect vol->volume_label with a mutex and snaphost the label before copy_to_user. This prevent a use-after-free when FS_IOC_SETFSLABEL replaces the vol->volume_label and FS_IOC_GETTSLABEL reads it concurrently.",
       "published": "2026-07-19T12:16:51.650Z",
@@ -27865,6 +27853,50 @@
       "priorityScore": 2.73,
       "tags": [
         "CWE-863"
+      ]
+    },
+    {
+      "id": "CVE-2026-59143",
+      "summary": "Data::RoaringBitmap::Shared versions before 0.02 for Perl allow an out-of-bounds read via an unvalidated container offset and cardinality in rb_contains_locked. The attach-time validator rb_validate_header checks the header scalars and region layout against the file size, but does not validate the bucket contents it then trusts. rb_contains_locked forms a container pointer as pool + container_off * 8192 from a raw file-stored offset and then searches over a file-stored cardinality, neither bounded against the container pool capacity or the fixed 8192-byte slot size. A local peer that can write the backing file can leave the header valid while poisoning a bucket, so the next membership query dereferences a file-controlled wild pointer and scans a file-controlled count, reading adjacent memory or crashing the process.",
+      "published": "2026-07-21T20:17:03.083Z",
+      "lastModified": "2026-07-23T13:16:28.107Z",
+      "severity": "Medium",
+      "cvssScore": 6.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.00235,
+      "epssPercentile": 0.14734,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.72,
+      "tags": [
+        "CWE-125"
       ]
     },
     {
@@ -32480,51 +32512,6 @@
       "priorityScore": 2.08,
       "tags": [
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-57848",
-      "summary": "Stoat for Android exports the chat.stoat.activities.ShareTargetActivity component (reachable to any process on the device via the android.intent.action.SEND intent) and accepts the file to share as a URI supplied through the android.intent.extra.STREAM extra. The activity does not validate or filter the incoming URI before using it as the outgoing attachment, so a caller can pass a file:// URI pointing at the application's own internal storage (for example /data/data/chat.revolt/databases/revolt.db, cached authentication token files, or preferences) and have the app treat that internal file as a user-selected attachment. An attacker who can invoke intents on the victim's device (via ADB access, a co-installed malicious application, or any other route that reaches Android's intent dispatch) can launch ShareTargetActivity with such a URI and cause the victim, on a single channel-selection interaction, to send the internal file to any Stoat channel or user of the attacker's choosing. The composer displays the attachment as \\\"attachment\\\" with no filename indication, so the victim has no visible signal that the file being sent is their own internal application data. Consequences include disclosure of the local Stoat database (message history, contact list, cached content), disclosure of authentication tokens permitting full account takeover, and disclosure of any other file readable by the app process.",
-      "published": "2026-07-18T20:17:30.427Z",
-      "lastModified": "2026-07-23T15:23:01.470Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00144,
-      "epssPercentile": 0.04192,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Android",
-      "product": "Android",
-      "cwe": [
-        {
-          "id": "CWE-926",
-          "name": "CWE-926",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.07,
-      "tags": [
-        "Android",
-        "CWE-926"
       ]
     },
     {
