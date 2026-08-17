@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-17T19:35:04.153Z",
+  "generatedAt": "2026-08-17T20:01:07.149Z",
   "count": 1000,
   "items": [
     {
@@ -4014,7 +4014,7 @@
       "id": "CVE-2026-64142",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: ksmbd: close durable scavenger races against m_fp_list lookups ksmbd_durable_scavenger() has two related races against any walker that iterates f_ci->m_fp_list, including ksmbd_lookup_fd_inode() (used by ksmbd_vfs_rename) and the share-mode checks in fs/smb/server/smb_common.c. (1) fp->node list-head reuse. Durable-preserved handles can remain linked on f_ci->m_fp_list after session teardown so share-mode checks still see them while the handle is reconnectable. The scavenger collected expired handles by adding fp->node to a local scavenger_list after removing them from the global durable idr. Because fp->node is the same list_head used by m_fp_list, list_add(&fp->node, &scavenger_list) overwrites the m_fp_list links and corrupts both lists. CONFIG_DEBUG_LIST can report this on the share-mode walk path. (2) Refcount race against m_fp_list walkers. The scavenger qualifies an expired durable handle with atomic_read(&fp->refcount) > 1 and fp->conn under global_ft.lock, removes fp from global_ft, then drops global_ft.lock before unlinking fp from m_fp_list and freeing it. During that gap fp is still linked on m_fp_list with f_state == FP_INITED. ksmbd_lookup_fd_inode() under m_lock read calls ksmbd_fp_get() (atomic_inc_not_zero on refcount that is still 1) and takes a live reference; the scavenger then unlinks and frees fp while the holder owns a reference, leading to UAF on the holder's subsequent ksmbd_fd_put() and on any field reads performed by a concurrent share-mode walker that iterates m_fp_list without taking ksmbd_fp_get() (smb_check_perm_dleases-like paths). Fix both: * Stop reusing fp->node as a scavenger-private list node. Remove one expired handle from global_ft under global_ft.lock, take an explicit transient reference, drop the lock, unlink fp->node from m_fp_list under f_ci->m_lock, then drop both the durable lifetime and transient references with atomic_sub_and_test(2, &fp->refcount). If the scavenger is the last putter the close runs there; otherwise an in-flight holder that already raced through the m_fp_list lookup owns the final close via its ksmbd_fd_put() path. The one-at-a-time disposal can rescan the durable idr when multiple handles expire in the same pass, but durable scavenging is a background expiration path and the final full scan recomputes min_timeout before the next wait. * Clear fp->persistent_id inside __ksmbd_remove_durable_fd() right after idr_remove(), so a delayed final close from a holder that snatched fp does not re-issue idr_remove() on a persistent id that idr_alloc_cyclic() in ksmbd_open_durable_fd() may have already handed out to a brand-new durable handle. * Bypass the per-conn open_files_count decrement in __put_fd_final() when fp is detached from any session table (fp->conn cleared by session_fd_check() at durable preserve -- paired with the volatile_id clear at unpublish, so checking fp->conn alone is sufficient). The walker that owns the final close runs from an unrelated work->conn whose stats.open_files_count never tracked this durable fp; without this guard the holder would underflow that unrelated counter. The two races are folded into one patch because patch (1) alone cleans up the corrupted list but leaves a deterministic UAF window for m_fp_list walkers that the transient-reference and persistent_id discipline in (2) close; bisecting onto an intermediate state would land on a UAF that pre-patch chaos merely made less reproducible. Validation: * CONFIG_DEBUG_LIST coverage for the list_head reuse path. * KASAN-enabled direct SMB2 durable-handle coverage that exercised ksmbd_durable_scavenger() and non-NULL ksmbd_lookup_fd_inode() returns while durable handles expired under concurrent rename lookups, with no KASAN, UAF, list-corruption, ODEBUG, or WARNING reports. ---truncated---",
       "published": "2026-07-19T16:17:56.103Z",
-      "lastModified": "2026-07-30T14:59:47.950Z",
+      "lastModified": "2026-08-17T19:40:06.100Z",
       "severity": "Critical",
       "cvssScore": 9.8,
       "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
@@ -4034,18 +4034,25 @@
       "kev": null,
       "vendor": "Linux",
       "product": null,
-      "cwe": [],
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 4.81,
       "tags": [
-        "Linux"
+        "Linux",
+        "CWE-416"
       ]
     },
     {
@@ -20723,6 +20730,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64143",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: platform/x86: uniwill-laptop: Do not enable the charging limit even when forced It seems that on some older models (~2020) the battery charging limit can permanently damage the battery. Prevent users from enabling this feature thru the \"force\" module parameter to avoid causing permanent hardware damage on such devices.",
+      "published": "2026-07-19T16:17:56.243Z",
+      "lastModified": "2026-08-17T19:39:52.783Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00162,
+      "epssPercentile": 0.05951,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.13,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-27823",
       "summary": "A vulnerability has been identified in EGroupware that may lead to Remote Code Execution (RCE). The issue allows an authenticated attacker to execute arbitrary commands on the server. If user self-registration is enabled, the vulnerability may be exploitable without prior authentication. The vulnerability stems from improper authorization checks combined with a file write primitive and an arbitrary file read vulnerability, which together enable full system compromise. This has been patched in versions 26.2.20260224 and 23.1.20260224.",
       "published": "2026-07-20T16:16:57.680Z",
@@ -22816,6 +22861,51 @@
       "priorityScore": 2.95,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64145",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: wilc1000: fix dma_buffer leak on bus acquire failure wilc_wlan_firmware_download() allocates dma_buffer with kmalloc() at the top of the function and uses a 'fail:' label to free it via kfree(dma_buffer) on error. All later error paths correctly use 'goto fail' to route through this cleanup. However, the early failure path after the first acquire_bus() call uses a bare 'return ret;', which leaks dma_buffer whenever the bus acquire fails. Replace the early return with goto fail so the existing cleanup path runs. Found via a custom Coccinelle semantic patch hunting for kmalloc'd locals leaked on early-return error paths in driver firmware-download code.",
+      "published": "2026-07-19T16:17:56.443Z",
+      "lastModified": "2026-08-17T19:39:19.187Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00166,
+      "epssPercentile": 0.06319,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.95,
+      "tags": [
+        "Linux",
+        "CWE-787"
       ]
     },
     {
@@ -31518,6 +31608,96 @@
       ]
     },
     {
+      "id": "CVE-2026-64144",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: btmtk: fix urb->setup_packet leak in error paths The setup_packet of control urb is not freed if usb_submit_urb fails or the submitted urb is killed. Add free in these two paths.",
+      "published": "2026-07-19T16:17:56.347Z",
+      "lastModified": "2026-08-17T19:39:29.323Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00175,
+      "epssPercentile": 0.0734,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.18,
+      "tags": [
+        "Linux",
+        "CWE-401"
+      ]
+    },
+    {
+      "id": "CVE-2026-64147",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: pds_core: fix debugfs_lookup dentry leak and error handling debugfs_lookup() returns a dentry with an elevated reference count that must be released with dput(). The current code discards the returned dentry without calling dput(), causing a reference leak on every firmware reset recovery. Additionally, when CONFIG_DEBUG_FS is disabled, debugfs_lookup() returns ERR_PTR(-ENODEV), not NULL. The current check passes for error pointers and would call dput() on an invalid pointer, causing a crash.",
+      "published": "2026-07-19T16:17:56.643Z",
+      "lastModified": "2026-08-17T19:37:15.583Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00175,
+      "epssPercentile": 0.0734,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.18,
+      "tags": [
+        "Linux",
+        "CWE-401"
+      ]
+    },
+    {
       "id": "CVE-2026-45797",
       "summary": "HeyForm is an open-source form builder. Prior to version 3.0.0-rc.7, the `/api/upload` endpoint allows unauthenticated file uploads including SVG files. Uploaded SVGs are stored in the static assets directory and served with `Content-Type: image/svg+xml` by Express's serve-static middleware, allowing an attacker to achieve stored cross-site scripting (XSS) on the heyform domain without any authentication. Version 3.0.0-rc.7 contains a patch for the issue.",
       "published": "2026-07-20T16:17:00.743Z",
@@ -31995,6 +32175,51 @@
       "priorityScore": 2.14,
       "tags": [
         "CWE-863"
+      ]
+    },
+    {
+      "id": "CVE-2026-64146",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: erofs: fix metabuf leak in inode xattr initialization commit bb88e8da0025 (\"erofs: use meta buffers for xattr operations\") converted xattr operations to use on-stack erofs_buf instances. erofs_init_inode_xattrs() uses such a metabuf while reading the inline xattr header and shared xattr id array. Some error paths after erofs_read_metabuf() leave through out_unlock without dropping the metabuf, so the folio reference can leak. Consolidate the cleanup at out_unlock. erofs_put_metabuf() is a no-op if no folio has been acquired, and this keeps all paths after taking EROFS_I_BL_XATTR_BIT covered by a single cleanup site.",
+      "published": "2026-07-19T16:17:56.547Z",
+      "lastModified": "2026-08-17T19:37:52.253Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00162,
+      "epssPercentile": 0.05951,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.13,
+      "tags": [
+        "Linux",
+        "CWE-401"
       ]
     },
     {
@@ -37314,44 +37539,6 @@
       ]
     },
     {
-      "id": "CVE-2026-64143",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: platform/x86: uniwill-laptop: Do not enable the charging limit even when forced It seems that on some older models (~2020) the battery charging limit can permanently damage the battery. Prevent users from enabling this feature thru the \"force\" module parameter to avoid causing permanent hardware damage on such devices.",
-      "published": "2026-07-19T16:17:56.243Z",
-      "lastModified": "2026-07-30T14:59:47.950Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00162,
-      "epssPercentile": 0.05951,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.21,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-64070",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: powerpc/hv-gpci: fix preempt count leak in sysfs show paths Four sysfs show() callbacks in hv-gpci take get_cpu_var(hv_gpci_reqb) (which calls preempt_disable()) but only call the matching put_cpu_var() on the error path under the 'out:' label. Every successful read leaks one preempt_disable(): processor_bus_topology_show() processor_config_show() affinity_domain_via_virtual_processor_show() affinity_domain_via_domain_show() (affinity_domain_via_partition_show() was already correct.) On a CONFIG_PREEMPT=y kernel, repeated reads raise preempt_count and eventually return to userspace with preemption still disabled. The next user-mode page fault then hits faulthandler_disabled() == 1, gets forced to SIGSEGV, and the resulting coredump trips 'BUG: scheduling while atomic' in call_usermodehelper_exec -> wait_for_completion_state -> schedule: BUG: scheduling while atomic: / /0x00000004 ... __schedule_bug+0x6c/0x90 __schedule+0x58c/0x13a0 schedule+0x48/0x1a0 schedule_timeout+0x104/0x170 wait_for_completion_state+0x16c/0x330 call_usermodehelper_exec+0x254/0x2d0 vfs_coredump+0x1050/0x2590 get_signal+0xb9c/0xc80 do_notify_resume+0xf8/0x470 Add an out_success label that calls put_cpu_var() before returning the byte count, mirroring affinity_domain_via_partition_show().",
       "published": "2026-07-19T16:17:47.583Z",
@@ -40580,82 +40767,6 @@
       ]
     },
     {
-      "id": "CVE-2026-64144",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: btmtk: fix urb->setup_packet leak in error paths The setup_packet of control urb is not freed if usb_submit_urb fails or the submitted urb is killed. Add free in these two paths.",
-      "published": "2026-07-19T16:17:56.347Z",
-      "lastModified": "2026-07-30T14:59:47.950Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00175,
-      "epssPercentile": 0.0734,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.26,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-64147",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: pds_core: fix debugfs_lookup dentry leak and error handling debugfs_lookup() returns a dentry with an elevated reference count that must be released with dput(). The current code discards the returned dentry without calling dput(), causing a reference leak on every firmware reset recovery. Additionally, when CONFIG_DEBUG_FS is disabled, debugfs_lookup() returns ERR_PTR(-ENODEV), not NULL. The current check passes for error pointers and would call dput() on an invalid pointer, causing a crash.",
-      "published": "2026-07-19T16:17:56.643Z",
-      "lastModified": "2026-07-30T14:59:47.950Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00175,
-      "epssPercentile": 0.0734,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.26,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-63822",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: ath11k: fix warning when unbinding If there is an error during some initialization related to firmware, the buffers dp->tx_ring[i].tx_status are released. However this is released again when the device is unbinded (ath11k_pci), and we get: WARNING: CPU: 0 PID: 6231 at mm/slub.c:4368 free_large_kmalloc+0x57/0x90 Call Trace: free_large_kmalloc ath11k_dp_free ath11k_core_deinit ath11k_pci_remove ... The issue is always reproducible from a VM because the MSI addressing initialization is failing. In order to fix the issue, just set the buffers to NULL after releasing in order to avoid the double free.",
       "published": "2026-07-19T12:16:55.330Z",
@@ -41957,82 +42068,6 @@
       "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 0.22,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-64145",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: wilc1000: fix dma_buffer leak on bus acquire failure wilc_wlan_firmware_download() allocates dma_buffer with kmalloc() at the top of the function and uses a 'fail:' label to free it via kfree(dma_buffer) on error. All later error paths correctly use 'goto fail' to route through this cleanup. However, the early failure path after the first acquire_bus() call uses a bare 'return ret;', which leaks dma_buffer whenever the bus acquire fails. Replace the early return with goto fail so the existing cleanup path runs. Found via a custom Coccinelle semantic patch hunting for kmalloc'd locals leaked on early-return error paths in driver firmware-download code.",
-      "published": "2026-07-19T16:17:56.443Z",
-      "lastModified": "2026-07-30T14:59:47.950Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00166,
-      "epssPercentile": 0.06319,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.22,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-64146",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: erofs: fix metabuf leak in inode xattr initialization commit bb88e8da0025 (\"erofs: use meta buffers for xattr operations\") converted xattr operations to use on-stack erofs_buf instances. erofs_init_inode_xattrs() uses such a metabuf while reading the inline xattr header and shared xattr id array. Some error paths after erofs_read_metabuf() leave through out_unlock without dropping the metabuf, so the folio reference can leak. Consolidate the cleanup at out_unlock. erofs_put_metabuf() is a no-op if no folio has been acquired, and this keeps all paths after taking EROFS_I_BL_XATTR_BIT covered by a single cleanup site.",
-      "published": "2026-07-19T16:17:56.547Z",
-      "lastModified": "2026-07-30T14:59:47.950Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00162,
-      "epssPercentile": 0.05951,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.21,
       "tags": [
         "Linux"
       ]
