@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-17T14:56:54.103Z",
+  "generatedAt": "2026-08-17T15:29:58.072Z",
   "count": 1000,
   "items": [
     {
@@ -6435,7 +6435,7 @@
       "id": "CVE-2026-64160",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix potential for tearing in ->remote_i_size and ->zero_point Fix potential tearing in using ->remote_i_size and ->zero_point by copying i_size_read() and i_size_write() and using the same seqcount as for i_size. We need to make sure that netfslib and the filesystems that use it always hold i_lock whilst updating any of the sizes to prevent i_size_seqcount from getting corrupted.",
       "published": "2026-07-19T16:17:58.010Z",
-      "lastModified": "2026-07-30T14:59:47.950Z",
+      "lastModified": "2026-08-17T15:05:03.423Z",
       "severity": "Critical",
       "cvssScore": 9.8,
       "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
@@ -6462,7 +6462,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 4.62,
       "tags": [
@@ -13595,6 +13595,62 @@
       ]
     },
     {
+      "id": "CVE-2026-47667",
+      "summary": "CImg Library is a C++ library for image processing. Prior to version 4.0.0 in `_load_analyze()`, the header_size field is read as an `unsigned int` from the first 4 bytes of an Analyze/NIfTI file and passed directly to `new unsigned char[header_size]` without being bounded against the actual file size. A value up to ~4 GB is accepted. If the subsequent `fread` returns `short` as it will for any malformed file), the function throws a `CImgIOException` and the allocated buffer is never freed. A 6-byte crafted file is sufficient to trigger an allocation of ~1.3 GB per call, with the full allocation leaked on every error path. The issue is reachable via `load_analyze()` and the generic `load()` when the file extension is .hdr, .img, or .nii. Version 4.0.0 fixes the issue.",
+      "published": "2026-07-21T20:17:01.323Z",
+      "lastModified": "2026-07-23T16:04:11.740Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00426,
+      "epssPercentile": 0.35521,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-789",
+          "name": "CWE-789",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-1284",
+          "name": "CWE-1284",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.87,
+      "tags": [
+        "CWE-401",
+        "CWE-789",
+        "CWE-1284"
+      ]
+    },
+    {
       "id": "CVE-2026-53994",
       "summary": "ProFTPD mod_sftp contains a heap-based buffer overflow reachable by an authenticated SFTP user. The fxp_packet_read() function accepts the attacker-supplied 32-bit big-endian SFTP packet length without a minimum sanity check. A value of 0 causes an unsigned subtraction elsewhere in the read path to underflow to approximately 4 GB. That oversized request reaches the core memory allocator, where the rounded size is computed in size_t but passed to new_block() as a 32-bit int; the low 32 bits of 0x100000000 are 0, so new_block() returns a small (~512-byte) block while the caller is told it received ~4 GB. The subsequent fill loop then streams attacker-controlled bytes past the end of the 544-byte allocation, producing an attacker-controlled heap buffer overflow. An authenticated user can crash the per-connection ProFTPD session child on demand with a single malformed SFTP packet (packet_len=0 followed by a body greater than approximately 544 bytes), producing reliable authenticated remote denial of service. Depending on heap layout and adjacent allocations, heap metadata corruption and further consequences beyond denial of service may be possible, though only denial of service is demonstrated by the supplied proof of concept.",
       "published": "2026-07-18T20:17:30.283Z",
@@ -16229,6 +16285,50 @@
       ]
     },
     {
+      "id": "CVE-2026-46600",
+      "summary": "Parsing an invalid SVCB or HTTPS RR can panic when the size of a parameter value overflows the message buffer.",
+      "published": "2026-07-21T20:17:01.213Z",
+      "lastModified": "2026-08-14T16:16:55.673Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.0035,
+      "epssPercentile": 0.28066,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-125",
+          "name": "CWE-125",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.61,
+      "tags": [
+        "CWE-125"
+      ]
+    },
+    {
       "id": "CVE-2026-63939",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: KVM: SEV: Compute the correct max length of the in-GHCB scratch area When setting the length of the GHCB scratch area, and the area is in the GHCB shared buffer, set the effective length of the scratch area to the max possible size given the start of the guest-provided pointer, and the end of the shared buffer. The code was \"fine\" when first introduced, as KVM doesn't consult the length of the buffer when emulating MMIO, because the passed in @len always specifies the *max* size required. But for PSC requests, the incoming @len is just the minimum length (to process the header), and KVM needs to know the full size of the scratch area to avoid buffer overflows (spoiler alert). Opportunistically rename @len => @min_len to better reflect its role.",
       "published": "2026-07-19T16:17:12.433Z",
@@ -16761,6 +16861,50 @@
       "tags": [
         "CWE-74",
         "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-47671",
+      "summary": "Nhost is an open source Firebase alternative with GraphQL. In versions of Nhost CLI prior to 1.46.0, the hidden `nhost configserver` used by `nhost dev` exposes the Mimir GraphQL API with dummy authorization directives and permissive CORS. When a developer is running the local development environment, any process that can reach the developer's localhost service, including a web page loaded from an arbitrary origin, can query the configserver for local Nhost configuration and secrets and can mutate the local `.secrets` file. This impacts developers using `nhost dev`: project admin secrets, JWT signing keys, webhook secrets, Grafana credentials, and custom environment variables can be read, and attacker-controlled secrets can be written to the local development project. Version 1.46.0 of Nhost CLI contains a fix.",
+      "published": "2026-07-21T20:17:01.473Z",
+      "lastModified": "2026-07-30T15:27:31.953Z",
+      "severity": "Medium",
+      "cvssScore": 5.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00266,
+      "epssPercentile": 0.18835,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-306",
+          "name": "CWE-306",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.55,
+      "tags": [
+        "CWE-306"
       ]
     },
     {
@@ -28879,106 +29023,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16121",
-      "summary": "A vulnerability was identified in nextlevelbuilder GoClaw up to 3.13.2. Affected is the function isSafeBin of the file internal/tools/exec_approval.go. The manipulation leads to improper authorization. It is possible to initiate the attack remotely. The exploit is publicly available and might be used.",
-      "published": "2026-07-18T15:17:32.987Z",
-      "lastModified": "2026-07-20T16:16:56.167Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00209,
-      "epssPercentile": 0.11414,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-266",
-          "name": "CWE-266",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-285",
-          "name": "CWE-285",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.6,
-      "tags": [
-        "CWE-266",
-        "CWE-285"
-      ]
-    },
-    {
-      "id": "CVE-2026-16123",
-      "summary": "A weakness has been identified in nextlevelbuilder GoClaw up to 3.13.2. Affected by this issue is the function ToolsInvokeHandler.ServeHTTP of the file internal/http/tools_invoke.go of the component Invoke Endpoint. This manipulation causes missing authorization. The attack can be initiated remotely. The exploit has been made available to the public and could be used for attacks.",
-      "published": "2026-07-18T15:17:33.900Z",
-      "lastModified": "2026-07-22T16:17:11.563Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00209,
-      "epssPercentile": 0.11413,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.6,
-      "tags": [
-        "CWE-862",
-        "CWE-863"
-      ]
-    },
-    {
       "id": "CVE-2026-16195",
       "summary": "A security flaw has been discovered in Sipeed PicoClaw up to 0.2.9. This issue affects the function dispatchIncoming of the file pkg/channels/wecom/wecom.go of the component Group Message Handler. The manipulation results in incorrect authorization. It is possible to launch the attack remotely. The exploit has been released to the public and may be used for attacks. The reported GitHub issue was closed automatically due to inactivity.",
       "published": "2026-07-18T23:17:00.847Z",
@@ -29692,7 +29736,7 @@
       "id": "CVE-2026-64158",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix write streaming disablement if fd open O_RDWR In netfs_perform_write(), \"write streaming\" (the caching of dirty data in dirty but !uptodate folios) is performed to avoid the need to read data that is just going to get immediately overwritten. However, this is/will be disabled in three circumstances: if the fd is open O_RDWR, if fscache is in use (as we need to round out the blocks for DIO) or if content encryption is enabled (again for rounding out purposes). The idea behind disabling it if the fd is open O_RDWR is that we'd need to flush the write-streaming page before we could read the data, particularly through mmap. But netfs now fills in the gaps if ->read_folio() is called on the page, so that is unnecessary. Further, this doesn't actually work if a separate fd is open for reading. Fix this by removing the check for O_RDWR, thereby allowing streaming writes even when we might read. This caused a number of problems with the generic/522 xfstest, but those are now fixed.",
       "published": "2026-07-19T16:17:57.807Z",
-      "lastModified": "2026-07-30T14:59:47.950Z",
+      "lastModified": "2026-08-17T15:10:11.783Z",
       "severity": "High",
       "cvssScore": 7.3,
       "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:L",
@@ -29719,7 +29763,7 @@
       "patchAvailable": true,
       "workaroundAvailable": true,
       "recentlyPublished": false,
-      "recentlyModified": false,
+      "recentlyModified": true,
       "knownRansomwareUse": false,
       "priorityScore": 2.57,
       "tags": [
@@ -31502,6 +31546,51 @@
       ]
     },
     {
+      "id": "CVE-2026-64155",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: ath11k: fix error path leaks in some WMI WOW calls Fix two instances where we used to directly return the result of ath11k_wmi_cmd_send(...). Because we did not check the return value, we also did not free the skb in the error path.",
+      "published": "2026-07-19T16:17:57.483Z",
+      "lastModified": "2026-08-17T15:21:54.500Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00173,
+      "epssPercentile": 0.07045,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.17,
+      "tags": [
+        "Linux",
+        "CWE-401"
+      ]
+    },
+    {
       "id": "CVE-2026-63758",
       "summary": "SurrealDB versions before 3.1.0 contain an authorization bypass vulnerability in the KILL statement that allows authenticated database users to terminate other users' LIVE SELECT subscriptions. Attackers can issue KILL statements with target live query UUIDs to disrupt real-time data subscriptions of other users without ownership verification.",
       "published": "2026-07-20T12:19:45.900Z",
@@ -31678,6 +31767,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64157",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix partial invalidation of streaming-write folio In netfs_invalidate_folio(), if the region of a partial invalidation overlaps the front (but not all) of a dirty write cached in a streaming write page (dirty, but not uptodate, with the dirty region tracked by a netfs_folio struct), the function modifies the dirty region - but incorrectly as it moves the region forward by setting the start to the start, not the end, of the invalidation region. Fix this by setting finfo->dirty_offset to the end of the invalidation region (iend).",
+      "published": "2026-07-19T16:17:57.703Z",
+      "lastModified": "2026-08-17T15:20:23.197Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.06505,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.15,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-47128",
       "summary": "nono is software that allows users to run AI agents in a zero-latency sandbox. Prior to version 0.55.0, the nono Landlock/seccomp policies allow access to local Unix domain sockets (concrete and abstract). This allows an easy sandbox escape by talking to the per-user systemd dbus socket. Version 0.55.0 patches the issue.",
       "published": "2026-07-20T22:17:14.847Z",
@@ -31719,6 +31846,45 @@
       "priorityScore": 2.15,
       "tags": [
         "CWE-863"
+      ]
+    },
+    {
+      "id": "CVE-2026-64154",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/msm/adreno: Fix a reference leak in a6xx_gpu_init() In a6xx_gpu_init(), node is obtained via of_parse_phandle(). While there was a manual of_node_put() at the end of the common path, several early error returns would bypass this call, resulting in a reference leak. Fix this by using the __free(device_node) cleanup handler to release the reference when the variable goes out of scope. Patchwork: https://patchwork.freedesktop.org/patch/700661/",
+      "published": "2026-07-19T16:17:57.390Z",
+      "lastModified": "2026-08-17T15:23:39.687Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00165,
+      "epssPercentile": 0.06206,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.14,
+      "tags": [
+        "F5",
+        "Linux"
       ]
     },
     {
@@ -31897,6 +32063,44 @@
       "tags": [
         "Linux",
         "CWE-476"
+      ]
+    },
+    {
+      "id": "CVE-2026-64159",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix zeropoint update where i_size > remote_i_size Fix the update of the zero point[*] by netfs_release_folio() when there is uncommitted data in the pagecache beyond the folio being released but the on-server EOF is in this folio (ie. i_size > remote_i_size). The update needs to limit zero_point to remote_i_size, not i_size as i_size is a local phenomenon reflecting updates made locally to the pagecache, not stuff written to the server. remote_i_size tracks the server's i_size. [*] The zero point is the file position from which we can assume that the server will just return zeros, so we can avoid generating reads. Note that netfs_invalidate_folio() probably doesn't need fixing as zero_point should be updated by setattr after truncation or fallocate. Found with: fsx -q -N 1000000 -p 10000 -o 128000 -l 600000 \\ /xfstest.test/junk --replay-ops=junk.fsxops using the following as junk.fsxops: truncate 0x0 0x1bbae 0x82864 write 0x3ef2e 0xf9c8 0x1bbae write 0x67e05 0xcb5a 0x4e8f6 mapread 0x57781 0x85b6 0x7495f copy_range 0x5d3d 0x10329 0x54fac 0x7495f write 0x64710 0x1c2b 0x7495f mapread 0x64000 0x1000 0x7495f on cifs with the default cache option. It shows read-gaps on folio 0x64 failing with a short read (ie. it hits EOF) if the FMODE_READ check is commented out in netfs_perform_write(): if (//(file->f_mode & FMODE_READ) || netfs_is_cache_enabled(ctx)) { and no fscache. This was initially found with the generic/522 xfstest.",
+      "published": "2026-07-19T16:17:57.913Z",
+      "lastModified": "2026-08-17T15:07:44.960Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00155,
+      "epssPercentile": 0.05214,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": true,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.11,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -34987,56 +35191,6 @@
       "tags": [
         "WordPress",
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-16122",
-      "summary": "A security flaw has been discovered in nextlevelbuilder GoClaw up to 3.13.2. Affected by this vulnerability is the function extractBin/RequestApproval/matchesAllowlist of the file internal/tools/exec_approval.go. The manipulation results in incorrect authorization. The exploit has been released to the public and may be used for attacks.",
-      "published": "2026-07-18T15:17:33.743Z",
-      "lastModified": "2026-07-20T14:16:54.230Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00197,
-      "epssPercentile": 0.09726,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-285",
-          "name": "CWE-285",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.85,
-      "tags": [
-        "CWE-285",
-        "CWE-863"
       ]
     },
     {
@@ -40708,44 +40862,6 @@
       ]
     },
     {
-      "id": "CVE-2026-64155",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: ath11k: fix error path leaks in some WMI WOW calls Fix two instances where we used to directly return the result of ath11k_wmi_cmd_send(...). Because we did not check the return value, we also did not free the skb in the error path.",
-      "published": "2026-07-19T16:17:57.483Z",
-      "lastModified": "2026-07-30T14:59:47.950Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00173,
-      "epssPercentile": 0.07045,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.25,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-57310",
       "summary": "Windu CMS uses hashing algorithm based on MD5 and SHA1 with static salt to store user passwords. This allows an attacker who obtain password hash to decode user credentials. Because vendor contact attempts were unsuccessful, the vulnerability has only been confirmed in version 4.1 but may also affect other versions.",
       "published": "2026-07-20T13:16:56.507Z",
@@ -41287,44 +41403,6 @@
       "tags": [
         "Linux",
         "iOS"
-      ]
-    },
-    {
-      "id": "CVE-2026-64157",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix partial invalidation of streaming-write folio In netfs_invalidate_folio(), if the region of a partial invalidation overlaps the front (but not all) of a dirty write cached in a streaming write page (dirty, but not uptodate, with the dirty region tracked by a netfs_folio struct), the function modifies the dirty region - but incorrectly as it moves the region forward by setting the start to the start, not the end, of the invalidation region. Fix this by setting finfo->dirty_offset to the end of the invalidation region (iend).",
-      "published": "2026-07-19T16:17:57.703Z",
-      "lastModified": "2026-07-30T14:59:47.950Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00168,
-      "epssPercentile": 0.06505,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.23,
-      "tags": [
-        "Linux"
       ]
     },
     {
@@ -41938,44 +42016,6 @@
       ]
     },
     {
-      "id": "CVE-2026-64154",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/msm/adreno: Fix a reference leak in a6xx_gpu_init() In a6xx_gpu_init(), node is obtained via of_parse_phandle(). While there was a manual of_node_put() at the end of the common path, several early error returns would bypass this call, resulting in a reference leak. Fix this by using the __free(device_node) cleanup handler to release the reference when the variable goes out of scope. Patchwork: https://patchwork.freedesktop.org/patch/700661/",
-      "published": "2026-07-19T16:17:57.390Z",
-      "lastModified": "2026-07-30T14:59:47.950Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00165,
-      "epssPercentile": 0.06206,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.22,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-64146",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: erofs: fix metabuf leak in inode xattr initialization commit bb88e8da0025 (\"erofs: use meta buffers for xattr operations\") converted xattr operations to use on-stack erofs_buf instances. erofs_init_inode_xattrs() uses such a metabuf while reading the inline xattr header and shared xattr id array. Some error paths after erofs_read_metabuf() leave through out_unlock without dropping the metabuf, so the folio reference can leak. Consolidate the cleanup at out_unlock. erofs_put_metabuf() is a no-op if no folio has been acquired, and this keeps all paths after taking EROFS_I_BL_XATTR_BIT covered by a single cleanup site.",
       "published": "2026-07-19T16:17:56.547Z",
@@ -42337,44 +42377,6 @@
       },
       "epssScore": 0.00155,
       "epssPercentile": 0.05215,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.18,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-64159",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: netfs: Fix zeropoint update where i_size > remote_i_size Fix the update of the zero point[*] by netfs_release_folio() when there is uncommitted data in the pagecache beyond the folio being released but the on-server EOF is in this folio (ie. i_size > remote_i_size). The update needs to limit zero_point to remote_i_size, not i_size as i_size is a local phenomenon reflecting updates made locally to the pagecache, not stuff written to the server. remote_i_size tracks the server's i_size. [*] The zero point is the file position from which we can assume that the server will just return zeros, so we can avoid generating reads. Note that netfs_invalidate_folio() probably doesn't need fixing as zero_point should be updated by setattr after truncation or fallocate. Found with: fsx -q -N 1000000 -p 10000 -o 128000 -l 600000 \\ /xfstest.test/junk --replay-ops=junk.fsxops using the following as junk.fsxops: truncate 0x0 0x1bbae 0x82864 write 0x3ef2e 0xf9c8 0x1bbae write 0x67e05 0xcb5a 0x4e8f6 mapread 0x57781 0x85b6 0x7495f copy_range 0x5d3d 0x10329 0x54fac 0x7495f write 0x64710 0x1c2b 0x7495f mapread 0x64000 0x1000 0x7495f on cifs with the default cache option. It shows read-gaps on folio 0x64 failing with a short read (ie. it hits EOF) if the FMODE_READ check is commented out in netfs_perform_write(): if (//(file->f_mode & FMODE_READ) || netfs_is_cache_enabled(ctx)) { and no fscache. This was initially found with the generic/522 xfstest.",
-      "published": "2026-07-19T16:17:57.913Z",
-      "lastModified": "2026-07-30T14:59:47.950Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00155,
-      "epssPercentile": 0.05214,
       "isKev": false,
       "kev": null,
       "vendor": "Linux",
