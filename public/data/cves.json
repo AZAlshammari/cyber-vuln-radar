@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-20T22:58:56.317Z",
+  "generatedAt": "2026-08-20T23:33:52.171Z",
   "count": 1000,
   "items": [
     {
@@ -4788,6 +4788,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64459",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: tcp: restore RCU grace period in tcp_ao_destroy_sock Commit 51e547e8c89c (\"tcp: Free TCP-AO/TCP-MD5 info/keys without RCU\") removed the call_rcu() callback from tcp_ao_destroy_sock(), arguing that \"the destruction of info/keys is delayed until the socket destructor\" and therefore \"no one can discover it anymore\". That argument does not hold for the call site in tcp_connect() (net/ipv4/tcp_output.c:4327-4332). At that point the socket is in TCP_SYN_SENT, has already been inserted into the inet ehash by inet_hash_connect() in tcp_v4_connect(), and is therefore very much discoverable: any softirq running tcp_v4_rcv() on another CPU can take the socket out of the ehash, walk into tcp_inbound_hash(), and load tp->ao_info via implicit RCU before bh_lock_sock_nested() is taken on the destroying CPU. The reader path then enters __tcp_ao_do_lookup() (net/ipv4/tcp_ao.c:208) which re-loads tp->ao_info via rcu_dereference_check(); the re-load can still observe the (about-to-be-freed) pointer because there is no synchronize_rcu() between rcu_assign_pointer(tp->ao_info, NULL) and tcp_ao_info_free() in tcp_ao_destroy_sock(). The captured pointer is then walked at line 223: hlist_for_each_entry_rcu(key, &ao->head, node, ...) The writer's synchronous kfree() is free to complete between the line 218 re-fetch and the line 223 hlist iteration. The slab is reused (or simply LIST_POISON1-stamped if not yet reused) and the iteration walks attacker-controlled or poison memory in softirq context. Reproducer (no debug shim, stock x86_64 v7.1-rc2 SMP+KASAN, QEMU+KVM): an unprivileged uid=1000 process inside CLONE_NEWUSER|CLONE_NEWNET installs TCP_MD5SIG + TCP_AO_ADD_KEY on a TCP socket, sprays forged TCP-AO segments toward its eventual 4-tuple via raw sockets, then calls connect(). The md5-wins reconciliation in tcp_connect() fires tcp_ao_destroy_sock(); the softirq backlog reader on the loopback NAPI path crashes on the freed ao->head.first walk: Oops: general protection fault, probably for non-canonical address 0xfbd59c000000002f KASAN: maybe wild-memory-access in range [0xdead000000000178-0xdead00000000017f] CPU: 0 UID: 1000 PID: 100 Comm: repro_userns RIP: 0010:__tcp_ao_do_lookup+0x107/0x1c0 Call Trace: __tcp_ao_do_lookup+0x107/0x1c0 tcp_ao_inbound_lookup.constprop.0+0x12a/0x200 tcp_inbound_ao_hash+0x5ea/0x1520 tcp_inbound_hash+0x7ce/0x1240 tcp_v4_rcv+0x1e7a/0x3e10 ... Restore the RCU grace period: re-add struct rcu_head to tcp_ao_info and replace the synchronous tcp_ao_info_free() with a call_rcu() callback. Readers that captured tp->ao_info before rcu_assign_pointer NULLed it now see the object remain valid until rcu_read_unlock(). With the patch applied the reproducer runs cleanly for 2000 iterations on the same kernel build.",
+      "published": "2026-07-25T10:17:31.073Z",
+      "lastModified": "2026-08-17T05:17:51.100Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00475,
+      "epssPercentile": 0.39251,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.8,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-59525",
       "summary": "Unauthenticated SQL Injection in Participants Database <= 2.7.8.3 versions.",
       "published": "2026-07-23T12:18:32.590Z",
@@ -5588,56 +5626,6 @@
       "priorityScore": 4.69,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-56819",
-      "summary": "Netty is a network application framework for development of protocol servers and clients. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, a remote unauthenticated peer can leak one direct `ByteBuf` per HTTP/2 `DATA` frame in applications that enable HTTP/2 content decompression via `DelegatingDecompressorFrameListener`. When a `DATA` frame is processed for a stream whose decompressor has already been closed, `Http2Decompressor.decompress(...)` calls `decompressor.writeInbound(data.retain())` and does not release the retained buffer on the error path, eventually exhausting direct memory and crashing the JVM. This issue is fixed in versions 4.1.136.Final and 4.2.16.Final.",
-      "published": "2026-07-21T23:17:52.263Z",
-      "lastModified": "2026-07-30T14:46:35.563Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00365,
-      "epssPercentile": 0.29846,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-401",
-          "name": "CWE-401",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.67,
-      "tags": [
-        "CWE-400",
-        "CWE-401"
       ]
     },
     {
@@ -6709,50 +6697,6 @@
       "priorityScore": 4.51,
       "tags": [
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-56817",
-      "summary": "Netty is a network application framework for development of protocol servers and clients. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, any caller that can deliver bytes to a Netty channel pipeline containing `XmlDecoder` can send XML with a `DOCTYPE` declaration to an `AsyncXMLInputFactory` instantiated with no security configuration, leaving DTD and entity handling active depending on Aalto XML async parser behavior and creating conditional XML external entity risk. This issue is fixed in versions 4.1.136.Final and 4.2.16.Final.",
-      "published": "2026-07-21T23:17:52.127Z",
-      "lastModified": "2026-07-30T14:48:18.777Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00371,
-      "epssPercentile": 0.30469,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-611",
-          "name": "CWE-611",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.5,
-      "tags": [
-        "CWE-611"
       ]
     },
     {
@@ -9818,52 +9762,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16420",
-      "summary": "Type Confusion in WebAudio in Google Chrome prior to 150.0.7871.182 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: High)",
-      "published": "2026-07-21T23:16:59.607Z",
-      "lastModified": "2026-07-24T15:41:20.473Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00362,
-      "epssPercentile": 0.29473,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "Chrome",
-      "cwe": [
-        {
-          "id": "CWE-843",
-          "name": "CWE-843",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.11,
-      "tags": [
-        "Google",
-        "Chrome",
-        "CWE-843"
-      ]
-    },
-    {
       "id": "CVE-2026-65897",
       "summary": "Grav API Plugin versions before 1.0.10 fail to validate the groups field in InvitationsController::create(), allowing authenticated api.users.write callers to assign invited accounts to groups that grant api.super permissions. Attackers can create invitation records with elevated group membership, and when accepted, the new account gains full super-admin API access without the inviter holding those permissions.",
       "published": "2026-07-23T12:18:48.180Z",
@@ -10070,53 +9968,6 @@
       "priorityScore": 4.1,
       "tags": [
         "CWE-918"
-      ]
-    },
-    {
-      "id": "CVE-2026-16424",
-      "summary": "Use after free in GPU in Google Chrome on Android prior to 150.0.7871.182 allowed a remote attacker who had compromised the renderer process to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: High)",
-      "published": "2026-07-21T23:17:00.030Z",
-      "lastModified": "2026-07-24T15:07:41.797Z",
-      "severity": "Critical",
-      "cvssScore": 9.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00283,
-      "epssPercentile": 0.20948,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "Chrome",
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.09,
-      "tags": [
-        "Google",
-        "Chrome",
-        "Android",
-        "CWE-416"
       ]
     },
     {
@@ -10873,52 +10724,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16418",
-      "summary": "Stack buffer overflow in V8 in Google Chrome prior to 150.0.7871.182 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: High)",
-      "published": "2026-07-21T23:16:59.400Z",
-      "lastModified": "2026-07-24T15:41:46.123Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00334,
-      "epssPercentile": 0.26491,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "Chrome",
-      "cwe": [
-        {
-          "id": "CWE-121",
-          "name": "CWE-121",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.01,
-      "tags": [
-        "Google",
-        "Chrome",
-        "CWE-121"
-      ]
-    },
-    {
       "id": "CVE-2026-64832",
       "summary": "FFmpeg versions 4.4 through 8.1.2 contain a double-free vulnerability in the NVIDIA NVDEC hardware decoder within libavcodec/nvdec.c that allows attackers to trigger memory corruption by supplying a crafted video file. When no decoder surfaces remain, the ff_nvdec_start_frame_sep_ref error path frees memory via nvdec_fdd_priv_free while the calling layer subsequently frees the same frame description data, resulting in a double-free of the underlying decoder context in any FFmpeg-based application using NVDEC hardware-accelerated decoding.",
       "published": "2026-07-22T18:17:05.483Z",
@@ -11094,52 +10899,6 @@
       "tags": [
         "Apache",
         "CWE-400"
-      ]
-    },
-    {
-      "id": "CVE-2026-16421",
-      "summary": "Inappropriate implementation in WebAudio in Google Chrome prior to 150.0.7871.182 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: High)",
-      "published": "2026-07-21T23:16:59.710Z",
-      "lastModified": "2026-07-24T15:40:30.657Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00332,
-      "epssPercentile": 0.26207,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "Chrome",
-      "cwe": [
-        {
-          "id": "CWE-20",
-          "name": "CWE-20",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4,
-      "tags": [
-        "Google",
-        "Chrome",
-        "CWE-20"
       ]
     },
     {
@@ -11320,59 +11079,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16419",
-      "summary": "Out of bounds read and write in ANGLE in Google Chrome on Android prior to 150.0.7871.182 allowed a remote attacker to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: High)",
-      "published": "2026-07-21T23:16:59.503Z",
-      "lastModified": "2026-07-24T15:41:33.510Z",
-      "severity": "Critical",
-      "cvssScore": 9.6,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00255,
-      "epssPercentile": 0.17316,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "Chrome",
-      "cwe": [
-        {
-          "id": "CWE-125",
-          "name": "CWE-125",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.97,
-      "tags": [
-        "Google",
-        "Chrome",
-        "Android",
-        "CWE-125",
-        "CWE-787"
-      ]
-    },
-    {
       "id": "CVE-2025-13146",
       "summary": "The The Contact Form 7 – Dynamic Text Extension plugin for WordPress is vulnerable to arbitrary shortcode execution in all versions up to, and including, 5.0.6. This is due to the software allowing users to execute an action that does not properly validate a value before running do_shortcode. This makes it possible for unauthenticated attackers to execute arbitrary shortcodes. The vulnerability was partially patched in version 5.0.4.",
       "published": "2026-07-22T12:16:54.763Z",
@@ -11465,94 +11171,6 @@
       "tags": [
         "CWE-639",
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-63260",
-      "summary": "Uncontrolled Resource Consumption (CWE-400) in Kibana can lead to denial of service via Excessive Allocation (CAPEC-130). An authenticated attacker with low-privilege access can trigger a denial of service condition in Kibana by sending a specially crafted, oversized request payload. Processing this user-supplied input requires resource-intensive memory allocation that can exhaust the available heap memory in the Kibana process, causing it to crash and become unavailable to all users.",
-      "published": "2026-07-21T23:18:02.697Z",
-      "lastModified": "2026-08-03T17:42:28.500Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.0027,
-      "epssPercentile": 0.19257,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.95,
-      "tags": [
-        "CWE-400"
-      ]
-    },
-    {
-      "id": "CVE-2026-63261",
-      "summary": "Uncontrolled Resource Consumption (CWE-400) in Kibana can lead to denial of service via Excessive Allocation (CAPEC-130). A low-privileged authenticated user can send a specially crafted request to a Kibana machine learning feature, causing the server to exhaust available memory and become unavailable to all users.",
-      "published": "2026-07-21T23:18:02.817Z",
-      "lastModified": "2026-08-03T16:38:28.820Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.0027,
-      "epssPercentile": 0.19258,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-400",
-          "name": "CWE-400",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.95,
-      "tags": [
-        "CWE-400"
       ]
     },
     {
@@ -15835,52 +15453,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16423",
-      "summary": "Use after free in UI in Google Chrome prior to 150.0.7871.182 allowed a remote attacker who convinced a user to engage in specific UI gestures to potentially exploit heap corruption via a crafted HTML page. (Chromium security severity: High)",
-      "published": "2026-07-21T23:16:59.923Z",
-      "lastModified": "2026-07-24T15:07:36.017Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00255,
-      "epssPercentile": 0.17315,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "Chrome",
-      "cwe": [
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.69,
-      "tags": [
-        "Google",
-        "Chrome",
-        "CWE-416"
-      ]
-    },
-    {
       "id": "CVE-2026-15827",
       "summary": "The GutenKit Blocks plugin for WordPress is vulnerable to unauthorized access of data due to a missing capability check on the /wp-json/gutenkit/v1/mailchimp/get/lists and /wp-json/gutenkit/v1/mailchimp/get/interests REST API endpoints in versions up to, and including, 2.4.12. Both endpoints are registered with permission_callback => '__return_true', and their callbacks read the site's stored Mailchimp API key from the gutenkit_settings_list option and proxy Mailchimp audience/list, merge-field, interest-category, interest-name, and subscriber-count metadata back to the caller with no login, nonce, or capability check. This makes it possible for unauthenticated attackers to retrieve private Mailchimp audience configuration information from any site that has configured the GutenKit Mailchimp integration.",
       "published": "2026-07-23T10:16:51.467Z",
@@ -17672,52 +17244,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16413",
-      "summary": "Out of bounds write in ANGLE in Google Chrome prior to 150.0.7871.182 allowed a remote attacker who had compromised the renderer process to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: High)",
-      "published": "2026-07-21T23:16:58.017Z",
-      "lastModified": "2026-07-24T15:56:20.553Z",
-      "severity": "High",
-      "cvssScore": 8.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00257,
-      "epssPercentile": 0.1753,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "Chrome",
-      "cwe": [
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.52,
-      "tags": [
-        "Google",
-        "Chrome",
-        "CWE-787"
-      ]
-    },
-    {
       "id": "CVE-2026-13059",
       "summary": "An authenticated user with low privileges may be able to perform unauthorized reads and writes on data protected by role-based query-level access controls, due to insufficient validation of certain client-supplied command parameters. The issue affects find, update, delete, and aggregate commands in non-apiStrict configurations.",
       "published": "2026-07-22T20:16:43.793Z",
@@ -17892,6 +17418,44 @@
       "tags": [
         "WordPress",
         "CWE-89"
+      ]
+    },
+    {
+      "id": "CVE-2026-64460",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: PCI/IOV: Skip VF Resizable BAR restore on read error sriov_restore_vf_rebar_state() uses the VF Resizable BAR Control register to decide how many VF BARs to restore (nbars) and which VF BAR each iteration addresses (bar_idx). bar_idx indexes into dev->sriov->barsz[], which has only PCI_SRIOV_NUM_BARS (6) entries. When a device does not respond, config reads typically return PCI_ERROR_RESPONSE (~0). Both fields are 3 bits wide, so nbars and bar_idx both evaluate to 7. The barsz[] access then goes out of bounds. UBSAN reports this as: UBSAN: array-index-out-of-bounds in drivers/pci/iov.c:948:51 index 7 is out of range for type 'resource_size_t [6]' Observed on an NVIDIA RTX PRO 1000 GPU (GB207GLM) that stopped responding during a failed GC6 power state exit. The subsequent pci_restore_state() invoked sriov_restore_vf_rebar_state() while config reads returned 0xffffffff, triggering the splat. Bail out if any VF Resizable BAR Control read returns PCI_ERROR_RESPONSE. No further VF BARs are touched, which is safe because a config read that returns PCI_ERROR_RESPONSE indicates the device is unreachable and restoration is pointless. This mirrors the guard in pci_restore_rebar_state().",
+      "published": "2026-07-25T10:17:31.193Z",
+      "lastModified": "2026-08-17T05:17:51.230Z",
+      "severity": "High",
+      "cvssScore": 7,
+      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:C/C:L/I:L/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "High",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "High"
+      },
+      "epssScore": 0.00118,
+      "epssPercentile": 0.02012,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.52,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -20778,52 +20342,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16416",
-      "summary": "Integer overflow in Chromecast in Google Chrome prior to 150.0.7871.182 allowed a local attacker to potentially perform a sandbox escape via malicious network traffic. (Chromium security severity: High)",
-      "published": "2026-07-21T23:16:59.170Z",
-      "lastModified": "2026-07-30T19:17:09.260Z",
-      "severity": "Critical",
-      "cvssScore": 9.3,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00099,
-      "epssPercentile": 0.00948,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "Chrome",
-      "cwe": [
-        {
-          "id": "CWE-190",
-          "name": "CWE-190",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.29,
-      "tags": [
-        "Google",
-        "Chrome",
-        "CWE-190"
-      ]
-    },
-    {
       "id": "CVE-2026-50039",
       "summary": "The affected product is vulnerable to a stack-based buffer overflow, which may allow an attacker to cause a memory corruption via a Read Request.",
       "published": "2026-07-23T21:17:04.910Z",
@@ -21881,103 +21399,41 @@
       ]
     },
     {
-      "id": "CVE-2026-16485",
-      "summary": "A vulnerability has been found in SourceCodester Class and Exam Timetabling System 1.0. Affected by this issue is some unknown functionality of the file /class.php. Such manipulation of the argument day leads to cross site scripting. The attack can be launched remotely. The exploit has been disclosed to the public and may be used.",
-      "published": "2026-07-21T23:17:00.153Z",
-      "lastModified": "2026-07-22T16:25:46.380Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+      "id": "CVE-2026-64475",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: vfio/pci: Release the VGA arbiter client on register_device() failure The re-order in the Fixes commit below displaced vfio_pci_vga_init() as the last failure point of what is now vfio_pci_core_register_device() without introducing an unwind for the VGA arbiter registration. In current kernels this is mostly benign because vfio_pci_set_decode() only uses pci_dev state, but the original failure path could leave a callback with a freed vdev cookie. The stale registration also becomes unsafe again once the callback follows drvdata to the vfio device. Add the required VGA unwind callout.",
+      "published": "2026-07-25T10:17:32.980Z",
+      "lastModified": "2026-08-17T05:17:53.140Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
       "cvssBreakdown": {
-        "attackVector": "Network",
+        "attackVector": "Local",
         "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
       },
-      "epssScore": 0.00273,
-      "epssPercentile": 0.19763,
+      "epssScore": 0.00139,
+      "epssPercentile": 0.03732,
       "isKev": false,
       "kev": null,
-      "vendor": null,
+      "vendor": "Linux",
       "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
+      "cwe": [],
       "references": [],
       "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
+      "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 3.2,
+      "priorityScore": 3.21,
       "tags": [
-        "CWE-79",
-        "CWE-94"
-      ]
-    },
-    {
-      "id": "CVE-2026-16486",
-      "summary": "A vulnerability was found in SourceCodester Class and Exam Timetabling System 1.0. This affects an unknown part of the file /BSIS.php. Performing a manipulation of the argument day results in cross site scripting. The attack may be initiated remotely. The exploit has been made public and could be used.",
-      "published": "2026-07-21T23:17:00.403Z",
-      "lastModified": "2026-07-22T19:16:57.627Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00273,
-      "epssPercentile": 0.19763,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.2,
-      "tags": [
-        "CWE-79",
-        "CWE-94"
+        "Linux"
       ]
     },
     {
@@ -22010,6 +21466,44 @@
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.2,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64467",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: rust_binder: use a u64 stride when cleaning up the offsets array Allocation's Drop walks the offsets array (binder_size_t = u64 entries), cleaning up the objects, but it used usize instead of u64 for both the stride and the per-entry read. On 64-bit kernels (usize == u64) this is harmless, but on 32-bit kernels it walks the 8-byte entries in 4-byte steps, iterating an N-entry array 2N times, and reads the always-zero high word as offset 0, cleaning up the object at offset 0 N extra times. As a result the referenced node or handle ends up with a lower reference count than it actually has (a refcount over-decrement), and binder's reference accounting is corrupted; for example, the owner can be notified of a strong reference release (BR_RELEASE) even though references still remain. Change the stride to u64, and read each entry as a u64, narrowing it to usize with try_into(). On 32-bit ARM, when this over-decrement would drive a count below zero, the driver's existing refcount guard refuses it and fires: rust_binder: Failure: refcount underflow!",
+      "published": "2026-07-25T10:17:32.003Z",
+      "lastModified": "2026-08-17T05:17:52.107Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00137,
+      "epssPercentile": 0.03552,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
@@ -25256,6 +24750,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64452",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: 6lowpan: fix NHC entry use-after-free on error path lowpan_nhc_do_uncompression() looks up an NHC descriptor while holding lowpan_nhc_lock. If the descriptor has no uncompress callback, the error path drops the lock before printing nhc->name. lowpan_nhc_del() removes descriptors under the same lock and then relies on synchronize_net() before the owning module can be unloaded. That only waits for net RX RCU readers. lowpan_header_decompress() is also exported and can be reached from callers that are not necessarily covered by the net core RX critical section, for example the Bluetooth 6LoWPAN L2CAP receive path. This leaves a race where one task drops lowpan_nhc_lock in the error path, another task unregisters and frees the matching descriptor after synchronize_net() returns, and the first task then dereferences nhc->name for the warning. With the post-unlock window widened, KASAN reports: BUG: KASAN: slab-use-after-free in lowpan_nhc_do_uncompression+0x1f4/0x220 Read of size 8 lowpan_nhc_do_uncompression lowpan_header_decompress Fix this by printing the warning before dropping lowpan_nhc_lock, so the descriptor name is read while unregister is still excluded. The malformed packet is still rejected with -ENOTSUPP.",
+      "published": "2026-07-25T10:17:30.140Z",
+      "lastModified": "2026-08-17T05:17:50.200Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00219,
+      "epssPercentile": 0.12656,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.93,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-8287",
       "summary": "Allocation of resources without limits or throttling vulnerability in BizimHesap Information Systems Industry and Trade Inc. Online Pre-Accounting Software allows Excessive Allocation. This issue affects Online Pre-Accounting Software: through 17072026.",
       "published": "2026-07-23T14:18:09.863Z",
@@ -25733,50 +25265,6 @@
       ]
     },
     {
-      "id": "CVE-2026-56820",
-      "summary": "Netty is a network application framework for development of protocol servers and clients. In versions 4.2.0.Final through 4.2.15.Final and prior to 4.1.135.Final, `OcspClient` does not validate that the `CertificateID` in an OCSP response matches the requested `CertificateID`, which can lead to replay attack. `OcspClient.validateResponse` accepts a legitimately signed `GOOD` status response for an unrelated certificate issued by the same CA, allowing bypass of revocation checks for another certificate. This issue is fixed in versions 4.1.136.Final and 4.2.16.Final.",
-      "published": "2026-07-21T23:17:52.403Z",
-      "lastModified": "2026-07-30T14:48:49.323Z",
-      "severity": "High",
-      "cvssScore": 7.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00182,
-      "epssPercentile": 0.081,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-295",
-          "name": "CWE-295",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.87,
-      "tags": [
-        "CWE-295"
-      ]
-    },
-    {
       "id": "CVE-2026-64802",
       "summary": "In JetBrains GoLand before 2026.2 arbitrary code execution was possible before granting project trust in the Go Modules integration",
       "published": "2026-07-23T12:18:35.647Z",
@@ -25903,50 +25391,6 @@
       ]
     },
     {
-      "id": "CVE-2026-63143",
-      "summary": "Missing Authorization (CWE-862) in Kibana can lead to unauthorized information disclosure via Privilege Abuse (CAPEC-122). A user with limited feature privileges can access workflow execution outputs in their Kibana space without the authorization required to do so through the documented API. The accessible data may include sensitive information returned by workflow steps, such as results from connected data sources that the caller would not otherwise be authorized to access.",
-      "published": "2026-07-21T23:18:02.230Z",
-      "lastModified": "2026-08-03T17:49:47.380Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.002,
-      "epssPercentile": 0.10159,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.86,
-      "tags": [
-        "CWE-862"
-      ]
-    },
-    {
       "id": "CVE-2026-13071",
       "summary": "An authenticated user with read access can cause the mongod process to be terminated through certain aggregation expressions that execute server-side JavaScript. The issue involves improper memory handling during document processing.",
       "published": "2026-07-22T20:16:45.580Z",
@@ -26038,6 +25482,44 @@
       "tags": [
         "CWE-284",
         "CWE-352"
+      ]
+    },
+    {
+      "id": "CVE-2026-64463",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: usb: typec: tcpci_rt1711h: unregister TCPCI port with devres rt1711h_probe() registers the TCPCI port before requesting the interrupt and enabling alert interrupts. If either of those later steps fails, the probe function returns without unregistering the TCPCI port. The explicit unregister currently only happens from the remove callback. Register a devres action immediately after tcpci_register_port() succeeds, so tcpci_unregister_port() runs on later probe failures and on driver detach. Drop the remove callback to avoid unregistering the same port twice. This issue was identified during our ongoing static-analysis research while reviewing kernel code.",
+      "published": "2026-07-25T10:17:31.543Z",
+      "lastModified": "2026-08-17T05:17:51.597Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00138,
+      "epssPercentile": 0.03667,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.86,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -26148,6 +25630,120 @@
       },
       "epssScore": 0.00135,
       "epssPercentile": 0.03439,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64456",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: hwrng: virtio: clamp device-reported used.len at copy_data() random_recv_done() stores the device-reported used.len directly into vi->data_avail. copy_data() then indexes vi->data[] using vi->data_idx (advanced by previous copy_data() calls) and issues a memcpy() without re-validating either value against the posted buffer size sizeof(vi->data) (SMP_CACHE_BYTES bytes, typically 32 or 64). A malicious or buggy virtio-rng backend can set used.len beyond sizeof(vi->data), steering the memcpy() past the end of the inline array into adjacent kmalloc-1k slab bytes. hwrng_fillfn() mixes those bytes into the guest RNG, and guest root can also observe them directly via /dev/hwrng. Concrete impact is inside the guest: - Memory-safety / hardening: any virtio-rng backend that over-reports used.len causes the driver to read past vi->data into unrelated slab contents. hwrng_fillfn() is a kernel thread that runs as soon as the device is probed; no guest userspace interaction is required to first-trigger the OOB. - Cross-boundary leak (confidential-compute threat model): a malicious hypervisor cooperating with a malicious or compromised guest root userspace can use /dev/hwrng as a leak channel for guest-kernel heap data. The host sets a large used.len, guest root reads /dev/hwrng, and the returned bytes contain guest kernel slab contents that were adjacent to vi->data. In practice, confidential-compute guests (SEV-SNP, TDX) usually disable virtio-rng entirely, so this path is narrow, but the fix is still worth carrying because the underlying memory-safety bug contaminates the guest RNG on any host. KASAN confirms the OOB on a 7.1-rc4 guest whose virtio-rng backend has been patched to report used.len = 0x10000: BUG: KASAN: slab-out-of-bounds in virtio_read+0x394/0x5d0 Read of size 64 at addr ffff88800ae0ba20 by task hwrng/52 Call Trace: __asan_memcpy+0x23/0x60 virtio_read+0x394/0x5d0 hwrng_fillfn+0xb2/0x470 kthread+0x2cc/0x3a0 Allocated by task 1: probe_common+0xa5/0x660 virtio_dev_probe+0x549/0xbc0 The buggy address belongs to the object at ffff88800ae0b800 which belongs to the cache kmalloc-1k of size 1024 The buggy address is located 0 bytes to the right of allocated 544-byte region [ffff88800ae0b800, ffff88800ae0ba20) Same class of bug as commit c04db81cd028 (\"net/9p: Fix buffer overflow in USB transport layer\"), which hardened usb9pfs_rx_complete() against unchecked device-reported length in the USB 9p transport. With the clamp at point of use and array_index_nospec() in place, the same harness boots cleanly: copy_data() returns zero for the bogus report, the device-supplied bytes after data_idx are discarded, and the driver issues a fresh request.",
+      "published": "2026-07-25T10:17:30.677Z",
+      "lastModified": "2026-08-17T05:17:50.710Z",
+      "severity": "High",
+      "cvssScore": 7.7,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00148,
+      "epssPercentile": 0.04549,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64468",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: binder: fix UAF in binder_free_transaction() In binder_free_transaction(), the t->to_proc is read under the t->lock. However, once the t->lock is dropped, the to_proc can die in parallel. This leads to a use-after-free error when we attempt to acquire its inner lock right afterwards: ================================================================== BUG: KASAN: slab-use-after-free in _raw_spin_lock+0xe4/0x1a0 Write of size 4 at addr ffff00001125da70 by task B/672 CPU: 20 UID: 0 PID: 672 Comm: B Not tainted 7.1.0-rc6-00284-g8e65320d91cd #4 PREEMPT Hardware name: linux,dummy-virt (DT) Call trace: _raw_spin_lock+0xe4/0x1a0 binder_free_transaction+0x8c/0x320 binder_send_failed_reply+0x21c/0x2f8 binder_thread_release+0x488/0x7e0 binder_ioctl+0x12c0/0x29a0 [...] Allocated by task 675: __kmalloc_cache_noprof+0x174/0x444 binder_open+0x118/0xb70 do_dentry_open+0x374/0x1040 vfs_open+0x58/0x3bc [...] Freed by task 212: __kasan_slab_free+0x58/0x80 kfree+0x1a0/0x4a4 binder_proc_dec_tmpref+0x32c/0x5e0 binder_deferred_func+0xc48/0x104c process_one_work+0x53c/0xbc0 [...] ================================================================== To prevent this, pin the target thread (t->to_thread) to guarantee the target process remains alive. Undelivered transactions without a target thread are already safe, as the target process can only be the current context in those paths.",
+      "published": "2026-07-25T10:17:32.103Z",
+      "lastModified": "2026-08-17T05:17:52.263Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00135,
+      "epssPercentile": 0.0343,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64469",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: binder: fix UAF in binder_thread_release() When a thread exits, binder_thread_release() walks its transaction stack to clear the t->from and t->to_proc that correspond with the exiting thread. However, a process dying in parallel might attempt to kfree some of these transactions. And if one of them has no associated t->to_proc, the t->to_proc->inner_lock will not be acquired. This means that transaction accesses in binder_thread_release() after t->to_proc has been cleared might race with binder_free_transaction() and cause a use-after-free error as reported by KASAN: ================================================================== BUG: KASAN: slab-use-after-free in binder_thread_release+0x5d0/0x798 Write of size 8 at addr ffff000016627500 by task X/715 CPU: 17 UID: 0 PID: 715 Comm: X Not tainted 7.1.0-rc5-00149-g8fde5d1d47f6 #30 PREEMPT Hardware name: linux,dummy-virt (DT) Call trace: binder_thread_release+0x5d0/0x798 binder_ioctl+0x12c0/0x299c [...] Allocated by task 717 on cpu 18 at 67.267803s: __kasan_kmalloc+0xa0/0xbc __kmalloc_cache_noprof+0x174/0x444 binder_transaction+0x554/0x8150 binder_thread_write+0xa30/0x4354 binder_ioctl+0x20f0/0x299c [...] Freed by task 202 on cpu 18 at 90.416221s: __kasan_slab_free+0x58/0x80 kfree+0x1a0/0x4a4 binder_free_transaction+0x150/0x294 binder_send_failed_reply+0x398/0x6d8 binder_release_work+0x3e4/0x4ec binder_deferred_func+0xbd8/0x104c [...] ================================================================== In order to avoid this, make sure that binder_free_transaction() reads the t->to_proc under the transaction lock. This will serialize the transaction release with the accesses in binder_thread_release(). Plus, it matches the documented locking rules for @to_proc.",
+      "published": "2026-07-25T10:17:32.247Z",
+      "lastModified": "2026-08-17T05:17:52.430Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00135,
+      "epssPercentile": 0.0343,
       "isKev": false,
       "kev": null,
       "vendor": "Linux",
@@ -27348,50 +26944,6 @@
       ]
     },
     {
-      "id": "CVE-2026-63144",
-      "summary": "Uncontrolled Recursion (CWE-674) in Elasticsearch can lead to denial of service via a specially crafted search request submitted by a low-privileged authenticated user. A user with read-level index access can submit a request that triggers unbounded recursive processing within the Elasticsearch query evaluation component, causing a fatal error that terminates the affected node. In single-node deployments, this results in complete service outage; in multi-node clusters, it causes repeated node restarts and sustained availability degradation.",
-      "published": "2026-07-21T23:18:02.343Z",
-      "lastModified": "2026-08-03T16:07:28.740Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.0024,
-      "epssPercentile": 0.15423,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-674",
-          "name": "CWE-674",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.81,
-      "tags": [
-        "CWE-674"
-      ]
-    },
-    {
       "id": "CVE-2026-13075",
       "summary": "An authenticated user can cause the mongod process to be terminated by the operating system under memory pressure via the $rankFusion and $scoreFusion aggregation stages. The issue originates in the server's error-handling path and requires the ability to run aggregation queries.",
       "published": "2026-07-22T20:16:46.213Z",
@@ -27560,53 +27112,6 @@
       "priorityScore": 2.81,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-16422",
-      "summary": "Insufficient validation of untrusted input in Certificate in Google Chrome on Linux prior to 150.0.7871.182 allowed an attacker in a privileged network position to perform domain spoofing via malicious network traffic. (Chromium security severity: High)",
-      "published": "2026-07-21T23:16:59.817Z",
-      "lastModified": "2026-07-24T14:54:15.077Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00154,
-      "epssPercentile": 0.05085,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "Chrome",
-      "cwe": [
-        {
-          "id": "CWE-20",
-          "name": "CWE-20",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.8,
-      "tags": [
-        "Google",
-        "Linux",
-        "Chrome",
-        "CWE-20"
       ]
     },
     {
@@ -28465,52 +27970,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16414",
-      "summary": "Insufficient validation of untrusted input in Chromecast in Google Chrome prior to 150.0.7871.182 allowed a local attacker to potentially perform a sandbox escape via malicious network traffic. (Chromium security severity: High)",
-      "published": "2026-07-21T23:16:58.943Z",
-      "lastModified": "2026-07-30T19:17:09.090Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00094,
-      "epssPercentile": 0.00717,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "Chrome",
-      "cwe": [
-        {
-          "id": "CWE-20",
-          "name": "CWE-20",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.76,
-      "tags": [
-        "Google",
-        "Chrome",
-        "CWE-20"
-      ]
-    },
-    {
       "id": "CVE-2026-13066",
       "summary": "Improper handling of DBPointer objects during BSON serialization in MongoDB's server-side JavaScript engine can result in internal process memory contents being included in data returned to the client. This constitutes an unintended information disclosure affecting deployments that use server-side JavaScript.",
       "published": "2026-07-22T20:16:44.813Z",
@@ -28955,50 +28414,6 @@
       "tags": [
         "CWE-295",
         "CWE-345"
-      ]
-    },
-    {
-      "id": "CVE-2026-63145",
-      "summary": "Incorrect Authorization (CWE-863) in Kibana can lead to integrity compromise of Machine Learning audit and notification records via Accessing Functionality Not Properly Constrained by ACLs (CAPEC-1). A vulnerability exists in Kibana's Machine Learning functionality where a Machine Learning management endpoint performs an insufficient authorization check. The endpoint validates only a coarse privilege level but does not verify that the requesting user has access to the specific Machine Learning job or notification resources provided in the request. As a result, a low-privileged user with Machine Learning access in any Kibana space can manipulate Machine Learning audit and notification records for arbitrary jobs—including jobs in other spaces or belonging to other users—by leveraging Kibana's internally elevated credentials to write to restricted Machine Learning system indices that the user cannot access directly.",
-      "published": "2026-07-21T23:18:02.460Z",
-      "lastModified": "2026-08-03T17:49:02.370Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00161,
-      "epssPercentile": 0.05786,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.71,
-      "tags": [
-        "CWE-863"
       ]
     },
     {
@@ -33668,52 +33083,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16415",
-      "summary": "Insufficient validation of untrusted input in Extensions in Google Chrome prior to 150.0.7871.182 allowed a remote attacker to spoof the contents of the Omnibox (URL bar) via a crafted HTML page. (Chromium security severity: High)",
-      "published": "2026-07-21T23:16:59.053Z",
-      "lastModified": "2026-07-24T15:55:40.383Z",
-      "severity": "Medium",
-      "cvssScore": 5.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.002,
-      "epssPercentile": 0.10195,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "Chrome",
-      "cwe": [
-        {
-          "id": "CWE-20",
-          "name": "CWE-20",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.25,
-      "tags": [
-        "Google",
-        "Chrome",
-        "CWE-20"
-      ]
-    },
-    {
       "id": "CVE-2026-65534",
       "summary": "Author Cross Site Scripting (XSS) in Custom links in Elementor Image Carousel <= 1.1.1 versions.",
       "published": "2026-07-23T12:18:46.377Z",
@@ -36161,50 +35530,6 @@
       ]
     },
     {
-      "id": "CVE-2026-63142",
-      "summary": "Incomplete List of Disallowed Inputs (CWE-184) in Kibana can allow an authenticated attacker with access to the Reporting feature to bypass outbound request restrictions configured by an administrator, causing the reporting service to send requests to network destinations that should be denied by the configured security policy.",
-      "published": "2026-07-21T23:18:02.110Z",
-      "lastModified": "2026-08-03T17:57:11.103Z",
-      "severity": "Medium",
-      "cvssScore": 5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00172,
-      "epssPercentile": 0.06914,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.99,
-      "tags": [
-        "CWE-863"
-      ]
-    },
-    {
       "id": "CVE-2026-11804",
       "summary": "Improper handling of insufficient permissions or privileges vulnerability in Tridium Niagara Framework on Windows, Linux, QNX, Tridium Niagara Enterprise Security on Windows, Linux, QNX allows Privilege Abuse. This issue affects Niagara Framework: before 4.14.6, before 4.15.5; Niagara Enterprise Security: before 4.14.6, before 4.15.5.",
       "published": "2026-07-23T16:17:13.273Z",
@@ -37990,50 +37315,6 @@
       ]
     },
     {
-      "id": "CVE-2026-63259",
-      "summary": "Authorization Bypass Through User-Controlled Key (CWE-639) in Kibana can lead to information disclosure via user-supplied identifiers that reference scheduled query result data from Kibana Spaces the requester is not authorized to access.",
-      "published": "2026-07-21T23:18:02.580Z",
-      "lastModified": "2026-08-03T17:43:23.987Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00181,
-      "epssPercentile": 0.08039,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.79,
-      "tags": [
-        "CWE-639"
-      ]
-    },
-    {
       "id": "CVE-2026-48036",
       "summary": "Hulumi is an open-source toolkit that ships secure-by-default cloud and platform infrastructure components for Pulumi. Prior to version 1.4.0, consumers running drift detection in CI / cron could see transient adapter failures silently cached as \"all clear\" — masking real attacks for up to six hours — or see ordinary provider-version churn falsely promoted to incident severity. Either way, the verdict source was unreliable for downstream incident workflows that gate on it. This issue has been patched in version 1.4.0.",
       "published": "2026-07-24T19:16:58.753Z",
@@ -39143,52 +38424,6 @@
       ]
     },
     {
-      "id": "CVE-2026-16417",
-      "summary": "Uninitialized Use in Skia in Google Chrome prior to 150.0.7871.182 allowed a remote attacker who had compromised the renderer process to leak cross-origin data via a crafted HTML page. (Chromium security severity: High)",
-      "published": "2026-07-21T23:16:59.287Z",
-      "lastModified": "2026-07-24T15:55:19.233Z",
-      "severity": "Low",
-      "cvssScore": 3.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00206,
-      "epssPercentile": 0.10923,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Google",
-      "product": "Chrome",
-      "cwe": [
-        {
-          "id": "CWE-457",
-          "name": "CWE-457",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.47,
-      "tags": [
-        "Google",
-        "Chrome",
-        "CWE-457"
-      ]
-    },
-    {
       "id": "CVE-2026-63048",
       "summary": "Joomla Extension - joomlack.fr - Improper access control in Page Builder CK < 3.6.2 - The Joomla extension Page Builder CK is vulnerable to an authenticated arbitrary file upload, leading to RCE.",
       "published": "2026-07-22T08:16:24.063Z",
@@ -39413,6 +38648,196 @@
       "tags": [
         "CWE-200",
         "CWE-284"
+      ]
+    },
+    {
+      "id": "CVE-2026-64462",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: PCI: altera: Fix resource leaks on probe failure The chained IRQ handler is set during probe, but is only removed during the driver remove(). If pci_host_probe() fails, the handler and INTx IRQ domain remain set even though the devm-managed host bridge storage containing struct altera_pcie will be released, leaving the handler with a stale data pointer. Interrupts are also enabled before pci_host_probe() is called. If probe fails after that point, the controller interrupt source should be disabled before the chained handler and INTx domain are removed. So set the chained handler only after the INTx domain has been created. Disable controller interrupts during IRQ teardown, and tear the IRQ setup down if pci_host_probe() fails. [mani: commit log]",
+      "published": "2026-07-25T10:17:31.420Z",
+      "lastModified": "2026-08-17T05:17:51.473Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00184,
+      "epssPercentile": 0.08364,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.29,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64465",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: usb: xhci: Fix sleep in atomic context in xhci_free_streams() When a USB device with active stream endpoints is disconnected, xhci_free_streams() is called from the hub_event workqueue to free the stream resources. It calls xhci_free_stream_info() while holding xhci->lock with irqs disabled. xhci_free_stream_info() invokes xhci_free_stream_ctx(), which calls dma_free_coherent() for large stream context arrays. dma_free_coherent() can sleep (e.g. via vunmap), triggering a BUG when called from atomic context. Call trace: dma_free_attrs+0x174/0x220 xhci_free_stream_info+0xd0/0x11c xhci_free_streams+0x278/0x37c usb_free_streams+0x98/0xc0 usb_unbind_interface+0x1b8/0x2f8 device_release_driver_internal+0x1d4/0x2cc device_release_driver+0x18/0x28 bus_remove_device+0x160/0x1a4 device_del+0x1ec/0x350 usb_disable_device+0x98/0x214 usb_disconnect+0xf0/0x35c hub_event+0xab4/0x19ec process_one_work+0x278/0x63c Fix this by saving the stream_info pointers and clearing the ep references under the lock, then calling xhci_free_stream_info() outside the lock where sleeping is allowed.",
+      "published": "2026-07-25T10:17:31.763Z",
+      "lastModified": "2026-08-17T05:17:51.890Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00184,
+      "epssPercentile": 0.08364,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.29,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64470",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: btusb: fix use-after-free on marvell probe failure Make sure to stop any TX URBs submitted during Marvell OOB wakeup configuration on later probe failures to avoid use-after-free in the completion callback. This issue was reported by Sashiko while reviewing a fix for a wakeup source leak in the btusb probe errors paths.",
+      "published": "2026-07-25T10:17:32.390Z",
+      "lastModified": "2026-08-17T05:17:52.583Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00184,
+      "epssPercentile": 0.08366,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.29,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64471",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: Bluetooth: btusb: fix use-after-free on registration failure Make sure to release the sibling interfaces in case controller registration fails to avoid use-after-free and double-free when they are eventually disconnected. This issue was reported by Sashiko while reviewing a fix for a wakeup source leak in the btusb probe errors paths.",
+      "published": "2026-07-25T10:17:32.510Z",
+      "lastModified": "2026-08-17T05:17:52.700Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00184,
+      "epssPercentile": 0.08366,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.29,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64454",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: usb: dwc3: run gadget disconnect from sleepable suspend context dwc3_gadget_suspend() takes dwc->lock with IRQs disabled and then calls dwc3_disconnect_gadget(). For async callbacks that helper only uses plain spin_unlock()/spin_lock(), so the gadget ->disconnect() callback still runs with IRQs disabled and any sleepable callback trips Lockdep. This issue was found by our static analysis tool and then manually reviewed against the current tree. The grounded PoC kept the dwc3_gadget_suspend() -> dwc3_disconnect_gadget() -> gadget_driver->disconnect() chain, and Lockdep reported: BUG: sleeping function called from invalid context gadget_disconnect+0x21/0x39 [vuln_msv] dwc3_gadget_suspend.constprop.0+0x2b/0x42 [vuln_msv] Keep the disconnect callback selection in one common helper, but add a sleepable suspend-side wrapper which snapshots the callback under dwc->lock and then runs it after spin_unlock_irqrestore(). The regular event path still uses the existing spin_unlock()/spin_lock() window.",
+      "published": "2026-07-25T10:17:30.407Z",
+      "lastModified": "2026-08-17T05:17:50.467Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.0018,
+      "epssPercentile": 0.0793,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.28,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -39952,50 +39377,6 @@
       "priorityScore": 1.09,
       "tags": [
         "CWE-269"
-      ]
-    },
-    {
-      "id": "CVE-2026-16517",
-      "summary": "A signed integer overflow vulnerability was found in libarchive's ZIP writer. In the archive_write_zip_header function in archive_write_set_format_zip.c, when ZIP encryption is enabled and the entry file size is close to INT64_MAX, the addition of the encryption overhead to the entry size overflows int64_t, resulting in undefined behavior. This could lead to incorrect Zip64 extension decisions or potential memory corruption.",
-      "published": "2026-07-21T23:17:00.587Z",
-      "lastModified": "2026-08-19T11:16:46.320Z",
-      "severity": "Low",
-      "cvssScore": 2.9,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "Low"
-      },
-      "epssScore": 0.00078,
-      "epssPercentile": 0.00156,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-190",
-          "name": "CWE-190",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": true,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.02,
-      "tags": [
-        "CWE-190"
       ]
     },
     {
@@ -41359,6 +40740,83 @@
       ]
     },
     {
+      "id": "CVE-2026-64455",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: USB: chaoskey: Fix slab-use-after-free in chaoskey_release() The chaoskey driver has a use-after-free bug in its release routine. If the user closes the device file after the USB device has been unplugged, a debugging log statement will try to access the usb_interface structure after it has been deallocated: BUG: KASAN: slab-use-after-free in dev_driver_string (drivers/base/core.c:2406) Read of size 8 at addr ffff888168e8a0b8 by task chaoskey_raw_re/10106 Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014 Call Trace: dump_stack_lvl (lib/dump_stack.c:94 lib/dump_stack.c:120) print_report (mm/kasan/report.c:378 mm/kasan/report.c:482) kasan_report (mm/kasan/report.c:595) dev_driver_string (drivers/base/core.c:2406) __dynamic_dev_dbg (lib/dynamic_debug.c:906) chaoskey_release (drivers/usb/misc/chaoskey.c:323) __fput (fs/file_table.c:510) fput_close_sync (fs/file_table.c:615) __x64_sys_close (fs/open.c:1507 fs/open.c:1492 fs/open.c:1492) do_syscall_64 (arch/x86/entry/syscall_64.c:63 arch/x86/entry/syscall_64.c:94) entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121) The driver's last reference to the interface structure is dropped in the chaoskey_free() routine, so the code must not use the interface -- even in a debugging statement -- after that routine returns. (Exception: If we know that another reference is held by someone else, such as the device core while the disconnect routine runs, there's no problem. Thanks to Johan Hovold for pointing this out.) Since the bad access is part of an unimportant debugging statement, we can fix the problem simply by removing the whole statement.",
+      "published": "2026-07-25T10:17:30.537Z",
+      "lastModified": "2026-08-17T05:17:50.583Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00184,
+      "epssPercentile": 0.08364,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.29,
+      "tags": [
+        "Linux",
+        "iOS"
+      ]
+    },
+    {
+      "id": "CVE-2026-64461",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: PCI: mediatek: Fix IRQ domain leak when port fails to enable When mtk_pcie_enable_port() fails, mtk_pcie_port_free() removes the port from pcie->ports and frees the port structure. However, the IRQ domains set up earlier by mtk_pcie_init_irq_domain() are never freed. Fix this by refactoring mtk_pcie_irq_teardown() into a per-port helper, mtk_pcie_irq_teardown_port(), and calling it from mtk_pcie_setup() when mtk_pcie_enable_port() fails. Since the IRQ teardown must only happen in the probe error path (during resume, child devices may have active MSI mappings and the NOIRQ context prohibits sleeping locks), mtk_pcie_enable_port() is changed to return an error code so callers can distinguish the two paths and act accordingly. This issue was reported by Sashiko while reviewing the EcoNet EN7528 SoC support series.",
+      "published": "2026-07-25T10:17:31.293Z",
+      "lastModified": "2026-08-17T05:17:51.347Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00184,
+      "epssPercentile": 0.08364,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.29,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-64369",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: s390: Revert support for DCACHE_WORD_ACCESS load_unaligned_zeropad() reads eight bytes from unaligned addresses and may cross page boundaries. It handles exceptions which may happen if reading from the second page results in an exception. For pages which are donated to the Ultravisor for secure execution purposes the do_secure_storage_access() exception handler however does not handle such exceptions correctly. Such an exception may result in an endless exception loop which will never be resolved. An attempt to fix this [1] turned out to be not sufficient. For now revert load_unaligned_zeropad() until this problem has been resolved in a proper way. Note that the implementation of load_unaligned_zeropad() itself is correct. The revert is just a temporary workaround until there is complete fix for secure storage access exceptions. [1] commit b00be77302d7 (\"s390/mm: Add missing secure storage access fixups for donated memory\")",
       "published": "2026-07-25T10:17:19.743Z",
@@ -41378,6 +40836,120 @@
       },
       "epssScore": 0.00181,
       "epssPercentile": 0.07959,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.28,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64458",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: mm/damon/ops-common: handle extreme intervals in damon_hot_score() Fix three issues in damon_hot_score() that comes from wrong handling of extreme (zero or too high) monitoring intervals user setup. When the user sets sampling interval zero, damon_max_nr_accesses(), which is called from damon_hot_score(), causes a divide-by-zero. Needless to say, it is a problem. When the user sets the aggregation interval zero, the function returns zero. It is wrong, since the real maximum nr_acceses in the setup should be one. Worse yet, it can cause another divide-by-zero from its caller, damon_hot_score(), since it uses damon_max_nr_accesses() return value as a denominator. When the user sets the aggregation interval very high, damon_hot_score() could return a value out of [0, DAMOS_MAX_SCORE] range. Since the return value is used as an index to the regions_score_histogram array, which is DAMOS_MAX_SCORE+1 size, it causes out of bounds array access. The issues can be relatively easily reproduced like below. The sysfs write permission is required, though. # ./damo start --damos_action lru_prio --damos_quota_space 100M \\ --damos_quota_interval 1s # cd /sys/kernel/mm/damon/admin/kdamonds/0 # echo 0 > contexts/0/monitoring_attrs/intervals/sample_us # echo 0 > contexts/0/monitoring_attrs/intervals/aggr_us # echo commit > state # dmesg [...] [ 131.329762] Oops: divide error: 0000 [#1] SMP NOPTI [...] [ 131.336089] RIP: 0010:damon_hot_score+0x27/0xd0 [...] Fix the divide-by-zero intervals problems by explicitly handling the zero intervals in damon_max_nr_accesses(). Fix the out-of-bound array access by applying [0, DAMOS_MAX_SCORE] bounds before returning from damon_hot_score(). The issue was discovered [1] by Sashiko.",
+      "published": "2026-07-25T10:17:30.943Z",
+      "lastModified": "2026-08-17T05:17:50.980Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.0018,
+      "epssPercentile": 0.0793,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.28,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64472",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: vfio/mlx5: Fix racy bitfields and tighten struct layout Bitfield operations are not atomic, they use a read-modify-write pattern, therefore we should be careful not to pack bitfields that can be concurrently updated into the same storage unit. This split takes a binary approach: flags that are only modified pre/post open/close remain bitfields, flags modified from user action, including actions that reach across to another device (ex. reset) use dedicated storage units. Note mlx5_vhca_page_tracker.status is relocated to fill the alignment hole this split exposes. Bitfield justifications: migrate_cap: written only in mlx5vf_cmd_set_migratable() at probe chunk_mode: written only in mlx5vf_cmd_set_migratable() at probe mig_state_cap: written only in mlx5vf_cmd_set_migratable() at probe Dedicated storage units: mdev_detach: written in the VF attach/detach event notifier mlx5fv_vf_event() at runtime log_active: written in mlx5vf_start_page_tracker()/ mlx5vf_stop_page_tracker() during runtime dirty tracking deferred_reset: written in mlx5vf_state_mutex_unlock()/ mlx5vf_pci_aer_reset_done() during runtime reset handling is_err: set by tracker error handling and dirty-log polling at runtime object_changed: set by tracker event handling and cleared by dirty-log polling at runtime",
+      "published": "2026-07-25T10:17:32.630Z",
+      "lastModified": "2026-08-17T05:17:52.820Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00181,
+      "epssPercentile": 0.07978,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.28,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64476",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: vfio/pci: Latch disable_idle_d3 per device When disable_idle_d3 was introduced in vfio-pci, it directly manipulated the device power state with pci_set_power_state(). There were no refcounts to maintain or balanced operations, we could unconditionally bring the device to D0 and conditionally move it to D3hot. Therefore the module parameter was made writable. Later, in commit c61302aa48f7 (\"vfio/pci: Move module parameters to vfio_pci.c\"), as part of the vfio-pci-core split, the writable aspect of the module parameter was nullified. The parameter value could still be changed through sysfs, but the vfio-pci driver latched the values into vfio-pci-core globals at module init. Loading the vfio-pci module, or unloading and reloading, with non-default or different values could change the globals relative to existing devices bound to vfio-pci variant drivers. Runtime PM was introduced in commit 7ab5e10eda02 (\"vfio/pci: Move the unused device into low power state with runtime PM\"), which marks the point where power states became refcounted. PM get and put operations need to be balanced, but the same module operations noted above can change the global variables relative to those devices already bound to vfio-pci variant drivers. This introduces a window where PM operations can now become unbalanced. To resolve this with a narrow footprint for stable backports, the disable_idle_d3 flag is latched into the vfio_pci_core_device at the time of initialization, such that the device always operates with a consistent value. NB. vfio_pci_dev_set_try_reset() now unconditionally raises the runtime PM usage count around bus reset to account for disable_idle_d3 becoming a per-device rather than global flag. When this flag is set, the additional get/put pair is harmless and allows continued use of the shared vfio_pci_dev_set_pm_runtime_get() helper.",
+      "published": "2026-07-25T10:17:33.113Z",
+      "lastModified": "2026-08-17T05:17:53.293Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.0018,
+      "epssPercentile": 0.0793,
       "isKev": false,
       "kev": null,
       "vendor": "Linux",
@@ -42236,6 +41808,120 @@
       ]
     },
     {
+      "id": "CVE-2026-64457",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: virtio_pci: fix vq info pointer lookup via wrong index Unbinding a virtio balloon device: echo virtio0 > /sys/bus/virtio/drivers/virtio_balloon/unbind triggers a NULL pointer dereference. The dmesg says: BUG: kernel NULL pointer dereference, address: 0000000000000008 [...] RIP: 0010:__list_del_entry_valid_or_report+0x5/0xf0 Call Trace: vp_del_vqs+0x121/0x230 remove_common+0x135/0x150 virtballoon_remove+0xee/0x100 virtio_dev_remove+0x3b/0x80 device_release_driver_internal+0x187/0x2c0 unbind_store+0xb9/0xe0 kernfs_fop_write_iter.llvm.11660790530567441834+0xf6/0x180 vfs_write+0x2a9/0x3b0 ksys_write+0x5c/0xd0 do_syscall_64+0x54/0x230 entry_SYSCALL_64_after_hwframe+0x29/0x31 [...] The virtio_balloon device registers 5 queues (inflate, deflate, stats, free_page, reporting) but only the first two are unconditional. The stats, free_page and reporting queues are each conditional on their respective feature bits. When any of these features are absent, the corresponding vqs_info entry has name == NULL, creating holes in the array. The root cause is an indexing mismatch introduced when vq info storage was changed to be passed as an argument. vp_find_vqs_msix() and vp_find_vqs_intx() store the info pointer at vp_dev->vqs[i], where 'i' is the caller's sparse array index. However, the virtqueue itself gets vq->index assigned from queue_idx, a dense index that skips NULL entries. When holes exist, 'i' and queue_idx diverge. Later, vp_del_vqs() looks up info via vp_dev->vqs[vq->index] using the dense index into the sparsely-populated array, and hits NULL. Fix this by storing info at vp_dev->vqs[queue_idx] instead of vp_dev->vqs[i], so the store index matches the lookup index (vq->index). Apply the fix to both the MSIX and INTX paths.",
+      "published": "2026-07-25T10:17:30.830Z",
+      "lastModified": "2026-08-17T05:17:50.867Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00175,
+      "epssPercentile": 0.07354,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.26,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64473",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: vfio: Remove device debugfs before releasing devres VFIO device debugfs files created with debugfs_create_devm_seqfile() store a devres allocated debugfs_devm_entry as inode private data. vfio_unregister_group_dev() currently calls vfio_device_del() before vfio_device_debugfs_exit(), but device_del() releases devres. This can leave debugfs entries visible with stale inode private data while unregister waits for userspace references to drain. Remove the per-device debugfs tree before vfio_device_del(). The debugfs view is diagnostic only, so losing it at the start of unregister is preferable to preserving entries whose backing storage may already have been released. Complete the teardown by clearing the per-device debugfs root after removal. This matches the global debugfs root cleanup and prevents future users from mistaking a removed dentry for a live debugfs tree during the remainder of unregister.",
+      "published": "2026-07-25T10:17:32.757Z",
+      "lastModified": "2026-08-17T05:17:52.930Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00175,
+      "epssPercentile": 0.07354,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.26,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64474",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: vfio: prevent infinite loop in vfio_mig_get_next_state() on blocked arc vfio_mig_get_next_state() walks vfio_from_fsm_table[] one step at a time, looping to skip optional states the device does not support until *next_fsm is supported. A blocked transition is encoded as VFIO_DEVICE_STATE_ERROR, which the trailing return reports as -EINVAL. The skip loop does not account for the ERROR sentinel. state_flags_table[ERROR] is ~0U and vfio_from_fsm_table[ERROR][*] is ERROR, so once *next_fsm becomes ERROR the loop condition stays true and *next_fsm never changes. The blocked arcs STOP_COPY -> PRE_COPY and STOP_COPY -> PRE_COPY_P2P map to ERROR yet pass the support check on a precopy-capable device, causing the loop to spin forever while holding the driver state mutex. This can result in a soft lockup, and a panic with softlockup_panic set. Terminate the skip loop on the ERROR sentinel so a blocked transition falls through to the existing return and reports -EINVAL.",
+      "published": "2026-07-25T10:17:32.863Z",
+      "lastModified": "2026-08-17T05:17:53.030Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00176,
+      "epssPercentile": 0.07426,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.26,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-64336",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: USB: serial: keyspan_pda: fix information leak The write() callback is supposed to return the number of characters accepted or a negative errno. Since the addition of write fifo support the keyspan_pda implementation will however return the number characters submitted to the device if the write urb is not already in use. If this number is larger than the number of characters passed to write(), the line discipline continues writing data from beyond the tty write buffer. Fix the information leak by making sure that keyspan_pda_write_start() returns zero on success as intended.",
       "published": "2026-07-25T10:17:15.463Z",
@@ -42559,6 +42245,121 @@
       },
       "epssScore": 0.00173,
       "epssPercentile": 0.07017,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.25,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64453",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: usb: misc: usbio: fix disconnect UAF in client teardown usbio_disconnect() walks usbio->cli_list in reverse and uninitializes each auxiliary device. auxiliary_device_uninit() drops the device reference, and for an unbound child that can run usbio_auxdev_release() and free the containing struct usbio_client. list_for_each_entry_reverse() advances after the loop body by reading client->link.prev. If the current client is freed by auxiliary_device_uninit(), the iterator dereferences freed memory. Use list_for_each_entry_safe_reverse() so the previous client is cached before the body can drop the final reference. This preserves reverse teardown order while keeping the next iterator cursor independent of the current client's lifetime. Validation reproduced this kernel report: BUG: KASAN: slab-use-after-free in usbio_disconnect+0x12e/0x150 Call Trace: dump_stack_lvl+0x66/0xa0 print_report+0xce/0x630 ? usbio_disconnect+0x12e/0x150 ? srso_alias_return_thunk+0x5/0xfbef5 ? __virt_addr_valid+0x188/0x320 ? usbio_disconnect+0x12e/0x150 kasan_report+0xe0/0x110 ? usbio_disconnect+0x12e/0x150 usbio_disconnect+0x12e/0x150 usb_unbind_interface+0xf3/0x400 really_probe+0x316/0x660 __driver_probe_device+0x106/0x240 driver_probe_device+0x4a/0x110 __device_attach_driver+0xf1/0x1a0 ? __pfx___device_attach_driver+0x10/0x10 bus_for_each_drv+0xf9/0x160 ? __pfx_bus_for_each_drv+0x10/0x10 ? srso_alias_return_thunk+0x5/0xfbef5 ? trace_hardirqs_on+0x18/0x130 ? srso_alias_return_thunk+0x5/0xfbef5 ? _raw_spin_unlock_irqrestore+0x44/0x60 __device_attach+0x133/0x2a0 ? __pfx___device_attach+0x10/0x10 ? srso_alias_return_thunk+0x5/0xfbef5 ? do_raw_spin_unlock+0x9a/0x100 ? srso_alias_return_thunk+0x5/0xfbef5 device_initial_probe+0x55/0x70 bus_probe_device+0x4a/0xd0 device_add+0x9b9/0xc10 ? __pfx_device_add+0x10/0x10 ? _raw_spin_unlock_irqrestore+0x44/0x60 ? srso_alias_return_thunk+0x5/0xfbef5 ? lockdep_hardirqs_on_prepare+0xea/0x1a0 ? srso_alias_return_thunk+0x5/0xfbef5 ? usb_enable_lpm+0x3c/0x260 usb_set_configuration+0xb64/0xf20 usb_generic_driver_probe+0x5f/0x90 usb_probe_device+0x71/0x1b0 really_probe+0x46b/0x660 __driver_probe_device+0x106/0x240 driver_probe_device+0x4a/0x110 __device_attach_driver+0xf1/0x1a0 ? __pfx___device_attach_driver+0x10/0x10 bus_for_each_drv+0xf9/0x160 ? __pfx_bus_for_each_drv+0x10/0x10 ? srso_alias_return_thunk+0x5/0xfbef5 ? trace_hardirqs_on+0x18/0x130 ? srso_alias_return_thunk+0x5/0xfbef5 ? _raw_spin_unlock_irqrestore+0x44/0x60 __device_attach+0x133/0x2a0 ? __pfx___device_attach+0x10/0x10 ? srso_alias_return_thunk+0x5/0xfbef5 ? do_raw_spin_unlock+0x9a/0x100 ? srso_alias_return_thunk+0x5/0xfbef5 device_initial_probe+0x55/0x70 bus_probe_device+0x4a/0xd0 device_add+0x9b9/0xc10 ? __pfx_device_add+0x10/0x10 ? srso_alias_return_thunk+0x5/0xfbef5 ? add_device_randomness+0xb7/0xf0 usb_new_device+0x492/0x870 hub_event+0x1b10/0x29c0 ? __pfx_hub_event+0x10/0x10 ? srso_alias_return_thunk+0x5/0xfbef5 ? lock_acquire+0x187/0x300 ? process_one_work+0x475/0xb90 ? srso_alias_return_thunk+0x5/0xfbef5 ? lock_release+0xc8/0x290 ? srso_alias_return_thunk+0x5/0xfbef5 process_one_work+0x4d7/0xb90 ? __pfx_process_one_work+0x10/0x10 ? srso_alias_return_thunk+0x5/0xfbef5 ? srso_alias_return_thunk+0x5/0xfbef5 ? __list_add_valid_or_report+0x37/0xf0 ? __pfx_hub_event+0x10/0x10 ? srso_alias_return_thunk+0x5/0xfbef5 worker_thread+0x2d8/0x570 ? __pfx_worker_thread+0x10/0x10 kthread+0x1ad/0x1f0 ? __pfx_kthread+0x10/0x10 ret_from_fork+0x3c9/0x540 ? __pfx_ret_from_fork+0x10/0x10 ? srso_alias_return_thunk+0x5/0xfbef5 ? __switch_to+0x2e9/0x730 ? __pfx_kthread+0x10/0x10 ret_from_fork_asm+0x1a/0x30",
+      "published": "2026-07-25T10:17:30.273Z",
+      "lastModified": "2026-08-17T05:17:50.343Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00173,
+      "epssPercentile": 0.07111,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.25,
+      "tags": [
+        "F5",
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64464",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xhci: sideband: fix ring sg table pages leak xhci_ring_to_sgtable() allocates a temporary pages array and uses it to build the returned sg_table with sg_alloc_table_from_pages(). The error paths free the pages array, but the success path returns the sg_table without freeing it. This leaks the temporary array every time a sideband client gets an endpoint or event ring buffer. Free the pages array after sg_alloc_table_from_pages() succeeds. The returned sg_table has its own scatterlist entries and does not depend on the temporary array after construction.",
+      "published": "2026-07-25T10:17:31.660Z",
+      "lastModified": "2026-08-17T05:17:51.727Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00173,
+      "epssPercentile": 0.07111,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.25,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64466",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: rust_binder: clear freeze listener on node removal Generally userspace is supposed to explicitly clear freeze listeners before they drop the refcount on the node ref to zero, but there's nothing forcing that. Currently, in this scenario the freeze listener remains in the freeze_listeners rbtree and in the remote node's freeze listener list, even though the ref for which the listener is registered is gone. This could potentially lead to a memory leak due to a refcount cycle. Thus, remove the freeze listener in this scenario.",
+      "published": "2026-07-25T10:17:31.893Z",
+      "lastModified": "2026-08-17T05:17:52.013Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00173,
+      "epssPercentile": 0.07111,
       "isKev": false,
       "kev": null,
       "vendor": "Linux",
