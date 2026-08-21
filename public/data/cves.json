@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-21T12:51:58.298Z",
+  "generatedAt": "2026-08-21T13:47:17.735Z",
   "count": 1000,
   "items": [
     {
@@ -2883,50 +2883,6 @@
         "CWE-121",
         "CWE-787",
         "CWE-918"
-      ]
-    },
-    {
-      "id": "CVE-2026-44191",
-      "summary": "A flaw was found in the Visual Studio Code Ansible Lightspeed extension. This command injection vulnerability (CWE-78) arises from improper handling of the ansible.executionEnvironment.containerOptions and ansible.executionEnvironment.volumeMounts settings, allowing an attacker to inject shell separators. This can be triggered automatically during Language Server initialization or manually when executing a playbook. Successful exploitation leads to remote code execution (RCE) on the victim's machine with the privileges of the Visual Studio Code user, potentially resulting in a complete system compromise.",
-      "published": "2026-07-22T13:16:37.367Z",
-      "lastModified": "2026-07-22T19:17:03.743Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00473,
-      "epssPercentile": 0.39111,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.1,
-      "tags": [
-        "CWE-78"
       ]
     },
     {
@@ -24243,6 +24199,44 @@
       ]
     },
     {
+      "id": "CVE-2026-64529",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: crypto: qat - remove unused character device and IOCTLs The QAT driver exposes a character device (qat_adf_ctl) with IOCTLs for device configuration, start, stop, status query and enumeration. These IOCTLs are not part of any public uAPI header and have no known in-tree or out-of-tree users. Device lifecycle is already managed via sysfs. The ioctl interface also increases the attack surface and is the subject of a number of bug reports. Remove the character device, the IOCTL definitions, and the related data structures (adf_dev_status_info, adf_user_cfg_key_val, adf_user_cfg_section, adf_user_cfg_ctl_data). Drop the now-unused adf_cfg_user.h header and strip adf_ctl_drv.c down to the minimal module_init/module_exit hooks for workqueue, AER, and crypto/compression algorithm registration. Clean up leftover dead code that was only reachable from the removed IOCTL paths: adf_cfg_del_all(), adf_devmgr_verify_id(), adf_devmgr_get_num_dev(), adf_devmgr_get_dev_by_id(), adf_get_vf_real_id() and the unused ADF_CFG macros. Additionally, drop the entry associated to QAT IOCTLs in ioctl-number.rst.",
+      "published": "2026-07-25T10:17:39.317Z",
+      "lastModified": "2026-08-17T05:17:57.737Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00135,
+      "epssPercentile": 0.03438,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-64218",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: batman-adv: bla: fix report_work leak on backbone_gw purge batadv_bla_purge_backbone_gw() removes stale backbone gateway entries, but fails to properly handle their associated report_work: - If report_work is running, the purge must wait for it to finish before freeing the backbone_gw, otherwise the worker may access freed memory (e.g. bat_priv). - If report_work is pending, the purge must cancel it and release the reference held for that pending work item. The previous implementation called hlist_for_each_entry_safe() inside a spin_lock_bh() section, but cancel_work_sync() may sleep and therefore cannot be called from within a spinlock-protected region. Restructure the loop to handle one entry per spinlock critical section: acquire the lock, find the next entry to purge, remove it from the hash list, then release the lock before calling cancel_work_sync() and dropping the hash_entry reference. Repeat until no more entries require purging.",
       "published": "2026-07-24T16:16:49.520Z",
@@ -31940,6 +31934,50 @@
       ]
     },
     {
+      "id": "CVE-2026-66011",
+      "summary": "ImageMagick before 7.1.2-27 contains a memory leak vulnerability in the magick command-line interface when invalid options are provided. Attackers can trigger memory exhaustion by repeatedly supplying malformed command-line arguments to consume system resources.",
+      "published": "2026-07-25T11:17:18.347Z",
+      "lastModified": "2026-08-04T13:52:56.537Z",
+      "severity": "Low",
+      "cvssScore": 3.3,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00092,
+      "epssPercentile": 0.00617,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-401",
+          "name": "CWE-401",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.18,
+      "tags": [
+        "CWE-401"
+      ]
+    },
+    {
       "id": "CVE-2026-57530",
       "summary": "Milkdown before 7.21.3 contains a stored cross-site scripting vulnerability in the @milkdown/preset-commonmark and @milkdown/components packages that allows attackers with document write access to execute arbitrary JavaScript in the browser context of any user who opens the document or clicks a rendered link. The parseMarkdown runner stores raw URL values from the remark AST as href mark attributes without URL scheme validation, and the ineffective DOMPurify.sanitize call in edit-view.ts treats the bare URL string as a text node and returns it unchanged, allowing javascript: payloads to pass through the link-tooltip preview component and read-only mode anchor elements unmodified.",
       "published": "2026-07-24T20:18:02.893Z",
@@ -36644,56 +36682,6 @@
       ]
     },
     {
-      "id": "CVE-2026-8152",
-      "summary": "Unblu Spark contains an open redirect vulnerability that can be escalated to a DOM-based cross-site scripting (XSS) attack. When Unblu Spark is deployed with com.unblu.identifier.siteEmbeddedSetup=true, it runs in the same origin as the host application. Any JavaScript injected through this vulnerability therefore executes with full access to the host application's cookies, DOM, and same-origin APIs — an attacker can reach all resources of the host application, not just Unblu's. This expanded blast radius is the reason on-premises deployments using this configuration are rated CRITICAL.",
-      "published": "2026-07-22T13:16:38.423Z",
-      "lastModified": "2026-07-22T19:17:14.617Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00244,
-      "epssPercentile": 0.15924,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-601",
-          "name": "CWE-601",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.56,
-      "tags": [
-        "CWE-79",
-        "CWE-601"
-      ]
-    },
-    {
       "id": "CVE-2026-65761",
       "summary": "Joomla Extension - joomshaper.com - Unauthenticated SQL injection in Easy Store extension 1.0.0-2.0.1 - Improper validation of order parameters lead to an unauthenticated SQL injection in easystore, allowing full DB read access including credentials and sessions.",
       "published": "2026-07-23T17:16:30.433Z",
@@ -37944,50 +37932,6 @@
       "priorityScore": 0.81,
       "tags": [
         "CWE-1021"
-      ]
-    },
-    {
-      "id": "CVE-2026-16270",
-      "summary": "Open Mercato does not validate regex rules. An attacker with privileges to create the regex rule can add an unsafe regex to a field. When someone provide the proper string it can result in a DoS attack. This issue was fixed in version 0.6.4.",
-      "published": "2026-07-22T13:16:36.990Z",
-      "lastModified": "2026-07-22T20:54:47.023Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00278,
-      "epssPercentile": 0.20344,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-1333",
-          "name": "CWE-1333",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.71,
-      "tags": [
-        "CWE-1333"
       ]
     },
     {
@@ -41959,6 +41903,44 @@
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.23,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64528",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: tty: serial: samsung: Remove redundant port lock acquisition in rx helpers Sashiko identified a deadlock when the console flow is engaged [1]. When console flow control is enabled (UPF_CONS_FLOW), s3c24xx_serial_stop_tx() calls s3c24xx_serial_rx_enable() and s3c24xx_serial_start_tx() calls s3c24xx_serial_rx_disable(). The serial core framework invokes the .stop_tx() and .start_tx() callbacks with the port->lock spinlock already held. Furthermore, all internal driver paths that invoke stop_tx (such as the DMA TX completion handler s3c24xx_serial_tx_dma_complete() or the PIO TX IRQ handler s3c24xx_serial_tx_irq()) also acquire port->lock prior to calling it. (Note that s3c24xx_serial_start_tx() is only invoked by the serial core). However, s3c24xx_serial_rx_enable() and s3c24xx_serial_rx_disable() unconditionally attempt to acquire port->lock again using uart_port_lock_irqsave(). Since spinlocks are not recursive, this causes a deadlock on the same CPU when console flow control is engaged. Remove the redundant lock acquisition from both rx helper functions.",
+      "published": "2026-07-25T10:17:39.187Z",
+      "lastModified": "2026-07-25T10:17:39.187Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.06525,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
