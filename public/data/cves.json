@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-21T10:13:00.292Z",
+  "generatedAt": "2026-08-21T10:50:26.559Z",
   "count": 1000,
   "items": [
     {
@@ -8401,62 +8401,6 @@
       "tags": [
         "CWE-74",
         "CWE-89"
-      ]
-    },
-    {
-      "id": "CVE-2026-14551",
-      "summary": "The servereye client (also known as sensorhub, technically ClientAgentContainerService) versions 20.15 and earlier are vulnerable to Local Privilege Escalation. The high-privileged service SE3Recovery (EmergencyRecoveryService.exe), running as SYSTEM, periodically monitors the directory %ProgramData%\\ServerEye3\\update\\ for a trigger file named \"update_available\". Due to insufficient access restrictions on this directory, a local standard user can create the trigger file and provide a path to a directory containing malicious JSON instructions. The service subsequently executes the utility UpdaterAction.exe with SYSTEM privileges, which parses the instructions and performs an unvalidated file copy from a user-controlled source to a protected system destination (e.g., overwriting a service binary). This leads to full system compromise as the service automatically restarts the overwritten binary with SYSTEM privileges.",
-      "published": "2026-07-22T10:17:13.810Z",
-      "lastModified": "2026-07-22T16:25:46.380Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00132,
-      "epssPercentile": 0.03228,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-73",
-          "name": "CWE-73",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-269",
-          "name": "Improper Privilege Management",
-          "description": "Privileges are assigned, modified, or checked incorrectly."
-        },
-        {
-          "id": "CWE-379",
-          "name": "CWE-379",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.19,
-      "tags": [
-        "CWE-73",
-        "CWE-269",
-        "CWE-379"
       ]
     },
     {
@@ -39990,6 +39934,44 @@
       "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 0.35,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-64495",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: iio: gyro: bmg160: bail out when bandwidth/filter is not in table bmg160_get_filter() walks bmg160_samp_freq_table[] looking for the entry matching the bw_bits value read from the chip: for (i = 0; i < ARRAY_SIZE(bmg160_samp_freq_table); ++i) { if (bmg160_samp_freq_table[i].bw_bits == bw_bits) break; } *val = bmg160_samp_freq_table[i].filter; If no entry matches, i ends up equal to the array size and the next line reads one slot past the end. bmg160_set_filter() has the same shape, driven by 'val' instead of bw_bits. smatch flags both: drivers/iio/gyro/bmg160_core.c:204 bmg160_get_filter() error: buffer overflow 'bmg160_samp_freq_table' 7 <= 7 drivers/iio/gyro/bmg160_core.c:222 bmg160_set_filter() error: buffer overflow 'bmg160_samp_freq_table' 7 <= 7 Return -EINVAL when no entry matches. The set_filter() path is reachable from userspace via the sysfs in_anglvel_filter_low_pass_3db_frequency interface, so userspace can trivially trigger the out-of-bounds read with a value that is not in bmg160_samp_freq_table[].filter.",
+      "published": "2026-07-25T10:17:35.360Z",
+      "lastModified": "2026-08-17T05:17:55.443Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00195,
+      "epssPercentile": 0.09588,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.34,
       "tags": [
         "Linux"
       ]
