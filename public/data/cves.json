@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-22T08:01:31.605Z",
+  "generatedAt": "2026-08-22T08:48:25.275Z",
   "count": 1000,
   "items": [
     {
@@ -3937,6 +3937,57 @@
       "priorityScore": 4.94,
       "tags": [
         "CWE-266"
+      ]
+    },
+    {
+      "id": "CVE-2026-42792",
+      "summary": "Improper Handling of Exceptional Conditions vulnerability in Erlang OTP erts (epmd) allows an unauthenticated remote attacker to permanently terminate the Erlang Port Mapper Daemon (epmd) via connection slot exhaustion. The do_accept function in erts/epmd/src/epmd_srv.c calls epmd_cleanup_exit() when accept(2) returns EMFILE (per-process file descriptor limit reached) or ENFILE (system-wide file descriptor limit reached), rather than treating these as recoverable conditions. An attacker can exhaust epmd's file descriptor slots by holding many TCP connections open while periodically sending a single byte to reset the idle timeout, then causing accept(2) to return EMFILE, which kills the daemon. epmd has no per-source-IP connection cap, making the attack feasible from a single source. On Debian/Ubuntu default packaging the impact is amplified: the systemd unit inherits a low file descriptor soft limit, and repeated daemon deaths trigger systemd's start-rate-limit, permanently failing both epmd.service and epmd.socket and requiring manual operator intervention to recover. This issue affects OTP from OTP 17.0 before OTP 29.0.4, OTP 28.5.0.4 and OTP 27.3.4.15.",
+      "published": "2026-07-27T16:17:06.257Z",
+      "lastModified": "2026-08-10T20:26:36.763Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00441,
+      "epssPercentile": 0.36998,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-755",
+          "name": "CWE-755",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-770",
+          "name": "CWE-770",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.92,
+      "tags": [
+        "F5",
+        "CWE-755",
+        "CWE-770"
       ]
     },
     {
@@ -8022,51 +8073,6 @@
       ]
     },
     {
-      "id": "CVE-2026-9713",
-      "summary": "The Lumise Product Designer for WooCommerce plugin for WordPress is vulnerable to SQL Injection via the 'id' and 'table' parameters in the uploaded cart JSON file processed by the checkout AJAX action in versions up to, and including, 2.1.1. This is due to insufficient escaping on the user-supplied parameters before they are appended directly to a raw SQL query in the find_resource() function — the 'id' field is interpolated without quotes into a WHERE clause (numeric context) and 'table' is interpolated into the FROM clause, neither of which is protected by wp_magic_quotes or passed through $wpdb->prepare(). This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.",
-      "published": "2026-07-23T08:16:25.390Z",
-      "lastModified": "2026-07-23T16:17:55.150Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00273,
-      "epssPercentile": 0.19812,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.32,
-      "tags": [
-        "WordPress",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-65906",
       "summary": "In JetBrains TeamCity before 2026.1.2, 2025.11.6 сode execution via Kotlin DSL sandbox escape was possible",
       "published": "2026-07-23T13:16:31.733Z",
@@ -12124,51 +12130,6 @@
       "priorityScore": 3.84,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-12421",
-      "summary": "The ARforms plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'password' Field Values in all versions up to, and including, 7.2.1 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
-      "published": "2026-07-23T08:16:23.683Z",
-      "lastModified": "2026-07-23T15:14:51.013Z",
-      "severity": "High",
-      "cvssScore": 7.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.0019,
-      "epssPercentile": 0.08996,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.83,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -27433,51 +27394,6 @@
       ]
     },
     {
-      "id": "CVE-2026-9729",
-      "summary": "The Webpushr Push Notifications plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'webpushr_notification_title' and 'webpushr_notification_body' parameters in versions up to, and including, 4.39.0. This is due to insufficient input sanitization in the save_send_notification_flag() function and missing output escaping in the wpp_notification_box() function, which concatenates raw post meta values directly into HTML attribute and textarea contexts. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
-      "published": "2026-07-23T08:16:25.540Z",
-      "lastModified": "2026-07-23T16:17:55.250Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00193,
-      "epssPercentile": 0.09348,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.57,
-      "tags": [
-        "WordPress",
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-15394",
       "summary": "The Header Footer Script Adder – Insert Code in Header, Body & Footer plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'asm_code' Snippet Meta in all versions up to, and including, 2.1 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with author-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
       "published": "2026-07-23T10:16:50.433Z",
@@ -28132,51 +28048,6 @@
       "priorityScore": 2.55,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-9635",
-      "summary": "The WP Shortcode by MyThemeShop plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'title' parameter of the [tab] shortcode in versions up to, and including, 1.4.17. This is due to insufficient input sanitization and output escaping in the mts_tabs() function, which outputs the title shortcode attribute directly into the HTML output between anchor tags without applying any escaping functions. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
-      "published": "2026-07-23T08:16:25.253Z",
-      "lastModified": "2026-07-23T15:14:51.013Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00187,
-      "epssPercentile": 0.08647,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.54,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -33926,6 +33797,51 @@
       ]
     },
     {
+      "id": "CVE-2026-17573",
+      "summary": "A double free vulnerability was discovered in the HDF5 library. Processing a crafted HDF5 file containing an oversized chunk size field via h5repack may cause the application to abort due to a double free.",
+      "published": "2026-07-27T16:17:04.807Z",
+      "lastModified": "2026-08-18T18:56:16.187Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00104,
+      "epssPercentile": 0.0119,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-415",
+          "name": "CWE-415",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.97,
+      "tags": [
+        "F5",
+        "CWE-415"
+      ]
+    },
+    {
       "id": "CVE-2026-65530",
       "summary": "Subscriber Broken Access Control in TemplateSpare <= 4.2.2 versions.",
       "published": "2026-07-23T12:18:45.880Z",
@@ -34011,6 +33927,57 @@
       "priorityScore": 1.96,
       "tags": [
         "CWE-269"
+      ]
+    },
+    {
+      "id": "CVE-2026-17574",
+      "summary": "HDF5 contains a NULL pointer dereference vulnerability. Processing a crafted HDF5 file containing an attribute with an invalid variable-length datatype type field may cause the application to crash when the attribute is read.",
+      "published": "2026-07-27T16:17:04.943Z",
+      "lastModified": "2026-08-18T18:56:04.270Z",
+      "severity": "Medium",
+      "cvssScore": 5.5,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00103,
+      "epssPercentile": 0.01132,
+      "isKev": false,
+      "kev": null,
+      "vendor": "F5",
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-476",
+          "name": "CWE-476",
+          "description": "CWE mapping from source data."
+        },
+        {
+          "id": "CWE-617",
+          "name": "CWE-617",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.96,
+      "tags": [
+        "F5",
+        "CWE-476",
+        "CWE-617"
       ]
     },
     {
@@ -42368,6 +42335,50 @@
       ]
     },
     {
+      "id": "CVE-2026-47078",
+      "summary": "Relative Path Traversal vulnerability in Erlang OTP (stdlib zip module) allows writing files outside the intended extraction directory via a crafted zip archive. zip:unzip/1,2 and zip:extract/1,2 validate entry paths using zip:check_dir_level/2, which tracks directory depth as a running integer counter: .. decrements it, normal path components increment it. The caller rejects only paths where the final counter value is less than zero. A path such as ../x/y causes the counter to go negative mid-traversal then recover to zero, passing validation while resolving to a location outside the extraction directory when joined with the current working directory via add_cwd. This vulnerability is associated with program file lib/stdlib/src/zip.erl. This issue affects OTP from OTP 27.1 before OTP 29.0.4, OTP 28.5.0.4 and OTP 27.3.4.15, corresponding to stdlib from 6.1 before 8.0.3, 7.3.0.1 and 6.2.2.4.",
+      "published": "2026-07-27T16:17:07.643Z",
+      "lastModified": "2026-07-30T17:01:07.343Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00152,
+      "epssPercentile": 0.04856,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-23",
+          "name": "CWE-23",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.17,
+      "tags": [
+        "CWE-23"
+      ]
+    },
+    {
       "id": "CVE-2026-56392",
       "summary": "GNU coreutils unexpand is vulnerable to a heap-based buffer overflow due to an integer overflow during buffer allocation when processing large tab stop (-t) values. The multiplication used to calculate the allocation size can wrap around, resulting in an undersized buffer. When processing crafted input, subsequent writes exceed the allocated memory, leading to an out‑of‑bounds heap write. When running GNU coreutils unexpand with attacker-provided large tab stop (-t) arguments, this behavior leads to a crash and potentially achieve a heap write primitive depending on memory layout. This issue has been fixed in the commit b60a159fdc5bfcf9988d3a4cb6f53abe8ad5d35d",
       "published": "2026-07-24T09:16:25.147Z",
@@ -42639,51 +42650,6 @@
       ]
     },
     {
-      "id": "CVE-2026-59678",
-      "summary": "An Incorrect Authorization vulnerability in Linux-Gaming PortProtonQt allows any users to mount and unmount arbitrary file systems and modify the network configuration via NetworkManager. This issue affects PortProtonQt before 0d0f0950ebd948cdf82e8c3e1ebd2bcb9b8bafbe.",
-      "published": "2026-07-23T08:16:25.003Z",
-      "lastModified": "2026-07-23T15:26:39.980Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00116,
-      "epssPercentile": 0.01906,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.07,
-      "tags": [
-        "Linux",
-        "CWE-863"
-      ]
-    },
-    {
       "id": "CVE-2026-55728",
       "summary": "Stack-based Buffer Overflow (CWE-121) in `/usr/bin/ltsudo` `cmd_ipaddr_conflict` in Loytec LIP-ME201C, L-INX, L-GATE, L-ROC, L-IOB, L-DALI, L-VIS and L-PAD through 8.4.16 on LINX-A64 allows a `superadmin`-group attacker to trigger a SUID-root process abort or potentially elevate privileges via an overly long interface-name argument.",
       "published": "2026-07-24T15:18:30.950Z",
@@ -42725,51 +42691,6 @@
       "priorityScore": 0.06,
       "tags": [
         "CWE-121"
-      ]
-    },
-    {
-      "id": "CVE-2026-59677",
-      "summary": "A Missing Authorization vulnerability in selinux policycoreutils seunshares allows a user that is running in unconfined context to kill e.g. root-owned processes running also in unconfined context This issue affects policycoreutils through 3.10.",
-      "published": "2026-07-23T08:16:24.737Z",
-      "lastModified": "2026-07-23T15:26:19.260Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00107,
-      "epssPercentile": 0.01302,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.05,
-      "tags": [
-        "Linux",
-        "CWE-862"
       ]
     },
     {
@@ -42945,6 +42866,78 @@
       "summary": "Rejected reason: This is a duplicate.",
       "published": "2026-07-27T09:16:37.310Z",
       "lastModified": "2026-07-27T14:16:51.697Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0,
+      "epssPercentile": 0,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0,
+      "tags": []
+    },
+    {
+      "id": "CVE-2026-51296",
+      "summary": "Rejected reason: DO NOT USE THIS CVE RECORD. ConsultIDs: none. Reason: This record was withdrawn by its CNA. Further investigation showed that it was not a security issue. Notes: none.",
+      "published": "2026-07-27T16:17:38.347Z",
+      "lastModified": "2026-07-31T15:16:33.347Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0,
+      "epssPercentile": 0,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0,
+      "tags": []
+    },
+    {
+      "id": "CVE-2026-51297",
+      "summary": "Rejected reason: DO NOT USE THIS CVE RECORD. ConsultIDs: none. Reason: This record was withdrawn by its CNA. Further investigation showed that it was not a security issue. Notes: none.",
+      "published": "2026-07-27T16:17:38.933Z",
+      "lastModified": "2026-07-31T15:16:55.740Z",
       "severity": "Unknown",
       "cvssScore": 0,
       "cvssVector": null,
