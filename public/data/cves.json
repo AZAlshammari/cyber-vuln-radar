@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-22T05:56:53.130Z",
+  "generatedAt": "2026-08-22T06:48:31.877Z",
   "count": 1000,
   "items": [
     {
@@ -9756,51 +9756,6 @@
       ]
     },
     {
-      "id": "CVE-2026-64600",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfs: resample the data fork mapping after cycling ILOCK xfs_reflink_fill_{cow_hole,delalloc} are both presented with an inode, a data fork mapping, and a cow fork mapping. Unfortunately, these two helpers cycle the ILOCK to grab a transaction, which means that the mappings are stale as soon as we reacquire the ILOCK. Currently we refresh the cow fork mapping by re-calling xfs_find_trim_cow_extent, but we don't refresh the data fork mapping beforehand, which means that the xfs_bmap_trim_cow in that function queries the refcount btree about the wrong physical blocks and returns an inaccurate value in *shared. If *shared is now false, the directio write proceeds with a stale data fork mapping. Fix this by querying the data fork mapping if the sequence counter changes across the ILOCK cycle.",
-      "published": "2026-07-23T06:16:50.493Z",
-      "lastModified": "2026-08-18T12:38:12.680Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00474,
-      "epssPercentile": 0.39232,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-362",
-          "name": "CWE-362",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.1,
-      "tags": [
-        "Linux",
-        "CWE-362"
-      ]
-    },
-    {
       "id": "CVE-2026-64873",
       "summary": "Joomla Extension - regularlabs.com - SSRF in Cache Cleaner Pro extension - Custom query URLs could access internal or reserved network services.",
       "published": "2026-07-23T10:16:52.193Z",
@@ -11213,51 +11168,6 @@
       ]
     },
     {
-      "id": "CVE-2026-7232",
-      "summary": "The FormCraft plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the '[parameter name]' parameter in all versions up to, and including, 3.9.14 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The exploit chain combines a server-side gap — where composite matrix sub-field keys such as field2_0 and field2_1 are never passed through the sanitization loop and are stored raw via $wpdb->insert() — with a client-side gap where DOMPurify is only invoked when typeof field.value === 'string', but matrix values arrive from the server as arrays, bypassing the check before being mapped to strings and injected into the DOM. Additionally, the same sink is reachable via a second attack vector: array-typed field values are passed through htmlentities() on submission but later reversed by html_entity_decode() at formcraft-main.php:2608 and :2122, restoring the malicious payload before storage and rendering.",
-      "published": "2026-07-23T06:16:50.607Z",
-      "lastModified": "2026-07-23T15:14:51.013Z",
-      "severity": "High",
-      "cvssScore": 7.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00206,
-      "epssPercentile": 0.11047,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.91,
-      "tags": [
-        "WordPress",
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-65693",
       "summary": "Microweber CMS through 2.0.20 contains a server-side template injection vulnerability that allows authenticated administrators to achieve arbitrary OS command execution by injecting Twig expressions into mail templates. Attackers can exploit the unsandboxed Twig environment in TwigView::render(), which lacks SandboxExtension or a SecurityPolicy, to inject malicious expressions such as filter('system') into mail template bodies stored unsanitized in the database, causing automatic payload execution on each subsequent application event that triggers a mail dispatch.",
       "published": "2026-07-24T16:16:55.360Z",
@@ -12207,51 +12117,6 @@
       "priorityScore": 3.84,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-7534",
-      "summary": "The SUMO Reward Points plugin for WordPress is vulnerable to Unauthenticated Stored Cross-Site Scripting via the REST API endpoint `/wp-json/wc-srp/v1/earning` in versions up to, and including, 32.7.0. This is due to the `user_has_cap` filter in the `SRP_REST_Earning_Controller` class unconditionally granting the custom `rs_earning_read` capability to all users — including unauthenticated visitors — combined with missing sanitization of the `reason` parameter in the `create_items()` function and missing output escaping in the `column_default()` method of `SRP_Master_Log`. This makes it possible for unauthenticated attackers to inject arbitrary web scripts into the reward points log that will execute whenever an administrator accesses the Master Log or User Reward Points admin pages.",
-      "published": "2026-07-23T06:16:50.780Z",
-      "lastModified": "2026-07-23T15:14:51.013Z",
-      "severity": "High",
-      "cvssScore": 7.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.0019,
-      "epssPercentile": 0.08997,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.83,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -19743,6 +19608,50 @@
       ]
     },
     {
+      "id": "CVE-2026-66475",
+      "summary": "Shop manager Cross Site Scripting (XSS) in Checkout Field Editor for WooCommerce &#8211; Checkout Manager <= 3.0.5 versions.",
+      "published": "2026-07-27T15:17:11.963Z",
+      "lastModified": "2026-07-27T17:46:02.447Z",
+      "severity": "Medium",
+      "cvssScore": 5.9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:R/S:C/C:L/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "High",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.0014,
+      "epssPercentile": 0.03822,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.2,
+      "tags": [
+        "CWE-79"
+      ]
+    },
+    {
       "id": "CVE-2026-65430",
       "summary": "Joomla Extension - regularlabs.com - MaxMind Credential leakage in GeoIP extension - MaxMind credentials where leaked in request URLs, causing a credential leakage vulnerability.",
       "published": "2026-07-23T10:16:52.613Z",
@@ -20464,6 +20373,50 @@
       },
       "epssScore": 0.00176,
       "epssPercentile": 0.07409,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.11,
+      "tags": [
+        "CWE-862"
+      ]
+    },
+    {
+      "id": "CVE-2026-66477",
+      "summary": "Unauthenticated Broken Access Control in Gillion <= 4.13 versions.",
+      "published": "2026-07-27T15:17:12.223Z",
+      "lastModified": "2026-07-27T17:46:02.447Z",
+      "severity": "Medium",
+      "cvssScore": 5.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00176,
+      "epssPercentile": 0.0741,
       "isKev": false,
       "kev": null,
       "vendor": null,
@@ -26821,6 +26774,50 @@
       ]
     },
     {
+      "id": "CVE-2026-66476",
+      "summary": "Administrator Arbitrary File Deletion in Easy Digital Downloads <= 3.6.9 versions.",
+      "published": "2026-07-27T15:17:12.090Z",
+      "lastModified": "2026-07-27T17:46:02.447Z",
+      "severity": "Medium",
+      "cvssScore": 4.9,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "High",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00325,
+      "epssPercentile": 0.25545,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "name": "Path Traversal",
+          "description": "Improper limitation of a pathname to a restricted directory."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.61,
+      "tags": [
+        "CWE-22"
+      ]
+    },
+    {
       "id": "CVE-2026-15821",
       "summary": "The SureDash – Community, Courses & Member Dashboard plugin for WordPress is vulnerable to Stored Cross-Site Scripting via Shortcode Attributes in all versions up to, and including, 1.10.0 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
       "published": "2026-07-24T09:16:24.387Z",
@@ -28159,6 +28156,50 @@
       ]
     },
     {
+      "id": "CVE-2026-66474",
+      "summary": "Unauthenticated Cross Site Request Forgery (CSRF) in Insert Headers and Footers Code – HT Script <= 1.1.8 versions.",
+      "published": "2026-07-27T15:17:11.833Z",
+      "lastModified": "2026-07-27T19:17:23.240Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00098,
+      "epssPercentile": 0.00883,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-352",
+          "name": "Cross-Site Request Forgery",
+          "description": "A web request may execute without user intent."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.54,
+      "tags": [
+        "CWE-352"
+      ]
+    },
+    {
       "id": "CVE-2026-64222",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: octeontx2-pf: avoid double free of pool->stack on AQ init failure otx2_pool_aq_init() frees pool->stack when mailbox sync or retry allocation fails, but leaves the pointer unchanged. Later, otx2_sq_aura_pool_init() unwinds the partial setup through otx2_aura_pool_free(), which frees pool->stack again. The CN20K-specific cn20k_pool_aq_init() implementation has the same bug in its corresponding error path. Set pool->stack to NULL immediately after the local free so the shared cleanup path does not free the same stack again while cleaning up partially initialized pool state. The bug was first flagged by an experimental analysis tool we are developing for kernel memory-management bugs while analyzing v6.13-rc1. The tool is still under development and is not yet publicly available. Manual inspection confirms that the bug is still present in v7.1-rc3. Runtime validation was not performed because reproducing this path requires OcteonTX2/CN20K hardware.",
       "published": "2026-07-24T16:16:50.053Z",
@@ -28451,50 +28492,6 @@
       "priorityScore": 2.5,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-63226",
-      "summary": "Printers and Multifunction Printers (MFPs) provided by Ricoh Company, Ltd. do not implement restrictions on SSH port forwarding, allowing to connect to arbitrary destinations. When SSH is enabled on an affected product, SSH port forwarding may be leveraged to connect to other node on the LAN.",
-      "published": "2026-07-23T06:16:49.037Z",
-      "lastModified": "2026-07-23T15:17:43.437Z",
-      "severity": "Medium",
-      "cvssScore": 5.8,
-      "cvssVector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00223,
-      "epssPercentile": 0.13229,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-923",
-          "name": "CWE-923",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.49,
-      "tags": [
-        "CWE-923"
       ]
     },
     {
