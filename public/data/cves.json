@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-26T08:09:20.303Z",
+  "generatedAt": "2026-08-26T09:03:00.453Z",
   "count": 1000,
   "items": [
     {
@@ -6075,44 +6075,6 @@
       ]
     },
     {
-      "id": "CVE-2026-64535",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: nvmet-tcp: Fix potential UAF when ddgst mismatch Shivam Kumar found via vulnerability testing: When data digest is enabled on an NVMe/TCP connection and a digest mismatch occurs on a non-final H2C_DATA PDU during an R2T-based data transfer, the digest error handler in nvmet_tcp_try_recv_ddgst() calls nvmet_req_uninit() — which performs percpu_ref_put() on the submission queue — but does NOT mark the command as completed. It does not set cqe->status, does not modify rbytes_done, and does not clear any flag. When the subsequent fatal error triggers queue teardown, nvmet_tcp_uninit_data_in_cmds() iterates all commands, checks nvmet_tcp_need_data_in() for each one, and finds that the already-uninited command still appears to need data (because rbytes_done status == 0). It therefore calls nvmet_req_uninit() a second time on the same command — a double percpu_ref_put against a single percpu_ref_get.",
-      "published": "2026-07-27T08:16:22.773Z",
-      "lastModified": "2026-08-19T17:20:15.370Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00547,
-      "epssPercentile": 0.43431,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.95,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-13161",
       "summary": "The TrueBooker – Appointment Booking and Scheduler System plugin for WordPress is vulnerable to generic SQL Injection via the 'alldata[truebooker_user]' parameter in all versions up to, and including, 1.2.2 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. The check_ajax_referer() nonce guard does not constitute an authentication or authorization barrier because the nonce is exposed to unauthenticated visitors on TrueBooker front-end booking pages; exploitation additionally requires that the required booking fields (category, service, person, date, and time slot) be present in the alldata POST parameter so that execution reaches the vulnerable SQL query branch.",
       "published": "2026-07-28T09:16:41.220Z",
@@ -7222,6 +7184,52 @@
       ]
     },
     {
+      "id": "CVE-2026-17687",
+      "summary": "Type Confusion in ANGLE in Google Chrome prior to 151.0.7922.72 allowed a remote attacker who had compromised the renderer process to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-30T01:16:30.990Z",
+      "lastModified": "2026-08-03T17:59:02.200Z",
+      "severity": "Critical",
+      "cvssScore": 9.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00533,
+      "epssPercentile": 0.42646,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-843",
+          "name": "CWE-843",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.85,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-843"
+      ]
+    },
+    {
       "id": "CVE-2026-54890",
       "summary": "Integer Underflow (Wrap or Wraparound) vulnerability in erlang otp erlang/otp (erts modules), erlang otp erts (erts modules) allows Forced Integer Overflow, Excessive Allocation. This vulnerability is associated with program files erts/emulator/beam/external.c, emulator/beam/external.c. The BIT_BINARY_EXT tag (77) handler in the External Term Format (ETF) decoder accepts an encoding with both length and trailing-bits fields set to zero. The subsequent computation of the bitstring size underflows an unsigned integer, producing a value of roughly 2^64 that is then passed as a memory allocation size. The allocator aborts the entire node with a message such as \"Cannot allocate 2305843009213693951 bytes of memory (of type binary)\". The crash is a VM-level abort, not an Erlang-level exception. It cannot be intercepted by supervision trees, by try/catch, or by passing the [safe] option to binary_to_term/2 (which only restricts atom creation and does not perform structural validation of binary encodings). Any application that decodes ETF from untrusted sources via binary_to_term/1,2 or enif_binary_to_term() is exposed. The Erlang distribution protocol also decodes incoming terms through the same code path, but distribution is expected to run on trusted networks per the OTP Secure Coding Guidelines (DSG-011). This issue affects OTP from OTP 27.0 before OTP 29.0.4, OTP 28.5.0.4 and OTP 27.3.4.15, corresponding to erts from 15.0 before 17.0.4, 16.4.0.4 and 15.2.7.11.",
       "published": "2026-07-27T16:17:41.437Z",
@@ -7828,44 +7836,6 @@
       ]
     },
     {
-      "id": "CVE-2026-64531",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: net: openvswitch: reject oversized nested action attrs Open vSwitch stores generated flow actions as nlattrs, whose nla_len field is u16. Commit a1e64addf3ff (\"net: openvswitch: remove misbehaving actions length check\") allowed the total sw_flow_actions stream to grow beyond 64 KiB, which is valid, but also removed the last guard preventing a generated nested action attribute from exceeding U16_MAX. An oversized generated container can thus be closed with a truncated nla_len. A later dump or teardown then walks a structurally different stream than the one that was validated. In particular, an oversized nested CLONE/CT action may cause subsequent bytes in the generated stream to be interpreted as independent actions. Keep the larger total-action-stream behavior, but make nested action close reject generated containers that do not fit in nla_len, and return the error through all callers. For recursive SAMPLE, CLONE, DEC_TTL, and CHECK_PKT_LEN builders, trim resource-owning action-list tails in reverse construction order before discarding failed wrappers, so resources copied into the rejected tails are released before the wrappers are removed. Most failed outer wrappers are discarded by truncating actions_len after child resources have been released. CHECK_PKT_LEN also trims its parent after branch resources are gone. SET/TUNNEL close failures unwind their known tun_dst ownership directly, and SET_TO_MASKED has no external ownership and truncates on close failure.",
-      "published": "2026-07-27T08:16:22.243Z",
-      "lastModified": "2026-08-22T04:17:58.720Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0038,
-      "epssPercentile": 0.30773,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.81,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-17652",
       "summary": "Use after free in Views in Google Chrome prior to 151.0.7922.72 allowed a remote attacker who had compromised the renderer process to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: Critical)",
       "published": "2026-07-30T01:16:27.080Z",
@@ -8373,6 +8343,54 @@
         "Chrome",
         "iOS",
         "CWE-20"
+      ]
+    },
+    {
+      "id": "CVE-2026-17692",
+      "summary": "Use after free in DataTransfer in Google Chrome on Windows prior to 151.0.7922.72 allowed a remote attacker who had compromised the renderer process to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-30T01:16:31.550Z",
+      "lastModified": "2026-08-03T15:02:16.990Z",
+      "severity": "Critical",
+      "cvssScore": 9.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00489,
+      "epssPercentile": 0.39874,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Microsoft",
+      "product": "Windows",
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.76,
+      "tags": [
+        "Microsoft",
+        "Google",
+        "Chrome",
+        "Windows",
+        "CWE-416"
       ]
     },
     {
@@ -9005,6 +9023,100 @@
       ]
     },
     {
+      "id": "CVE-2026-17688",
+      "summary": "Use after free in Input in Google Chrome prior to 151.0.7922.72 allowed a remote attacker who had compromised the renderer process to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-30T01:16:31.100Z",
+      "lastModified": "2026-08-03T17:58:54.590Z",
+      "severity": "Critical",
+      "cvssScore": 9.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00479,
+      "epssPercentile": 0.39213,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.73,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-17691",
+      "summary": "Out of bounds write in ANGLE in Google Chrome on Windows prior to 151.0.7922.72 allowed a remote attacker to potentially perform a sandbox escape via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-30T01:16:31.443Z",
+      "lastModified": "2026-08-03T15:02:07.273Z",
+      "severity": "Critical",
+      "cvssScore": 9.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00479,
+      "epssPercentile": 0.39213,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Microsoft",
+      "product": "Windows",
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "name": "Out-of-bounds Write",
+          "description": "Writes data past the intended buffer boundary."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.73,
+      "tags": [
+        "Microsoft",
+        "Google",
+        "Chrome",
+        "Windows",
+        "CWE-787"
+      ]
+    },
+    {
       "id": "CVE-2026-59243",
       "summary": "The FAB auth manager's Azure AD OAuth login defaulted `verify_signature=False` when decoding the ID token, so an attacker able to present a forged or unsigned (`alg:none`) ID token to the OAuth callback could bypass authentication and log in as an arbitrary user, including one holding the Admin role (CWE-347). Deployments running the FAB auth manager with the Azure AD OAuth login path under its default configuration are affected; the Authentik path already defaulted to `True`. This issue affects `apache-airflow-providers-fab` before 3.7.3. Users are advised to upgrade to `apache-airflow-providers-fab` 3.7.3, which defaults `verify_signature=True`.",
       "published": "2026-07-29T10:16:44.390Z",
@@ -9503,44 +9615,6 @@
       ]
     },
     {
-      "id": "CVE-2026-64534",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: nvmet-tcp: check INIT_FAILED before nvmet_req_uninit in digest error path In nvmet_tcp_try_recv_ddgst(), when a data digest mismatch is detected, nvmet_req_uninit() is called unconditionally. However, if the command arrived via the nvmet_tcp_handle_req_failure() path, nvmet_req_init() had returned false and percpu_ref_tryget_live() was never executed. The unconditional percpu_ref_put() inside nvmet_req_uninit() then causes a refcount underflow, leading to a WARNING in percpu_ref_switch_to_atomic_rcu, a use-after-free diagnostic, and eventually a permanent workqueue deadlock. Check cmd->flags & NVMET_TCP_F_INIT_FAILED before calling nvmet_req_uninit(), matching the existing pattern in nvmet_tcp_execute_request().",
-      "published": "2026-07-27T08:16:22.643Z",
-      "lastModified": "2026-08-05T08:16:35.860Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00419,
-      "epssPercentile": 0.34639,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.64,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-28911",
       "summary": "The issue was addressed with improved memory handling. This issue is fixed in macOS Sonoma 14.8.8, macOS Tahoe 26.6. A malicious app may be able to corrupt memory of a system process.",
       "published": "2026-07-27T21:16:49.177Z",
@@ -9773,6 +9847,52 @@
       "summary": "Use after free in Loader in Google Chrome prior to 151.0.7922.72 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: High)",
       "published": "2026-07-30T01:16:28.090Z",
       "lastModified": "2026-08-10T14:13:26.117Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0056,
+      "epssPercentile": 0.44103,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.62,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-17685",
+      "summary": "Use after free in Autofill in Google Chrome prior to 151.0.7922.72 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-30T01:16:30.770Z",
+      "lastModified": "2026-08-03T17:59:39.310Z",
       "severity": "High",
       "cvssScore": 8.8,
       "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
@@ -13540,6 +13660,52 @@
       ]
     },
     {
+      "id": "CVE-2026-17686",
+      "summary": "Insufficient validation of untrusted input in Passwords in Google Chrome prior to 151.0.7922.72 allowed a remote attacker who had compromised the renderer process to bypass site isolation via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-30T01:16:30.880Z",
+      "lastModified": "2026-08-03T17:59:32.487Z",
+      "severity": "High",
+      "cvssScore": 8.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00466,
+      "epssPercentile": 0.38335,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-20",
+          "name": "CWE-20",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.18,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-20"
+      ]
+    },
+    {
       "id": "CVE-2026-65888",
       "summary": "Joomla Extension - balbooa.com - Account takeover vulnerability in Gridbox < 2.20.2 - The socialLogin method allows actors to login as any given user on the target site.",
       "published": "2026-07-29T15:16:28.813Z",
@@ -15953,44 +16119,6 @@
       "tags": [
         "CWE-436",
         "CWE-524"
-      ]
-    },
-    {
-      "id": "CVE-2026-64532",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: fs/ntfs3: bound NTFS_DE view.data_off in UpdateRecordData{Root,Allocation} In do_action()'s UpdateRecordDataRoot (fslog.c:3489) and UpdateRecordDataAllocation (fslog.c:3697) cases, the memmove destination is `Add2Ptr(e, le16_to_cpu(e->view.data_off))`, where e->view.data_off comes from an on-disk NTFS_DE inside an INDEX_ROOT or INDEX_BUFFER. Neither case validates view.data_off + dlen against e->size; the existing check_if_index_root / check_if_alloc_index helpers walk the entry chain and validate the entry's offset, but not its internal view fields. The neighbouring read sites (e.g., fs/ntfs3/index.c when iterating view entries) check view.data_off + view.data_size size. Apply the same bound at the two memmove sites. Reproduced under UML+KASAN on mainline 8d90b09e6741 via pr_warn-only probe instrumentation: with view.data_off forced to 0xFFFC, the memmove writes 32 bytes past the end of the NTFS_DE. This is similar in shape to Pavitra Jha's 2026-05-02 patch \"fs/ntfs3: prevent oob in case UpdateRecordDataRoot\" ( ) which proposes calling ntfs3_bad_de_range(); that helper does not exist in mainline. This patch uses inline checks.",
-      "published": "2026-07-27T08:16:22.383Z",
-      "lastModified": "2026-08-17T05:17:58.210Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00128,
-      "epssPercentile": 0.02715,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.83,
-      "tags": [
-        "Linux"
       ]
     },
     {
@@ -22374,41 +22502,49 @@
       ]
     },
     {
-      "id": "CVE-2026-64536",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: staging: rtl8723bs: fix OOB reads in is_ap_in_tkip() IE loop The loop in is_ap_in_tkip() iterates over IEs without verifying that enough bytes remain before dereferencing the IE header or its payload: - pIE->element_id and pIE->length are read without checking that i + sizeof(*pIE) data + 12, which requires pIE->length >= 16. For WLAN_EID_RSN it compares pIE->data + 8, requiring pIE->length >= 12. Neither requirement is checked. Add the missing IE header and payload bounds checks and guard each data access with an explicit pIE->length minimum, matching the pattern established in update_beacon_info().",
-      "published": "2026-07-27T08:16:22.890Z",
-      "lastModified": "2026-08-17T05:17:58.493Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
+      "id": "CVE-2026-17693",
+      "summary": "Insufficient policy enforcement in FileSystem in Google Chrome prior to 151.0.7922.72 allowed a remote attacker to leak cross-origin data via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-30T01:16:31.663Z",
+      "lastModified": "2026-07-31T15:27:51.113Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N",
       "cvssBreakdown": {
-        "attackVector": "Adjacent",
+        "attackVector": "Network",
         "attackComplexity": "Low",
         "privilegesRequired": "None",
-        "userInteraction": "None",
+        "userInteraction": "Required",
         "scope": "Unchanged",
-        "confidentiality": "High",
+        "confidentiality": "Low",
         "integrity": "None",
-        "availability": "High"
+        "availability": "None"
       },
-      "epssScore": 0.00249,
-      "epssPercentile": 0.16015,
+      "epssScore": 0.00334,
+      "epssPercentile": 0.25803,
       "isKev": false,
       "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-346",
+          "name": "CWE-346",
+          "description": "CWE mapping from source data."
+        }
+      ],
       "references": [],
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
-      "patchAvailable": true,
+      "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
-      "priorityScore": 3.4,
+      "priorityScore": 3.41,
       "tags": [
-        "Linux"
+        "Google",
+        "Chrome",
+        "CWE-346"
       ]
     },
     {
@@ -25053,6 +25189,53 @@
       "tags": [
         "F5",
         "CWE-125"
+      ]
+    },
+    {
+      "id": "CVE-2026-17690",
+      "summary": "Insufficient validation of untrusted input in PDF in Google Chrome on Android prior to 151.0.7922.72 allowed a local attacker to leak cross-origin data via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-30T01:16:31.333Z",
+      "lastModified": "2026-08-03T12:15:04.090Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00332,
+      "epssPercentile": 0.25534,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-20",
+          "name": "CWE-20",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.17,
+      "tags": [
+        "Google",
+        "Chrome",
+        "Android",
+        "CWE-20"
       ]
     },
     {
@@ -29098,44 +29281,6 @@
       ]
     },
     {
-      "id": "CVE-2026-64533",
-      "summary": "In the Linux kernel, the following vulnerability has been resolved: fs/ntfs3: validate lcns_follow in log_replay conversion log_replay() converts DIR_PAGE_ENTRY_32 records into DIR_PAGE_ENTRY records when replaying version 0 restart tables. During this conversion, the memmove() length is derived directly from the on-disk lcns_follow field: memmove(&dp->vcn, &dp0->vcn_low, 2 * sizeof(u64) + le32_to_cpu(dp->lcns_follow) * sizeof(u64)); check_rstbl() validates restart table structure, but does not constrain per-entry lcns_follow values relative to the entry size. A malformed filesystem image can provide an oversized lcns_follow value, causing the conversion memmove() to access memory beyond the bounds of the allocated restart table buffer. The same field is later used to bound iteration over page_lcns[], so validating lcns_follow during conversion also prevents downstream out-of-bounds access from the same malformed metadata. Compute the maximum valid lcns_follow from the already-validated restart table entry size and reject entries that exceed this bound. Reuse the existing t16/t32 scratch variables already declared in log_replay() to avoid introducing new declarations. [almaz.alexandrovich@paragon-software.com: fixed the conflicts]",
-      "published": "2026-07-27T08:16:22.510Z",
-      "lastModified": "2026-08-17T05:17:58.350Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00135,
-      "epssPercentile": 0.03191,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.84,
-      "tags": [
-        "Linux"
-      ]
-    },
-    {
       "id": "CVE-2026-13307",
       "summary": "Autel MaxiCharger AC Elite Home USB Heap-based Buffer Overflow Arbitrary Code Execution Vulnerability. This vulnerability allows physically present attackers to execute arbitrary code on affected installations of Autel MaxiCharger AC Elite Home EV chargers. Authentication is not required to exploit this vulnerability. The specific flaw exists within the handling of custom USB packets. The issue results from the lack of proper validation of the length of user-supplied data prior to copying it to a fixed-length, heap-based buffer. An attacker can leverage this vulnerability to execute code in the context of the device. Was ZDI-CAN-29048.",
       "published": "2026-07-29T21:17:46.370Z",
@@ -29863,6 +30008,52 @@
       ]
     },
     {
+      "id": "CVE-2026-17689",
+      "summary": "Uninitialized Use in ANGLE in Google Chrome prior to 151.0.7922.72 allowed a remote attacker to leak cross-origin data via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-07-30T01:16:31.220Z",
+      "lastModified": "2026-07-31T15:27:35.290Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00435,
+      "epssPercentile": 0.3612,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-457",
+          "name": "CWE-457",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.77,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-457"
+      ]
+    },
+    {
       "id": "CVE-2026-28945",
       "summary": "A permissions issue was addressed with additional sandbox restrictions. This issue is fixed in macOS Sequoia 15.7.8, macOS Sonoma 14.8.8, macOS Tahoe 26.6. An app may be able to bypass network restrictions.",
       "published": "2026-07-27T21:16:50.120Z",
@@ -29994,50 +30185,6 @@
       "priorityScore": 2.75,
       "tags": [
         "CWE-611"
-      ]
-    },
-    {
-      "id": "CVE-2026-14837",
-      "summary": "Multiple Lenze products are affected by an improper signature verification vulnerability in the SSH enablement mechanism. A low-privileged local attacker can bypass verification of the SSH enable file signature and enable SSH access on the device. Successful exploitation may result in unauthorized administrative access and complete system compromise.",
-      "published": "2026-07-27T08:16:17.463Z",
-      "lastModified": "2026-07-30T14:31:21.447Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00082,
-      "epssPercentile": 0.00247,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-347",
-          "name": "CWE-347",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.74,
-      "tags": [
-        "CWE-347"
       ]
     },
     {
@@ -36171,50 +36318,6 @@
         "Apple",
         "iOS",
         "CWE-200"
-      ]
-    },
-    {
-      "id": "CVE-2026-65894",
-      "summary": "This vulnerability exists in CP PLUS EZ-P21 IP Camera due to improper authentication of HTTP endpoints. A remote attacker could exploit this vulnerability by conducting brute-force attacks against HTTP endpoint on the targeted device. Successful exploitation of this vulnerability could allow an attacker to gain unauthorized access to live video snapshots from the targeted device.",
-      "published": "2026-07-27T08:16:23.157Z",
-      "lastModified": "2026-07-27T20:32:11.620Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.004,
-      "epssPercentile": 0.32861,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-307",
-          "name": "CWE-307",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.15,
-      "tags": [
-        "CWE-307"
       ]
     },
     {
@@ -42444,50 +42547,6 @@
       "priorityScore": 0.51,
       "tags": [
         "CWE-285"
-      ]
-    },
-    {
-      "id": "CVE-2026-65893",
-      "summary": "This vulnerability exists in CP PLUS EZ-P21 IP Camera due to an insecure debug feature enabled in the firmware. An attacker with physical access could exploit this vulnerability by placing arbitrary code on removable media and triggering their execution through the debug mechanism. Successful exploitation of this vulnerability could allow an attacker to execute arbitrary code with elevated privileges on the targeted device.",
-      "published": "2026-07-27T08:16:23.010Z",
-      "lastModified": "2026-07-27T20:32:11.620Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00228,
-      "epssPercentile": 0.13284,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-489",
-          "name": "CWE-489",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.46,
-      "tags": [
-        "CWE-489"
       ]
     },
     {
