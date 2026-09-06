@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-06T10:59:15.900Z",
+  "generatedAt": "2026-09-06T14:07:10.094Z",
   "count": 1000,
   "items": [
     {
@@ -3224,7 +3224,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 5.38,
       "tags": [
@@ -6643,51 +6643,6 @@
       ]
     },
     {
-      "id": "CVE-2026-66838",
-      "summary": "Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection') vulnerability in elixir-ecto postgrex allows SQL Injection via the :comment option of Postgrex.stream/4. An attacker who can influence that value can close the comment delimiter with */ and extend the streamed statement with their own clauses, which execute under the connection's role. Ecto exposes the same option through Ecto.Repo.stream/2. Postgrex appends the comment by concatenating it into the statement text sent in the Parse message, without escaping or rejecting */. The option is validated by comment_not_present!/1 at every other execution point; stream/4 never calls it. Because Parse accepts a single command, the injection is confined to the streamed statement and further statements cannot be chained. This issue affects postgrex: from 0.19.3 before 0.22.4.",
-      "published": "2026-08-07T13:16:52.960Z",
-      "lastModified": "2026-08-17T14:40:45.317Z",
-      "severity": "High",
-      "cvssScore": 8.2,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00285,
-      "epssPercentile": 0.20649,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.59,
-      "tags": [
-        "F5",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-68082",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: libceph: fix two unsafe bare decodes in decode_lockers() decode_lockers() in cls_lock_client.c contains two bare decode operations that allow a malicious or compromised OSD to trigger slab-out-of-bounds reads: 1. ceph_decode_32(p) at the num_lockers field has no preceding bounds check. ceph_start_decoding() accepts struct_len=0 as valid -- the internal ceph_decode_need(p, end, 0, bad) always passes -- so when an OSD sends struct_len=0, ceph_start_decoding() returns success with p == end. The immediately following bare ceph_decode_32(p) then reads 4 bytes past the validated buffer boundary. The garbage value is passed directly to kzalloc_objs() as the locker count. The sibling function decode_watchers() in osd_client.c already uses ceph_decode_32_safe() after its own ceph_start_decoding() call. decode_lockers() was the only site using the bare variant. 2. ceph_decode_8(p) after the decode_locker() loop has no preceding bounds check. If an OSD crafts num_lockers such that the loop advances p exactly to end, the subsequent bare ceph_decode_8(p) reads one byte past the validated buffer boundary. The result is passed directly into *type, which is used as a lock type discriminator by callers, giving an OSD-controlled one-byte OOB read with direct influence over the lock type field. Fix both by replacing bare operations with their safe variants: ceph_decode_32(p) -> ceph_decode_32_safe(p, end, *num_lockers, err_inval) ceph_decode_8(p) -> ceph_decode_8_safe(p, end, *type, err_free_lockers) The goto targets differ intentionally: err_inval: is a new label returning -EINVAL directly. It is used for the pre-allocation failure path where *lockers is not yet allocated and must not be passed to ceph_free_lockers(). err_free_lockers: is the existing label. It is used for the post-allocation failure path where *lockers is allocated and must be freed. ret is set to -EINVAL before ceph_decode_8_safe() so that err_free_lockers returns the correct error code on bounds violation. Without this, err_free_lockers would return a stale ret value (0 from the successful decode_locker() loop), silently swallowing the error. -EINVAL is correct for both failure paths. The data received from the OSD is structurally malformed. -ENOMEM would misrepresent the failure class to callers and to stable@ backporters triaging error paths. Attacker model: a malicious or compromised OSD in a multi-tenant Ceph deployment can trigger this against any kernel client that issues the lock.get_info class method (e.g. during RBD exclusive lock acquisition). [ idryomov: trim changelog, formatting ]",
       "published": "2026-08-08T10:16:55.377Z",
@@ -7214,50 +7169,6 @@
       "tags": [
         "Docker",
         "CWE-78"
-      ]
-    },
-    {
-      "id": "CVE-2026-56793",
-      "summary": "Dell OpenManage Server Administrator, versions prior to 11.1.0.2, contains an Improper Authentication vulnerability. An unauthenticated attacker with remote access could potentially exploit this vulnerability, leading to Unauthorized access.",
-      "published": "2026-08-07T13:16:52.503Z",
-      "lastModified": "2026-08-08T05:17:09.880Z",
-      "severity": "High",
-      "cvssScore": 7.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "Low"
-      },
-      "epssScore": 0.00313,
-      "epssPercentile": 0.23712,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-287",
-          "name": "Improper Authentication",
-          "description": "Authentication is missing or can be bypassed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.52,
-      "tags": [
-        "CWE-287"
       ]
     },
     {
@@ -8460,50 +8371,6 @@
       "tags": [
         "WordPress",
         "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-15816",
-      "summary": "A flaw was found in dracut. The die() error-handling function writes its message into a shell script under the initramfs emergency-hook directory without properly shell-quoting it. When the message contains data derived from the DHCP ROOT_PATH option, an attacker on the adjacent network who controls a rogue DHCP server can inject a command-substitution sequence that executes as root the next time dracut sources its emergency hook scripts during standard boot-failure handling.",
-      "published": "2026-08-07T11:17:05.100Z",
-      "lastModified": "2026-09-02T02:17:19.523Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00304,
-      "epssPercentile": 0.2268,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.42,
-      "tags": [
-        "CWE-78"
       ]
     },
     {
@@ -17971,50 +17838,6 @@
       ]
     },
     {
-      "id": "CVE-2026-56794",
-      "summary": "Dell OpenManage Server Administrator, versions prior to 11.1.0.2, contains a Relative Path Traversal vulnerability. A low privileged attacker with remote access could potentially exploit this vulnerability, leading to Filesystem access for attacker.",
-      "published": "2026-08-07T13:16:52.633Z",
-      "lastModified": "2026-08-08T00:39:32.573Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00302,
-      "epssPercentile": 0.22485,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-23",
-          "name": "CWE-23",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.06,
-      "tags": [
-        "CWE-23"
-      ]
-    },
-    {
       "id": "CVE-2026-72900",
       "summary": "Metabase allows an authenticated, low-privileged attacker to read the entire Metabase application database.",
       "published": "2026-08-10T18:18:53.637Z",
@@ -18310,6 +18133,50 @@
         "F5",
         "Android",
         "CWE-20"
+      ]
+    },
+    {
+      "id": "CVE-2026-72919",
+      "summary": "Rocket.Chat is an open-source, secure, fully customizable communications platform. Prior to 7.10.14, 8.0.8, 8.1.7, 8.2.7, 8.3.7, 8.4.5, 8.5.2, and 8.6.1, the channels.convertToTeam REST endpoint allows an authenticated registered user with the create-team permission to convert an unrelated public channel by supplying channelName instead of channelId because the edit-room permission is checked only for channelId. This issue is fixed in versions 7.10.14, 8.0.8, 8.1.7, 8.2.7, 8.3.7, 8.4.5, 8.5.2, and 8.6.1.",
+      "published": "2026-08-10T22:17:10.957Z",
+      "lastModified": "2026-08-11T15:17:37.947Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00238,
+      "epssPercentile": 0.14773,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.02,
+      "tags": [
+        "CWE-862"
       ]
     },
     {
@@ -25706,56 +25573,6 @@
       ]
     },
     {
-      "id": "CVE-2026-66494",
-      "summary": "Joomla Extension - joomshaper.com - Unauthenticated stored XSS in Shapes API endpoint SP Page Builder < 6.7.0 - An unauthenticated attacker can store malicious JavaScript in a Joomla site's database via a single HTTP request. When an administrator opens the SP Page Builder editor, the JavaScript executes in their browser automatically..",
-      "published": "2026-08-07T13:16:52.827Z",
-      "lastModified": "2026-08-26T16:36:16.990Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00389,
-      "epssPercentile": 0.3207,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.12,
-      "tags": [
-        "CWE-79",
-        "CWE-284"
-      ]
-    },
-    {
       "id": "CVE-2026-72743",
       "summary": "SQLBot through 1.10.0, fixed in commit c3f40a5, contains a stored cross-site scripting vulnerability in the SQText dashboard component that renders TinyMCE output via v-html without sanitization. Attackers who can modify dashboard text widget content can inject arbitrary HTML and JavaScript that executes for all users viewing the dashboard.",
       "published": "2026-08-10T21:17:24.370Z",
@@ -28043,7 +27860,7 @@
       "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
-      "recentlyModified": true,
+      "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 1.91,
       "tags": [
@@ -29638,6 +29455,50 @@
       ]
     },
     {
+      "id": "CVE-2025-30241",
+      "summary": "Certain web interface components in affected TP-Link Aginet devices do not validate and sanitize user-supplied input properly before passing it to system-level command execution functions. An authenticated adjacent attacker may inject specially crafted input to execute arbitrary operation system commands with elevated privileges. Successful exploitation may allow execution of arbitrary system commands, potentially leading to full device compromise.",
+      "published": "2026-08-10T23:16:50.670Z",
+      "lastModified": "2026-08-18T15:04:46.610Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00526,
+      "epssPercentile": 0.42537,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-78",
+          "name": "OS Command Injection",
+          "description": "Improper neutralization of special elements used in OS commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.49,
+      "tags": [
+        "CWE-78"
+      ]
+    },
+    {
       "id": "CVE-2026-19352",
       "summary": "A vulnerability was determined in mifi lossless-cut up to 3.69.0. Affected by this issue is some unknown functionality of the file src/main/httpServer.ts of the component Built-in HTTP API Service. Executing a manipulation can lead to server-side request forgery. The attack requires access to the local network. This attack is characterized by high complexity. The exploitation is known to be difficult. The exploit has been publicly disclosed and may be utilized. This patch is called 260802348955231442c4bae6c2d9d8ede947af0a. It is best practice to apply a patch to resolve this issue. The project maintainer provides this view: \"I'm not sure that this is a critical vulnerability, because it is behind an experimental CLI flag and the NTLM behavior isn't really a LosslessCut bug.\" The CVSS vector reflects the high level of pre-requisites.",
       "published": "2026-08-09T13:16:50.927Z",
@@ -29679,6 +29540,50 @@
       "priorityScore": 1.46,
       "tags": [
         "CWE-918"
+      ]
+    },
+    {
+      "id": "CVE-2025-30237",
+      "summary": "The affected TP-Link Aginet devices contain a flaw in the web management interface where authentication checks are not consistently enforced on certain endpoints. An attacker can send specially crafted requests to bypass authentication and directly invoke privileged functionality without valid credentials. This issue arises from improper enforcement of access control mechanisms on sensitive operations. Successful exploitation may allow an unauthenticated attacker to execute privileged operations and gain full control of the device.",
+      "published": "2026-08-10T23:16:48.640Z",
+      "lastModified": "2026-08-18T15:04:46.610Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00225,
+      "epssPercentile": 0.13144,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.46,
+      "tags": [
+        "CWE-862"
       ]
     },
     {
@@ -32638,51 +32543,6 @@
       "priorityScore": 0.81,
       "tags": [
         "CWE-470"
-      ]
-    },
-    {
-      "id": "CVE-2026-48094",
-      "summary": "The ShareOpenly WordPress plugin prior to version 1.2.1 contains a Cross-Site Scripting vulnerability caused by the absence of WordPress's `esc_url()` escaping function on the `$url` variable before it is rendered into HTML content. This variable is constructed from `home_url( add_query_arg( array(), $wp->request ) )` and is concatenated directly into an HTML `href` attribute on every singular post or page where the plugin's sharing link is displayed. WordPress's security handbook mandates that every URL placed in HTML output must be passed through `esc_url()`, which both HTML-encodes special characters (converting `\"`, ` ` into their safe HTML entity equivalents) and strips dangerous URI schemes such as `javascript:` and `data:`. The omission of this function means that if the `$url` value ever contains HTML-special characters or a dangerous URI scheme — through a `home_url` WordPress filter applied by another plugin or theme, through certain web server or hosting configurations, or through future code changes — the unescaped content will be injected verbatim into the rendered HTML of every post or page on the site. Version 1.2.1 contains a patch for the issue.",
-      "published": "2026-08-07T13:16:49.493Z",
-      "lastModified": "2026-08-07T16:17:25.040Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00305,
-      "epssPercentile": 0.22767,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.8,
-      "tags": [
-        "WordPress",
-        "CWE-79"
       ]
     },
     {
@@ -37103,6 +36963,50 @@
       ]
     },
     {
+      "id": "CVE-2025-30240",
+      "summary": "The affected TP-Link Aginet devices do not properly validate symbolic links created on external USB storage devices. By placing a crafted symbolic link on supported storage media, an attacker may cause the system to resolve the link. Successful exploitation may allow unauthorized read access to sensitive files within the device filesystem.",
+      "published": "2026-08-10T23:16:50.463Z",
+      "lastModified": "2026-08-18T15:04:46.610Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00178,
+      "epssPercentile": 0.07419,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-59",
+          "name": "CWE-59",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.26,
+      "tags": [
+        "CWE-59"
+      ]
+    },
+    {
       "id": "CVE-2026-68111",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: drm/amdgpu/gfx9: replace BUG_ON() with WARN_ON() There's no need to crash the kernel for these cases. (cherry picked from commit b71604f8685b0eba07866f4e8dc30f93e1931054)",
       "published": "2026-08-10T13:19:55.977Z",
@@ -39801,6 +39705,94 @@
       "priorityScore": 0.14,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2025-30238",
+      "summary": "In affected TP-Link Aginet devices, insufficient authorization validation allows authenticated low-privileged users to execute higher-privileged operations. An attacker may perform administrative actions such as creating privileged accounts or modifying critical configuration settings.",
+      "published": "2026-08-10T23:16:49.900Z",
+      "lastModified": "2026-08-18T15:04:46.610Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00144,
+      "epssPercentile": 0.03953,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-863",
+          "name": "CWE-863",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.14,
+      "tags": [
+        "CWE-863"
+      ]
+    },
+    {
+      "id": "CVE-2025-30239",
+      "summary": "In affected TP-Link Aginet devices, use of hardcoded cryptographic keys embedded in the firmware to protect sensitive configuration data may allow an attacker who has access to device storage to recover the keys and decrypt stored data. Successful exploitation may allow access to decrypted sensitive configuration data, including credentials and service-related information.",
+      "published": "2026-08-10T23:16:50.173Z",
+      "lastModified": "2026-08-18T15:04:46.610Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00144,
+      "epssPercentile": 0.03953,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-321",
+          "name": "CWE-321",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": true,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.14,
+      "tags": [
+        "CWE-321"
       ]
     },
     {
