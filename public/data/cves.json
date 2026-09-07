@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-07T00:53:45.155Z",
+  "generatedAt": "2026-09-07T05:48:55.843Z",
   "count": 1000,
   "items": [
     {
@@ -9197,6 +9197,50 @@
       ]
     },
     {
+      "id": "CVE-2026-72606",
+      "summary": "A server-side request forgery vulnerability in Pinry through 2.1.13 allows unauthenticated remote attackers to make the server issue HTTP requests to arbitrary internal or external hosts via the pin-from-URL feature. The feature passes the user-supplied URL directly to requests.get() without host or IP validation, and ALLOW_NEW_REGISTRATIONS defaults to true enabling anonymous triggering. An attacker can reach internal services or cloud metadata endpoints from the server.",
+      "published": "2026-08-11T12:17:43.743Z",
+      "lastModified": "2026-08-28T18:51:39.823Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00283,
+      "epssPercentile": 0.20566,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-918",
+          "name": "CWE-918",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.34,
+      "tags": [
+        "CWE-918"
+      ]
+    },
+    {
       "id": "CVE-2026-68124",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: mctp: serial: handle zero-length frames to prevent rx buffer overflow The MCTP serial receive state machine reads a frame length byte in mctp_serial_push_header() case 2 and validates it upper-bound-only: if (c > MCTP_SERIAL_FRAME_MTU) { dev->rxstate = STATE_ERR; } else { dev->rxlen = c; dev->rxpos = 0; dev->rxstate = STATE_DATA; ... } A length of zero passes this check, so rxlen is set to 0 and the state machine advances to STATE_DATA. In mctp_serial_push() STATE_DATA, the incoming byte is stored and rxpos incremented before the terminator is dev->rxbuf[dev->rxpos] = c; dev->rxpos++; dev->rxstate = STATE_DATA; if (dev->rxpos == dev->rxlen) { dev->rxpos = 0; dev->rxstate = STATE_TRAILER; } With rxlen == 0 the \"rxpos == rxlen\" terminator can never fire (rxpos is already 1 on the first data byte), so subsequent bytes are written past the end of the fixed 74-byte rxbuf, which is the last member of the netdev private area. Every following data byte is an attacker-controlled 1-byte out-of-bounds heap write, and the overflow continues until a frame (0x7e) or escape byte resets the parser -- effectively unbounded. Reaching this requires CAP_NET_ADMIN to attach the N_MCTP line discipline and bring the resulting mctpserialN netdev up, after which the bytes arrive via the tty receive path. Route a zero-length frame straight to STATE_TRAILER instead of STATE_DATA. The trailer/framing bytes are still consumed, and the frame resolves to a zero-length skb that the MCTP core rejects; the parser never enters STATE_DATA with rxlen == 0, so the out-of-bounds write can no longer occur. KASAN, on a frame of 0x7e 0x01 0x00 followed by data bytes (before this change): UBSAN: array-index-out-of-bounds in drivers/net/mctp/mctp-serial.c:370 index 74 is out of range for type 'u8 [74]' BUG: KASAN: slab-out-of-bounds in mctp_serial_tty_receive_buf Write of size 1 at addr ... by task kworker/u16:0 mctp_serial_tty_receive_buf tty_ldisc_receive_buf flush_to_ldisc Allocated by task 152: alloc_netdev_mqs mctp_serial_open v2: route zero-length frames to STATE_TRAILER instead of STATE_ERR so the trailer/framing bytes are still consumed (Jeremy Kerr). Found by 0sec automated security-research tooling (https://0sec.ai).",
       "published": "2026-08-10T13:19:57.550Z",
@@ -10820,6 +10864,50 @@
       "priorityScore": 4.13,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-72607",
+      "summary": "A stored SQL injection vulnerability in Koha through 24.11.17, 25.05.12, 25.11.06, and 26.05.01 allows authenticated staff with the tools => items_batchmod permission to read arbitrary database contents by storing a SQL payload in the agefield value of an automatic item modification rule. The agefield value is stored verbatim to the system preference and later interpolated without parameterization into a SQL query in C4::Items::ToggleNewStatus (line 1228) when the scheduled cron job executes. The injection is SELECT-only under standard MariaDB/MySQL DBI single-statement execution; a time-based SLEEP payload is also achievable via the cron trigger. An attacker can read the entire Koha database including patron PII and staff bcrypt password hashes.",
+      "published": "2026-08-11T12:17:43.867Z",
+      "lastModified": "2026-08-28T18:51:07.660Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "Low"
+      },
+      "epssScore": 0.00266,
+      "epssPercentile": 0.18313,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.13,
+      "tags": [
+        "CWE-89"
       ]
     },
     {
@@ -13514,6 +13602,50 @@
       "priorityScore": 3.74,
       "tags": [
         "CWE-287"
+      ]
+    },
+    {
+      "id": "CVE-2026-72608",
+      "summary": "A stored SQL injection vulnerability in Koha through 24.11.17, 25.05.12, 25.11.06, and 26.05.01 allows authenticated staff with the tools => label_creator permission to execute arbitrary SQL via the image_name field of a patron card layout. The image_name value is stored verbatim in the layout XML and later concatenated raw into a SQL query in patroncards/create-pdf.pl when a patron card batch is printed. An attacker can read the entire Koha database including patron PII and staff bcrypt password hashes via error-based or time-based blind injection.",
+      "published": "2026-08-11T12:17:43.987Z",
+      "lastModified": "2026-08-28T18:51:07.660Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00224,
+      "epssPercentile": 0.1291,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-89",
+          "name": "SQL Injection",
+          "description": "Improper neutralization of special elements used in SQL commands."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.73,
+      "tags": [
+        "CWE-89"
       ]
     },
     {
@@ -20889,51 +21021,6 @@
       "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 2.86,
-      "tags": [
-        "WordPress",
-        "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-18988",
-      "summary": "The Easy Accordion plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'accordionTitleTag' block attribute in versions up to, and including, 3.1.8. This is due to insufficient input sanitization and output escaping in the accordion_header_renderer() function, which emits the attacker-supplied tag name using esc_attr() in an HTML tag-name context instead of tag_escape(). This makes it possible for authenticated attackers, with contributor-level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
-      "published": "2026-08-08T05:17:06.790Z",
-      "lastModified": "2026-08-12T21:00:52.257Z",
-      "severity": "Medium",
-      "cvssScore": 6.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00258,
-      "epssPercentile": 0.17372,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.85,
       "tags": [
         "WordPress",
         "CWE-79"
@@ -28678,50 +28765,6 @@
       ]
     },
     {
-      "id": "CVE-2026-8798",
-      "summary": "In Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 2.1.3, the native entropy source used on Intel platforms retried the CPU entropy instructions without any bound. RDSEED and RDRAND report failure through their carry flag, and the JNI seeding routine spun re-issuing the instruction for as long as that flag stayed clear, so a persistent failure of the on-chip entropy source - whether from a hardware fault, from the underlying DRBG being exhausted by contention across many cores, or from a hypervisor that does not provide the instruction - left the calling thread looping indefinitely inside the JNI call, where it could be neither interrupted nor timed out. Any operation drawing from the native entropy source could therefore hang, denying service to the application. The retry loops are now bounded (200 attempts for RDSEED and 20 for RDRAND, twice the baselines given in Intel's Digital Random Number Generator software implementation guide), pausing between attempts and, on exhaustion, clearing any partially written buffer and throwing rather than continuing to spin. The clear is performed by an un-elidable memzero, which uses a volatile pointer and an assembly memory barrier so that a compiler cannot optimise the erase away as a dead store. Bouncy Castle for Java (bcprov) is not affected, as it has no native entropy source; the 1.0.X and 2.0.X FIPS series are not affected.",
-      "published": "2026-08-08T01:16:31.393Z",
-      "lastModified": "2026-09-03T16:44:20.217Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00329,
-      "epssPercentile": 0.25649,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-835",
-          "name": "CWE-835",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.9,
-      "tags": [
-        "CWE-835"
-      ]
-    },
-    {
       "id": "CVE-2026-19373",
       "summary": "A weakness has been identified in PhialsBasement KoboldCPP-MCP-Server 1.0.0. Affected by this issue is the function makeRequest of the file src/index.ts of the component BaseConfigSchema. Executing a manipulation of the argument apiUrl can lead to server-side request forgery. It is possible to launch the attack on the local host. The project was informed of the problem early through an issue report but has not responded yet.",
       "published": "2026-08-09T23:16:36.280Z",
@@ -33198,50 +33241,6 @@
       "priorityScore": 0.59,
       "tags": [
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-13505",
-      "summary": "In Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 1.0.2.7 (1.0.X series), 2.0.2 (2.0.X series) and 2.1.3 (2.1.X series), sensitive key material held by the AES and DESede engines, the SP 800-90A DRBGs, SymmetricSecretKey and the PBKD and scrypt parameter classes was zeroised on garbage collection by overriding Object.finalize. Finalization runs at an unspecified time and in an unspecified order and is serviced by a single finalizer thread, so where objects carrying a finalizer are allocated faster than that thread retires them the pending-finalization queue grows without bound: disposal falls arbitrarily far behind, which can contribute to an OutOfMemoryError under load, and the key material those objects hold stays resident in the heap for as long as they are queued, defeating the purpose of the zeroisation. The behaviour was not a problem on Java 8 or Java 11; it is later JVMs, on which finalization has been deprecated and progressively de-emphasised, where it becomes one. Disposal of these classes now runs from a java.lang.ref.Cleaner registered in the multi-release jdk1.9 overlay, so on Java 9 and later it no longer depends on the finalizer being scheduled. Bouncy Castle for Java (bcprov) and Bouncy Castle for Java LTS are not affected, as neither implements the finalizer-based zeroisation scheme.",
-      "published": "2026-08-08T02:17:16.520Z",
-      "lastModified": "2026-09-03T16:44:20.217Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00253,
-      "epssPercentile": 0.16664,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-772",
-          "name": "CWE-772",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.58,
-      "tags": [
-        "CWE-772"
       ]
     },
     {
