@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-12T00:06:35.069Z",
+  "generatedAt": "2026-09-12T04:38:11.256Z",
   "count": 1000,
   "items": [
     {
@@ -593,68 +593,6 @@
       "priorityScore": 6.38,
       "tags": [
         "CWE-306"
-      ]
-    },
-    {
-      "id": "CVE-2026-49819",
-      "summary": "UpSnap is a wake on lan web app. Versions 4.4.1 through 5.3.5 are vulnerable to a missing-authentication / privilege-escalation chain in `pb.HandlerInitSuperuser` (`backend/pb/handlers.go:249`), reachable as `POST /api/upsnap/init-superuser`. The vulnerable code lacks any authentication, setup token, IP allow-list, or rate limit and is gated only by a `totalSuperusers > 0` count check — a condition that is false on every fresh install — allowing an unauthenticated network-adjacent attacker to register the initial superuser account, receive a long-lived JWT, and pivot to root remote code execution at `backend/networking/wake.go:43` (`exec.CommandContext(ctx, \"/bin/sh\", \"-c\", wake_cmd)`). Version 5.4.0 fixes the issue.",
-      "published": "2026-08-13T00:17:32.747Z",
-      "lastModified": "2026-09-09T21:02:22.660Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00792,
-      "epssPercentile": 0.54209,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        },
-        {
-          "id": "CWE-269",
-          "name": "Improper Privilege Management",
-          "description": "Privileges are assigned, modified, or checked incorrectly."
-        },
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 6.33,
-      "tags": [
-        "CWE-78",
-        "CWE-269",
-        "CWE-306",
-        "CWE-862"
       ]
     },
     {
@@ -1501,50 +1439,6 @@
       "tags": [
         "WordPress",
         "CWE-287"
-      ]
-    },
-    {
-      "id": "CVE-2026-16770",
-      "summary": "PDF::WebKit versions through 1.2 for Perl allow argument injection into wkhtmltopdf via meta tags in the source document. For an HTML string or file source, the constructor collects every element in the document head through _pdf_webkit_meta_tags and turns each one into a wkhtmltopdf command line option. KEY is normalized to an option name matching --[a-z0-9-]+ but is not checked against an allow list, VALUE is passed through unchanged as the argument that follows it, and a VALUE of \"yes\" emits the option as a bare flag. BUILD merges the meta derived options last, so they also override the module defaults and the options passed to new. Switches such as --enable-local-file-access and --cookie-jar are reachable this way. The renderer is executed with an argument list rather than a shell command, so this is argument injection and not shell injection. Any caller that renders untrusted HTML lets the document choose the renderer's options and override those set by the application, including options that read local files into the resulting PDF or write to a chosen path. A URL source is not scanned, and the scan is skipped when XML::LibXML, a recommended dependency, is not installed.",
-      "published": "2026-08-13T00:17:31.763Z",
-      "lastModified": "2026-08-26T16:51:19.490Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00431,
-      "epssPercentile": 0.36391,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-88",
-          "name": "CWE-88",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.7,
-      "tags": [
-        "CWE-88"
       ]
     },
     {
@@ -2772,6 +2666,44 @@
       ]
     },
     {
+      "id": "CVE-2026-72130",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nvmet-auth: reject short AUTH_RECEIVE buffers nvmet_execute_auth_receive() trusts the AUTH_RECEIVE allocation length after checking only that it is nonzero and matches the transfer length. In the SUCCESS1 and FAILURE1/default states, that lets a remote NVMe-oF initiator reach the fixed-size DH-HMAC-CHAP response builders with a kmalloc() buffer shorter than the response, so nvmet_auth_success1() and nvmet_auth_failure1() write past the allocation; both only WARN_ON the short length and then format the message anyway. Impact: A remote NVMe-oF initiator with access to an auth-enabled target can trigger a 16-byte heap out-of-bounds write via a one-byte AUTH_RECEIVE allocation length. Compute the minimum response length for the current DH-HMAC-CHAP step in nvmet_auth_receive_data_len() and report a zero data length when the host-supplied allocation length is shorter, so the existing zero-length check in nvmet_execute_auth_receive() rejects the command before any builder runs. The SUCCESS1 minimum is sizeof(struct nvmf_auth_dhchap_success1_data) plus the HMAC hash length, because the response hash is written into the rval[] flexible-array tail, so the minimum is state dependent rather than a flat sizeof. CHALLENGE keeps its existing variable-length guard in nvmet_auth_challenge(). This is reachable only when in-band DH-HMAC-CHAP authentication is configured on the target.",
+      "published": "2026-08-15T06:21:30.453Z",
+      "lastModified": "2026-08-17T06:18:12.680Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00748,
+      "epssPercentile": 0.52789,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.28,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-73666",
       "summary": "OpenChoreo is a developer platform for Kubernetes. Prior to 1.0.4, 1.1.4, and 1.2.1, the OpenChoreo Backstage backend hardcoded backend.auth.dangerouslyDisableDefaultAuthPolicy and auth.providers.guest.dangerouslyAllowOutsideDevelopment to true, exposing /api/* without authentication and allowing unauthenticated catalog reads, scaffolder log reads, and catalog location creation or deletion. This issue is fixed in versions 1.0.4, 1.1.4, and 1.2.1.",
       "published": "2026-08-13T22:17:28.393Z",
@@ -3513,6 +3445,44 @@
       ]
     },
     {
+      "id": "CVE-2026-72129",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nvmet-rdma: handle inline data with a nonzero offset nvmet_rdma_use_inline_sg() maps the host-controlled inline data offset into the per-command inline scatterlist. The bounds check admits any offset with off + len offset = off; sg->length = min_t(int, len, PAGE_SIZE - off); When a port is configured with inline_data_size > PAGE_SIZE (settable up to max(SZ_16K, PAGE_SIZE)), an offset in (PAGE_SIZE, inline_data_size] makes \"PAGE_SIZE - off\" underflow, so sg->length is set to ~4 GiB and the block backend reads far past the first inline page. num_pages(len) also ignores the offset, so an in-bounds offset whose [off, off+len) span crosses a page boundary under-counts the scatterlist. Map the offset properly: split it into a page index and an in-page offset, start the scatterlist at that page, and size the page count from page_off + len. Because the request scatterlist may now start at inline_sg[page_idx] rather than inline_sg[0], generalize the inline-SGL identity test in nvmet_rdma_release_rsp() to a range test; otherwise the persistent inline scatterlist is mistaken for an allocated one and nvmet_req_free_sgls() frees an inline page (and warns in free_large_kmalloc()).",
+      "published": "2026-08-15T06:21:30.320Z",
+      "lastModified": "2026-08-17T06:18:12.533Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00695,
+      "epssPercentile": 0.50924,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.21,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-70455",
       "summary": "rsync 3.4.2 before 3.5.0 contains a denial of service vulnerability that allows a remote sender to exhaust system resources by specifying the --zt short alias for --compress-threads, which bypasses the refuse options directive's string matching on long option names. Attackers can specify --zt=N with a large value to spawn an unbounded number of Zstandard worker threads on the receiver, exhausting available thread and memory resources.",
       "published": "2026-08-13T15:19:59.197Z",
@@ -3756,6 +3726,44 @@
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.17,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-72137",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfrm: nat_keepalive: avoid double free on send error nat_keepalive_send() frees the keepalive skb whenever the IPv4 or IPv6 send helper reports an error. That cleanup is only correct before the skb is handed to the output path. Once ip_build_and_send_pkt() or ip6_xmit() takes ownership, the networking stack may already have consumed the skb before returning an error, so freeing it again is unsafe. Handle the pre-handoff failure cases inside nat_keepalive_send_ipv4() and nat_keepalive_send_ipv6(), where the caller still owns the skb, and keep nat_keepalive_send() responsible only for family dispatch and the unsupported-family cleanup path.",
+      "published": "2026-08-15T06:21:31.223Z",
+      "lastModified": "2026-08-17T06:18:13.583Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00663,
+      "epssPercentile": 0.49657,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
@@ -4316,6 +4324,44 @@
       "tags": [
         "F5",
         "CWE-287"
+      ]
+    },
+    {
+      "id": "CVE-2026-72139",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: tcp: defer md5sig_info kfree past RCU grace period in tcp_connect The md5+ao reconciliation in tcp_connect() (net/ipv4/tcp_output.c) has two symmetric branches: if (needs_md5) { tcp_ao_destroy_sock(sk, false); } else if (needs_ao) { tcp_clear_md5_list(sk); kfree(rcu_replace_pointer(tp->md5sig_info, NULL, ...)); } Both branches free a per-socket auth-info object while the socket is in TCP_SYN_SENT and is already on the inet ehash (inserted by inet_hash_connect() in tcp_v4_connect()). Both branches are reachable by softirq RX-path readers that load the corresponding info pointer via implicit RCU before bh_lock_sock_nested() is taken. The needs_md5 branch is fixed in the prior patch by re-introducing the call_rcu() free in tcp_ao_destroy_sock(): the equivalent per-key loop runs inside tcp_ao_info_free_rcu(), the RCU callback, so by the time it frees each tcp_ao_key all softirq readers that captured the container have already completed rcu_read_unlock(). The needs_ao branch is not symmetric in the same way. The container free can be deferred via kfree_rcu(md5sig, rcu) -- struct tcp_md5sig_info already has the required rcu member (include/net/tcp.h:1999-2002), and the rest of the tree already does this in the tcp_md5sig_info_add() rollback paths (net/ipv4/tcp_ipv4.c:1410, 1436). But the per-key teardown is done by tcp_clear_md5_list() in process context BEFORE the container's RCU grace period: it walks &md5sig->head and frees each tcp_md5sig_key with bare hlist_del + kfree. A concurrent softirq reader in __tcp_md5_do_lookup() / __tcp_md5_do_lookup_exact() (tcp_ipv4.c:1253, 1298) walks the same list via hlist_for_each_entry_rcu() and races with that bare kfree on the keys themselves -- a per-key slab use-after-free of the same class as the TCP-AO bug, on the same race window. Fix this in two halves: 1. Convert the bare kfree() in tcp_connect() to kfree_rcu() so the md5sig_info container joins the rest of the md5sig lifecycle. The local-variable lift is mechanical and required because kfree_rcu() is a macro that expects an lvalue. 2. Make tcp_clear_md5_list() RCU-safe by replacing hlist_del + kfree(key) with hlist_del_rcu + kfree_rcu(key, rcu). struct tcp_md5sig_key already carries the rcu member (include/net/tcp.h:1995) and tcp_md5_do_del() (net/ipv4/tcp_ipv4.c:1456) already uses kfree_rcu, so this restores the lifecycle invariant the rest of the file follows rather than introducing a one-off. The other caller of tcp_clear_md5_list() is tcp_md5_destruct_sock() (net/ipv4/tcp.c:412), which runs from the sock destructor when the socket is already unhashed and unreachable; the extra grace period there is unnecessary but harmless. Making the helper unconditionally RCU-safe is the cleaner contract. The needs_ao branch is not reachable by the userns reproducer used to demonstrate the AO-side splat (the repro installs both keys but ends up in the needs_md5 branch because the connect peer matches the MD5 key, not the AO key); however the symmetric race exists and a maintainer touching this code should not have to think about which branch escapes RCU and which one does not. [also credits to Qihang, who found that this races with tcp-diag]",
+      "published": "2026-08-15T06:21:31.460Z",
+      "lastModified": "2026-08-17T06:18:13.823Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00581,
+      "epssPercentile": 0.45869,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.04,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -5794,56 +5840,6 @@
       ]
     },
     {
-      "id": "CVE-2026-49473",
-      "summary": "@cedar-policy/authorization-for-expressjs is an open-source Express.js middleware that integrates Cedar authorization into Express applications by mapping HTTP requests to Cedar actions and evaluating authorization policies before allowing requests to proceed. Versions prior to 0.3.0 have an issue where, under certain circumstances, the middleware matches incoming requests against Cedar action mappings using req.originalUrl, which includes the query string, while Express routes requests using only the path component. The middleware uses req.originalUrl to match incoming requests against Cedar action mappings. In Express, req.originalUrl includes the query string, while route matching uses only the path. This creates a divergence between what Cedar authorizes and what Express executes. When an application defines separate actions for overlapping path prefixes with different authorization requirements (for example, GET /users for listing all users with admin-only access, and GET /users/{id} for retrieving a single user with any authenticated user access), an actor can append a query string to bypass the more restrictive policy. Sending GET /users/?x=1 causes the middleware to match against /users/{id} (with id parameter set to ?x=1) and evaluate the less restrictive action, while Express routes the request to the /users list handler. This allows inappropriate access to the more restrictive endpoint. This issue has been addressed in version 0.30. Some workarounds are available. Validate and sanitize incoming request paths before they reach the authorization middleware. Ensure that applications do not rely solely on the middleware for authorization when defining multiple actions on overlapping path prefixes with different permission levels.",
-      "published": "2026-08-13T00:17:32.587Z",
-      "lastModified": "2026-09-09T21:02:22.660Z",
-      "severity": "High",
-      "cvssScore": 8.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00276,
-      "epssPercentile": 0.1991,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-436",
-          "name": "CWE-436",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.78,
-      "tags": [
-        "CWE-436",
-        "CWE-863"
-      ]
-    },
-    {
       "id": "CVE-2026-66450",
       "summary": "Unauthenticated Local File Inclusion in Geo Mashup <= 1.13.18 versions.",
       "published": "2026-08-13T14:17:06.147Z",
@@ -6366,56 +6362,6 @@
       "priorityScore": 4.75,
       "tags": [
         "CWE-770"
-      ]
-    },
-    {
-      "id": "CVE-2026-17431",
-      "summary": "PDF::WebKit versions through 1.2 for Perl allow OS command injection via a 2-arg open() of the output path in to_pdf and of stylesheet paths in _style_tag_for. to_pdf reads the generated PDF back from its path argument, and _style_tag_for reads each entry of the stylesheets list, by assigning the path to a local @ARGV and reading it with the diamond operator, which opens each @ARGV element with Perl's 2-arg open(). A value that begins or ends with a pipe (\"| cmd\", \"cmd |\") is run as a command rather than opened as a file, and one that begins with a redirect (\"> path\", \">> path\") opens that path for write or append. to_file forwards its path argument to to_pdf and reaches the same read. Any caller that forwards untrusted input as the output path or as a stylesheets entry can run a command under the process UID; with the \"cmd |\" form the command's output is returned in place of the PDF, and with the \"> path\" form the named file is truncated. Stylesheets may only be added to an HTML source, so a URL or file source exposes the output path alone.",
-      "published": "2026-08-13T00:17:31.917Z",
-      "lastModified": "2026-08-26T16:51:19.490Z",
-      "severity": "Medium",
-      "cvssScore": 6.1,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:L/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00583,
-      "epssPercentile": 0.45983,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-73",
-          "name": "CWE-73",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-78",
-          "name": "OS Command Injection",
-          "description": "Improper neutralization of special elements used in OS commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.74,
-      "tags": [
-        "CWE-73",
-        "CWE-78"
       ]
     },
     {
@@ -8338,51 +8284,6 @@
       "priorityScore": 4.48,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-0301",
-      "summary": "An information disclosure vulnerability in the URL Filtering feature of Palo Alto Networks PAN-OS® software enables an unauthenticated user with network access to obtain sensitive information. Panorama is not impacted by this vulnerability.",
-      "published": "2026-08-13T03:16:46.097Z",
-      "lastModified": "2026-08-28T14:49:09.613Z",
-      "severity": "High",
-      "cvssScore": 7.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00316,
-      "epssPercentile": 0.24232,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Palo Alto Networks",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-908",
-          "name": "CWE-908",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.47,
-      "tags": [
-        "Palo Alto Networks",
-        "CWE-908"
       ]
     },
     {
@@ -11417,6 +11318,44 @@
       ]
     },
     {
+      "id": "CVE-2026-72141",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: i2c: imx: fix locked bus on SMBus block-read of 0 (IRQ) SMBus 3.1 6.5.7 allows a Block Read byte count of 0, but the interrupt-driven block-read state machine rejects it as -EPROTO. Worse, it returns without a NACK+STOP: the next receive cycle has already started, so the target keeps holding SDA and the bus stays stuck until a power cycle of this i2c controller. Accept count=0: NACK the in-flight dummy byte (TXAK) and set msg->len to 2 so i2c_imx_isr_read_continue() emits STOP via its normal last-byte path. The dummy byte is discarded; block-read callers only consume buf[0..count-1]. Reading I2DR has likewise already armed the next byte on the count > I2C_SMBUS_BLOCK_MAX error path, so NACK it (TXAK) before aborting with -EPROTO; otherwise the failing transfer's STOP cannot complete and the bus stays held. The atomic path regressed earlier (v3.16) and is fixed separately; this patch covers only the v6.13 state-machine rework.",
+      "published": "2026-08-15T06:21:31.717Z",
+      "lastModified": "2026-08-17T06:18:14.070Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00576,
+      "epssPercentile": 0.45624,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.22,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-53803",
       "summary": "rsync before 3.5.0 contains a symlink following vulnerability that allows local attackers to overwrite arbitrary files by placing a symlink at a predictable output path such as --log-file, --write-batch, or daemon-mode log and statistics paths. Attackers can exploit rsync's failure to reject symlinks during ancillary file writes to redirect output to arbitrary filesystem locations, achieving local privilege escalation on installations where rsync runs with elevated privileges such as setuid or privileged daemon configurations.",
       "published": "2026-08-13T15:19:53.020Z",
@@ -12943,58 +12882,6 @@
       "tags": [
         "OpenSSL",
         "CWE-295"
-      ]
-    },
-    {
-      "id": "CVE-2026-0299",
-      "summary": "Local privilege escalation vulnerabilities in the Palo Alto Networks GlobalProtect™ app enable a local user to escalate their privileges to NT AUTHORITY\\SYSTEM on Windows, and root on macOS and Linux. This enables a non-administrative user to execute arbitrary commands with administrative privileges. The GlobalProtect app on iOS, Android, and Chrome OS is not affected.",
-      "published": "2026-08-13T03:16:45.793Z",
-      "lastModified": "2026-09-03T17:39:50.557Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00203,
-      "epssPercentile": 0.10308,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Palo Alto Networks",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-426",
-          "name": "CWE-426",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.09,
-      "tags": [
-        "Palo Alto Networks",
-        "F5",
-        "Linux",
-        "Chrome",
-        "Android",
-        "Windows",
-        "iOS",
-        "GlobalProtect",
-        "CWE-426"
       ]
     },
     {
@@ -15042,6 +14929,44 @@
       ]
     },
     {
+      "id": "CVE-2026-72144",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: platform/x86: dell-laptop: fix missing cleanups in init error path dell_init() initializes several resources after dell_setup_rfkill(), including the optional touchpad LED, keyboard backlight LED, battery hook, debugfs directory and dell-laptop notifier. If a later LED or backlight registration fails, the error path only tears down the battery hook and rfkill resources. This leaves the notifier, debugfs directory, keyboard backlight LED and optional touchpad LED registered after dell_init() returns an error. Add the missing cleanup calls before tearing down rfkill.",
+      "published": "2026-08-15T06:21:32.067Z",
+      "lastModified": "2026-08-17T06:18:14.447Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00163,
+      "epssPercentile": 0.05846,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.93,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-19910",
       "summary": "PAX Technology Q80 Application Installer Signature Verification Bypass Remote Code Execution Vulnerability. This vulnerability allows network-adjacent attackers to execute arbitrary code on affected installations of PAX Technology Q80. Authentication is not required to exploit this vulnerability. The specific flaw exists within the application installer. The issue results from the lack of proper verification of a cryptographic signature before installing an application. An attacker can leverage this in conjunction with other vulnerabilities to execute code in the context of root. Was ZDI-CAN-30585.",
       "published": "2026-08-14T20:16:52.550Z",
@@ -16812,58 +16737,6 @@
       ]
     },
     {
-      "id": "CVE-2026-0294",
-      "summary": "A privilege escalation (PE) vulnerability in the Palo Alto Networks Prisma® Access Agent app on Windows and macOS devices enables a local user to execute code with elevated privileges. The Prisma Access Agent on Linux, iOS, Android, and ChromeOS is not affected.",
-      "published": "2026-08-13T03:16:44.323Z",
-      "lastModified": "2026-09-09T16:32:33.997Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00115,
-      "epssPercentile": 0.01709,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Microsoft",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-427",
-          "name": "CWE-427",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.79,
-      "tags": [
-        "Microsoft",
-        "Apple",
-        "Palo Alto Networks",
-        "Linux",
-        "Chrome",
-        "Android",
-        "Windows",
-        "iOS",
-        "CWE-427"
-      ]
-    },
-    {
       "id": "CVE-2026-73603",
       "summary": "Flowise before 3.1.4 fails to validate chatflow visibility in the unauthenticated text-to-speech endpoint, allowing attackers to abuse private chatflow TTS credentials. Unauthenticated attackers can generate unlimited text-to-speech audio using stored OpenAI or ElevenLabs API keys by providing a valid chatflow UUID, incurring costs on the chatflow owner's account.",
       "published": "2026-08-13T12:17:24.617Z",
@@ -17522,58 +17395,6 @@
       "priorityScore": 3.77,
       "tags": [
         "CWE-787"
-      ]
-    },
-    {
-      "id": "CVE-2026-0298",
-      "summary": "An improper input validation vulnerability exists in the Windows Pre-Logon Access Provider (PLAP) component of the Palo Alto Networks GlobalProtect™ app on Windows devices which enables a man-in-the-middle (MitM) attacker to execute arbitrary code with SYSTEM privileges on an affected client. The GlobalProtect app on Linux, macOS, iOS, Android, and Chrome OS is not affected.",
-      "published": "2026-08-13T03:16:45.560Z",
-      "lastModified": "2026-09-10T17:01:09.003Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00333,
-      "epssPercentile": 0.26309,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Palo Alto Networks",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": true,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.76,
-      "tags": [
-        "Palo Alto Networks",
-        "F5",
-        "Linux",
-        "Chrome",
-        "Android",
-        "Windows",
-        "iOS",
-        "GlobalProtect",
-        "CWE-94"
       ]
     },
     {
@@ -18922,58 +18743,6 @@
       ]
     },
     {
-      "id": "CVE-2026-0296",
-      "summary": "Improper certificate validation vulnerabilities in Palo Alto Networks GlobalProtect™ app enable an unauthenticated attacker with man-in-the-middle (MitM) access to intercept and modify application communications. VPN tunnel traffic is not impacted. The GlobalProtect app on iOS, Android, and Chrome OS is not affected.",
-      "published": "2026-08-13T03:16:44.703Z",
-      "lastModified": "2026-09-10T17:09:30.590Z",
-      "severity": "High",
-      "cvssScore": 7.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00138,
-      "epssPercentile": 0.03545,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Palo Alto Networks",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-295",
-          "name": "CWE-295",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": true,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.71,
-      "tags": [
-        "Palo Alto Networks",
-        "F5",
-        "Linux",
-        "Chrome",
-        "Android",
-        "Windows",
-        "iOS",
-        "GlobalProtect",
-        "CWE-295"
-      ]
-    },
-    {
       "id": "CVE-2026-73847",
       "summary": "Emlog is an open source website building system. In 2.6.26 and earlier, missing CSRF protection on the AI Assistant execute_tool action in admin/ai.php lets a remote unauthenticated attacker submit a forged cross-site request from an attacker-controlled page to a recently logged-in administrator. The authentication cookie set in include/lib/loginauth.php has no explicit SameSite attribute, enabling Chrome's temporary Lax+POST grace window. The query_database case passes attacker-controlled sql and confirm_code values to Ai::queryDatabase in include/service/ai.php; read queries need no confirmation, write queries accept the public confirm string, only the blog table is write-protected, and aliasing password as pwd_hash bypasses output redaction. A successful request can read every database table and write every table except blog, including changing the user table to take over an administrator account. No fixed version is available as of this review.",
       "published": "2026-08-14T18:19:09.843Z",
@@ -19437,57 +19206,6 @@
       "priorityScore": 3.67,
       "tags": [
         "CWE-190"
-      ]
-    },
-    {
-      "id": "CVE-2026-0297",
-      "summary": "A buffer overflow vulnerability exists in the Palo Alto Networks GlobalProtect™ app that enables a man-in-the-middle (MitM) attacker or a rogue gateway to disrupt system processes and potentially execute arbitrary code with elevated privileges (SYSTEM privileges on Windows, and root privileges on macOS and Linux).",
-      "published": "2026-08-13T03:16:45.077Z",
-      "lastModified": "2026-09-10T17:07:52.880Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0031,
-      "epssPercentile": 0.23548,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Palo Alto Networks",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-787",
-          "name": "Out-of-bounds Write",
-          "description": "Writes data past the intended buffer boundary."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": true,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.66,
-      "tags": [
-        "Palo Alto Networks",
-        "F5",
-        "Linux",
-        "Chrome",
-        "Android",
-        "Windows",
-        "GlobalProtect",
-        "CWE-787"
       ]
     },
     {
@@ -23425,6 +23143,44 @@
       ]
     },
     {
+      "id": "CVE-2026-72136",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfrm: xfrm_interface: require CAP_NET_ADMIN in the device netns for changelink xfrmi_changelink() operates on at most two netns, dev_net(dev) and the interface link netns xi->net. They differ once the device is created in or moved to a netns other than the one the request runs in. The rtnl changelink path checks CAP_NET_ADMIN only against dev_net(dev), so a caller privileged there but not in xi->net can rewrite an interface that lives in xi->net. Gate xfrmi_changelink() on rtnl_dev_link_net_capable() at its top, before any attribute is parsed.",
+      "published": "2026-08-15T06:21:31.103Z",
+      "lastModified": "2026-08-17T06:18:13.443Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00169,
+      "epssPercentile": 0.06439,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.31,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-27535",
       "summary": "Subscriber Broken Access Control in Solace Extra <= 1.6.0 versions.",
       "published": "2026-08-13T14:16:56.120Z",
@@ -24214,6 +23970,44 @@
       ]
     },
     {
+      "id": "CVE-2026-72133",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: spi: uniphier: Fix completion initialization order before devm_request_irq() The driver calls devm_request_irq() before initializing the completion used by the interrupt handler. Because the interrupt may occur immediately after devm_request_irq(), the handler may execute before init_completion(). This may result in calling complete() on an uninitialized completion, causing undefined behavior. This has been observed with KASAN. Fix this by initializing the completion before registering the IRQ.",
+      "published": "2026-08-15T06:21:30.760Z",
+      "lastModified": "2026-08-17T06:18:13.007Z",
+      "severity": "High",
+      "cvssScore": 8.4,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00182,
+      "epssPercentile": 0.07908,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.22,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-72823",
       "summary": "The Grav API plugin (getgrav/grav-plugin-api) before 1.0.13 contains an API-key scope cap bypass in DemoController. Its private requireSuper() method checks isSuperAdmin() and returns early before invoking requirePermission(), so the api_key_scopes cap (enforced only in requirePermission()) is skipped. As a result, any scoped API key minted on a super account can bypass its scope restrictions when calling the baseline() and reset() operations (e.g. POST /api/v1/demo/reset), allowing it to capture the demo baseline or force a demo reset. Impact is bounded to demo-engine control and is conditional on demo mode being configured with writable resources.",
       "published": "2026-08-14T12:16:45.397Z",
@@ -24299,57 +24093,6 @@
       "priorityScore": 3.21,
       "tags": [
         "CWE-269"
-      ]
-    },
-    {
-      "id": "CVE-2026-0292",
-      "summary": "An authentication bypass vulnerability in the network driver of Palo Alto Networks Prisma® Access Agent on Windows enables a local administrator to bypass security inspection, subsequently allowing them to inject and intercept arbitrary network traffic. The Prisma Access Agent on Linux, macOS, iOS, Android, and Chrome OS is not affected.",
-      "published": "2026-08-13T03:16:43.983Z",
-      "lastModified": "2026-09-09T16:31:10.667Z",
-      "severity": "Medium",
-      "cvssScore": 6,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.0013,
-      "epssPercentile": 0.02946,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Microsoft",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-290",
-          "name": "CWE-290",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.2,
-      "tags": [
-        "Microsoft",
-        "Palo Alto Networks",
-        "Linux",
-        "Chrome",
-        "Android",
-        "Windows",
-        "iOS",
-        "CWE-290"
       ]
     },
     {
@@ -27739,6 +27482,44 @@
       ]
     },
     {
+      "id": "CVE-2026-72135",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: tpm: Make the TPM character devices non-seekable The TPM character devices expose a sequential command/response interface, but their open handlers leave FMODE_PREAD and FMODE_PWRITE enabled. After a command leaves a response pending, pread(fd, buf, 16, 0x1400) passes 0x1400 as *off to tpm_common_read(). The transfer length is bounded by response_length, but the offset is used unchecked when forming data_buffer + *off. A sufficiently large offset therefore causes an out-of-bounds heap read through copy_to_user() and, if the copy succeeds, an out-of-bounds zero-write through the following memset(). Positional I/O does not provide coherent semantics for this interface. An arbitrary pread offset cannot represent how much of a response has been consumed sequentially. The write callback always stores a command at the start of data_buffer, while pwrite() does not update file->f_pos and can leave the sequential read cursor stale. Call nonseekable_open() from both open handlers. This removes FMODE_PREAD and FMODE_PWRITE, causing positional reads and writes to fail with -ESPIPE before reaching the TPM callbacks, and explicitly marks the files non-seekable. Normal read() and write() continue to use the existing sequential f_pos cursor, leaving the response state machine unchanged. Tested on Linux 6.12 with KASAN and a swtpm TPM2 device: - sequential partial reads returned the complete response - pread() and preadv() with offset 0x1400 returned -ESPIPE - pwrite() and pwritev() with offset zero returned -ESPIPE - the pending response remained intact after the rejected operations - a subsequent normal command/response cycle completed normally - no KASAN report was produced.",
+      "published": "2026-08-15T06:21:30.973Z",
+      "lastModified": "2026-08-17T06:18:13.280Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00169,
+      "epssPercentile": 0.06438,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.96,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-28173",
       "summary": "Customer Arbitrary Content Deletion in WP Event SOlution <= 4.1.19 versions.",
       "published": "2026-08-13T14:16:59.277Z",
@@ -28427,6 +28208,44 @@
       ]
     },
     {
+      "id": "CVE-2026-72125",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: can: isotp: fix use-after-free race with concurrent NETDEV_UNREGISTER isotp_release() looked up the bound network device via dev_get_by_index() using the stored ifindex. During device unregistration the device is unlisted from the ifindex hash before the NETDEV_UNREGISTER notifier chain runs, so a concurrent isotp_release() could find no device, skip can_rx_unregister() entirely, and still proceed to free the socket. Since isotp_release() had already removed itself from the isotp notifier list at that point, isotp_notify() would never get a chance to clean up either, leaving a stale CAN filter that keeps pointing at the freed socket. Fix this the same way raw.c already does: hold a tracked reference to the bound net_device in the socket (so->dev/so->dev_tracker) from bind() onward instead of re-resolving it from the ifindex, and serialize bind()/release() with rtnl_lock() so that so->dev is always consistent with what the NETDEV_UNREGISTER notifier sees. so->dev stays valid regardless of ifindex-hash unlisting, and is only ever cleared by whichever of isotp_release()/isotp_notify() gets there first, so the filter is always removed exactly once. isotp_bind() now rejects a (re)bind with -EAGAIN while so->[tx|rx].state isn't ISOTP_IDLE yet, so a timer left running by a prior NETDEV_UNREGISTER can't act on a newly bound so->ifindex. Both checks share the same lock_sock() section, so there is no window in which a concurrent isotp_notify() clearing so->bound could be missed.",
+      "published": "2026-08-15T06:21:29.840Z",
+      "lastModified": "2026-08-19T17:21:00.010Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00164,
+      "epssPercentile": 0.05891,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.94,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-72034",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: fhandle: reject detached mounts in capable_wrt_mount() The recent fhandle RCU fix moved the mount namespace capability check into capable_wrt_mount(), so a non-NULL mnt_namespace survives the ns_capable() dereference. The helper still assumes the later READ_ONCE(mount->mnt_ns) must be non-NULL because may_decode_fh() checked is_mounted() first. That assumption is not stable. A detached mount from open_tree(..., OPEN_TREE_CLONE) can be dissolved on fput while open_by_handle_at() is between those checks, and umount_tree() can clear mount->mnt_ns. If the helper observes NULL, it dereferences mnt_ns->user_ns and panics. Return false when the RCU read observes a detached mount. This keeps the relaxed permission path conservative: a mount no longer attached to a namespace cannot authorize open_by_handle_at() access.",
       "published": "2026-08-15T06:21:12.383Z",
@@ -28630,6 +28449,44 @@
       ]
     },
     {
+      "id": "CVE-2026-72126",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: can: isotp: use unconditional synchronize_rcu() in isotp_release() isotp_notify() unregisters the (RCU) CAN filters via can_rx_unregister() and clears so->bound without waiting for a grace period. isotp_release() uses so->bound to decide whether it needs to call synchronize_rcu() before cancelling so->rxtimer, so when NETDEV_UNREGISTER runs first it skips that synchronize_rcu() and can cancel the timer while an in-flight isotp_rcv() is still executing and about to re-arm it via isotp_send_fc(), leading to a use-after-free timer callback on the freed socket. sakisho-bot remarked a problem with rtnl_lock held in isotp_notify(), therefore make isotp_release() always call synchronize_rcu() before cancelling the timers, regardless of so->bound. This still closes the original race (isotp_notify() clearing so->bound without waiting for in-flight isotp_rcv() callers before isotp_release() cancels the RX timer) without adding any RCU wait to the netdevice notifier path.",
+      "published": "2026-08-15T06:21:29.963Z",
+      "lastModified": "2026-08-17T06:18:12.213Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00159,
+      "epssPercentile": 0.05413,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.92,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-55400",
       "summary": "CVE-2026-55400 is an integer underflow in Secure Access servers prior to version 14.57. Attackers with an authenticated session can send specially crafted traffic to a server in a non-default configuration and cause a persistent denial of service.",
       "published": "2026-08-13T16:18:07.720Z",
@@ -28778,6 +28635,44 @@
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.9,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-72134",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: spi: imx: reconfigure for PIO when DMA cannot be started When spi_imx_can_dma() selects DMA, the ECSPI is configured for DMA: spi_imx_setupxfer() sets CTRL.SMC and clears dynamic_burst, and spi_imx_dma_transfer() programs the dynamic-burst BURST_LENGTH and the SDMA watermarks. If the DMA descriptor cannot be prepared (dmaengine_prep_slave_single() returns NULL), the transfer is failed with SPI_TRANS_FAIL_NO_START and falls back to PIO. The dynamic-burst DMA path uses its own bounce buffers instead of the SPI core's mapping, so xfer->{tx,rx}_sg_mapped are not set and the core's DMA->PIO retry is skipped; the driver falls back to PIO internally. But none of the DMA-mode configuration is undone, so the PIO transfer runs with CTRL.SMC set, the wrong burst length and dynamic_burst cleared, and the transferred data is corrupted. This is easily hit on i.MX8MP boards that describe ECSPI DMA in the device tree but run SDMA on ROM firmware (no external sdma-imx7d.bin): every ECSPI DMA prepare fails. An Infineon SLB9670 TPM on ECSPI1 then returns shifted TPM2_GetCapability data, is flagged \"field failure mode\", /dev/tpmrm0 is never created. Set controller->fallback before re-running spi_imx_setupxfer() so the ECSPI is reconfigured exactly like a normal PIO transfer. With controller->fallback set, spi_imx_setupxfer() sees spi_imx_can_dma() return false, so it clears spi_imx->usedma and reprograms the controller (clears CTRL.SMC, restores dynamic_burst and the PIO burst length). No explicit spi_imx->usedma = false is needed: setupxfer() already updates it from the can_dma() result.",
+      "published": "2026-08-15T06:21:30.880Z",
+      "lastModified": "2026-08-17T06:18:13.150Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00154,
+      "epssPercentile": 0.04829,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
       "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
@@ -30490,51 +30385,6 @@
       ]
     },
     {
-      "id": "CVE-2026-0289",
-      "summary": "A security bypass vulnerability in the Account Protection feature of Palo Alto Networks Prisma® Browser enables a user to bypass intended security controls.",
-      "published": "2026-08-13T03:16:43.107Z",
-      "lastModified": "2026-09-09T16:15:04.617Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00225,
-      "epssPercentile": 0.13149,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Palo Alto Networks",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-522",
-          "name": "CWE-522",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.74,
-      "tags": [
-        "Palo Alto Networks",
-        "CWE-522"
-      ]
-    },
-    {
       "id": "CVE-2026-58420",
       "summary": "Local File Inclusion via file:// URI in Migration Restore",
       "published": "2026-08-13T17:17:26.513Z",
@@ -31194,6 +31044,44 @@
       ]
     },
     {
+      "id": "CVE-2026-72143",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: platform/x86: ISST: Restore SST-PP control to all domains The SST-PP control offset is only restored to power domain 0 after resume. During suspend, control values are read and stored for all power domains. Use pd_info->sst_base instead of power_domain_info->sst_base, which only points to power domain 0 base address.",
+      "published": "2026-08-15T06:21:31.953Z",
+      "lastModified": "2026-08-17T06:18:14.327Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00157,
+      "epssPercentile": 0.05223,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.67,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-56657",
       "summary": "Gitea SSH Key Parser Denial of Service",
       "published": "2026-08-13T17:17:25.470Z",
@@ -31828,51 +31716,6 @@
       "tags": [
         "F5",
         "CWE-59"
-      ]
-    },
-    {
-      "id": "CVE-2026-18728",
-      "summary": "A flaw was found in open-iscsi. An integer underflow vulnerability in the `iscsiuio` component, specifically during IPv4 Dynamic Host Configuration Protocol (DHCP) parsing, allows a remote attacker on the same local network segment to cause a denial of service. By sending a specially crafted IPv4/UDP DHCP reply, the attacker can trigger an out-of-bounds read, leading to the `iscsiuio` process crashing. This issue affects systems where `iscsiuio` is actively handling IPv4 DHCP traffic.",
-      "published": "2026-08-13T04:17:19.340Z",
-      "lastModified": "2026-08-25T15:04:06.220Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.0019,
-      "epssPercentile": 0.0873,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Linux",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-191",
-          "name": "CWE-191",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.58,
-      "tags": [
-        "Linux",
-        "CWE-191"
       ]
     },
     {
@@ -32860,58 +32703,6 @@
       "tags": [
         "CWE-285",
         "CWE-639"
-      ]
-    },
-    {
-      "id": "CVE-2026-0295",
-      "summary": "A race condition in the Palo Alto Networks GlobalProtect™ client on macOS enables a locally authenticated low-privileged attacker to escalate their privileges to root. The GlobalProtect app on Linux, Windows, iOS, Android, and Chrome OS is not affected.",
-      "published": "2026-08-13T03:16:44.493Z",
-      "lastModified": "2026-09-10T17:12:10.887Z",
-      "severity": "High",
-      "cvssScore": 7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00075,
-      "epssPercentile": 0.00091,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Palo Alto Networks",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-362",
-          "name": "CWE-362",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": true,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.45,
-      "tags": [
-        "Palo Alto Networks",
-        "F5",
-        "Linux",
-        "Chrome",
-        "Android",
-        "Windows",
-        "iOS",
-        "GlobalProtect",
-        "CWE-362"
       ]
     },
     {
@@ -34918,57 +34709,6 @@
       ]
     },
     {
-      "id": "CVE-2026-50544",
-      "summary": "NortheBridge/luminalshine is a Sunshine-compatible game stream host for Moonlight. Prior to version 26.05.0-rc4, a latent gap exists on a default install, the file at `src/platform/windows/misc.cpp` lives at `C:\\ProgramData\\LuminalShine\\config\\apps.json` and is created by the `SYSTEM` service. Under Windows' default `C:\\ProgramData` inheritance, that gives `BUILTIN\\Users` only Read+Execute — not writable — so the canonical EoP doesn't actually trigger on a vanilla install. Version 26.05.0-rc4 contains a patch for the issue. As a workaround, use default condition DACLs for `ProgramData`.",
-      "published": "2026-08-13T00:17:32.930Z",
-      "lastModified": "2026-09-09T21:02:22.660Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "High",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00089,
-      "epssPercentile": 0.0047,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-379",
-          "name": "CWE-379",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-732",
-          "name": "CWE-732",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.22,
-      "tags": [
-        "Windows",
-        "CWE-379",
-        "CWE-732"
-      ]
-    },
-    {
       "id": "CVE-2026-73584",
       "summary": "A flaw was found in sblim-sfcb. A local, low-privileged attacker can exploit a race condition during privileged instance migration by manipulating a temporary file in the `/tmp` directory. By repeatedly recreating a symbolic link, the attacker can redirect privileged output to an arbitrary file. This can lead to privileged file corruption or a denial of service (DoS) on the system.",
       "published": "2026-08-13T13:19:18.673Z",
@@ -35239,57 +34979,6 @@
         "iOS",
         "CWE-285",
         "CWE-639"
-      ]
-    },
-    {
-      "id": "CVE-2026-0293",
-      "summary": "A vulnerability in Palo Alto Networks Prisma® Access Agent on Windows enables a local attacker with administrator privileges to bypass the anti-tamper protection, enabling unauthorized access to protected processes and files. The Prisma Access Agent on Linux, macOS, iOS, Android, and Chrome OS is not affected.",
-      "published": "2026-08-13T03:16:44.160Z",
-      "lastModified": "2026-09-09T16:32:01.280Z",
-      "severity": "Medium",
-      "cvssScore": 6,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00108,
-      "epssPercentile": 0.01341,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Microsoft",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-693",
-          "name": "CWE-693",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.15,
-      "tags": [
-        "Microsoft",
-        "Palo Alto Networks",
-        "Linux",
-        "Chrome",
-        "Android",
-        "Windows",
-        "iOS",
-        "CWE-693"
       ]
     },
     {
@@ -35748,52 +35437,6 @@
       "priorityScore": 2.03,
       "tags": [
         "CWE-1270"
-      ]
-    },
-    {
-      "id": "CVE-2026-0290",
-      "summary": "An information disclosure vulnerability in the Account Protection feature of Palo Alto Networks Prisma® Browser enables a local attacker to view sensitive data.",
-      "published": "2026-08-13T03:16:43.647Z",
-      "lastModified": "2026-09-09T16:14:13.810Z",
-      "severity": "Medium",
-      "cvssScore": 5.5,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00127,
-      "epssPercentile": 0.02704,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Palo Alto Networks",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-522",
-          "name": "CWE-522",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.02,
-      "tags": [
-        "Palo Alto Networks",
-        "F5",
-        "CWE-522"
       ]
     },
     {
@@ -37916,56 +37559,6 @@
       ]
     },
     {
-      "id": "CVE-2026-0291",
-      "summary": "An improper link resolution before file access vulnerability exists in the Palo Alto Networks Prisma® Access Agent on Linux platforms that enables a local low privileged user to delete system files in a limited scope and disable Prisma Access Agent. The Prisma Access Agent on macOS, Windows, iOS, Android, and Chrome OS is not affected.",
-      "published": "2026-08-13T03:16:43.800Z",
-      "lastModified": "2026-09-09T16:33:11.627Z",
-      "severity": "Medium",
-      "cvssScore": 4.4,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00111,
-      "epssPercentile": 0.01485,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Palo Alto Networks",
-      "product": "Windows",
-      "cwe": [
-        {
-          "id": "CWE-59",
-          "name": "CWE-59",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.59,
-      "tags": [
-        "Palo Alto Networks",
-        "Linux",
-        "Chrome",
-        "Android",
-        "Windows",
-        "iOS",
-        "CWE-59"
-      ]
-    },
-    {
       "id": "CVE-2026-18086",
       "summary": "IBM i 7.6, 7.5, 7.4, and 7.3 could allow a local attacker to execute arbitrary code or cause a denial of service due to improper bounds checking.",
       "published": "2026-08-13T21:17:44.377Z",
@@ -38098,50 +37691,6 @@
         "F5",
         "Linux",
         "CWE-835"
-      ]
-    },
-    {
-      "id": "CVE-2026-46688",
-      "summary": "The Meeting Room Booking System (MRBS) is a PHP-based application for booking meeting rooms. Prior to version 1.12.2, an unauthenticated request can be made to redirect the user to a query-specified location. This allows an attacker to create a specially-crafted URL to an MRBS installation that will cause the user who clicks it to be redirected to the attacker-specified redirect URL, which could be a spoofed MRBS login page, for example. Version 1.12.2 contains a fix. No known workarounds are available.",
-      "published": "2026-08-13T00:17:32.250Z",
-      "lastModified": "2026-09-09T21:02:22.660Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00249,
-      "epssPercentile": 0.16203,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-601",
-          "name": "CWE-601",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.57,
-      "tags": [
-        "CWE-601"
       ]
     },
     {
@@ -39027,6 +38576,44 @@
       "recentlyModified": false,
       "knownRansomwareUse": false,
       "priorityScore": 1.4,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-72140",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: i2c: mlxbf: Fix use-after-free in mlxbf_i2c_init_resource() If devm_platform_get_and_ioremap_resource() returns an error, mlxbf_i2c_init_resource() frees tmp_res before reading tmp_res->io to get the error code. This results in a use-after-free. Save the error code before freeing tmp_res.",
+      "published": "2026-08-15T06:21:31.587Z",
+      "lastModified": "2026-08-17T06:18:13.963Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.0021,
+      "epssPercentile": 0.11262,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.39,
       "tags": [
         "Linux"
       ]
@@ -40503,50 +40090,6 @@
       ]
     },
     {
-      "id": "CVE-2026-48791",
-      "summary": "sigstore-java is a sigstore java client for interacting with sigstore infrastructure. Version 2.0.0 erroneously removed verification of the integrated (Rekor entry) time) against the Fulcio certificate. Version 2.1.0 re-added this verification with enhancements that adhere to the Sigstore verification spec. The old sigstore-conformance test for this check was built incorrectly. This vulnerability impacts only users verifying bundles with `dev.sigstore:sigstore-java:2.0.0`. Older versions are not affected; it is fixed in `dev.sigstore:sigstore-java:2.1.0` A malicious actor may exploit this if they were able to access a users system and exfiltrate the temporary private key used during signing and then reuse an old fulcio certificate later without requiring direct access to the user's credentials. Users may protect themselves by re-verifying their artifacts using the newest sigstore-java or another current sigstore client. Transparency logs may also be audited for unauthorized signatures for a suspected reused identity.",
-      "published": "2026-08-13T00:17:32.407Z",
-      "lastModified": "2026-09-09T21:02:22.660Z",
-      "severity": "Low",
-      "cvssScore": 2,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00083,
-      "epssPercentile": 0.0029,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-347",
-          "name": "CWE-347",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.71,
-      "tags": [
-        "CWE-347"
-      ]
-    },
-    {
       "id": "CVE-2026-45725",
       "summary": "compliance-trestle is a tooling platform for managing compliance as code. Prior to versiions 3.12.2 and 4.0.3, the compliance-trestle library's remote fetching cache mechanism (HTTPSFetcher and SFTPFetcher) constructs the local cache file path from the URL path component without sanitizing path traversal sequences (`../`). When a remote OSCAL profile references a URL with traversal in its path, the HTTP response body is written to a location outside the intended cache directory, enabling arbitrary file write with attacker-controlled content to the filesystem. Versions 3.12.3 and 4.0.3 patch the issue.",
       "published": "2026-08-13T20:17:22.027Z",
@@ -40676,50 +40219,6 @@
       "priorityScore": 0.58,
       "tags": [
         "CWE-362"
-      ]
-    },
-    {
-      "id": "CVE-2026-46382",
-      "summary": "The Meeting Room Booking System (MRBS) is a PHP-based application for booking meeting rooms. Prior to version 1.12.2, a user-supplied private/local URI can be made to be fetched without checks. Version 1.12.2 contains a fix. No known workarounds are available.",
-      "published": "2026-08-13T00:17:32.090Z",
-      "lastModified": "2026-09-09T21:02:22.660Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00249,
-      "epssPercentile": 0.16201,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0.57,
-      "tags": [
-        "CWE-918"
       ]
     },
     {
@@ -41261,6 +40760,44 @@
       },
       "epssScore": 0.00216,
       "epssPercentile": 0.12032,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.42,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-72138",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xen/gntdev: fix error handling in ioctl When gntdev_ioctl_map_grant_ref() fails to copy the operation result back to userspace after successfully adding the mapping to the list, the error path returns -EFAULT without releasing the reference acquired by gntdev_alloc_map(). The mapping remains in priv->maps with a refcount of 1, causing a memory leak and a dangling list entry. Additionally, gntdev_add_map() may modify map->index to avoid overlap with existing mappings. Therefore, the index returned to userspace must be obtained after gntdev_add_map() completes. Fix this by holding the mutex across gntdev_add_map(), retrieving the correct index, and copy_to_user(). If copy_to_user() fails, remove the mapping from the list and release the reference while still holding the lock. Fix these issues by properly handling all error cases.",
+      "published": "2026-08-15T06:21:31.337Z",
+      "lastModified": "2026-08-17T06:18:13.703Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00216,
+      "epssPercentile": 0.12026,
       "isKev": false,
       "kev": null,
       "vendor": "Linux",
@@ -41843,6 +41380,44 @@
       "exploitAvailable": false,
       "patchAvailable": true,
       "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.4,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-72142",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: i2c: imx: fix locked bus on SMBus block-read of 0 (atomic) SMBus 3.1 6.5.7 allows a Block Read byte count of 0, but the atomic (polling) path rejects it as -EPROTO. Worse, it returns without a NACK+STOP: the next receive cycle has already started, so the target keeps holding SDA and the bus stays stuck until a power cycle for this i2c controller. Reading I2DR to obtain the count likewise arms the next byte on the count > I2C_SMBUS_BLOCK_MAX path, which also returned -EPROTO directly and left the bus held. Handle both: NACK the in-flight dummy byte (TXAK) and extend msgs->len so the existing last-byte handling emits STOP; the dummy byte is discarded. A count of 0 is a valid empty block read; a count above I2C_SMBUS_BLOCK_MAX is still reported as -EPROTO, but only after the bus has been released. The interrupt-driven path has the same flaw from a later commit and is fixed separately, as it carries a different Fixes: tag and stable range.",
+      "published": "2026-08-15T06:21:31.827Z",
+      "lastModified": "2026-08-23T13:16:40.440Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00211,
+      "epssPercentile": 0.11297,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
@@ -42461,6 +42036,83 @@
       ]
     },
     {
+      "id": "CVE-2026-72127",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: netdev-genl: report NAPI thread PID in the caller's pid namespace netdev_nl_napi_fill_one() reports the NAPI kthread PID in NETDEV_A_NAPI_PID using task_pid_nr(), which returns the PID in the initial pid namespace. NETDEV_CMD_NAPI_GET does not have GENL_ADMIN_PERM and the netdev genl family is netnsok, so a caller in a child pid namespace can issue it. That caller then sees the kthread's global PID, even though the kthread is not visible in its pid namespace, where the value should be 0. Translate the PID through the caller's pid namespace, the same way commit 3799c2570982 (\"io_uring/fdinfo: translate SqThread PID through caller's pid_ns\") did for the io_uring SQPOLL thread. The doit and dumpit paths both run synchronously in the caller's context, so task_active_pid_ns(current) is the caller's pid namespace.",
+      "published": "2026-08-15T06:21:30.113Z",
+      "lastModified": "2026-08-17T06:18:12.363Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.002,
+      "epssPercentile": 0.09913,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.35,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-72132",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: NFS: Charge unstable writes by request size, not folio size nfs_folio_mark_unstable() and nfs_folio_clear_commit() charge and uncharge NR_WRITEBACK/WB_WRITEBACK by folio_nr_pages(folio) once per *request* added to or removed from a commit list. This is correct only when a folio has a single associated request. When pg_test splits a folio into N sub-folio requests (e.g. pNFS flexfiles striping with a stripe unit smaller than the folio size, or plain wsize-limited splitting), each of the N requests independently charges the whole folio's page count, inflating the accounting by a factor of N per folio. With large folios and small stripe units this reaches multiple orders of magnitude: a 2 MiB folio split into 512 4 KiB requests can charge up to 512x its real size, pushing global dirty+writeback accounting past the system's dirty threshold and forcing every buffered writer on the host into the hard-throttle path, including unrelated in-kernel NFS server threads sharing the box. Charge each request only for the pages it actually covers.",
+      "published": "2026-08-15T06:21:30.657Z",
+      "lastModified": "2026-08-17T06:18:12.897Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.002,
+      "epssPercentile": 0.09885,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": "iOS",
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.35,
+      "tags": [
+        "Linux",
+        "iOS"
+      ]
+    },
+    {
       "id": "CVE-2026-72006",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: net/mlx5: free mlx5_st_idx_data on final dealloc Workloads that repeatedly allocate and release mkeys carrying TPH steering-tag hints (e.g. churning RDMA MRs) leak one struct mlx5_st_idx_data per cycle; kmemleak flags it as unreferenced and the kmalloc slab grows over time. When the last reference to an ST table entry is dropped, mlx5_st_dealloc_index() removed the entry from idx_xa but the backing mlx5_st_idx_data allocation was never freed. Free idx_data after the xa_erase() so the lifetime of the bookkeeping struct matches the lifetime of the ST entry it tracks.",
       "published": "2026-08-15T06:20:59.250Z",
@@ -42651,6 +42303,83 @@
       ]
     },
     {
+      "id": "CVE-2026-72128",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nvmet: fix refcount leak in nvmet_sq_create() In nvmet_sq_create(), a reference on the ctrl is taken via kref_get_unless_zero() before calling nvmet_check_sqid(). If nvmet_check_sqid() fails, the function returns the error directly without releasing the reference, leading to a leak. Fix this by jumping to the \"ctrl_put\" label, which already performs the necessary nvmet_ctrl_put(ctrl). This ensures the reference is properly released on this error path.",
+      "published": "2026-08-15T06:21:30.217Z",
+      "lastModified": "2026-08-17T06:18:12.447Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00198,
+      "epssPercentile": 0.09635,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.34,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-72131",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nvme-apple: Prevent shared tags across queues on Apple A11 On Apple A11, tags of pending commands must be unique across the admin and IO queues, else the firmware crashes with \"duplicate tag error for tag N\", with N being the tag. Apply the existing workaround for M1 of reserving two tags for the admin queue to A11.",
+      "published": "2026-08-15T06:21:30.557Z",
+      "lastModified": "2026-08-17T06:18:12.807Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00198,
+      "epssPercentile": 0.09635,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apple",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.34,
+      "tags": [
+        "Apple",
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-16455",
       "summary": "In Teltonika Networks RUTOS devices running versions 7.07.1 through 7.24.1 and TSWOS devices running versions 1.03 through 1.10, a vulnerability exists whereby a lower privileged user can escalate privileges to administrative level due to unsafe calls to an execl function.",
       "published": "2026-08-13T11:17:38.340Z",
@@ -42762,6 +42491,44 @@
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.3,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-72145",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: platform/x86/intel/tpmi: use cleanup helpers in mem_write() In mem_write(), the temporary array returned by parse_int_array_user() must be released on all exit paths. Convert the array variable to use cleanup.h scope-based cleanup so it is freed automatically on return. This also moves the array declaration next to parse_int_array_user() as required by cleanup.h usage guidelines.",
+      "published": "2026-08-15T06:21:32.167Z",
+      "lastModified": "2026-08-17T06:18:14.577Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00189,
+      "epssPercentile": 0.08654,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
