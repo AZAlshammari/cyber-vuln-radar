@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-12T22:34:53.381Z",
+  "generatedAt": "2026-09-13T00:24:51.905Z",
   "count": 1000,
   "items": [
     {
@@ -4820,6 +4820,44 @@
       ]
     },
     {
+      "id": "CVE-2026-74475",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: vxlan: use neigh_ha_snapshot() in route_shortcircuit() The neighbour hardware address n->ha can be updated asynchronously by the neighbour subsystem, protected by n->ha_lock seqlock. Reading n->ha without holding the seqlock loop can lead to torn reads or reading a partially updated MAC address. Use neigh_ha_snapshot() in route_shortcircuit() to safely copy n->ha under read_seqbegin()/read_seqretry() lock protection before using it. Note that arp_reduce() and neigh_reduce() seem to have the same issue left for future patches.",
+      "published": "2026-08-15T13:17:52.293Z",
+      "lastModified": "2026-08-19T17:21:04.787Z",
+      "severity": "Critical",
+      "cvssScore": 10,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "Low"
+      },
+      "epssScore": 0.00454,
+      "epssPercentile": 0.38307,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.84,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-68470",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mac80211: validate extension-frame layout before RX Extension frames only have the extension header at the regular 802.11 header offset. The generic RX path can still reach helpers and interface dispatch code that read regular header address fields before unsupported extension subtypes are dropped. mac80211 currently only handles S1G beacon extension frames. Drop other extension subtypes before they can reach regular-header RX processing. For S1G beacons, linearize the SKB with the management-frame path and require the fixed S1G beacon header, including optional fixed fields indicated by frame control, before generic RX dispatch. Route S1G beacons through the station/default-link RX path without regular-header station lookup. Avoid regular-header address reads in the mac80211 RX paths that process S1G extension beacons, including accept-frame, duplicate-detection, address-copy, and MLO address-translation paths. Also make ieee80211_get_bssid() length-safe before returning the S1G source-address pointer.",
       "published": "2026-08-15T06:19:57.767Z",
@@ -5071,6 +5109,44 @@
       "tags": [
         "WordPress",
         "CWE-269"
+      ]
+    },
+    {
+      "id": "CVE-2026-74474",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: vxlan: use pskb_network_may_pull() for transmit path header pulls In vxlan_xmit(), arp_reduce(), and vxlan_mdb_entry_skb_get(), pskb_may_pull() was being called to verify the availability of network layer headers (ARP, IPv6/ND, IP/IPv6 MDB keys). However, during transmit skb->data points to the MAC header, so skb_network_offset(skb) is ETH_HLEN (14 bytes). Using pskb_may_pull(skb, len) only checks len bytes from skb->data rather than skb_network_offset(skb) + len, which can leave part of the network header in non-linear frags. Replace these remaining pskb_may_pull() calls with pskb_network_may_pull() to properly account for the MAC header offset.",
+      "published": "2026-08-15T13:17:52.177Z",
+      "lastModified": "2026-08-23T13:16:44.120Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00457,
+      "epssPercentile": 0.38498,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.78,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -5909,6 +5985,44 @@
       "tags": [
         "CWE-787",
         "CWE-1284"
+      ]
+    },
+    {
+      "id": "CVE-2026-74476",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: veth: convert frag_list skbs before running XDP A frag_list skb can reach veth with data_len set but nr_frags zero. veth_convert_skb_to_xdp_buff() only converts skbs that are shared, locked, have frags[], or do not have enough headroom. It later uses skb_is_nonlinear() to decide whether to set XDP_FLAGS_HAS_FRAGS and xdp_frags_size. That exposes frag_list data to XDP as if it were stored in frags[], but frags[] is empty. AF_XDP copy mode can then trust the bogus XDP fragment metadata, walk an empty fragment entry, and crash in memcpy() from __xsk_rcv(). Route non-linear skbs through skb_pp_cow_data() before exposing them to XDP, and only advertise XDP frags when the resulting skb has frags[]. skb_copy_bits() already handles frag_list input, and skb_pp_cow_data() builds frags[] output with skb_add_rx_frag(), which is the representation XDP multi-buffer expects.",
+      "published": "2026-08-15T13:17:52.397Z",
+      "lastModified": "2026-08-23T13:16:44.250Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00491,
+      "epssPercentile": 0.40782,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.61,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -14978,50 +15092,6 @@
       ]
     },
     {
-      "id": "CVE-2026-19753",
-      "summary": "A vulnerability was detected in Model Context Protocol mcp-rdf-explorer 1.0.0. Affected is the function explore_url of the file src/mcp-rdf-explorer/server.py of the component MCP Server. Performing a manipulation of the argument url results in server-side request forgery. The attack may be initiated remotely. The exploit is now public and may be used. The vendor was contacted early about this disclosure but did not respond in any way.",
-      "published": "2026-08-13T23:17:14.440Z",
-      "lastModified": "2026-08-14T19:09:39.140Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00278,
-      "epssPercentile": 0.20234,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.26,
-      "tags": [
-        "CWE-918"
-      ]
-    },
-    {
       "id": "CVE-2026-14229",
       "summary": "The ECS WordPress plugin before 4.3.8 does not check the post status or any capability when rendering an Elementor document requested through one of its AJAX actions, allowing unauthenticated users to retrieve the rendered content of unpublished (private, draft, pending) documents by supplying their identifier.",
       "published": "2026-08-15T06:16:49.917Z",
@@ -18676,50 +18746,6 @@
       "priorityScore": 2.96,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-19756",
-      "summary": "A vulnerability has been found in Dromara lamp-cloud up to 5.10.0. This affects an unknown part of the file DefGenProjectController.java of the component Code Generator. Such manipulation of the argument outputDir/parent/projectPrefix leads to path traversal. It is possible to launch the attack remotely. The exploit has been disclosed to the public and may be used. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-08-13T23:17:14.617Z",
-      "lastModified": "2026-08-18T02:17:25.493Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00288,
-      "epssPercentile": 0.21326,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.95,
-      "tags": [
-        "CWE-22"
       ]
     },
     {
@@ -38514,6 +38540,44 @@
       ]
     },
     {
+      "id": "CVE-2026-74477",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: uprobes: Fix NULL pointer dereference in hprobe_expire() Forking a task that has a pending uretprobe can oops the kernel with a NULL pointer dereference in the clone() path: BUG: kernel NULL pointer dereference, address: 0000000000000018 Oops: 0002 [#1] SMP NOPTI RIP: 0010:hprobe_expire CR2: 0000000000000018 Call Trace: uprobe_copy_process copy_process kernel_clone __x64_sys_clone do_syscall_64 entry_SYSCALL_64_after_hwframe This was found on real hosts on Meta fleet. I've got the impression that this is what is happening: CPU 1 CPU 2 (traced task) ----- ------------------- hit uprobe, prepare_uretprobe(): hprobe LEASED, refcount >= 1 uprobe_unregister() put_uprobe(): refcount -> 0 fork() -> dup_utask() hprobe_expire(hprobe, true) try_get_uprobe() -> NULL get_uprobe(NULL) <-- Oops Only take the extra reference when the uprobe is non-NULL; a NULL means it is gone and is the correct value to return.",
+      "published": "2026-08-15T13:17:52.497Z",
+      "lastModified": "2026-08-17T06:19:43.777Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00166,
+      "epssPercentile": 0.06159,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.22,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-74426",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: afs: fix NULL pointer dereference in afs_get_tree() afs_alloc_sbi() uses kzalloc for memory allocation. And, if ctx->dyn_root is not null, as->cell and as->volume are null. In trace_afs_get_tree() they are dereferenced. KASAN error message: KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007] CPU: 2 PID: 18478 Comm: syz-executor.7 Not tainted 5.10.246-syzkaller #0 Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014 RIP: 0010:perf_trace_afs_get_tree+0x1d9/0x550 include/trace/events/afs.h:1365 Call Trace: trace_afs_get_tree include/trace/events/afs.h:1365 [inline] afs_get_tree+0x922/0x1350 fs/afs/super.c:599 vfs_get_tree+0x8e/0x300 fs/super.c:1572 do_new_mount fs/namespace.c:3011 [inline] path_mount+0x14a5/0x2220 fs/namespace.c:3341 do_mount fs/namespace.c:3354 [inline] __do_sys_mount fs/namespace.c:3562 [inline] __se_sys_mount fs/namespace.c:3539 [inline] __x64_sys_mount+0x283/0x300 fs/namespace.c:3539 do_syscall_64+0x33/0x50 arch/x86/entry/common.c:46 entry_SYSCALL_64_after_hwframe+0x67/0xd1 Found by Linux Verification Center (linuxtesting.org) with Syzkaller.",
       "published": "2026-08-15T06:22:44.690Z",
@@ -39611,78 +39675,6 @@
       "tags": [
         "CWE-787"
       ]
-    },
-    {
-      "id": "CVE-2026-18532",
-      "summary": "Rejected reason: This CVE ID has been rejected or withdrawn by its CVE Numbering Authority.",
-      "published": "2026-08-13T23:17:14.360Z",
-      "lastModified": "2026-08-13T23:17:14.360Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0,
-      "epssPercentile": 0,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0,
-      "tags": []
-    },
-    {
-      "id": "CVE-2026-3883",
-      "summary": "Rejected reason: This CVE ID has been rejected or withdrawn by its CVE Numbering Authority.",
-      "published": "2026-08-13T23:17:14.787Z",
-      "lastModified": "2026-08-13T23:17:14.787Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0,
-      "epssPercentile": 0,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 0,
-      "tags": []
     },
     {
       "id": "CVE-2023-7347",
