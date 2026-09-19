@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-19T00:33:55.129Z",
+  "generatedAt": "2026-09-19T05:07:27.916Z",
   "count": 1000,
   "items": [
     {
@@ -7165,6 +7165,44 @@
       ]
     },
     {
+      "id": "CVE-2026-74727",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ovpn: skip rehash for peers already removed from by_id ovpn_nl_peer_set_doit() resolves the target peer via ovpn_peer_get_by_id() before taking ovpn->lock. In the window between the lookup (which only takes a refcount) and the subsequent spin_lock_bh(&ovpn->lock), a concurrent OVPN_CMD_PEER_DEL, keepalive expiry, or socket teardown can take ovpn->lock first, run ovpn_peer_remove() to unhash the peer from all four tables (by_id, by_vpn_addr4/6, by_transp_addr) and release the lock. set_doit then acquires ovpn->lock and calls ovpn_peer_hash_vpn_ip(), which re-inserts the now-removed peer back into the rehashing tables. The same race affects the float path: ovpn_peer_endpoints_update() holds only a refcount and acquires ovpn->lock very late (after async AEAD decrypt and a netlink notification), then rehashes the peer in the by_transp_addr table. The resurrected peer becomes reachable again from the RX lookup (ovpn_peer_get_by_transp_addr) and the TX VPN-IP lookup, even though userspace believes it is gone. Once the data-path refcount drops the peer is freed via call_rcu while the hash entries embedded in it remain linked, opening a UAF window. Bail out of the rehash when hash_entry_id is unhashed, mirroring the sentinel already used by ovpn_peer_remove() to detect the already-removed state. The check is safe under ovpn->lock, which serializes every mutation of hash_entry_id, and is a no-op for the add path because ovpn_peer_add_mp() inserts hash_entry_id before calling ovpn_peer_hash_vpn_ip().",
+      "published": "2026-08-22T16:16:47.813Z",
+      "lastModified": "2026-08-25T06:18:59.263Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00442,
+      "epssPercentile": 0.37836,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.75,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-13097",
       "summary": "A privilege escalation flaw was found in FreeIPA. The uniqueness constraint enforced on Kerberos principal name attributes in the 389-ds directory server does not properly account for equivalent representations of the same principal name, allowing a user with sufficient LDAP write privileges to create a service principal that impersonates an existing privileged one. This can lead to unauthorized acquisition of Kerberos service tickets for sensitive services, potentially resulting in full domain compromise.",
       "published": "2026-08-20T11:16:20.293Z",
@@ -11164,56 +11202,6 @@
       "priorityScore": 4.17,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-76783",
-      "summary": "A security vulnerability has been detected in DeDeCMS 53_1_UTF8. This vulnerability affects unknown code of the file /plus/advancedsearch.php. Such manipulation of the argument sql leads to sql injection. The attack can be launched remotely. The exploit has been disclosed publicly and may be used.",
-      "published": "2026-08-20T01:16:53.923Z",
-      "lastModified": "2026-08-20T18:16:52.177Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00254,
-      "epssPercentile": 0.17282,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.16,
-      "tags": [
-        "CWE-74",
-        "CWE-89"
       ]
     },
     {
@@ -18285,50 +18273,6 @@
       ]
     },
     {
-      "id": "CVE-2026-76795",
-      "summary": "A vulnerability has been found in AeternaLabsHQ PullMD 3.2.0. This impacts an unknown function of the file /api of the component REST API Endpoint. The manipulation of the argument url leads to server-side request forgery. The attack can be initiated remotely. The exploit has been disclosed to the public and may be used. Upgrading to version 3.3.0 will fix this issue. The identifier of the patch is 96448894cc93ccecb0bdcbf263a9d25390a8455e. Upgrading the affected component is advised.",
-      "published": "2026-08-20T01:16:54.277Z",
-      "lastModified": "2026-08-25T15:16:42.643Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00352,
-      "epssPercentile": 0.28888,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.57,
-      "tags": [
-        "CWE-918"
-      ]
-    },
-    {
       "id": "CVE-2026-19611",
       "summary": "A flaw was found in WildFly Elytron. Password hashing and verification normalize input with Unicode NFKC, which can collapse fullwidth characters to ASCII equivalents. A remote attacker can more easily guess affected passwords by using an ASCII-only dictionary against accounts whose passwords were intended to include those non-ASCII characters, leading to unauthorized access.",
       "published": "2026-08-20T16:17:18.293Z",
@@ -18551,56 +18495,6 @@
       "tags": [
         "VMware",
         "CWE-863"
-      ]
-    },
-    {
-      "id": "CVE-2026-76785",
-      "summary": "A security flaw has been discovered in amirsanni Mini-Inventory-and-Sales-Management-System 0.1. Affected is the function Transaction::getAll of the file application/models/Transaction.php. Performing a manipulation of the argument orderBy/orderFormat results in sql injection. It is possible to initiate the attack remotely. The exploit has been released to the public and may be used for attacks. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-08-20T01:16:54.100Z",
-      "lastModified": "2026-08-20T16:18:20.453Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.002,
-      "epssPercentile": 0.10224,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.56,
-      "tags": [
-        "CWE-74",
-        "CWE-89"
       ]
     },
     {
@@ -21264,50 +21158,6 @@
       ]
     },
     {
-      "id": "CVE-2026-75628",
-      "summary": "Punk::OAuth2 versions before 0.03 for Perl allow an attacker-chosen off-site redirect after login because same_origin_path accepts a backslash or tab in the return parameter. oauth2_login reads the return parameter from the initiation request, runs same_origin_path over it, and stores the survivor in the session flow record as the post-login redirect target. That check rejects a value that does not begin with a slash, one with a slash as its second byte, and one containing CR or LF. A backslash and a tab pass. The URL Standard treats a backslash as equivalent to a slash for special schemes, so `/\\evil.example` parses with the authority `evil.example`. It also strips ASCII tab before parsing, so a tab between two leading slashes leaves `//evil.example`. A crafted link to the application's own login route lands the victim on the attacker's site after a genuine authentication. The redirect carries no authorization code or access token.",
-      "published": "2026-08-20T01:16:53.803Z",
-      "lastModified": "2026-08-28T16:18:25.103Z",
-      "severity": "Medium",
-      "cvssScore": 5.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00408,
-      "epssPercentile": 0.34775,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-601",
-          "name": "CWE-601",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.21,
-      "tags": [
-        "CWE-601"
-      ]
-    },
-    {
       "id": "CVE-2026-63044",
       "summary": "Server-Side Request Forgery (SSRF) vulnerability in Apache InLong. Any authenticated user (no admin role required) can cause the InLong Manager server to make outbound HTTP requests or TCP connections to arbitrary internal hosts and ports. This issue affects Apache InLong: from 2.0.0 before 2.4.0. Users are advised to upgrade to Apache InLong's 2.4.0 or cherry-pick [1] to solve it. [1] https://github.com/apache/inlong/pull/12130 .",
       "published": "2026-08-20T16:17:30.483Z",
@@ -23107,56 +22957,6 @@
       "priorityScore": 3.04,
       "tags": [
         "CWE-639"
-      ]
-    },
-    {
-      "id": "CVE-2026-76799",
-      "summary": "A weakness has been identified in code-projects Login Registration System 1.0. This affects an unknown function of the file /loginsystem/database/login_registration_system.sql of the component SQL Database Backup Handler. This manipulation causes files or directories accessible. The attack may be initiated remotely. The exploit has been made available to the public and could be used for attacks.",
-      "published": "2026-08-20T02:16:21.753Z",
-      "lastModified": "2026-08-21T17:16:46.133Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00396,
-      "epssPercentile": 0.33628,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-425",
-          "name": "CWE-425",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-552",
-          "name": "CWE-552",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.03,
-      "tags": [
-        "CWE-425",
-        "CWE-552"
       ]
     },
     {
@@ -26499,6 +26299,44 @@
       ]
     },
     {
+      "id": "CVE-2026-74725",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: enic: fix tx_hang_reset use-after-free on device removal enic_remove() cancels the reset and change_mtu_work items but does not cancel tx_hang_reset. A TX timeout that fires while the device is being removed can schedule enic_tx_hang_reset() so that it runs after free_netdev(), resulting in a use-after-free. cancel_work_sync() alone is not sufficient here: the still-live watchdog and notify paths can re-schedule these work items in the window between the cancel and unregister_netdev(). Use disable_work_sync(), which cancels the work and blocks any subsequent schedule_work() from requeuing it, and apply it to the reset and change_mtu_work items as well so the same requeue race is closed for all teardown work.",
+      "published": "2026-08-22T16:16:47.567Z",
+      "lastModified": "2026-08-25T06:18:58.687Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00125,
+      "epssPercentile": 0.02549,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.82,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-16997",
       "summary": "IBM AIX 7.2, and 7.3 and IBM PowerVM VIOS 4.1 could allow a local attacker to execute arbitrary commands due to improper privilege management.",
       "published": "2026-08-20T22:17:10.650Z",
@@ -26701,6 +26539,44 @@
       "vendorAdvisoryLinks": [],
       "exploitAvailable": false,
       "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.81,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-74724",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ipvs: avoid out-of-bounds write in ip_vs_nat_icmp Sashiko warns that local attacker can modify the packet while it is processed by IPVS. Some places read the IP ihl field multiple times which can cause out-of-bounds access. One such place is ip_vs_nat_icmp where we can write after the validated area. Fix it by providing ciph argument just like it is done for IPv6 and use ciph->len as offset to the embedded transport header. Modify some IPv4 header checks by reading the ihl field only once.",
+      "published": "2026-08-22T16:16:47.450Z",
+      "lastModified": "2026-08-25T06:18:58.390Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00123,
+      "epssPercentile": 0.02387,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
       "workaroundAvailable": false,
       "recentlyPublished": false,
       "recentlyModified": false,
@@ -27913,6 +27789,44 @@
       ]
     },
     {
+      "id": "CVE-2026-74726",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: bonding: alb: re-check primary_is_promisc under RTNL in bond_alb_monitor bond_alb_monitor() reads primary_is_promisc under RCU, then drops RCU and takes RTNL via rtnl_trylock() before undoing the promiscuity it set on the active slave. In that window the active slave can change under RTNL (RTM_DELLINK -> __bond_release_one() -> bond_alb_handle_active_change()), which already drops the promiscuity and clears primary_is_promisc. The monitor still acts on the stale decision: if the slave was removed with no failover, curr_active_slave is now NULL and the deref faults; if it failed over, the stale dev_set_promiscuity(-1) underflows the new slave's promiscuity counter and pins it in IFF_PROMISC. Oops: general protection fault, probably for non-canonical address ... KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007] Workqueue: b42 bond_alb_monitor RIP: 0010:bond_alb_monitor (drivers/net/bonding/bond_alb.c:1600) process_one_work (kernel/workqueue.c:3322) worker_thread (kernel/workqueue.c:3486) kthread (kernel/kthread.c:436) ret_from_fork (arch/x86/kernel/process.c:158) Kernel panic - not syncing: Fatal exception Re-check primary_is_promisc (and curr_active_slave) after taking RTNL so the monitor only undoes an increment it still owns. The other bonding monitors already re-read state under RTNL in their commit phase (bond_miimon_commit/bond_ab_arp_commit); bond_alb_monitor() was the only one acting on the pre-trylock decision.",
+      "published": "2026-08-22T16:16:47.673Z",
+      "lastModified": "2026-08-25T06:18:58.980Z",
+      "severity": "High",
+      "cvssScore": 7.3,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "Low",
+        "availability": "High"
+      },
+      "epssScore": 0.00126,
+      "epssPercentile": 0.02617,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.65,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-63382",
       "summary": "Libevent is an event notification library. Prior to 2.1.13 and 2.2.2-alpha, the libevent evhttp parser in http.c inconsistently handles duplicate Transfer-Encoding headers, comma-separated Transfer-Encoding values, and bare line feeds in chunked framing. evhttp_find_header can select only the first header, evhttp_check_transfer_encoding_ was absent so the previous whole-string comparison fails to recognize valid lists ending in chunked, and evhttp_handle_chunked_read uses EVBUFFER_EOL_CRLF rather than EVBUFFER_EOL_CRLF_STRICT, accepting bare LF chunk terminators. When libevent is deployed behind a proxy that frames the same request differently, an unauthenticated remote attacker can desynchronize request boundaries and smuggle a second request, potentially bypassing access controls or poisoning caches. This issue is fixed in versions 2.1.13 and 2.2.2-alpha.",
       "published": "2026-08-20T18:16:35.700Z",
@@ -28480,56 +28394,6 @@
       "tags": [
         "CWE-125",
         "CWE-190"
-      ]
-    },
-    {
-      "id": "CVE-2026-76800",
-      "summary": "A flaw has been found in DeDeCMS 3. Affected by this vulnerability is an unknown functionality of the file /include/dialog/select_media_post.php. Executing a manipulation of the argument uploadfile can lead to unrestricted upload. The attack can be executed remotely. The exploit has been published and may be used.",
-      "published": "2026-08-20T03:16:23.887Z",
-      "lastModified": "2026-08-21T16:18:20.203Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00201,
-      "epssPercentile": 0.10376,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-434",
-          "name": "CWE-434",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.57,
-      "tags": [
-        "CWE-284",
-        "CWE-434"
       ]
     },
     {
@@ -36483,6 +36347,44 @@
       ]
     },
     {
+      "id": "CVE-2026-74729",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: soc: aspeed: lpc-snoop: Fix usercopy overflow in snoop_file_read put_fifo_with_discard() acts as both producer and consumer on the kfifo: it calls kfifo_skip() (advances out) and kfifo_put() (advances in) from the IRQ handler without synchronizing with snoop_file_read(), which also consumes via kfifo_to_user(). On SMP systems this concurrent access can leave (in - out) larger than the ring buffer, so __kfifo_to_user()'s clamp to (in - out) is ineffective and kfifo_copy_to_user() can attempt a copy_to_user() past the kmalloc-2k backing store: usercopy: Kernel memory exposure attempt detected from SLUB object 'kmalloc-2k' (offset 0, size 2049)! kernel BUG at mm/usercopy.c! Call trace: usercopy_abort __check_heap_object __check_object_size kfifo_copy_to_user __kfifo_to_user snoop_file_read vfs_read Serialize kfifo access with a per-channel spinlock shared between the IRQ handler (producer) and the file reader (consumer). Annotate @fifo with __guarded_by(&lock) and opt the driver into context analysis so the compiler enforces that all fifo access holds the lock.",
+      "published": "2026-08-22T16:16:48.033Z",
+      "lastModified": "2026-08-22T16:16:48.033Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.0017,
+      "epssPercentile": 0.06727,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.24,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-19085",
       "summary": "The Duplicate Post WordPress plugin before 1.5.6 does not check that a user may read the content of a post before duplicating it, allowing users with a delegated role to republish another user's password-protected post as publicly readable.",
       "published": "2026-08-21T07:16:25.243Z",
@@ -40393,6 +40295,44 @@
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.23,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-74728",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: xfs: handle NULL b_addr in xfs_buf_free When xfs_buf_alloc_backing_mem() fails, xfs_buf_free() is called with bp->b_addr still NULL. The code falls through to the folio_put path which calls virt_to_folio(NULL), dereferencing an invalid address and causing a kernel crash. Call Trace: xfs_buf_free+0x25f/0x510 xfs_buf_alloc+0xc98/0x19b0 xfs_buf_find_insert+0x55/0x14d0 xfs_buf_get_map+0x122b/0x17c0 xfbtree_init_leaf_block+0x11c/0x4a0 xfbtree_init+0x1bb/0x460 xrep_rmap_setup_scan+0x100/0x1f0 xrep_rmapbt+0x41/0xc0 Fix this by skipping folio_put() when bp->b_addr is NULL.",
+      "published": "2026-08-22T16:16:47.930Z",
+      "lastModified": "2026-08-22T16:16:47.930Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.0017,
+      "epssPercentile": 0.06693,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
