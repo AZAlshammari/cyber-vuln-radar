@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-22T06:17:08.546Z",
+  "generatedAt": "2026-09-22T11:57:59.702Z",
   "count": 1000,
   "items": [
     {
@@ -1916,52 +1916,6 @@
       ]
     },
     {
-      "id": "CVE-2026-10053",
-      "summary": "GitLab has remediated an issue in GitLab CE/EE affecting all versions from 18.8 before 19.0.6, 19.1 before 19.1.4, and 19.2 before 19.2.2 that under certain conditions could have allowed an authenticated user to achieve remote code execution due to a path traversal vulnerability in the package registry.",
-      "published": "2026-08-23T10:16:27.140Z",
-      "lastModified": "2026-08-31T14:42:52.997Z",
-      "severity": "High",
-      "cvssScore": 8.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00773,
-      "epssPercentile": 0.53773,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.86,
-      "tags": [
-        "F5",
-        "GitLab",
-        "CWE-22"
-      ]
-    },
-    {
       "id": "CVE-2026-71364",
       "summary": "A path traversal vulnerability was found in AWX's project archive extraction. The project_archive action plugin extracts zip and tar archive members by joining the project directory path with the member filename without performing path normalization, boundary validation, or rejecting directory traversal sequences. A malicious archive containing members with path traversal components can write files to arbitrary locations on the execution node's filesystem outside the intended project directory. An attacker who controls the archive content, either through a compromised upstream source, a malicious archive URL, or a man-in-the-middle attack on a plain HTTP connection, can achieve arbitrary file writes as the user performing the extraction, potentially leading to remote code execution through mechanisms such as cron files, SSH authorized keys, or playbook content injection.",
       "published": "2026-08-24T16:17:22.663Z",
@@ -3095,51 +3049,6 @@
       ]
     },
     {
-      "id": "CVE-2026-78155",
-      "summary": "privilege escalation in StackGres operator allows a low-privilege tenant who owns a database to gain administrator privileges",
-      "published": "2026-08-23T10:16:28.757Z",
-      "lastModified": "2026-09-16T13:13:14.767Z",
-      "severity": "Critical",
-      "cvssScore": 9.9,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00294,
-      "epssPercentile": 0.22166,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": "Kubernetes",
-      "cwe": [
-        {
-          "id": "CWE-426",
-          "name": "CWE-426",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.24,
-      "tags": [
-        "Kubernetes",
-        "CWE-426"
-      ]
-    },
-    {
       "id": "CVE-2026-66907",
       "summary": "Relative path traversal vulnerability in Apache Camel Google Storage component. This issue affects Apache Camel: from 4.0.0 before 4.14.9, from 4.15.0 before 4.18.4, from 4.19.0 before 4.22.0. The camel-google-storage consumer downloads Google Cloud Storage objects to the local filesystem when the downloadFileName option is set. That option is documented as a folder or a filename, and when its value contains no expression token the consumer builds the local destination by appending the object name to it: evaluateFileExpression sets the Exchange file-name header to the remote object name and evaluates downloadFileName + \"/${file:name}\". The ${file:name} token returns the file-name header verbatim, unlike ${file:onlyname}, which applies FileUtil.stripPath to it. The resulting string was passed directly to new File(result) and blob.downloadTo(file.toPath()) with no lexical normalization and no check that the destination stayed inside the configured directory. The object name is not route-controlled data: the consumer lists the bucket, iterates every returned blob and creates one exchange per object from blob.getBlobId().getName() verbatim, and the filter option that could restrict those names is not applied at all unless it has been explicitly set. Google Cloud Storage object names are opaque UTF-8 keys that the service stores and lists exactly as written, with no server-side canonicalization, and a forward slash is only a display convention for pseudo-directories, so a key containing parent-directory segments survives round-tripping intact. An object name containing such segments therefore resolved to a location outside the configured downloadFileName directory, letting anyone able to influence the names present in the consumed bucket cause Camel to create or overwrite a file at a location of their choosing, with the privileges of the Camel process. Depending on what the process can write to, overwriting a file outside the download directory can escalate beyond the loss of integrity of that file. The downloadFileName option is an ordinary consumer parameter and carries no security marker, so nothing signalled to users that its value was not being enforced as a containment boundary. The defect is consumer-only; the producer has no download-to-file sink. Camel's other file-download consumers - camel-file, camel-ftp, camel-smb, camel-mina-sftp, camel-azure-files and the Azure Storage download paths - already constrained their local downloads to the configured directory using a path-segment boundary check; camel-google-storage was the remaining object-store download sink not covered by that work. Users are recommended to upgrade to version 4.22.0, which fixes the issue. If users are on the 4.14.x LTS releases stream, then they are suggested to upgrade to 4.14.9. If users are on the 4.18.x releases stream, then they are suggested to upgrade to 4.18.4. For deployments that cannot upgrade immediately, set the filter option to a regular expression that accepts only simple single-segment object names, so that any name carrying a path separator or a parent-directory segment is excluded before an exchange is created; note that no filtering whatsoever is applied when the option is left unset, and that the expression is matched against the whole object name. Alternatively, give downloadFileName an explicit expression that does not carry the remote path through, for example one built on ${file:onlyname} rather than the implicit ${file:name}, keeping in mind that a downloadFileName containing an expression is treated as route-author-controlled and is not covered by the containment check added in the fix. As defence in depth, treat the object names in any externally writable bucket as untrusted input and do not derive local filesystem paths from them.",
       "published": "2026-08-24T17:18:06.330Z",
@@ -3184,51 +3093,6 @@
         "Apache",
         "Exchange",
         "CWE-23"
-      ]
-    },
-    {
-      "id": "CVE-2026-13598",
-      "summary": "The RestrictMate WordPress plugin before 1.3.0 does not restrict the user role supplied during account registration, allowing unauthenticated attackers to create a new administrator account and gain a logged-in administrator session, leading to full site takeover.",
-      "published": "2026-08-23T06:16:19.850Z",
-      "lastModified": "2026-08-28T16:17:05.820Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00299,
-      "epssPercentile": 0.22736,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-269",
-          "name": "Improper Privilege Management",
-          "description": "Privileges are assigned, modified, or checked incorrectly."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.23,
-      "tags": [
-        "WordPress",
-        "CWE-269"
       ]
     },
     {
@@ -8280,6 +8144,52 @@
       ]
     },
     {
+      "id": "CVE-2026-79229",
+      "summary": "Uninitialized resource in ANGLE in Google Chrome prior to 152.0.7977.65 allowed a remote attacker who had compromised the renderer process to read memory outside the sandbox via a crafted HTML page. (Chromium security severity: Medium)",
+      "published": "2026-08-25T21:18:17.080Z",
+      "lastModified": "2026-08-31T13:34:10.087Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00411,
+      "epssPercentile": 0.35026,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-908",
+          "name": "CWE-908",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.5,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-908"
+      ]
+    },
+    {
       "id": "CVE-2026-78905",
       "summary": "Type confusion in ANGLE in Google Chrome prior to 152.0.7977.65 allowed a remote attacker to potentially execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium security severity: Medium)",
       "published": "2026-08-25T21:17:47.877Z",
@@ -9084,6 +8994,98 @@
       },
       "epssScore": 0.00373,
       "epssPercentile": 0.31068,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.45,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-79232",
+      "summary": "Use after free in Aura in Google Chrome prior to 152.0.7977.65 allowed a remote attacker to potentially execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-08-25T21:18:17.413Z",
+      "lastModified": "2026-08-31T18:15:31.563Z",
+      "severity": "Critical",
+      "cvssScore": 9.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00373,
+      "epssPercentile": 0.31025,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-416",
+          "name": "Use After Free",
+          "description": "A program uses memory after it has been freed."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.45,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-416"
+      ]
+    },
+    {
+      "id": "CVE-2026-79235",
+      "summary": "Use after free in WebGL in Google Chrome prior to 152.0.7977.65 allowed a remote attacker to execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium security severity: High)",
+      "published": "2026-08-25T21:18:17.747Z",
+      "lastModified": "2026-08-31T18:15:13.693Z",
+      "severity": "Critical",
+      "cvssScore": 9.6,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00373,
+      "epssPercentile": 0.31028,
       "isKev": false,
       "kev": null,
       "vendor": "Google",
@@ -10072,6 +10074,52 @@
         "Google",
         "Chrome",
         "Android",
+        "CWE-122"
+      ]
+    },
+    {
+      "id": "CVE-2026-79231",
+      "summary": "Buffer overflow in Media in Google Chrome prior to 152.0.7977.65 allowed a remote attacker to execute arbitrary code inside the sandbox via a crafted HTML page. (Chromium security severity: Medium)",
+      "published": "2026-08-25T21:18:17.297Z",
+      "lastModified": "2026-08-31T18:21:54.060Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00417,
+      "epssPercentile": 0.35584,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-122",
+          "name": "CWE-122",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.33,
+      "tags": [
+        "Google",
+        "Chrome",
         "CWE-122"
       ]
     },
@@ -12961,6 +13009,52 @@
       ]
     },
     {
+      "id": "CVE-2026-79227",
+      "summary": "Type confusion in DevTools in Google Chrome prior to 152.0.7977.65 allowed a remote attacker leveraging social engineering to execute arbitrary code inside the sandbox via a crafted HTML page. (Chromium security severity: Medium)",
+      "published": "2026-08-25T21:18:16.857Z",
+      "lastModified": "2026-08-31T18:22:32.960Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.0033,
+      "epssPercentile": 0.26286,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-843",
+          "name": "CWE-843",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-843"
+      ]
+    },
+    {
       "id": "CVE-2026-71505",
       "summary": "Dolibarr before 24.0.0 contains a broken object-level authorization vulnerability in the REST API third-party site account write routes that allows authenticated attackers with third-party creation rights to overwrite the WebPortal password of any company by bypassing per-object access checks that are only enforced on read routes. Attackers can replace the victim company's WebPortal password through the write endpoint, authenticate as that company to access its invoice data, and also obtain the victim's previous password verifier from the API response.",
       "published": "2026-08-24T19:16:49.817Z",
@@ -14643,6 +14737,53 @@
       ]
     },
     {
+      "id": "CVE-2026-79230",
+      "summary": "Improper input validation in ANGLE in Google Chrome on on Mac prior to 152.0.7977.65 allowed a remote attacker to potentially execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium security severity: Medium)",
+      "published": "2026-08-25T21:18:17.183Z",
+      "lastModified": "2026-08-31T18:22:11.767Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00303,
+      "epssPercentile": 0.23144,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Apple",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-20",
+          "name": "CWE-20",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.89,
+      "tags": [
+        "Apple",
+        "Google",
+        "Chrome",
+        "CWE-20"
+      ]
+    },
+    {
       "id": "CVE-2026-75099",
       "summary": "Unauthenticated REST disclosure of certain content items in Apache Allura. This issue affects Apache Allura: through 1.19.1. Users are recommended to upgrade to version 1.20.0, which fixes the issue.",
       "published": "2026-08-24T17:18:17.340Z",
@@ -16020,56 +16161,6 @@
       ]
     },
     {
-      "id": "CVE-2026-78112",
-      "summary": "A flaw has been found in itsourcecode Hospital Management System Project in PHP 1.0. This impacts an unknown function of the file /viewservicetype.php. This manipulation of the argument delid causes sql injection. The attack may be initiated remotely. The exploit has been published and may be used.",
-      "published": "2026-08-23T10:16:28.333Z",
-      "lastModified": "2026-08-24T19:17:03.510Z",
-      "severity": "Medium",
-      "cvssScore": 6.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.0025,
-      "epssPercentile": 0.16614,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.79,
-      "tags": [
-        "CWE-74",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-78185",
       "summary": "A vulnerability was detected in itsourcecode Sales and Inventory System 1.0. The impacted element is an unknown function of the file /pages/cust_edit.php. The manipulation of the argument ID results in sql injection. The attack can be executed remotely. The exploit is now public and may be used.",
       "published": "2026-08-24T04:16:59.297Z",
@@ -17076,56 +17167,6 @@
         "Google",
         "Chrome",
         "CWE-416"
-      ]
-    },
-    {
-      "id": "CVE-2026-78115",
-      "summary": "A vulnerability has been found in SourceCodester Class and Exam Timetabling System 1.0. Affected is an unknown function of the file /admin/edit_user_account.php of the component User Account Update. Such manipulation of the argument id/username leads to improper authorization. The attack may be launched remotely. The exploit has been disclosed to the public and may be used.",
-      "published": "2026-08-23T10:16:28.573Z",
-      "lastModified": "2026-08-26T19:17:06.337Z",
-      "severity": "Medium",
-      "cvssScore": 5.4,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00296,
-      "epssPercentile": 0.22452,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-266",
-          "name": "CWE-266",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-285",
-          "name": "CWE-285",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.68,
-      "tags": [
-        "CWE-266",
-        "CWE-285"
       ]
     },
     {
@@ -27366,6 +27407,52 @@
       ]
     },
     {
+      "id": "CVE-2026-79234",
+      "summary": "Injection in CSS in Google Chrome prior to 152.0.7977.65 allowed a remote attacker to potentially obtain sensitive information via a crafted HTML page. (Chromium security severity: Medium)",
+      "published": "2026-08-25T21:18:17.633Z",
+      "lastModified": "2026-08-28T14:35:22.337Z",
+      "severity": "Medium",
+      "cvssScore": 6.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00247,
+      "epssPercentile": 0.16289,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-74",
+          "name": "CWE-74",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.85,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-74"
+      ]
+    },
+    {
       "id": "CVE-2026-75370",
       "summary": "An out-of-bounds read/write vulnerability in the MessageParser::parseECSSTCHeader component of SpaceDot AcubeSAT OBC software commit eaf90ec allows attackers to cause a Denial of Service (DoS) via supplying a crafted CAN message.",
       "published": "2026-08-24T19:16:58.183Z",
@@ -29216,51 +29303,6 @@
       ]
     },
     {
-      "id": "CVE-2026-14853",
-      "summary": "The WooCommerce Bookings WordPress plugin before 3.9.0 does not perform a capability check on one of its AJAX actions, and its nonce check can be bypassed by omitting the token, allowing users with Subscriber-level access and above to create draft bookable products.",
-      "published": "2026-08-23T06:17:16.143Z",
-      "lastModified": "2026-08-26T16:30:52.723Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.0017,
-      "epssPercentile": 0.06723,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.74,
-      "tags": [
-        "WordPress",
-        "CWE-862"
-      ]
-    },
-    {
       "id": "CVE-2026-66153",
       "summary": "The NEService auto-upgrade process insecurely handles temporary files in SonicWall NetExtender Linux client which allows an attacker to manipulate file paths.",
       "published": "2026-08-25T20:17:01.270Z",
@@ -29304,50 +29346,6 @@
         "SonicWall",
         "Linux",
         "CWE-59"
-      ]
-    },
-    {
-      "id": "CVE-2026-77116",
-      "summary": "Brave Popup Builder (slug: brave-popup-builder) has a broken access control issue in versions through 0.8.5. Any logged-in user - Subscriber or WooCommerce Customer is enough — can read popup content they shouldn't have access to by passing a post ID in the URL.",
-      "published": "2026-08-23T06:17:27.833Z",
-      "lastModified": "2026-08-26T16:30:52.723Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00165,
-      "epssPercentile": 0.06165,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.72,
-      "tags": [
-        "CWE-639"
       ]
     },
     {
@@ -30210,50 +30208,6 @@
       "tags": [
         "Linux",
         "CWE-94"
-      ]
-    },
-    {
-      "id": "CVE-2026-77115",
-      "summary": "Brave Popup Builder (brave-popup-builder) up to version 0.8.5 reflects UTM query parameters into popup form HTML without escaping them.",
-      "published": "2026-08-23T06:17:27.730Z",
-      "lastModified": "2026-08-26T16:30:52.723Z",
-      "severity": "High",
-      "cvssScore": 7.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00146,
-      "epssPercentile": 0.04234,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.63,
-      "tags": [
-        "CWE-79"
       ]
     },
     {
@@ -39232,6 +39186,52 @@
       ]
     },
     {
+      "id": "CVE-2026-79228",
+      "summary": "Incorrect authorization in SiteIsolation in Google Chrome prior to 152.0.7977.65 allowed a remote attacker who had compromised the renderer process to bypass site isolation into a privileged page via a crafted HTML page. (Chromium security severity: Medium)",
+      "published": "2026-08-25T21:18:16.967Z",
+      "lastModified": "2026-08-28T14:35:25.817Z",
+      "severity": "Low",
+      "cvssScore": 3.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "None"
+      },
+      "epssScore": 0.00289,
+      "epssPercentile": 0.21683,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-863",
+          "name": "CWE-863",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.84,
+      "tags": [
+        "Google",
+        "Chrome",
+        "CWE-863"
+      ]
+    },
+    {
       "id": "CVE-2026-12600",
       "summary": "Denial-of-service (DoS) vulnerability in the internal JPEG2000 (JPX) decoding implementation of the Poppler fork developed by Innodata Labs. When an application processes an untrusted PDF file containing specially crafted JPXDecode images, a remote attacker can cause uncontrolled memory consumption. The flaw occurs in the JPXStream::readCodestream() function, where values controlled from the SIZ segment (such as img.nComps) are used for the memory allocation of tiles and components without adequate validation. This allows an attacker to force excessive memory allocation and cause a resource exhaustion, ultimately causing the pdftoppm process to terminate due to out-of-memory (OOM) conditions.",
       "published": "2026-08-25T11:16:50.383Z",
@@ -39550,6 +39550,53 @@
       "tags": [
         "Google",
         "Chrome",
+        "CWE-451"
+      ]
+    },
+    {
+      "id": "CVE-2026-79233",
+      "summary": "UI misrepresentation in CustomTabs in Google Chrome on on Android prior to 152.0.7977.65 allowed a remote attacker to spoof address bar via a crafted HTML page. (Chromium security severity: Low)",
+      "published": "2026-08-25T21:18:17.527Z",
+      "lastModified": "2026-08-27T19:07:43.383Z",
+      "severity": "Medium",
+      "cvssScore": 4.3,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.0019,
+      "epssPercentile": 0.08952,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Google",
+      "product": "Chrome",
+      "cwe": [
+        {
+          "id": "CWE-451",
+          "name": "CWE-451",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.82,
+      "tags": [
+        "Google",
+        "Chrome",
+        "Android",
         "CWE-451"
       ]
     },
@@ -42014,51 +42061,6 @@
       "tags": [
         "Apple",
         "iOS",
-        "CWE-269"
-      ]
-    },
-    {
-      "id": "CVE-2026-77003",
-      "summary": "The Content Mask WordPress plugin before 1.8.5.5 does not check the capability required to publish the post type being created, allowing users with a role as low as Contributor to publish posts and pages on the site without holding the publish capability.",
-      "published": "2026-08-23T06:17:23.720Z",
-      "lastModified": "2026-08-26T16:30:52.723Z",
-      "severity": "Low",
-      "cvssScore": 2.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "High",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00168,
-      "epssPercentile": 0.06552,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-269",
-          "name": "Improper Privilege Management",
-          "description": "Privileges are assigned, modified, or checked incorrectly."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.17,
-      "tags": [
-        "WordPress",
         "CWE-269"
       ]
     },
