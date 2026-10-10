@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T21:43:16.360Z",
+  "generatedAt": "2026-10-10T01:18:57.225Z",
   "count": 1000,
   "items": [
     {
@@ -717,6 +717,44 @@
       ]
     },
     {
+      "id": "CVE-2026-89712",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: NFSD: restart ssc_expire_umount walk after dropping nfsd_ssc_lock nfsd4_ssc_expire_umount() walks nn->nfsd_ssc_mount_list with list_for_each_entry_safe(ni, tmp, ...). For each expired entry it sets nsui_busy = true, drops nfsd_ssc_lock to run mntput() on the source vfsmount, then reacquires the lock to list_del + kfree the entry and continue iterating via the macro's saved tmp pointer. The nsui_busy flag protects the current ni from concurrent nfsd4_ssc_setup_dul() finders during the lock-drop window, but it does not pin tmp. Another nfsd RPC thread that fails its source- server mount and reaches nfsd4_ssc_cancel_dul() will, during that same window, take nfsd_ssc_lock, list_del + kfree its own ssc_umount item, and release the lock. If that item is the saved tmp of the expire walk, the next iteration dereferences a freed nfsd4_ssc_umount_item. Restart the walk from the head after the mntput() unlock window so no saved next pointer survives the lock-drop. The list is bounded by the number of active inter-server source mounts (typically small) and the expire delayed-work runs periodically rather than per-IO, so the restart is cheap.",
+      "published": "2026-09-11T20:19:58.620Z",
+      "lastModified": "2026-09-14T13:19:21.077Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00714,
+      "epssPercentile": 0.5228,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 6.26,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-89013",
       "summary": "Dolibarr 23.0.4 before 24.0.1 contains an authorization bypass vulnerability that allows unauthenticated attackers to read arbitrary files through the document storage endpoints by supplying a crafted hashp parameter value. Attackers can send a request with hashp=shared to skip token validation while satisfying the authorization condition in htdocs/document.php and htdocs/viewimage.php, gaining access to application logs, uploaded business documents, database backups containing password hashes, and files belonging to other multicompany entities.",
       "published": "2026-09-11T16:17:48.853Z",
@@ -929,50 +967,6 @@
       "priorityScore": 6.18,
       "tags": [
         "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-71805",
-      "summary": "An arbitrary file upload and path traversal vulnerability exists in LZ-litchi 1.0.0. Unauthenticated remote attackers can upload arbitrary files and write them outside the intended storage directory via the directory parameter in POST /app-api/infra/file/upload.",
-      "published": "2026-09-09T22:18:19.043Z",
-      "lastModified": "2026-09-10T16:17:53.127Z",
-      "severity": "Critical",
-      "cvssScore": 9.8,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.0065,
-      "epssPercentile": 0.49639,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-434",
-          "name": "CWE-434",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 6.17,
-      "tags": [
-        "CWE-434"
       ]
     },
     {
@@ -3411,56 +3405,6 @@
       ]
     },
     {
-      "id": "CVE-2026-87016",
-      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.6.41 until 0.11.1, get_user_by_oauth_sub and get_user_by_scim_external_id in backend/open_webui/models/users.py used JSON contains matching that compiled to SQL LIKE substring matching on SQLite. An OAuth subject containing percent or underscore wildcard characters could resolve to a different stored identity, potentially selecting an administrator account and issuing the attacker that account's session; PostgreSQL deployments were not affected. This issue is fixed in version 0.11.1.",
-      "published": "2026-09-09T22:18:46.720Z",
-      "lastModified": "2026-09-15T15:29:13.380Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00599,
-      "epssPercentile": 0.47091,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-155",
-          "name": "CWE-155",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-287",
-          "name": "Improper Authentication",
-          "description": "Authentication is missing or can be bypassed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.48,
-      "tags": [
-        "CWE-155",
-        "CWE-287"
-      ]
-    },
-    {
       "id": "CVE-2026-88885",
       "summary": "Renovate before 44.14.7 contains a command injection vulnerability in the gomod manager when processing unescaped depName parameters in import-path update commands with binarySource=docker mode. Attackers can inject shell metacharacters through malicious dependency names to execute arbitrary commands as the Renovate user during Go module major version updates with postUpdateOptions gomodUpdateImportPaths enabled.",
       "published": "2026-09-10T14:17:17.350Z",
@@ -3592,50 +3536,6 @@
       "priorityScore": 5.48,
       "tags": [
         "CWE-611"
-      ]
-    },
-    {
-      "id": "CVE-2026-71809",
-      "summary": "Authentication Bypass via Hardcoded Master Verification Code vulnerability in Siam Ordering (siam-server) 1.0.0 allows remote unauthenticated attackers to log in as any user, merchant, or administrator.",
-      "published": "2026-09-09T23:16:56.000Z",
-      "lastModified": "2026-09-14T15:17:07.133Z",
-      "severity": "High",
-      "cvssScore": 8.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00593,
-      "epssPercentile": 0.46711,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-259",
-          "name": "CWE-259",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.47,
-      "tags": [
-        "CWE-259"
       ]
     },
     {
@@ -6315,6 +6215,44 @@
       ]
     },
     {
+      "id": "CVE-2026-89703",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nfsd: set SC_STATUS_FREED in nfsd4_drop_revoked_stid for delegations nfsd4_drop_revoked_stid() handles FREE_STATEID for admin-revoked delegations but does not set SC_STATUS_FREED before releasing cl_lock. revoke_delegation() uses this flag to detect whether FREE_STATEID has already processed the delegation -- without it, the freed delegation is added to cl_revoked via list_add(), producing a use-after-free when cl_revoked is later traversed in __destroy_client(). The SC_STATUS_REVOKED path in nfsd4_free_stateid() (line 7983) already sets SC_STATUS_FREED correctly. Apply the same pattern to the SC_STATUS_ADMIN_REVOKED path in nfsd4_drop_revoked_stid().",
+      "published": "2026-09-11T20:19:57.537Z",
+      "lastModified": "2026-09-13T07:17:35.860Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00617,
+      "epssPercentile": 0.47996,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.11,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-89174",
       "summary": "Smart Video Intercom System developed by Kingdom Communication Associated has a Missing Brute-force Protection vulnerability. Unauthenticated remote attackers can gain access to valid accounts through a large number of login attempts.",
       "published": "2026-09-11T08:16:48.377Z",
@@ -7587,57 +7525,6 @@
       "tags": [
         "CWE-400",
         "CWE-1088"
-      ]
-    },
-    {
-      "id": "CVE-2026-87931",
-      "summary": "A vulnerability has been found in Behavioral Technology Group Pavlok Behavioral Conditioning Wearable up to 20260707. Impacted is an unknown function of the component Apple Notification Center Service Event Handler. The manipulation leads to buffer overflow. The attack must be carried out from within the local network. The vendor was contacted early about this disclosure but did not respond in any way.",
-      "published": "2026-09-10T00:17:24.737Z",
-      "lastModified": "2026-09-10T14:39:13.757Z",
-      "severity": "Critical",
-      "cvssScore": 9.6,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00602,
-      "epssPercentile": 0.47237,
-      "isKev": false,
-      "kev": null,
-      "vendor": "Apple",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-119",
-          "name": "CWE-119",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-120",
-          "name": "CWE-120",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 5.01,
-      "tags": [
-        "Apple",
-        "CWE-119",
-        "CWE-120"
       ]
     },
     {
@@ -9024,6 +8911,44 @@
       ]
     },
     {
+      "id": "CVE-2026-89713",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: NFSD: check truncate permission under inode lock nfsd_setattr() checks whether a size update needs NFSD_MAY_TRUNC before it takes inode_lock(). The comparison uses the file size sampled by that unlocked read, but the actual ATTR_SIZE update is applied later under inode_lock() by notify_change(). This leaves a TOCTOU window for append-only files. If a client sends a SETATTR that does not shrink the file at the time of the unlocked sample, a concurrent append can extend the file before nfsd_setattr() takes inode_lock(). notify_change() then applies a real truncation without the NFSD_MAY_TRUNC check that rejects IS_APPEND(inode). The VFS truncate syscall paths perform their own append-only checks before calling notify_change(), so NFSD must make this decision against the locked size it is about to change. Split the write-count acquisition from the truncation permission check. Keep get_write_access() before the locked setattr work, then recheck whether the requested size is below i_size_read(inode) after inode_lock() has been acquired and before notify_change(ATTR_SIZE). This also avoids the plain unlocked inode->i_size load.",
+      "published": "2026-09-11T20:19:58.743Z",
+      "lastModified": "2026-09-13T07:17:37.013Z",
+      "severity": "Critical",
+      "cvssScore": 9.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00612,
+      "epssPercentile": 0.47727,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.86,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-81431",
       "summary": "The Registration Form for WooCommerce WordPress plugin before 1.1.3 does not validate that the form referenced during registration is a legitimate registration form, reading the permitted-role allow-list from an arbitrary attacker-controlled post instead. A user able to create a post (Contributor and above) can therefore register a new account with an arbitrary role, including Administrator, leading to full site takeover. This is an incomplete fix of CVE-2026-54807.",
       "published": "2026-09-10T07:17:03.243Z",
@@ -9333,106 +9258,6 @@
       ]
     },
     {
-      "id": "CVE-2026-87921",
-      "summary": "A vulnerability was identified in Rizwan17 inventory-management-system up to bfe78a330d01bb26b9daec5dc9ecd5c77900e03f. Affected is the function update_record of the file includes/manage.php. The manipulation of the argument update_category/cid/update_brand/update_product leads to sql injection. The attack is possible to be carried out remotely. The exploit is publicly available and might be used. This product adopts a rolling release strategy to maintain continuous delivery. Therefore, version details for affected or updated releases cannot be specified. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-09-09T22:18:47.193Z",
-      "lastModified": "2026-09-14T18:20:20.357Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00431,
-      "epssPercentile": 0.35352,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.79,
-      "tags": [
-        "CWE-74",
-        "CWE-89"
-      ]
-    },
-    {
-      "id": "CVE-2026-87925",
-      "summary": "A vulnerability was detected in Rizwan17 inventory-management-system up to bfe78a330d01bb26b9daec5dc9ecd5c77900e03f. This vulnerability affects the function storeCustomerOrderInvoice of the file includes/manage.php. Performing a manipulation of the argument pro_name[] results in sql injection. The attack can be initiated remotely. The exploit is now public and may be used. Continious delivery with rolling releases is used by this product. Therefore, no version details of affected nor updated releases are available. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-09-10T00:17:24.387Z",
-      "lastModified": "2026-09-10T18:18:11.600Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00431,
-      "epssPercentile": 0.3535,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-74",
-          "name": "CWE-74",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-89",
-          "name": "SQL Injection",
-          "description": "Improper neutralization of special elements used in SQL commands."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.79,
-      "tags": [
-        "CWE-74",
-        "CWE-89"
-      ]
-    },
-    {
       "id": "CVE-2026-82097",
       "summary": "IBM DataStage on Cloud Pak for Data 5.4.0.0 could allow a remote authenticated attacker to execute arbitrary code due to a Server-Side Request Forgery (SSRF) vulnerability.",
       "published": "2026-09-10T22:17:03.650Z",
@@ -9704,6 +9529,44 @@
       },
       "epssScore": 0.00457,
       "epssPercentile": 0.37712,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.75,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89702",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nfsd: size fh_verify server sockaddr slot by xpt_locallen The nfsd_fh_verify and nfsd_fh_verify_err tracepoints declare the server sockaddr slot sized by xpt_remotelen but fill it from xpt_local using xpt_locallen: TP_STRUCT__entry( ... __sockaddr(server, rqstp->rq_xprt->xpt_remotelen) ... ) TP_fast_assign( ... __assign_sockaddr(server, &rqstp->rq_xprt->xpt_local, rqstp->rq_xprt->xpt_locallen); ... ) When xpt_locallen exceeds xpt_remotelen, __assign_sockaddr's memcpy writes past the reserved ring-buffer slot. In the reverse direction (xpt_locallen < xpt_remotelen) the slot is oversized and the unwritten tail leaks prior ring-buffer contents to trace consumers. The write-past-end case is reachable on NFS/UDP. svc_xprt_set_remote() is only called from svc_tcp_accept() (net/sunrpc/svcsock.c) and from the RDMA connect path; svc_create_socket() for UDP calls only svc_xprt_set_local(), so xpt_remotelen stays 0 for the xprt's lifetime. Every fh_verify trace for an NFSv2/v3-over-UDP request then copies 16 or 28 bytes from xpt_local into a zero-byte slot. The other NFSD tracepoints that record the server address (NFSD_TRACE_PROC_CALL_FIELDS, NFSD_TRACE_PROC_RES_FIELDS, SVC_RQST_ENDPOINT_FIELDS) already size the server slot by xpt_locallen; nfsd_fh_verify and nfsd_fh_verify_err were the only exceptions. Fix by sizing the server slot with xpt_locallen so the declared slot matches the copy length. The client slot and its assignment already agree on xpt_remotelen and are left untouched.",
+      "published": "2026-09-11T20:19:57.413Z",
+      "lastModified": "2026-09-13T07:17:35.723Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00457,
+      "epssPercentile": 0.3771,
       "isKev": false,
       "kev": null,
       "vendor": "Linux",
@@ -10153,6 +10016,44 @@
       ]
     },
     {
+      "id": "CVE-2026-89708",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nfsd: RCU-protect cl_cb_session to fix use-after-free on session teardown After a DESTROY_SESSION the per-session teardown path can free a session while rpciod still holds an inflight callback rpc_task that dereferences clp->cl_cb_session. nfsd4_probe_callback_sync() flushes cl_callback_wq, but once nfsd4_run_cb_work() has called rpc_call_async() the rpc_task lives on rpciod; flushing the workqueue does not wait for it. rpc_shutdown_client() does drain rpciod tasks, but uses a 1-second wait_event_timeout — tasks stuck in rpc_delay() (e.g. 2-second NFS4ERR_DELAY retries) can outlive the drain. destroy path rpciod ------------ ------ unhash_session(ses) nfsd4_probe_callback_sync(clp) flush_workqueue(cl_callback_wq) /* returns; rpc_task still live */ nfsd4_put_session_locked(ses) free_session(ses) -> kfree(ses) nfsd4_cb_sequence_done() reads cb_clp->cl_cb_session /* freed slab */ A second window exists in nfsd4_process_cb_update(). When __nfsd4_find_backchannel() returns NULL because unhash_session() has already removed the destroyed session from cl_sessions, setup_callback_client() takes the v4.1 early return so clp->cl_cb_session = ses never fires and the field retains a pointer to the about-to-be-freed session. Fix both by converting cl_cb_session to an RCU-protected pointer: - Move the cl_cb_session = ses assignment in setup_callback_client() to after rpc_create() succeeds, so it is only published when a working backchannel exists. Clear cl_cb_session on the error return in nfsd4_process_cb_update(). Both stores use rcu_assign_pointer(). - Annotate cl_cb_session with __rcu. All rpciod-side readers use rcu_read_lock()/rcu_dereference() and check for NULL, bailing to the appropriate error or requeue path: encode_cb_sequence4args(), decode_cb_sequence4resok(), nfsd41_cb_get_slot(), nfsd41_cb_release_slot(), nfsd4_cb_prepare(), and nfsd4_cb_sequence_done(). - Switch __free_session() from kfree() to kfree_rcu() so the session slab is not reclaimed until after an RCU grace period, guaranteeing that rpciod readers inside rcu_read_lock() never dereference freed memory. - Pass the session pointer to the nfsd_cb_seq_status and nfsd_cb_free_slot tracepoints instead of having them re-read cl_cb_session. - nfsd4_cb_prepare() calls rpc_exit() when the session is NULL, routing through the done/release path to requeue the callback.",
+      "published": "2026-09-11T20:19:58.140Z",
+      "lastModified": "2026-09-21T14:17:25.690Z",
+      "severity": "Critical",
+      "cvssScore": 9.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00444,
+      "epssPercentile": 0.36678,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.71,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-81796",
       "summary": "Authentication Bypass Using an Alternate Path or Channel vulnerability in WEN Solutions WP Travel wp-travel allows Password Recovery Exploitation.This issue affects WP Travel: from n/a through 12.0.3.",
       "published": "2026-09-10T15:17:46.107Z",
@@ -10365,56 +10266,6 @@
       "priorityScore": 4.66,
       "tags": [
         "CWE-22"
-      ]
-    },
-    {
-      "id": "CVE-2026-87996",
-      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.9.6 until 0.11.1, SafePlaywrightURLLoader in backend/open_webui/retrieval/web/utils.py validated a user-controlled hostname in Python and then let the Playwright browser resolve it again in the sync and async request interceptors. An authenticated user controlling authoritative DNS could return a public address to validation and an internal address to the browser, exposing responses from internal services or cloud metadata through web search or URL ingestion. This issue is fixed in version 0.11.1.",
-      "published": "2026-09-09T22:18:47.857Z",
-      "lastModified": "2026-09-16T15:14:48.890Z",
-      "severity": "High",
-      "cvssScore": 7.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00354,
-      "epssPercentile": 0.27143,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-367",
-          "name": "CWE-367",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.65,
-      "tags": [
-        "CWE-367",
-        "CWE-918"
       ]
     },
     {
@@ -12385,56 +12236,6 @@
       ]
     },
     {
-      "id": "CVE-2026-87922",
-      "summary": "A security flaw has been discovered in Rizwan17 inventory-management-system up to bfe78a330d01bb26b9daec5dc9ecd5c77900e03f. Affected by this vulnerability is the function DBOperation.addCategory of the file includes/process.php of the component AJAX Backend. The manipulation of the argument userid results in missing authentication. The attack may be performed from remote. The exploit has been released to the public and may be used for attacks. This product utilizes a rolling release system for continuous delivery, and as such, version information for affected or updated releases is not disclosed. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-09-09T22:18:47.390Z",
-      "lastModified": "2026-09-10T15:17:54.387Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00686,
-      "epssPercentile": 0.51212,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-287",
-          "name": "Improper Authentication",
-          "description": "Authentication is missing or can be bypassed."
-        },
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.35,
-      "tags": [
-        "CWE-287",
-        "CWE-306"
-      ]
-    },
-    {
       "id": "CVE-2026-89682",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: nfsd: fix fcache_disposal UAF by inlining dispose state into nfsd_net nfsd_file_dispose_list_delayed() defers fput() to nfsd service threads via a per-net freeme queue, preventing the shrinker and GC worker from bearing the cost of closing files (see ffb402596147). However, the queue lives in a separately-allocated struct nfsd_fcache_disposal that is freed by nfsd_free_fcache_disposal_net() during per-net teardown. The global shrinker, laundrette, and fsnotify callbacks can still be inside nfsd_file_dispose_list_delayed() dereferencing that pointer, causing a use-after-free. Inline the spinlock and freeme list directly into struct nfsd_net (as fcache_dispose_lock and fcache_dispose_list), eliminating the separately allocated struct nfsd_fcache_disposal entirely. These fields now have the same lifetime as the net namespace itself, so there is no dangling pointer to chase. nfsd_file_cache_start_net() now just initializes the inline fields and cannot fail due to allocation. nfsd_file_cache_shutdown_net() drains the inline list directly instead of freeing a separate struct. The alloc/free helpers are removed.",
       "published": "2026-09-11T20:19:55.043Z",
@@ -13181,6 +12982,44 @@
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.3,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89707",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nfsd: release path refs on follow_down() error nfsd_cross_mnt() initializes a local struct path with mntget() and dget() before calling follow_down(). On a negative return the error arm jumps to out without releasing those references: err = follow_down(&path, follow_flags); if (err < 0) goto out; follow_down() never drops the caller's entry-time refs on any error sub-case; for example a pre-cross d_manage() failure leaves path untouched, so the mntget()/dget() taken on entry survive the call. Every other early-exit arm in nfsd_cross_mnt() (other-namespace return, IS_ERR(exp2), and the success tail after the swap) already calls path_put(&path); the err < 0 arm is the lone omission. The leak inflates mnt_count and d_count on each failed cross-mount, blocking umount and pinning dentries against the shrinker, and is reachable by any authenticated NFS client through nfsd_lookup_dentry or the NFSv4 READDIR encode path. Fix by calling path_put(&path) before the goto out in the err < 0 arm so the entry-time refs are released on all follow_down() error returns.",
+      "published": "2026-09-11T20:19:58.017Z",
+      "lastModified": "2026-09-14T13:19:20.690Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00612,
+      "epssPercentile": 0.47727,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
@@ -14056,56 +13895,6 @@
       "priorityScore": 4.26,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-87995",
-      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.8.11 until 0.11.1, src/lib/components/chat/FileNav/PortPreview.svelte rendered terminal port content in an iframe sandbox containing both allow-scripts and allow-same-origin. Because the terminal proxy serves that content from the Open WebUI origin, an authenticated user with access to a shared terminal server could host script on a previewed port and take over a victim's account when the victim opened the preview. This issue is fixed in version 0.11.1.",
-      "published": "2026-09-09T22:18:47.710Z",
-      "lastModified": "2026-09-16T15:14:57.400Z",
-      "severity": "High",
-      "cvssScore": 8.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:H/I:H/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "None"
-      },
-      "epssScore": 0.00417,
-      "epssPercentile": 0.34015,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-1021",
-          "name": "CWE-1021",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.24,
-      "tags": [
-        "CWE-79",
-        "CWE-1021"
       ]
     },
     {
@@ -15154,56 +14943,6 @@
       ]
     },
     {
-      "id": "CVE-2026-87924",
-      "summary": "A security vulnerability has been detected in Rizwan17 inventory-management-system up to bfe78a330d01bb26b9daec5dc9ecd5c77900e03f. This affects an unknown part of the file includes/invoice_bill.php of the component Invoice Generation. Such manipulation of the argument order_date/invoice_no leads to missing authentication. It is possible to launch the attack remotely. The exploit has been disclosed publicly and may be used. This product takes the approach of rolling releases to provide continious delivery. Therefore, version details for affected and updated releases are not available. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-09-09T23:16:56.430Z",
-      "lastModified": "2026-09-10T18:18:11.457Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00758,
-      "epssPercentile": 0.53874,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-287",
-          "name": "Improper Authentication",
-          "description": "Authentication is missing or can be bypassed."
-        },
-        {
-          "id": "CWE-306",
-          "name": "CWE-306",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.16,
-      "tags": [
-        "CWE-287",
-        "CWE-306"
-      ]
-    },
-    {
       "id": "CVE-2026-88886",
       "summary": "Renovate is a dependency update automation tool. In versions before 44.14.7 (and in Mend Renovate CE/EE distributions before 15.4.0, and the mend-renovate-enterprise-edition Helm chart before 10.4.0), the manager/gradle-wrapper module does not escape the distributionUrl value read from a repository's gradle/wrapper/gradle-wrapper.properties file before invoking the Gradle Wrapper CLI. In self-hosted deployments configured with binarySource=docker and allowedUnsafeExecutions=['gradleWrapper', ...], a repository that supplies a crafted distributionUrl (for example, appending a shell metacharacter and command) can cause arbitrary commands to be executed as the Renovate user when Renovate processes a Gradle Wrapper update. The issue is fixed in Renovate 44.14.7; as a workaround, remove 'gradleWrapper' from allowedUnsafeExecutions.",
       "published": "2026-09-10T14:17:17.517Z",
@@ -15290,6 +15029,82 @@
       "priorityScore": 4.16,
       "tags": [
         "CWE-306"
+      ]
+    },
+    {
+      "id": "CVE-2026-89709",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: lockd, nfsd: RCU-protect nlmsvc_ops dispatch nlmsvc_ops is published by nfsd_lockd_init() and cleared by nfsd_lockd_shutdown() with plain stores, while lockd dereferences it unguarded from dispatch sites in fs/lockd/svcsubs.c. The pointer targets nfsd's .rodata and the fopen/fclose callbacks live in nfsd's .text, so a stale load after rmmod nfsd results in either a NULL deref or a module-text use-after-free. Declare nlmsvc_ops as __rcu, publish via rcu_assign_pointer(), clear via RCU_INIT_POINTER() + synchronize_rcu(). Add a struct module *owner field to nlmsvc_binding and pin the module across indirect calls with try_module_get/module_put. When the binding is torn down, fall back to fput() to avoid leaking struct file references.",
+      "published": "2026-09-11T20:19:58.270Z",
+      "lastModified": "2026-09-13T07:17:36.617Z",
+      "severity": "High",
+      "cvssScore": 8.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "High",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00454,
+      "epssPercentile": 0.37434,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.15,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89711",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: NFSD: remove flawed WARN_ON_ONCE from nfsd_mode_check The header for commit e75b23f9e323 (\"nfsd: check d_can_lookup in fh_verify of directories\") details the assumption that justified adding the WARN_ON_ONCE to nfsd_mode_check(), that assumption is invalid (in the case of NFS reexport). When NFSD exports an NFS filesystem it is very possible for nfsd_mode_check() to encounter a @dentry that doesn't have i_op->lookup (see nfs_fhget()'s NFS_ATTR_FATTR_MOUNTPOINT and NFS_ATTR_FATTR_V4_REFERRAL handling, and d_flags_for_inode()). So remove nfsd_mode_check()'s WARN_ON_ONCE(). The nfserr_notdir return on that branch must stay. It guards the subsequent lookup_one_unlocked() -> __lookup_slow() path, which calls inode->i_op->lookup() with no NULL check, so returning nfserr_notdir is what keeps a client LOOKUP into such a @dentry from dereferencing a NULL method pointer.",
+      "published": "2026-09-11T20:19:58.500Z",
+      "lastModified": "2026-09-14T13:19:20.930Z",
+      "severity": "High",
+      "cvssScore": 8.2,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "Low",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00443,
+      "epssPercentile": 0.36552,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.15,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -15635,6 +15450,82 @@
       ]
     },
     {
+      "id": "CVE-2026-89704",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nfsd: sample writeback error cursor before async COPY loop _nfsd_copy_file_range() samples dst->f_wb_err into \"since\" after the copy loop, then uses it to detect writeback errors via filemap_check_wb_err() once vfs_fsync_range() returns. Because the nfsd_file cache reuses a single struct file across requests targeting the same inode, a concurrent COMMIT or stable WRITE on dst advances dst->f_wb_err to the current mapping->wb_err via file_check_and_advance_wb_err() during its own vfs_fsync_range(). If that advancement lands between the writeback error appearing in mapping->wb_err and the COPY worker sampling \"since\", the worker captures the already-advanced cursor, errseq_check() sees cur == since and returns zero, and NFSD4_COPY_F_COMMITTED is set even though writeback failed. CB_OFFLOAD then encodes wr_stable_how = FILE_SYNC4, the client treats the copied data as durable, and the failure becomes silent data loss. Sample since once at the start of the function. The cursor then reflects state in effect before this COPY issues any writes, and filemap_check_wb_err() detects any error that occurs during the copy regardless of which thread first observes it. This matches the pattern used by nfsd_vfs_write() and nfsd4_clone_file_range().",
+      "published": "2026-09-11T20:19:57.657Z",
+      "lastModified": "2026-09-14T13:19:20.367Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00526,
+      "epssPercentile": 0.42818,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.12,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89706",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nfsd: Reset write verifier when async COPY writeback fails Async COPY captures nn->writeverf at request time and reports it to the client via CB_OFFLOAD after the worker kthread completes. When the post-copy vfs_fsync_range() or filemap_check_wb_err() in _nfsd_copy_file_range() reports an error, the worker correctly leaves NFSD4_COPY_F_COMMITTED clear so that CB_OFFLOAD encodes wr_stable_how as NFS_UNSTABLE, but the server's write verifier is not rotated. A client that receives NFS_UNSTABLE in CB_OFFLOAD follows up with COMMIT to make the copied data durable. With the verifier unchanged, COMMIT returns the same value the client just received via CB_OFFLOAD, and the client concludes the copy is durable -- silently dropping the data whose writeback in fact failed. This violates the UNSTABLE+COMMIT durability contract (RFC 7862 section 15.1, RFC 8881 section 18.32) and matches the bug just fixed in nfsd_vfs_write() and nfsd_commit(). Rotate nn->writeverf at the writeback-failure site. The async COPY worker has no svc_rqst, so commit_reset_write_verifier() is not available here; calling nfsd_reset_write_verifier() directly mirrors the trace-less reset already used by nfsd_file_check_write_error() for the same purpose. Filter out -EAGAIN and -ESTALE, matching commit_reset_write_verifier(), since neither indicates a durable-storage failure.",
+      "published": "2026-09-11T20:19:57.890Z",
+      "lastModified": "2026-09-14T13:19:20.523Z",
+      "severity": "High",
+      "cvssScore": 7.5,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "High",
+        "availability": "None"
+      },
+      "epssScore": 0.00526,
+      "epssPercentile": 0.42817,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.12,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-89173",
       "summary": "Smart Video Intercom System developed by Kingdom Communication Associated has a Sensitive Data Exposure vulnerability. Unauthenticated remote attackers can enumerate valid user accounts by exploiting differences in system responses.",
       "published": "2026-09-11T08:16:48.230Z",
@@ -15808,56 +15699,6 @@
       "priorityScore": 4.07,
       "tags": [
         "CWE-770"
-      ]
-    },
-    {
-      "id": "CVE-2026-87933",
-      "summary": "A vulnerability was found in DaveGamble cJSON up to 1.7.19. The affected element is the function cJSONUtils_MergePatch of the file cJSON_Utils.c. The manipulation results in use after free. The attack may be launched remotely. The exploit has been made public and could be used. The pull request to fix this issue awaits acceptance.",
-      "published": "2026-09-10T01:16:35.650Z",
-      "lastModified": "2026-09-10T20:17:31.073Z",
-      "severity": "High",
-      "cvssScore": 7.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00527,
-      "epssPercentile": 0.42896,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-119",
-          "name": "CWE-119",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-416",
-          "name": "Use After Free",
-          "description": "A program uses memory after it has been freed."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.06,
-      "tags": [
-        "CWE-119",
-        "CWE-416"
       ]
     },
     {
@@ -17777,6 +17618,44 @@
       ]
     },
     {
+      "id": "CVE-2026-89724",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: media: vicodec: fix out-of-bounds write in FWHT encoder vidioc_s_fmt_vid_out() sizes the encoder CAPTURE buffer from the compressed descriptor pixfmt_fwht, whose sizeimage_mult is 3: coded_w * coded_h * 3 + sizeof(struct fwht_cframe_hdr). fwht_encode_frame() encodes one plane per component, and an incompressible plane takes the FWHT_FRAME_UNENCODED path in encode_plane(), copying the plane verbatim. For a 4-component pixel format all four planes are full resolution (width_div == height_div == 1), so a frame that forces every plane through the unencoded fallback writes sizeof(struct fwht_cframe_hdr) + 4 * coded_w * coded_h bytes, overrunning the plane by coded_w * coded_h, which can result in corruption of adjacent kernel heap memory. Bump pixfmt_fwht.sizeimage_mult from 3 to 4, matching the largest components_num among the supported raw formats, so the capture buffer is always large enough for the unencoded fallback.",
+      "published": "2026-09-11T20:20:02.050Z",
+      "lastModified": "2026-09-14T13:19:21.580Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00169,
+      "epssPercentile": 0.0566,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.93,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-52097",
       "summary": "An issue in AppFlowy 0.11.8 allows a remote attacker to execute arbitrary code via the afLaunchUri, _afLaunchLocalUri (url_launcher.dart), OpenFilex.open, localPathRegex (common_patterns.dart) components",
       "published": "2026-09-10T17:17:04.820Z",
@@ -18033,51 +17912,6 @@
       "priorityScore": 3.92,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-88000",
-      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.10.0 until 0.11.1, DELETE /api/v1/chats/{id}/messages/{message_id} used the chat-history deletion helper in backend/open_webui/models/chats.py to follow childrenIds without recording visited message identifiers. An authenticated user could store a cyclic chat tree and delete a message, causing a synchronous infinite loop on the server request loop that blocked every user's requests until the process was killed. This issue is fixed in version 0.11.1.",
-      "published": "2026-09-09T22:18:48.777Z",
-      "lastModified": "2026-09-14T17:48:49.137Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00592,
-      "epssPercentile": 0.46696,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-835",
-          "name": "CWE-835",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.91,
-      "tags": [
-        "F5",
-        "CWE-835"
       ]
     },
     {
@@ -18443,50 +18277,6 @@
       ]
     },
     {
-      "id": "CVE-2026-88002",
-      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.5.0 until 0.11.1, the message-chain reconstruction helper in backend/open_webui/utils/misc.py advanced through a chat history by map key but tracked visited entries using each message body's optional id field. An authenticated user could store id-less messages in a parent cycle and trigger a non-terminating walk that blocked the async event loop, grew memory until termination, and remained persistent across process restarts. This issue is fixed in version 0.11.1.",
-      "published": "2026-09-09T22:18:49.080Z",
-      "lastModified": "2026-09-14T19:56:27.077Z",
-      "severity": "Medium",
-      "cvssScore": 6.5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "None",
-        "availability": "High"
-      },
-      "epssScore": 0.00583,
-      "epssPercentile": 0.46225,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-835",
-          "name": "CWE-835",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": true,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.89,
-      "tags": [
-        "CWE-835"
-      ]
-    },
-    {
       "id": "CVE-2026-89243",
       "summary": "WWBN AVideo through commit c3edcc274c389816d434acadac07ee78eaf330c1 contains a stored cross-site scripting vulnerability in UserGroups::setGroup_name() that fails to sanitize group_name input. Administrators with canAdminUserGroups permission can inject malicious HTML and JavaScript that executes in the browser when other administrators access the user manager interface.",
       "published": "2026-09-11T12:16:53.960Z",
@@ -18572,57 +18362,6 @@
       "priorityScore": 3.89,
       "tags": [
         "CWE-200"
-      ]
-    },
-    {
-      "id": "CVE-2026-87998",
-      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.10.0 until 0.11.1, DELETE /api/v1/knowledge/{id}/delete in backend/open_webui/routers/knowledge.py authorized deletion against the knowledge base but then removed its administrator-owned external connection without a separate administrator check or a check for other dependent knowledge bases. A non-administrator with write access to one external knowledge base could delete shared instance configuration and make every other knowledge base using that connection unavailable. This issue is fixed in version 0.11.1.",
-      "published": "2026-09-09T22:18:48.460Z",
-      "lastModified": "2026-09-16T15:14:19.507Z",
-      "severity": "High",
-      "cvssScore": 7.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "High",
-        "availability": "Low"
-      },
-      "epssScore": 0.00486,
-      "epssPercentile": 0.39921,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-269",
-          "name": "Improper Privilege Management",
-          "description": "Privileges are assigned, modified, or checked incorrectly."
-        },
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.88,
-      "tags": [
-        "F5",
-        "CWE-269",
-        "CWE-863"
       ]
     },
     {
@@ -19483,50 +19222,6 @@
       "priorityScore": 3.8,
       "tags": [
         "Linux"
-      ]
-    },
-    {
-      "id": "CVE-2026-15913",
-      "summary": "In versions prior to 7.10.2 a path traversal vulnerability in the /attachRemoteFiles endpoint of Fortra's GoAnywhere MFT allows Web Users with both Secure Folders and Secure Mail permissions to escape their sandboxed home directory, achieving arbitrary file read.",
-      "published": "2026-09-09T22:17:11.367Z",
-      "lastModified": "2026-09-10T15:53:23.707Z",
-      "severity": "High",
-      "cvssScore": 7.7,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00393,
-      "epssPercentile": 0.3142,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-23",
-          "name": "CWE-23",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.79,
-      "tags": [
-        "CWE-23"
       ]
     },
     {
@@ -20580,6 +20275,44 @@
       "tags": [
         "WordPress",
         "CWE-434"
+      ]
+    },
+    {
+      "id": "CVE-2026-89725",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: media: cec: stm32: prevent out-of-bounds write on RX overflow stm32_rx_done() appends each received CEC byte to rx_msg.msg[] using rx_msg.len as the write index, incrementing it on every RXBR (receive-byte-ready) interrupt without checking it against the buffer size: cec->rx_msg.msg[cec->rx_msg.len++] = val & 0xFF; rx_msg.msg[] is a fixed CEC_MAX_MSG_SIZE (16) byte array in struct cec_msg, and rx_msg.len is only reset on RXACKE/RXOVR or after a completed message (RXEND). The number of bytes received before RXEND is decided by the remote CEC device (it sets EOM), not by the driver. A peer that keeps sending bytes without ending the message drives RXBR repeatedly, pushing rx_msg.len past 16 and writing peer-controlled bytes out of bounds into the surrounding memory. This is reachable in normal operation once the driver has probed and receiving is enabled, from the IRQ thread, without any local privilege. The length check in the CEC core runs on the consumer side, after the byte has been stored, so it does not prevent the overflow. Bound the index in the driver before the store, as the other platform CEC drivers already do (e.g. tegra_cec), dropping the excess bytes of an overlong frame. Found by static analysis tool CodeQL.",
+      "published": "2026-09-11T20:20:02.567Z",
+      "lastModified": "2026-09-14T13:19:21.730Z",
+      "severity": "High",
+      "cvssScore": 8.8,
+      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Adjacent",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00262,
+      "epssPercentile": 0.16577,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.66,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -22267,50 +22000,6 @@
       "priorityScore": 3.47,
       "tags": [
         "CWE-121"
-      ]
-    },
-    {
-      "id": "CVE-2026-87999",
-      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. Prior to 0.11.1, POST /api/v1/retrieval/process/web and POST /api/v1/retrieval/process/web/search in backend/open_webui/retrieval/web/utils.py treated Python's globally routable address classification as proof that a destination was external. An authenticated user could make an Azure-hosted instance fetch and return content from 168.63.129.16, the Azure platform channel, as well as other reserved ranges that the standard classification did not reject. This issue is fixed in version 0.11.1.",
-      "published": "2026-09-09T22:18:48.617Z",
-      "lastModified": "2026-09-16T15:13:49.077Z",
-      "severity": "High",
-      "cvssScore": 7.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "High",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.0036,
-      "epssPercentile": 0.27737,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.46,
-      "tags": [
-        "CWE-918"
       ]
     },
     {
@@ -25675,50 +25364,6 @@
       ]
     },
     {
-      "id": "CVE-2026-15460",
-      "summary": "The Bluetooth Classic (BR/EDR) L2CAP receive handler bt_l2cap_br_recv() in subsys/bluetooth/host/classic/l2cap_br.c dispatched inbound data PDUs based only on the destination channel ID, without checking that the target channel had reached the BT_L2CAP_CONNECTED state. A dynamic channel is assigned its RX CID and added to the connection's channel list while still in BT_L2CAP_CONNECTING (and later BT_L2CAP_CONFIG) — before configuration completes and, for PSMs that require security, before the peer is authenticated (l2cap_br_conn_req()). Because the channel is already findable by bt_l2cap_br_lookup_rx_cid() during this window, a remote peer within radio range can send a data PDU addressed to that CID and have it processed on a not-yet-established channel. The dispatch keys off channel fields (BR_CHAN(chan)->rx.mode, rx.mps) that are only initialized during configuration by l2cap_br_conf(); since channel objects are pooled and bt_l2cap_br_chan_del() does not reset rx.mode or the reassembly buffer _sdu, a reused channel can carry stale state into the CONNECTING window and route the frame into the retransmission/flow-control path (bt_l2cap_br_ret_fc_recv()) with stale parameters and a possibly stale _sdu pointer. The impact is delivery of attacker data to upper-layer protocol handlers on a half-open (and possibly unauthenticated) channel, plus operation on stale or partially initialized channel state on reused channel objects — leading to channel/link teardown (denial of service) and, in the stale-_sdu case, a dangling-pointer condition. The fix adds an explicit BR_CHAN(chan)->state < BT_L2CAP_CONNECTED guard that drops any data received before the channel is fully connected.",
-      "published": "2026-09-09T23:16:54.617Z",
-      "lastModified": "2026-09-10T18:17:55.767Z",
-      "severity": "Medium",
-      "cvssScore": 5.4,
-      "cvssVector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
-      "cvssBreakdown": {
-        "attackVector": "Adjacent",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "Low"
-      },
-      "epssScore": 0.00159,
-      "epssPercentile": 0.04427,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-666",
-          "name": "CWE-666",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.04,
-      "tags": [
-        "CWE-666"
-      ]
-    },
-    {
       "id": "CVE-2026-89148",
       "summary": "AVideo through commit c3edcc274c389816d434acadac07ee78eaf330c1 contains an open redirect in objects/playlistSort.php. Because the endpoint is not a *.json.php script, AVideo's automatic CSRF guard (autoCSRFGuard()/forbidIfIsUntrustedRequest()) does not run, and when the request includes the sort parameter the script issues a Location header set to the unvalidated $_SERVER['HTTP_REFERER'] value without calling isSafeRedirectURL(). A remote unauthenticated attacker can therefore induce a logged-in user who can manage the targeted playlist to submit a cross-origin POST with a crafted Referer, causing the victim's playlist to be reordered and the victim's browser to be redirected from a trusted AVideo URL to an attacker-controlled site for phishing. No patched version is available.",
       "published": "2026-09-11T12:16:53.170Z",
@@ -27504,6 +27149,44 @@
       ]
     },
     {
+      "id": "CVE-2026-89720",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: ubifs: fix out-of-bounds read in signature length check ubifs_sb_verify_signature() bounds the on-disk ubifs_sig_node->len field before handing the signature payload to verify_pkcs7_signature(), but the check has the wrong sign: if (le32_to_cpu(signode->len) > snod->len + sizeof(struct ubifs_sig_node)) The signature bytes start sizeof(struct ubifs_sig_node) (UBIFS_SIG_NODE_SZ, 64 bytes) into the node, so the payload is at most snod->len - sizeof(struct ubifs_sig_node) bytes long. Adding the header size instead of subtracting it accepts a declared length up to 2 * UBIFS_SIG_NODE_SZ larger than the node actually holds -- past the end of c->sbuf, which is vmalloc(c->leb_size). verify_pkcs7_signature() -> pkcs7_parse_message() -> asn1_ber_decoder() is then handed that inflated length and reads beyond the allocation while walking the DER headers. The node length comes straight from the mounted image, so a crafted signed UBIFS image reaches this via ubifs_read_superblock() before the signature is cryptographically checked. snod->len is guaranteed to be >= UBIFS_SIG_NODE_SZ by the node scanner (c->ranges[UBIFS_SIG_NODE].min_len == UBIFS_SIG_NODE_SZ), so the corrected subtraction cannot underflow. Legitimately signed images are unaffected: a correct superblock never declares a signature longer than the node it is embedded in.",
+      "published": "2026-09-11T20:20:00.943Z",
+      "lastModified": "2026-09-14T13:19:21.230Z",
+      "severity": "High",
+      "cvssScore": 7.7,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00185,
+      "epssPercentile": 0.07428,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.95,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-80955",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: dm-pcache: fix use-after-free and invalid seg operations in kset_replay() In kset_replay, when key->seg_gen is stale (key->seg_gen cache_pos.cache_seg->gen), cache_key_put(key) is called but then key->cache_pos.cache_seg is accessed as the argument to cache_seg_get(). This is a use-after-free on the freed key memory. Although mempool recycled memory is not immediately reclaimed or overwritten in practice, this is still a potential UAF bug. Additionally, for expired invalid keys, setting the cache->seg_map bit and calling cache_seg_get() is unreasonable since the corresponding segment data is no longer valid. Fix both issues by moving cache_seg_get() and __set_bit() after the gen check, so they only execute for valid keys, and using continue to skip invalid keys.",
       "published": "2026-09-11T20:19:01.287Z",
@@ -28027,6 +27710,44 @@
       "exploitAvailable": false,
       "patchAvailable": false,
       "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.93,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89723",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nilfs2: fix slab-out-of-bounds in nilfs_direct_propagate after truncation Shuangpeng Bai reported that KASAN detected a slab-out-of-bounds error in nilfs_direct_propagate() during testing. Analysis revealed that after truncating a file, a node block immediately below the B-tree root was not deleted. Instead, it remained in the B-tree node cache in a dirty state. The log writer subsequently detected this block and incorrectly invoked nilfs_direct_propagate() on it, which is designed to handle only data blocks in direct mapping. B-tree nodes in the cache are managed by virtual block numbers, and their logical keys typically exceed the range expected by direct mapping. Consequently, processing such a node as a direct mapping entry triggers a slab-out-of-bounds access. The root cause is that when a B-tree mapping collapses into a direct mapping during truncation, an intermediate node block pointed to by the root node is left behind as garbage instead of being explicitly deleted. This resolves the issue by adding a nilfs_btree_discard() operation to delete the remaining intermediate node block during the conversion. A 'deform' flag is added to the bop_delete interface to explicitly signal that the deletion is part of a mapping transformation. This allows the B-tree mapping implementation to perform the necessary cleanup and discarding of the residual node structure that would be otherwise be left orphaned after the transition.",
+      "published": "2026-09-11T20:20:01.710Z",
+      "lastModified": "2026-09-14T13:19:21.417Z",
+      "severity": "High",
+      "cvssScore": 7.8,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "High",
+        "availability": "High"
+      },
+      "epssScore": 0.00169,
+      "epssPercentile": 0.0566,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
       "recentlyPublished": false,
       "recentlyModified": false,
       "knownRansomwareUse": false,
@@ -28616,106 +28337,6 @@
       "priorityScore": 2.87,
       "tags": [
         "CWE-416"
-      ]
-    },
-    {
-      "id": "CVE-2026-87923",
-      "summary": "A weakness has been identified in Rizwan17 inventory-management-system up to bfe78a330d01bb26b9daec5dc9ecd5c77900e03f. Affected by this issue is some unknown functionality of the file includes/DBOperation.php of the component List Handler. This manipulation of the argument category_name/brand_name/product_name causes cross site scripting. It is possible to initiate the attack remotely. The exploit has been made available to the public and could be used for attacks. This product is using a rolling release to provide continious delivery. Therefore, no version details for affected nor updated releases are available. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-09-09T23:16:56.253Z",
-      "lastModified": "2026-09-11T21:17:51.387Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.0047,
-      "epssPercentile": 0.38767,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.86,
-      "tags": [
-        "CWE-79",
-        "CWE-94"
-      ]
-    },
-    {
-      "id": "CVE-2026-87926",
-      "summary": "A flaw has been found in Rizwan17 inventory-management-system up to bfe78a330d01bb26b9daec5dc9ecd5c77900e03f. This issue affects some unknown processing of the file index.php of the component Login Page. Executing a manipulation of the argument msg can lead to cross site scripting. The attack can be launched remotely. The exploit has been published and may be used. This product does not use versioning. This is why information about affected and unaffected releases are unavailable. The project was informed of the problem early through an issue report but has not responded yet.",
-      "published": "2026-09-10T00:17:24.567Z",
-      "lastModified": "2026-09-14T19:17:53.500Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.0047,
-      "epssPercentile": 0.38767,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        },
-        {
-          "id": "CWE-94",
-          "name": "CWE-94",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.86,
-      "tags": [
-        "CWE-79",
-        "CWE-94"
       ]
     },
     {
@@ -29992,50 +29613,6 @@
       ]
     },
     {
-      "id": "CVE-2026-88001",
-      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.9.5 until 0.11.1, server-side web fetches did not reapply WEB_FETCH_FILTER_LIST or private-address controls to HTTP redirect destinations when AIOHTTP_CLIENT_ALLOW_REDIRECTS was enabled. An authenticated user could redirect the aiohttp and requests fetch paths to excluded hosts, loopback, private networks, or cloud metadata services and route resulting content into web search, URL ingestion, page-fetch tools, or chat image processing. This issue is fixed in version 0.11.1.",
-      "published": "2026-09-09T22:18:48.930Z",
-      "lastModified": "2026-09-14T19:56:01.227Z",
-      "severity": "Medium",
-      "cvssScore": 5,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00378,
-      "epssPercentile": 0.2975,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-918",
-          "name": "CWE-918",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.79,
-      "tags": [
-        "CWE-918"
-      ]
-    },
-    {
       "id": "CVE-2026-89158",
       "summary": "PCRE2 before 10.48, on 32-bit platforms, has a pcre2_compile_32 integer overflow and resultant out-of-bounds write.",
       "published": "2026-09-11T04:18:03.970Z",
@@ -30344,50 +29921,6 @@
       "priorityScore": 2.75,
       "tags": [
         "CWE-23"
-      ]
-    },
-    {
-      "id": "CVE-2026-71807",
-      "summary": "In RuoYi-Cloud-Plus <= 2.6.2 in the ruoyi-workflow module, multiple core task APIs in FlwTaskController lack permission annotations, and the Service layer does not verify whether the current user is the task handler/related user. Authenticated low-privileged remote attackers can read sensitive workflow task details (/task/getTask/{taskId}) and trigger unauthorized workflow executions (/task/startWorkFlow).",
-      "published": "2026-09-09T22:18:19.173Z",
-      "lastModified": "2026-09-14T17:17:50.237Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00424,
-      "epssPercentile": 0.34707,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-284",
-          "name": "CWE-284",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.72,
-      "tags": [
-        "CWE-284"
       ]
     },
     {
@@ -31135,94 +30668,6 @@
       ]
     },
     {
-      "id": "CVE-2026-75307",
-      "summary": "zhitan-ems 1.0.0 is vulnerable to Cross Site Scripting (XSS) via SVG file upload through the /equipmentFile/upload endpoint.",
-      "published": "2026-09-09T22:18:28.733Z",
-      "lastModified": "2026-09-10T19:17:34.543Z",
-      "severity": "Medium",
-      "cvssScore": 6.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00253,
-      "epssPercentile": 0.15426,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.67,
-      "tags": [
-        "CWE-79"
-      ]
-    },
-    {
-      "id": "CVE-2026-75308",
-      "summary": "yshopmall <=3.3 is vulnerable to Cross Site Scripting (XSS). The file upload endpoint /api/upload of the system lacks file type validation. Attackers can upload files of any type, including HTML, JSP, and other executable files.",
-      "published": "2026-09-09T22:18:28.857Z",
-      "lastModified": "2026-09-14T13:18:46.127Z",
-      "severity": "Medium",
-      "cvssScore": 6.1,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "Low",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00253,
-      "epssPercentile": 0.15425,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-79",
-          "name": "Cross-site Scripting",
-          "description": "Improper neutralization of input during web page generation."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.67,
-      "tags": [
-        "CWE-79"
-      ]
-    },
-    {
       "id": "CVE-2026-87107",
       "summary": "Consul and Consul Enterprise are vulnerable to an authorization bypass in the catalog deregistration path that may allow a local ACL token to delete peer-imported catalog objects. A caller with {{service:write}} or {{node:write}} permission may exploit this issue to remove services, checks, or nodes imported from a peered cluster without holding authority over the peer origin. This vulnerability (CVE-2026-87107) is fixed in Consul 2.0.4 and Consul Enterprise 1.21.18, 1.22.12 and 2.0.4.",
       "published": "2026-09-10T19:17:37.413Z",
@@ -31682,6 +31127,44 @@
       "tags": [
         "WordPress",
         "CWE-639"
+      ]
+    },
+    {
+      "id": "CVE-2026-89705",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nfsd: restore rq_status_counter to even on all nfsd_dispatch() exit paths nfsd_dispatch() sets rq_status_counter to an odd value once a request has been decoded, and back to an even value once it has been fully processed, forming a seq-lock like protocol with the lockless reader in nfsd_nl_rpc_status_get_dumpit(). Only the fully successful path restored the counter to even. The cache-hit (RC_REPLY), drop (RC_DROPIT / RQ_DROPME) and encode-error paths all return after the odd-valued store without ever bringing the counter back to even. Once one of those paths is taken, rq_status_counter is left odd: the next request's decode ORs in 1 (still odd) and only a subsequent successful encode restores even. While stuck odd, the dumpit reader treats the rqstp fields as stable and its retry check compares against the same unchanging odd value, so it never detects concurrent mutation. This exposes actively mutating fields (e.g. args->ops / args->opcnt during compound decode and release) to the lockless reader, which can read past the end of the 8-element inline ops array. Add a helper that advances the counter to the next even value and call it on every return path that follows the odd-valued store. The decode-error path is left untouched as it is reached before the counter is set odd.",
+      "published": "2026-09-11T20:19:57.780Z",
+      "lastModified": "2026-09-13T07:17:36.127Z",
+      "severity": "High",
+      "cvssScore": 7.1,
+      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
+      "cvssBreakdown": {
+        "attackVector": "Local",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "High",
+        "integrity": "None",
+        "availability": "High"
+      },
+      "epssScore": 0.00156,
+      "epssPercentile": 0.04217,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 2.63,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -32405,157 +31888,6 @@
       "tags": [
         "Google",
         "CWE-352"
-      ]
-    },
-    {
-      "id": "CVE-2026-87017",
-      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.7.0 until 0.11.1, the built-in knowledge search tool passed the caller's readable knowledge identifiers through a metadata filter, but the search methods in eleven shipped vector backends ignored that filter. An authenticated user on an affected backend could enumerate the identifiers, names, and descriptions of inaccessible knowledge bases from the shared collection, although the associated document text remained in separate collections. This issue is fixed in version 0.11.1.",
-      "published": "2026-09-09T22:18:47.023Z",
-      "lastModified": "2026-09-16T15:23:05.203Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "Low",
-        "integrity": "None",
-        "availability": "None"
-      },
-      "epssScore": 0.00372,
-      "epssPercentile": 0.2908,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-200",
-          "name": "CWE-200",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-863",
-          "name": "CWE-863",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.52,
-      "tags": [
-        "CWE-200",
-        "CWE-863"
-      ]
-    },
-    {
-      "id": "CVE-2026-87994",
-      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.9.5 until 0.11.1, the channel branch of chat_completion in backend/open_webui/main.py checked channel write access and channel membership for a supplied message_id but did not verify that the calling user authored the targeted message. A channel member could use the chat completions endpoint to replace another member's message while preserving the victim as the stored author, altering the conversation record without gaining access to other channels. This issue is fixed in version 0.11.1.",
-      "published": "2026-09-09T22:18:47.563Z",
-      "lastModified": "2026-09-16T15:15:32.030Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00372,
-      "epssPercentile": 0.29072,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.52,
-      "tags": [
-        "CWE-639",
-        "CWE-862"
-      ]
-    },
-    {
-      "id": "CVE-2026-87997",
-      "summary": "Open WebUI is an extensible, feature-rich, and user-friendly self-hosted AI platform. From 0.10.0 until 0.11.1, POST /api/chat/completions and POST /api/v1/chat/completions in backend/open_webui/main.py copied a client-supplied folder_id into a new chat without applying the folder write-access check used by the dedicated chat routes. An authenticated user who knew a shared folder identifier could inject an attacker-controlled chat into a folder where the user had read-only or no write access, causing the entry to appear to authorized folder readers. This issue is fixed in version 0.11.1.",
-      "published": "2026-09-09T22:18:48.267Z",
-      "lastModified": "2026-09-16T15:14:39.770Z",
-      "severity": "Medium",
-      "cvssScore": 4.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00372,
-      "epssPercentile": 0.29073,
-      "isKev": false,
-      "kev": null,
-      "vendor": "F5",
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-639",
-          "name": "CWE-639",
-          "description": "CWE mapping from source data."
-        },
-        {
-          "id": "CWE-862",
-          "name": "CWE-862",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.52,
-      "tags": [
-        "F5",
-        "CWE-639",
-        "CWE-862"
       ]
     },
     {
@@ -36107,50 +35439,6 @@
       ]
     },
     {
-      "id": "CVE-2026-88069",
-      "summary": "Pandora contains a path traversal vulnerability in its archive extraction worker. When processing a specially crafted archive or disk image, attacker-controlled file paths could be used without ensuring that the resulting destination remained within the intended extraction directory. An attacker able to submit a malicious file for analysis could use path traversal sequences or crafted paths to cause extracted content to be written outside the designated extraction directory, potentially overwriting files accessible to the Pandora worker process. Successful exploitation could result in unauthorized modification of application or system files, denial of service, and potentially further compromise depending on the permissions of the Pandora process and the files that can be overwritten. The vulnerability is addressed by resolving each extraction destination path before writing and verifying that it remains below the expected extraction directory. Extraction attempts resolving outside this directory are rejected and reported as path traversal attempts.",
-      "published": "2026-09-09T22:18:49.240Z",
-      "lastModified": "2026-09-10T15:43:03.760Z",
-      "severity": "Unknown",
-      "cvssScore": 0,
-      "cvssVector": null,
-      "cvssBreakdown": {
-        "attackVector": null,
-        "attackComplexity": null,
-        "privilegesRequired": null,
-        "userInteraction": null,
-        "scope": null,
-        "confidentiality": null,
-        "integrity": null,
-        "availability": null
-      },
-      "epssScore": 0.00496,
-      "epssPercentile": 0.40666,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-22",
-          "name": "Path Traversal",
-          "description": "Improper limitation of a pathname to a restricted directory."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 1.42,
-      "tags": [
-        "CWE-22"
-      ]
-    },
-    {
       "id": "CVE-2026-78085",
       "summary": "Joomla Extension - joomshaper.com - Path Traversal in Gallery Image Management in SP Property < 4.1.4 - The gallery management controller tasks lacked directory confinement checks.",
       "published": "2026-09-10T11:17:07.350Z",
@@ -36579,6 +35867,44 @@
       "tags": [
         "Linux",
         "iOS"
+      ]
+    },
+    {
+      "id": "CVE-2026-89714",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: NFS: fix delegation_hash_table leak when nfs4_server_common_setup() fails nfs4_server_common_setup() allocates server->delegation_hash_table first, but server->destroy - the only path that frees the table via nfs4_destroy_server() - is not assigned until the very end of the function. If any intermediate step fails (the is_ds_only_client() check, nfs4_init_session(), nfs4_get_rootfh(), or nfs_probe_server()), the function returns with server->destroy still NULL, so the caller's nfs_free_server() skips the destroy callback and the hash table is leaked (4 KiB per attempt with the default delegation watermark). This is trivially reachable from userspace: every failed NFSv4 mount leaks one allocation. A client that persistently retries a mount that cannot succeed leaks kernel memory without bound. Observed in production where a Longhorn backup poller retried mount.nfs4 against an NFSv3-only server roughly 10 times per second, leaking ~3.4 GiB of unreclaimable slab (kmalloc-rnd-13-4k) per day; the node accumulated 12 GiB of leaked slab before the source was identified via the kmem:kmalloc tracepoint (call_site=nfs4_delegation_hash_alloc). Reproducer: # server exports NFSv3 only (or export path absent for v4) while :; do mount -t nfs4 :/missing /mnt; done # watch SUnreclaim in /proc/meminfo grow 4 KiB per iteration Free the table on the error paths between the allocation and the assignment of server->destroy.",
+      "published": "2026-09-11T20:19:58.873Z",
+      "lastModified": "2026-09-11T20:19:58.873Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00206,
+      "epssPercentile": 0.09812,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 1.34,
+      "tags": [
+        "Linux"
       ]
     },
     {
@@ -40082,6 +39408,196 @@
       ]
     },
     {
+      "id": "CVE-2026-89701",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nfsd: validate nseconds in TIME_DELEG decode paths The xdrgen-based TIME_DELEG_ACCESS and TIME_DELEG_MODIFY decode arms store a raw uint32_t nseconds directly into tv_nsec without enforcing nseconds < NSEC_PER_SEC. The legacy nfsd4_decode_nfstime4 has this check but the TIME_DELEG paths do not. A malformed timespec can propagate through notify_change() to disk. Add range checks in both nfs4xdr.c (SETATTR path) and nfs4callback.c (CB_GETATTR path).",
+      "published": "2026-09-11T20:19:57.303Z",
+      "lastModified": "2026-09-11T20:19:57.303Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00206,
+      "epssPercentile": 0.09811,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.34,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89715",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: NFS/localio: fix ref leak on nfs_uuid_add_file failure When nfs_uuid_add_file() races with nfs_uuid_put() tearing down uuid->net, it returns -ENXIO without publishing nfl->nfs_uuid via rcu_assign_pointer(). nfs_open_local_fh() then enters its error branch and only releases the slot's file ref and its paired net ref plus its own entry-time net ref, while the close path is a no-op: nfs_close_local_fh() nfs_uuid = rcu_dereference(nfl->nfs_uuid); if (!nfs_uuid) { rcu_read_unlock(); return; } /* always */ nfsd_open_local_fh() returns localio holding a caller-owned +1 nfsd_file reference (from nfsd_file_get() after nfsd_file_acquire_local()) and an entry-time nfsd_net reference (from its first nfsd_net_try_get()) embedded as nf->nf_net. Both are leaked on the failure path, pinning one nfsd_file (and the underlying struct file, dentry, inode) and one nfsd_net_ref per occurrence, which blocks nfsd_net and netns teardown. Fix by releasing the caller-owned file ref and its net ref through the existing helper, using a stack-local RCU pointer so the helper can xchg it out, then returning -ENXIO so callers do not dereference a localio whose slot has been cleared: struct nfsd_file __rcu *tmp = RCU_INITIALIZER(localio); nfs_to_nfsd_file_put_local(pnf); nfs_to_nfsd_file_put_local(&tmp); localio = ERR_PTR(-ENXIO); The trailing nfs_to_nfsd_net_put(net) continues to release the outer net ref, so all three nfsd_net_try_get() increments are balanced on the error branch.",
+      "published": "2026-09-11T20:19:58.993Z",
+      "lastModified": "2026-09-11T20:19:58.993Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00206,
+      "epssPercentile": 0.09812,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.34,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89716",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: zram: validate deflate params We must validate user-supplied deflate winbits before we pass it to zlib_deflate_workspacesize(), which triggers BUG_ON() if winbits value is outside of valid ranges.",
+      "published": "2026-09-11T20:19:59.123Z",
+      "lastModified": "2026-09-11T20:19:59.123Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00206,
+      "epssPercentile": 0.09829,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.34,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89721",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: phy: rockchip-samsung-dcphy: fix out-of-range max_register The PHY register block is 64KB, so with a register stride of 4 the last accessible register sits at offset 0xfffc. max_register names 0x10000, one register past the end of the mapping: dumping the registers through the regmap debugfs interface reads beyond the ioremapped region and oopses on the unmapped page. The oops fires with the regmap lock held, so later PHY operations deadlock.",
+      "published": "2026-09-11T20:20:01.090Z",
+      "lastModified": "2026-09-11T20:20:01.090Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00206,
+      "epssPercentile": 0.09824,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.34,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89722",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: PCI/sysfs: Fix out-of-bounds read in pci_write_legacy_io() pci_write_legacy_io() loads 4 bytes from the kernfs write buffer regardless of how many bytes userspace wrote: if (count != 1 && count != 2 && count != 4) return -EINVAL; return pci_legacy_write(bus, off, *(u32 *)buf, count); kernfs_fop_write_iter() allocates the buffer with kmalloc(len + 1), so a 1-byte write to the legacy_io sysfs file allocates 2 bytes and the unconditional u32 load reads up to 2 bytes past the end of the allocation, which KASAN reports as a slab-out-of-bounds read. Similarly, a 2-byte write overreads by 1 byte. Thus, read only the number of bytes requested using get_unaligned_le16() and get_unaligned_le32() for the 2 and 4 byte cases, interpreting the buffer as little-endian to match the byte ordering of PCI I/O port space. The PowerPC implementation previously compensated for the generic code's native-endian 32-bit load by shifting the value into place for the 1 and 2 byte cases. The shifts were only correct on big-endian kernels. On little-endian PowerPC (POWER8 and later), they extracted the wrong bytes, so a 1-byte write wrote an out-of-bounds byte instead of the requested value. On big-endian, the native load also caused out_le16() and out_le32() to reverse the user's bytes on the wire for 2 and 4 byte writes. The little-endian helpers resolve both issues, so the shifts are removed. No changes are needed for the Alpha platform. The legacy_io file is root-only and exists only on Alpha and PowerPC, the two architectures that define HAVE_PCI_LEGACY.",
+      "published": "2026-09-11T20:20:01.370Z",
+      "lastModified": "2026-09-13T07:17:37.507Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00206,
+      "epssPercentile": 0.09792,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.34,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-89473",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: power: supply: bq25890: Fix power_supply reference leak bq25890_fw_probe() acquires a reference to a secondary charger using power_supply_get_by_name(), but the reference is not released on later probe failures or on driver detach. In particular, failures after bq25890_fw_probe() returns successfully, such as a failure in bq25890_hw_init(), also leak the reference. Register a device-managed cleanup action immediately after acquiring the secondary charger. This releases the reference on all subsequent probe failures and on driver detach. Found by code review.",
       "published": "2026-09-11T20:19:28.530Z",
@@ -41133,6 +40649,44 @@
       ]
     },
     {
+      "id": "CVE-2026-89726",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: lib/ucs2_string.c: fix out-of-bounds read in ucs2_strnlen() Patch series \"lib/ucs2_string.c: fix out-of-bounds read in ucs2_strnlen()\", v2. This series fixes an off-by-one out-of-bounds read in ucs2_strnlen(). The first patch is the real fix, the second patch comes as a bonus and fixes the code indentation. This patch (of 2): ucs2_strnlen() checks the current character before checking whether the caller-provided maximum length has been reached. If the input is not NUL-terminated within that bound, the loop can read one ucs2_char_t past the limit. Test the length before dereferencing to prevent an off-by-one out-of-bounds read.",
+      "published": "2026-09-11T20:20:02.907Z",
+      "lastModified": "2026-09-14T13:19:21.893Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00177,
+      "epssPercentile": 0.06697,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.23,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
       "id": "CVE-2026-80938",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: mt7615: avoid waiting for mac work under the mt76 mutex mt7615_suspend() acquired the mt76 mutex and then called cancel_delayed_work_sync() on mac_work. mt7615_mac_work() acquires the same mutex via mt7615_mutex_acquire() at the top of the worker, so if mac_work is already running and blocked on the mutex, the suspend path deadlocks waiting for the work it holds the mutex against. Flush scan_work and mac_work before taking the mutex, matching the suspend paths in mt7921 and mt7925. scan_work only takes the mt76 spinlock, but moving it keeps the sequence consistent. This also keeps mac_work from running over an already suspended HIF, which the previous split (async cancel under the lock, sync cancel after release) would have allowed.",
       "published": "2026-09-11T20:18:58.053Z",
@@ -41380,6 +40934,44 @@
       },
       "epssScore": 0.00173,
       "epssPercentile": 0.06112,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.21,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89710",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: NFSv4.1: fix layout segment leak on the pnfs_layout_process() forget path When the server returns a new layout stateid while a valid one is still held, pnfs_layout_process() calls pnfs_mark_matching_lsegs_return() on the on-stack free_me list and jumps to out_forget. Segments whose reference count drops to zero are unlinked from lo->plh_segs and moved to free_me by mark_lseg_invalid(); for an idle cached segment the layout header holds the only reference, so this happens on the first decrement. out_forget never drains free_me -- only the success path calls pnfs_free_lseg_list(). Commit 814b84971388 (\"pNFS/NFSv4: Fix a layout segment leak in pnfs_layout_process()\") added the drain; commit 08bd8dbe8882 (\"pNFS/NFSv4: Try to return invalid layout in pnfs_layout_process()\") removed it while switching the destination to lo->plh_return_segs, which is drained elsewhere. Commit fb700ef02676 (\"NFSv4.1: Simplify layout return in pnfs_layout_process()\") switched the destination back to free_me without restoring the drain. Restore the pnfs_free_lseg_list() call.",
+      "published": "2026-09-11T20:19:58.380Z",
+      "lastModified": "2026-09-14T13:19:20.800Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00173,
+      "epssPercentile": 0.06113,
       "isKev": false,
       "kev": null,
       "vendor": "Linux",
@@ -41920,6 +41512,158 @@
       },
       "epssScore": 0.00168,
       "epssPercentile": 0.05559,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.19,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89700",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: nfsd: validate sockaddr length per family in listener_set nfsd_sock_nl_policy declares NFSD_A_SOCK_ADDR as a bare NLA_BINARY attribute with no minimum length. A CAP_NET_ADMIN caller can send a 16-byte NFSD_A_SOCK_ADDR with sa_family=AF_INET6, causing a 12-byte OOB read across three consumers (rpc_cmp_addr_port, svc_find_listener, kernel_bind). nfsd_nl_listener_set_doit() also parsed and validated each listener entry inline in two separate loops, interleaved with mutating the running listener configuration. The validation was duplicated, used an open-coded \"nla_len < sizeof(struct sockaddr)\" check that was too short for AF_INET6, and handled a malformed entry inconsistently depending on which loop noticed it. Add an nfsd_nl_validate_listeners() helper that walks the entire list once and confirms each entry parses, carries both an address and a transport name, and is long enough for its address family (sizeof(struct sockaddr_in) for AF_INET, sizeof(struct sockaddr_in6) for AF_INET6, -EAFNOSUPPORT otherwise). Call it before taking nfsd_mutex or creating the serv, so a malformed request fails cleanly with no side effects. Since every entry is known valid by the time the two existing loops run, drop the redundant presence and per-family length checks from both, leaving only the nla_parse_nested() call needed to extract the data.",
+      "published": "2026-09-11T20:19:57.187Z",
+      "lastModified": "2026-09-21T14:17:25.580Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.05558,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": false,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.19,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89717",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: zram: set default primary compressor in zram_destroy_comps() Patch series \"zram: fix zram issues reported by sashiko\". Sashiko drove by and reported [1] a couple of zram issues: a possible BUG_ON() in zlib code due to missing winbits range validation and one possible NULL-ptr dereference in zcomp. Both are low risk yet still worth fixing. This patch (of 2): zram_destroy_comps() resets all compressors and leaves them set to NULL, including the primary one, which is invalid device state, as now comp_algorithm_show()->strcmp() can be called on a NULL compressor. Set default primary compressor in zram_destroy_comps().",
+      "published": "2026-09-11T20:19:59.233Z",
+      "lastModified": "2026-09-21T14:17:25.850Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.05561,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.19,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89718",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: zram: fix out-of-bounds access in writeback_store() Patch series \"zram: fix stale scan bounds after reinitialization\". Both writeback_store() and read_block_state() derive their table scan bounds from zram->disksize before acquiring dev_lock. If the device is reset and reinitialized with a smaller disksize between that read and lock acquisition, the bound can describe the old table while the scan operates on the new one. This can lead to out-of-bounds slot accesses. Move both bound calculations under dev_lock so each bound remains consistent with the table throughout its scan. Keep the fixes separate because the affected interfaces originate from different commits and can be backported independently. This patch (of 2): writeback_store() calculates the table scan bounds before taking dev_lock. A reset followed by reconfiguration with a smaller disksize can therefore replace zram->table while writeback_store() is waiting for the lock. Once it acquires the lock, it sees an initialized device but scans the new table using the old upper bound, resulting in an out-of-bounds access. Calculate the number of pages while holding dev_lock so the scan bound matches the table protected by the lock.",
+      "published": "2026-09-11T20:19:59.377Z",
+      "lastModified": "2026-09-21T14:17:25.967Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00166,
+      "epssPercentile": 0.05357,
+      "isKev": false,
+      "kev": null,
+      "vendor": "Linux",
+      "product": null,
+      "cwe": [],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": true,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 0.19,
+      "tags": [
+        "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-89719",
+      "summary": "In the Linux kernel, the following vulnerability has been resolved: zram: fix out-of-bounds access in read_block_state() read_block_state() calculates nr_pages before taking dev_lock. If the device is reset and reinitialized with a smaller disksize before lock acquisition, nr_pages still describes the old table. The subsequent loop can then call slot_lock() past the end of the newly allocated table. Read disksize after acquiring dev_lock and checking that the device is initialized. The read lock then keeps the table and its bound stable for the duration of the scan.",
+      "published": "2026-09-11T20:20:00.820Z",
+      "lastModified": "2026-09-21T14:17:26.067Z",
+      "severity": "Unknown",
+      "cvssScore": 0,
+      "cvssVector": null,
+      "cvssBreakdown": {
+        "attackVector": null,
+        "attackComplexity": null,
+        "privilegesRequired": null,
+        "userInteraction": null,
+        "scope": null,
+        "confidentiality": null,
+        "integrity": null,
+        "availability": null
+      },
+      "epssScore": 0.00168,
+      "epssPercentile": 0.0556,
       "isKev": false,
       "kev": null,
       "vendor": "Linux",
