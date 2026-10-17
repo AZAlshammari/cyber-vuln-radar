@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T23:55:25.135Z",
+  "generatedAt": "2026-10-17T03:29:06.339Z",
   "count": 1000,
   "items": [
     {
@@ -3141,6 +3141,50 @@
       ]
     },
     {
+      "id": "CVE-2026-54644",
+      "summary": "CubeCart is an ecommerce software solution. Prior to 6.7.5, the _errorMessage method in classes/gui.class.php uses strip_tags to permit anchor elements in error, information, and warning messages while retaining unsafe href values and onclick event handlers. Attacker-controlled search or input data that reaches a GUI message can carry a javascript: URI or event handler through the filter, and viewing or interacting with the rendered anchor executes JavaScript in the victim's browser session, enabling session exposure or unauthorized application actions. This issue is fixed in version 6.7.5.",
+      "published": "2026-09-17T22:17:02.283Z",
+      "lastModified": "2026-09-23T18:12:04.247Z",
+      "severity": "Medium",
+      "cvssScore": 6.1,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "None",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.00899,
+      "epssPercentile": 0.58885,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 5.2,
+      "tags": [
+        "CWE-79"
+      ]
+    },
+    {
       "id": "CVE-2026-92984",
       "summary": "HUBzero CMS through 2.2.32 accepts session identifiers from query strings and request variables instead of cookies alone, allowing unauthenticated attackers to fixate victim sessions. Attackers can obtain a valid session identifier, send victims a crafted link containing it, and replay the identifier after the victim authenticates to hijack their account and access.",
       "published": "2026-09-17T15:17:01.690Z",
@@ -4478,6 +4522,50 @@
       "tags": [
         "iOS",
         "CWE-22"
+      ]
+    },
+    {
+      "id": "CVE-2026-54645",
+      "summary": "CubeCart is an ecommerce software solution. Prior to 6.7.5, admin/sources/products.index.inc.php reads the description, description_short, and spec_copy rich-text fields from $GLOBALS['RAW']['POST'] and removes only script elements before the values are stored and rendered through Smarty templates. An administrator with product-editing rights can store event-handler attributes, SVG content, or javascript: URIs that bypass this filter, causing persistent JavaScript execution when a storefront visitor or another administrator views the product content and enabling session exposure or unauthorized browser-context actions. This issue is fixed in version 6.7.5.",
+      "published": "2026-09-17T22:17:02.420Z",
+      "lastModified": "2026-09-24T21:25:27.050Z",
+      "severity": "Medium",
+      "cvssScore": 4.8,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:R/S:C/C:L/I:L/A:N",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "High",
+        "userInteraction": "Required",
+        "scope": "Changed",
+        "confidentiality": "Low",
+        "integrity": "Low",
+        "availability": "None"
+      },
+      "epssScore": 0.01081,
+      "epssPercentile": 0.64544,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "name": "Cross-site Scripting",
+          "description": "Improper neutralization of input during web page generation."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 4.94,
+      "tags": [
+        "CWE-79"
       ]
     },
     {
@@ -7311,51 +7399,6 @@
       ]
     },
     {
-      "id": "CVE-2026-89064",
-      "summary": "The All-in-One WP Migration and Backup plugin for WordPress is vulnerable to Insufficient Credential Protection in versions up to, and including, 7.110. This is due to the `Ai1wm_Main_Controller::init()` method — registered on the `admin_init` hook, which fires unauthenticated on `admin-ajax.php` and `admin-post.php` requests — reading `$_SERVER['PHP_AUTH_USER']` and `$_SERVER['PHP_AUTH_PW']` from any incoming request and writing them to the `ai1wm_auth_header` option via `update_option()` as a reversible base64-encoded string, with no capability check, nonce verification, `is_user_logged_in()` check, or confirmation that Basic authentication actually succeeded. This makes it possible for unauthenticated attackers to capture into the database, in reversible base64 form, any WordPress Application Password or HTTP Basic credential presented to `/wp-admin/` by a legitimate integration, or to overwrite the stored credential with an attacker-chosen value by sending an anonymous request carrying a crafted `Authorization: Basic` header. This is particularly impactful in environments using WordPress Application Passwords for REST API or third-party integrations, as those credentials are transmitted as HTTP Basic auth to `/wp-admin/` and will be silently harvested via this unauthenticated write path.",
-      "published": "2026-09-17T03:16:32.500Z",
-      "lastModified": "2026-09-18T15:17:17.637Z",
-      "severity": "Medium",
-      "cvssScore": 5.3,
-      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
-      "cvssBreakdown": {
-        "attackVector": "Network",
-        "attackComplexity": "Low",
-        "privilegesRequired": "None",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "None",
-        "integrity": "Low",
-        "availability": "None"
-      },
-      "epssScore": 0.00496,
-      "epssPercentile": 0.41174,
-      "isKev": false,
-      "kev": null,
-      "vendor": "WordPress",
-      "product": "WordPress",
-      "cwe": [
-        {
-          "id": "CWE-522",
-          "name": "CWE-522",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": true,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 4.3,
-      "tags": [
-        "WordPress",
-        "CWE-522"
-      ]
-    },
-    {
       "id": "CVE-2026-90240",
       "summary": "In the Linux kernel, the following vulnerability has been resolved: iommu/vt-d: Flush context cache with correct SID when tearing down aliases domain_context_clear_one() and device_pasid_table_teardown() are both invoked once per DMA alias of a device. Each function locates the context entry using the bus/devfn pair provided by the pci_for_each_dma_alias() callback, then calls intel_context_flush_no_pasid(), which constructs a device-selective context-cache invalidation from info->bus and info->devfn (that is, always the requester ID of the device itself). As a result, for every alias other than the device’s own RID, the context entry that was just cleared in memory is never invalidated in the context cache. Hardware may continue using that stale cached entry. In the scalable-mode teardown path, intel_pasid_free_table() can then free the PASID directory still referenced by that stale entry, allowing the IOMMU to walk freed memory. Fix this by passing the source ID of the entry being torn down to intel_context_flush_no_pasid(), instead of deriving it from @info.",
       "published": "2026-09-17T17:17:19.960Z",
@@ -9087,6 +9130,50 @@
       "priorityScore": 3.95,
       "tags": [
         "Linux"
+      ]
+    },
+    {
+      "id": "CVE-2026-54643",
+      "summary": "CubeCart is an ecommerce software solution. Prior to 6.7.5, the delete-note handler in admin/sources/orders.index.inc.php verifies only the presence of order_id and delete-note parameters before deleting records from CubeCart_order_notes, without requiring CC_PERM_DELETE for orders. An authenticated administrator lacking order modification privileges can directly invoke the handler with valid identifiers and delete order-history notes, removing operational records and audit-trail data. This issue is fixed in version 6.7.5.",
+      "published": "2026-09-17T22:17:02.147Z",
+      "lastModified": "2026-09-23T19:43:31.933Z",
+      "severity": "Medium",
+      "cvssScore": 5.4,
+      "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L",
+      "cvssBreakdown": {
+        "attackVector": "Network",
+        "attackComplexity": "Low",
+        "privilegesRequired": "Low",
+        "userInteraction": "None",
+        "scope": "Unchanged",
+        "confidentiality": "None",
+        "integrity": "Low",
+        "availability": "Low"
+      },
+      "epssScore": 0.0038,
+      "epssPercentile": 0.30399,
+      "isKev": false,
+      "kev": null,
+      "vendor": null,
+      "product": null,
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "name": "CWE-862",
+          "description": "CWE mapping from source data."
+        }
+      ],
+      "references": [],
+      "vendorAdvisoryLinks": [],
+      "exploitAvailable": false,
+      "patchAvailable": true,
+      "workaroundAvailable": false,
+      "recentlyPublished": false,
+      "recentlyModified": false,
+      "knownRansomwareUse": false,
+      "priorityScore": 3.95,
+      "tags": [
+        "CWE-862"
       ]
     },
     {
@@ -13693,50 +13780,6 @@
       ]
     },
     {
-      "id": "CVE-2026-92838",
-      "summary": "A DLL hijacking vulnerability exists in the GeoVision GV-Remote E-Map desktop application. The application loads one or more dynamic-link libraries (DLLs) from an unsafe search path, allowing a local attacker to place a malicious DLL in a location searched before the legitimate library location. If successfully exploited, an attacker with local write access to the affected directory could achieve arbitrary code execution in the security context of the GV-Remote E-Map process.",
-      "published": "2026-09-17T02:16:28.610Z",
-      "lastModified": "2026-09-18T19:41:42.593Z",
-      "severity": "High",
-      "cvssScore": 7.8,
-      "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "Low",
-        "privilegesRequired": "Low",
-        "userInteraction": "None",
-        "scope": "Unchanged",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00198,
-      "epssPercentile": 0.08954,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-427",
-          "name": "CWE-427",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": true,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 3.04,
-      "tags": [
-        "CWE-427"
-      ]
-    },
-    {
       "id": "CVE-2026-26950",
       "summary": "Dell SmartFabric Manager, versions prior to 2.2.1, contains an Insufficient Verification of Data Authenticity vulnerability. A low privileged attacker with remote access could potentially exploit this vulnerability, leading to Elevation of privileges.",
       "published": "2026-09-17T15:16:46.763Z",
@@ -16759,50 +16802,6 @@
       "priorityScore": 2.84,
       "tags": [
         "Linux",
-        "CWE-121"
-      ]
-    },
-    {
-      "id": "CVE-2026-81546",
-      "summary": "The Affinity by Canva application before 3.3.0 (September 2026 release) did not perform adequate bounds checking when parsing Affinity document files leading to a stack-based buffer overflow. A threat actor could craft a Affinity document that when opened by a user in Affinity could result in arbitrary code execution.",
-      "published": "2026-09-17T02:16:27.537Z",
-      "lastModified": "2026-09-18T17:49:08.457Z",
-      "severity": "High",
-      "cvssScore": 7.7,
-      "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:H",
-      "cvssBreakdown": {
-        "attackVector": "Local",
-        "attackComplexity": "High",
-        "privilegesRequired": "None",
-        "userInteraction": "Required",
-        "scope": "Changed",
-        "confidentiality": "High",
-        "integrity": "High",
-        "availability": "High"
-      },
-      "epssScore": 0.00147,
-      "epssPercentile": 0.03553,
-      "isKev": false,
-      "kev": null,
-      "vendor": null,
-      "product": null,
-      "cwe": [
-        {
-          "id": "CWE-121",
-          "name": "CWE-121",
-          "description": "CWE mapping from source data."
-        }
-      ],
-      "references": [],
-      "vendorAdvisoryLinks": [],
-      "exploitAvailable": false,
-      "patchAvailable": false,
-      "workaroundAvailable": false,
-      "recentlyPublished": false,
-      "recentlyModified": false,
-      "knownRansomwareUse": false,
-      "priorityScore": 2.82,
-      "tags": [
         "CWE-121"
       ]
     },
